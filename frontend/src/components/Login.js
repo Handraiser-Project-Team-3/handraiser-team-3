@@ -4,6 +4,7 @@ import Background from './img/bg.jpg';
 import Teacher from './img/undraw.svg';
 import Logo from './img/logo.png';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -12,45 +13,49 @@ import PropTypes from 'prop-types';
 import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
 
-function Login(props) {
+function Login() {
     const classes = useStyles();
-    const { width } = props;
 
     return (
         <React.Fragment>
-            <Grid className={classes.root}>
-                <div className={classes.bg}>
+            <CssBaseline />
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                className={classes.root}
+            >
+                <Grid item className={classes.bg}>
                     <Grid item className={classes.logo}>
-                        <img src={Logo} alt="teacher" />
+                        <img src={Logo} alt="logo" className={classes.hand} />
                     </Grid>
-                    <Grid item xs={12}>
-                        <div className={classes.signinContainer}>
-                            <Typography className={classes.signin}>Hand Raiser</Typography>
-                            <div className={classes.subtitleContainer}>
-                                <Typography variant="subtitle1" className={classes.subtitle}>You can access the site by logging in with
+                    <Grid item xs={12} sm={12}>
+                        <Typography className={classes.signin}>Hand Raiser</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={12} className={classes.subtitleContainer}>
+                        <Typography className={classes.subtitle}>You can access the site by logging in with
                                 your google account</Typography>
+                    </Grid>
+                    <Grid item>
+                        <button className={classes.google}>
+                            <div>
+                                <img src={require('./img/google_icon.png')} className={classes.img} alt='g_icon' />
                             </div>
                             <div>
-                                <button className={classes.google}>
-                                    <div>
-                                        <img src={require('./img/google_icon.png')} className={classes.img} />
-                                    </div>
-                                    <div>
-                                        <Typography className={classes.pGoogle}>Sign in with Google</Typography>
-                                    </div>
-                                </button>
+                                <Typography className={classes.pGoogle}>Sign in</Typography>
                             </div>
-                            <Grid item xs={12} sm={12} md={4}>
-                                <hr className={classes.hr} />
-                            </Grid>
-                            <Hidden smDown>
-                                <div className={classes.teacher}>
-                                    <img src={Teacher} alt="teacher" className={classes.lady} />
-                                </div>
-                            </Hidden>
-                        </div>
+                        </button>
                     </Grid>
-                </div>
+                    <Hidden xsDown>
+                        <Grid item xs={12} sm={12} md={4}>
+                            <hr className={classes.hr} />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={4}>
+                            <img src={Teacher} alt="teacher" className={classes.lady} />
+                        </Grid>
+                    </Hidden>
+                </Grid>
             </Grid>
         </React.Fragment >
     );
@@ -64,8 +69,8 @@ export default withWidth()(Login);
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex',
-        height: '100vh'
+        height: '100vh',
+        flexGrow: 1
     },
     bg: {
         backgroundImage: `url(${Background})`,
@@ -75,75 +80,56 @@ const useStyles = makeStyles(theme => ({
         height: "100%",
         width: "100%"
     },
-
-
     logo: {
         position: 'absolute',
         top: '-70px',
         left: '50px'
     },
+    hand: {
+        width: '200px'
+    },
     signinContainer: {
         display: 'flex',
         flexDirection: 'column',
-        marginLeft: '160px'
+        justifyContent: 'space-evenly',
+        alignContent: 'center',
+        marginLeft: 160,
     },
     signin: {
-        position: 'absolute',
-        height: '100px',
-        top: '150px',
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '96px',
+        fontSize: '80px',
         lineHeight: '112px',
         color: '#4ABDAC',
         textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
     },
+    subtitleContainer: {
+        display: 'flex',
+
+    },
     subtitle: {
-        position: 'absolute',
-        top: '300px',
         fontSize: '20px',
         color: '#ABABAB'
     },
-    img: {
-        width: 95,
-        height: 75
-    },
     google: {
-        position: 'absolute',
-        width: '398px',
-        height: '80px',
-        left: '160px',
-        top: '340px',
-        background: 'rgba(247, 183, 51, 0.38)',
+        background: '#f7b733',
         borderRadius: '50px',
         display: 'flex',
         alignItems: 'center'
     },
+
+    img: {
+        width: 70,
+        height: 50
+    },
+
     pGoogle: {
-        left: '95px',
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '32px',
-        lineHeight: '37px',
+        fontSize: '25px',
         color: '#7C7C7C'
     },
     hr: {
-        position: 'absolute',
         width: '687px',
         height: '0px',
-        left: '152px',
-        top: '450px',
         border: '8px solid #4ABDAC',
         transform: 'rotate(-0.17deg)'
-    },
-    teacher: {
-        position: 'absolute',
-        left: '0%',
-        right: '0%',
-        top: '585px',
-        bottom: '-0.01%',
     },
     Teach: {
         backgroundImage: `url(${Teacher})`,
@@ -154,7 +140,6 @@ const useStyles = makeStyles(theme => ({
         zIndex: 9
     },
     lady: {
-        marginLeft: '160px',
         width: 500,
         height: 360,
     }
