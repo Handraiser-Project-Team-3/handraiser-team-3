@@ -28,8 +28,9 @@ exports.up = pgm => {
       notNull: true
     },
     date_posted: {
-      type: "text",
-      notNull: true
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp")
     }
   });
 };

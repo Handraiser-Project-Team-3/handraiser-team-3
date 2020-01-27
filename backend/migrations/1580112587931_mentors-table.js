@@ -10,7 +10,7 @@ exports.up = pgm => {
     },
     user_id: {
       type: "integer",
-      references: '"user"',
+      references: '"users"',
       notNull: true
     },
     class_id: {
@@ -19,9 +19,9 @@ exports.up = pgm => {
       references: '"class"'
     },
     date_joined: {
-      type: "date",
+      type: "timestamp",
       notNull: true,
-      default: pgm.func("current_date")
+      default: pgm.func("current_timestamp")
     }
   });
 };

@@ -6,7 +6,7 @@ exports.up = pgm => {
   pgm.createTable("account_type", {
     id: {
       type: "serial",
-      primarKey: true
+      primaryKey: true
     },
     account_type_name: {
       type: "text",

@@ -3,32 +3,24 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("messages", {
+  pgm.createTable("participants", {
     id: {
       type: "serial",
       primaryKey: true
-    },
-    user_id: {
-      type: "integer",
-      notNull: true,
-      references: '"user"'
     },
     chat_room_id: {
       type: "integer",
       notNull: true,
       references: '"chat_room"'
     },
-    content: {
-      type: "text",
-      notNull: true
-    },
-    message_created: {
-      type: "interval",
-      notNull: true
+    user_id: {
+      type: "integer",
+      notNull: true,
+      references: '"users"'
     }
   });
 };
 
 exports.down = pgm => {
-  pgm.dropTable("messages");
+  pgm.dropTable("participants");
 };

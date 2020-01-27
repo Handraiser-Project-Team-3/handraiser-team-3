@@ -25,7 +25,7 @@ exports.up = pgm => {
       notNull: true
     },
     user_image: {
-      type: "blob"
+      type: "text"
     },
     user_status: {
       type: "boolean",
