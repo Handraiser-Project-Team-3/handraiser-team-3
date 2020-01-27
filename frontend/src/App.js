@@ -1,25 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import { Routes } from "./components/routes/Routes";
+import { HashRouter } from "react-router-dom";
 
 function App() {
+  const [metaData, setMetaData] = useState({});
+  const [user, setUser] = useState({});
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+      <Routes
+        metaData={metaData}
+        setMetaData={metaData}
+        user={user}
+        setUser={setUser}
+      />
+    </HashRouter>
   );
 }
 
