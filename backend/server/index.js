@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+/* code here */
+=======
 const express = require("express");
 const massive = require("massive");
 const cors = require("cors");
@@ -29,3 +32,4 @@ massive({
     console.log(`Server is Ready on Port ${port}`);
   });
 });
+>>>>>>> c33adb4c6410a15370d415d7c6f89eb0b1308904
