@@ -26,6 +26,6 @@ massive({
   const port = 3001;
 
   app.listen(port, () => {
-    console.log(`Server is Ready`);
+    console.log(`Server is Ready on Port ${port}`);
   });
 });
