@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // images
 import Background from './assets/bg.jpg';
@@ -14,9 +14,27 @@ import GoogleLogin from 'react-google-login';
 
 export default function Login() {
     const classes = useStyles();
+    const [state, setState] = useState({
+        id: 0,
+        first_name: '',
+        last_name: '',
+        email: '',
+        user_image: ''
+    });
+    const [accessToken, setAccessToken] = useState('');
+
 
     const responseGoogle = (res) => {
         console.log(res)
+        setState({
+            ...state,
+            id: res.profileObj.googleId,
+            first_name: res.profileObj.givenName,
+            last_name: res.profileObj.familyName,
+            email: res.profileObj.email,
+            user_image: res.profileObj.imageUrl
+        })
+        setAccessToken(res.accessToken)
     }
 
     return (
@@ -45,19 +63,17 @@ export default function Login() {
                             <Grid item xs={12} sm={12} >
                                 <div>
                                     <Typography className={classes.subtitle}>You can access the site by logging in with
-                                your google account</Typography>
+                                your Boom account</Typography>
                                 </div>
                             </Grid>
                             <Grid item>
-                                <div>
-                                    <GoogleLogin
-                                        clientId="150562647566-vp3bb3o056kghih4q9bvp72l4iahjj55.apps.googleusercontent.com"
-                                        buttonText="Login"
-                                        onSuccess={responseGoogle}
-                                        onFailure={responseGoogle}
-                                        cookiePolicy={'single_host_origin'}
-                                    />
-                                </div>
+                                <GoogleLogin
+                                    clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
+                                    buttonText="Login"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                    cookiePolicy={'single_host_origin'}
+                                />
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <div className={classes.bar}>
