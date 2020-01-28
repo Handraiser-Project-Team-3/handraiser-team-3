@@ -1,20 +1,23 @@
 import React from 'react';
 
-import Background from './img/bg.jpg';
-import Teacher from './img/undraw.svg';
-import Logo from './img/logo.png';
+// images
+import Background from './assets/bg.jpg';
+import Teacher from './assets/undraw.svg';
+import Logo from './assets/logo.png';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-import PropTypes from 'prop-types';
-import Hidden from '@material-ui/core/Hidden';
-import withWidth from '@material-ui/core/withWidth';
+import GoogleLogin from 'react-google-login';
 
-function Login() {
+export default function Login() {
     const classes = useStyles();
+
+    const responseGoogle = (res) => {
+        console.log(res)
+    }
 
     return (
         <React.Fragment>
@@ -28,44 +31,51 @@ function Login() {
             >
                 <Grid item className={classes.bg}>
                     <Grid item className={classes.logo}>
-                        <img src={Logo} alt="logo" className={classes.hand} />
+                        <div>
+                            <img src={Logo} alt="logo" className={classes.hand} />
+                        </div>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <Typography className={classes.signin}>Hand Raiser</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={12} className={classes.subtitleContainer}>
-                        <Typography className={classes.subtitle}>You can access the site by logging in with
+                    <div className={classes.container}>
+                        <div className={classes.signInContainer}>
+                            <Grid item xs={12} sm={12} md={8} lg={6}>
+                                <div>
+                                    <Typography className={classes.signin}>Hand Raiser</Typography>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} sm={12} >
+                                <div>
+                                    <Typography className={classes.subtitle}>You can access the site by logging in with
                                 your google account</Typography>
-                    </Grid>
-                    <Grid item>
-                        <button className={classes.google}>
-                            <div>
-                                <img src={require('./img/google_icon.png')} className={classes.img} alt='g_icon' />
-                            </div>
-                            <div>
-                                <Typography className={classes.pGoogle}>Sign in</Typography>
-                            </div>
-                        </button>
-                    </Grid>
-                    <Hidden xsDown>
-                        <Grid item xs={12} sm={12} md={4}>
-                            <hr className={classes.hr} />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={4}>
-                            <img src={Teacher} alt="teacher" className={classes.lady} />
-                        </Grid>
-                    </Hidden>
+                                </div>
+                            </Grid>
+                            <Grid item>
+                                <div>
+                                    <GoogleLogin
+                                        clientId="150562647566-vp3bb3o056kghih4q9bvp72l4iahjj55.apps.googleusercontent.com"
+                                        buttonText="Login"
+                                        onSuccess={responseGoogle}
+                                        onFailure={responseGoogle}
+                                        cookiePolicy={'single_host_origin'}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <div className={classes.bar}>
+                                    <hr className={classes.hr} />
+                                </div>
+                            </Grid>
+                        </div>
+                        <div className={classes.teach}>
+                            <Grid item xs={12} sm={8} md={6} lg={4}>
+                                <img src={Teacher} alt="teacher" className={classes.lady} />
+                            </Grid>
+                        </div>
+                    </div>
                 </Grid>
             </Grid>
         </React.Fragment >
     );
 }
-
-Login.propTypes = {
-    width: PropTypes.oneOf(['lg', 'md', 'sm', 'xl', 'xs']).isRequired,
-};
-
-export default withWidth()(Login);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -75,7 +85,6 @@ const useStyles = makeStyles(theme => ({
     bg: {
         backgroundImage: `url(${Background})`,
         backgroundRepeat: "no-repeat",
-        backgroundPosition: '10% 10%',
         backgroundSize: "cover",
         height: "100%",
         width: "100%"
@@ -85,25 +94,29 @@ const useStyles = makeStyles(theme => ({
         top: '-70px',
         left: '50px'
     },
-    hand: {
-        width: '200px'
-    },
-    signinContainer: {
+    container: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-evenly',
+        height: '100%',
+        paddingLeft: 160
+    },
+    signInContainer: {
+        display: 'flex',
+        flexDirection: 'column',
         alignContent: 'center',
-        marginLeft: 160,
+        paddingTop: '200px',
+        height: '60%',
+        width: '100%',
+        marginTop: 65,
+    },
+    hand: {
+        width: '200px'
     },
     signin: {
         fontSize: '80px',
         lineHeight: '112px',
         color: '#4ABDAC',
         textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
-    },
-    subtitleContainer: {
-        display: 'flex',
-
     },
     subtitle: {
         fontSize: '20px',
@@ -113,34 +126,29 @@ const useStyles = makeStyles(theme => ({
         background: '#f7b733',
         borderRadius: '50px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-around'
     },
-
     img: {
         width: 70,
         height: 50
     },
-
     pGoogle: {
         fontSize: '25px',
         color: '#7C7C7C'
     },
     hr: {
-        width: '687px',
         height: '0px',
         border: '8px solid #4ABDAC',
         transform: 'rotate(-0.17deg)'
     },
-    Teach: {
-        backgroundImage: `url(${Teacher})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: 'center',
-        height: "100%",
-        width: "100%",
-        zIndex: 9
+    teach: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        height: '40%'
     },
     lady: {
-        width: 500,
-        height: 360,
+        maxWidth: "100%",
+        height: 'auto',
     }
 }));
