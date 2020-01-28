@@ -10,7 +10,7 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 const auth = require("./controllers/auth");
-const user = require("./controllers/user");
+const user = require("./controllers/users");
 
 massive({
   host: "localhost",

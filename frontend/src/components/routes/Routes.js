@@ -4,6 +4,7 @@ import { Login } from "../login/Login";
 import { Admin } from "../users/Admin";
 import { Mentors } from "../users/Mentors";
 import { Students } from "../users/Students";
+import Classroom from "../users/ClassSelection";
 
 export const Routes = props => {
   return (
@@ -12,6 +13,7 @@ export const Routes = props => {
       <Route path="/admin" render={() => <Admin data={props} />} />
       <Route path="/mentors" render={() => <Mentors data={props} />} />
       <Route path="/student" render={() => <Students data={props} />} />
+      <Route path="/class" render={() => <Classroom data={props} />} />
     </Switch>
   );
 };
