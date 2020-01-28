@@ -22,9 +22,9 @@ massive({
   app.use(auth.headers);
 
   //other pages that need headers
+  app.get("/api/user", user.login);
 
   const port = 3001;
-
   app.listen(port, () => {
     console.log(`Server is Ready on Port ${port}`);
   });
