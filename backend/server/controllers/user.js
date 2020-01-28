@@ -1,3 +1,5 @@
 module.exports = {
-  login: (req, res) => {}
+  login: (req, res) => {
+    res.status(200).send({ message: "ok" });
+  }
 };
