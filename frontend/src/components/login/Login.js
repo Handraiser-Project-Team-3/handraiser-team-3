@@ -18,7 +18,7 @@ import Grid from '@material-ui/core/Grid';
 export const Login = props => {
   const { metaData, setMetaData } = props.data;
   const classes = useStyles();
-  const [state, setState] = useState({
+  const [user, setUser] = useState({
     first_name: '',
     last_name: '',
     email: '',
@@ -38,7 +38,8 @@ export const Login = props => {
     localStorage.setItem('accessToken', res.accessToken)
     localStorage.setItem('id', res.profileObj.googleId)
 
-    setState({
+    setUser({
+      ...user,
       first_name: res.profileObj.givenName,
       last_name: res.profileObj.familyName,
       email: res.profileObj.email,
@@ -49,20 +50,20 @@ export const Login = props => {
     axios({
       method: 'post',
       url: 'http://localhost:3001/api/login',
-      data: state
+      data: user
     })
       .then(() => {
         toast.info("Log in Successful! Redirecting...", {
           position: "top-right",
           hideProgressBar: true,
-          autoClose: 3000,
+          autoClose: 1000,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true
         });
         setTimeout(() => {
           window.location.href = '#/admin';
-        }, 1000);
+        }, 3000);
       })
       .catch(e => {
         toast.error("Unable to Login!", {
