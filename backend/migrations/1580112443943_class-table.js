@@ -36,5 +36,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("class");
+  pgm.dropTable("class", { cascade: true });
 };

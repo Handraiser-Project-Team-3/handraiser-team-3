@@ -16,5 +16,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("chat_room");
+  pgm.dropTable("chat_room", { cascade: true });
 };

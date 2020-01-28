@@ -13,17 +13,14 @@ exports.up = pgm => {
       notNull: true,
       references: '"account_type"'
     },
-    username: {
-      type: "text",
-      notNull: true
-    },
-    password: {
-      type: "text",
-      notNull: true
+    user_profile_id: {
+      type: "integer",
+      notNull: true,
+      references: '"user_profile"'
     }
   });
 };
 
 exports.down = pgm => {
-  pgm.dropTable("users");
+  pgm.dropTable("users", { cascade: true });
 };

@@ -16,5 +16,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("account_type");
+  pgm.dropTable("account_type", { cascade: true });
 };
