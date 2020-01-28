@@ -43,12 +43,19 @@ module.exports = {
         content
       }).then(message => res.status(200).json(message)).catch(()=> res.status(500).end())
     }).catch(()=> res.status(500).end())
-  }
-  // ,
-  // particpantList: (req, res) => {
-  //     const db = req.app.get("db")
-  //     const {user_id, chat_room_id} = req.params
+  },
+  participantList: (req, res) => {
+      const db = req.app.get("db")
+      const {chat_room_id} = req.params
 
-  //     db.participants.find({user_id, chat_room_id}).then(data => )
-  // }
+      db.chat_room
+      .find({chat_room_id})
+      .then(()=> {
+        return db.query(`select * from participants, users 
+        where participants.chat_room_id = ${chat_room_id} 
+        and users.id = participants.user_id`)
+        .then(participants => res.status(200).json(participants))
+        .catch(() => res.status(500).end())
+      }).catch(() => res.status(500).end())
+  }
 };
