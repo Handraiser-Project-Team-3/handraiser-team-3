@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // images
 import Background from '../assets/images/bg.jpg';
@@ -25,11 +26,31 @@ export const Login = props => {
   const [accessToken, setAccessToken] = useState('');
 
 
+  // useEffect(() => {
+  //   localStorage.setItem('accessToken', accessToken);
+  //   if (!localStorage.getItem('accessToken')) {
+  //     window.location.href = "/"
+  //   } else {
+  //     axios({
+  //       method: 'post',
+  //       url: '/api/user',
+  //       data: state
+  //     })
+  //       .then(() => {
+  //         setTimeout(() => {
+  //           window.location.href = "#/admin"
+  //         }, 2000);
+  //       })
+  //       .catch(e => {
+  //         console.log(e)
+  //       })
+  //   }
+  // }, []);
+
   const responseGoogle = (res) => {
-    console.log(res)
     setState({
       ...state,
-      id: res.profileObj.googleId,
+      googleId: parseInt(res.profileObj.googleId),
       first_name: res.profileObj.givenName,
       last_name: res.profileObj.familyName,
       email: res.profileObj.email,
@@ -63,8 +84,8 @@ export const Login = props => {
               </Grid>
               <Grid item xs={12} sm={12} >
                 <div>
-                  <Typography className={classes.subtitle}>You can access the site by logging in with
-                                your Boom account</Typography>
+                  <Typography className={classes.subtitle}>You can access the course material by logging in with
+                                your @boom.camp account</Typography>
                 </div>
               </Grid>
               <Grid item>
