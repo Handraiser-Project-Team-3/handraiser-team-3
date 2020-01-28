@@ -10,7 +10,7 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 const auth = require("./controllers/auth");
-const user = require("./controllers/user");
+const user = require("./controllers/users");
 
 massive({
   host: "localhost",
@@ -31,13 +31,8 @@ massive({
   //other pages that need headers
 
   const port = 3001;
-<<<<<<< HEAD
   server.listen(port, () => {
     console.clear();
     console.log(`Server is running at port ${port}`);
-=======
-  app.listen(port, () => {
-    console.log(`Server is Ready on Port ${port}`);
->>>>>>> 2a3cb8cfbaa7ec1d432bde55036be02a04d5bd9e
   });
 });
