@@ -9,7 +9,7 @@ const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
 
-const auth = require("./controllers/auth");
+// const auth = require("./controllers/auth");
 const user = require("./controllers/users");
 
 massive({
@@ -25,8 +25,10 @@ massive({
 
   //login & signup here
   app.get("/api/login", user.login);
+  app.post("/api/user", user.addUser);
+  app.patch("/api/user/:id", user.editUser);
 
-  app.use(auth.headers);
+  // app.use(auth.headers);
 
   //other pages that need headers
 
