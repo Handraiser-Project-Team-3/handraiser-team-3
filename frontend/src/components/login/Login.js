@@ -1,57 +1,80 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import GoogleLogin from 'react-google-login';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // images
-import Background from "../assets/images/bg.jpg";
-import Teacher from "../assets/images/undraw.svg";
-import Logo from "../assets/images/logo.png";
+import Background from '../assets/images/bg.jpg';
+import Teacher from '../assets/images/undraw.svg';
+import Logo from '../assets/images/logo.png';
+// material-ui
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-
-import GoogleLogin from "react-google-login";
 
 export const Login = props => {
   const { metaData, setMetaData, user, setUser } = props.data;
   const classes = useStyles();
+  const [redirect, setRedirect] = useState(false);
 
-  // useEffect(() => {
-  //   localStorage.setItem('accessToken', accessToken);
-  //   if (!localStorage.getItem('accessToken')) {
-  //     window.location.href = "/"
-  //   } else {
-  //     axios({
-  //       method: 'post',
-  //       url: '/api/user',
-  //       data: state
-  //     })
-  //       .then(() => {
-  //         setTimeout(() => {
-  //           window.location.href = "#/admin"
-  //         }, 2000);
-  //       })
-  //       .catch(e => {
-  //         console.log(e)
-  //       })
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem('__accessToken')) {
+      setTimeout(() => {
+        window.location.href = '#/admin';
+      }, 1000);
+    }
+  }, []);
 
-  const responseGoogle = res => {
+  const responseGoogle = (res) => {
+    localStorage.setItem('__accessToken', res.accessToken)
+    localStorage.setItem('gId', res.profileObj.googleId)
+
     setUser({
       ...user,
-      googleId: parseInt(res.profileObj.googleId),
       first_name: res.profileObj.givenName,
       last_name: res.profileObj.familyName,
       email: res.profileObj.email,
       user_image: res.profileObj.imageUrl
     });
-  };
+    setRedirect(true);
+
+    axios({
+      method: 'post',
+      url: 'http://localhost:3001/api/login',
+      data: user
+    })
+      .then(() => {
+        toast.info("Log in Successful! Redirecting...", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 1000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
+        setTimeout(() => {
+          window.location.href = '#/admin';
+        }, 3000);
+      })
+      .catch(e => {
+        toast.error("Unable to Login!", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
+      })
+  }
 
   return (
     <React.Fragment>
       <CssBaseline />
+      <ToastContainer enableMulticontainer />
       <Grid
         container
         direction="row"
