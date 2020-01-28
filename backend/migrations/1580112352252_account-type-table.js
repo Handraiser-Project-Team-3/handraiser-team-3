@@ -13,6 +13,9 @@ exports.up = pgm => {
       notNull: true
     }
   });
+  pgm.sql(
+    "insert into account_type (account_type_name) values ('admin'),('mentor'),('student')"
+  );
 };
 
 exports.down = pgm => {
