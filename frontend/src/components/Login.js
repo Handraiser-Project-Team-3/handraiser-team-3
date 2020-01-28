@@ -12,7 +12,8 @@ import Grid from '@material-ui/core/Grid';
 
 import GoogleLogin from 'react-google-login';
 
-export default function Login() {
+export const Login = props => {
+    const { metaData, setMetaData } = props.data;
     const classes = useStyles();
     const [state, setState] = useState({
         id: 0,
