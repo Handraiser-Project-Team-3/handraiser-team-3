@@ -23,6 +23,10 @@ exports.up = pgm => {
       notNull: true,
       references: '"mentors"'
     },
+    title: {
+      type: "text",
+      notNull: true
+    },
     status: {
       type: "boolean",
       notNull: true
