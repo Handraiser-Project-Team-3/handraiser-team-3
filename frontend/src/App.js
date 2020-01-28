@@ -5,7 +5,7 @@ import { HashRouter } from "react-router-dom";
 
 function App() {
   const [metaData, setMetaData] = useState({});
-  const [user, setUser] = useState({});
+  const [user, setUser] = useLocalStorage("user", {});
 
   return (
     <HashRouter>
