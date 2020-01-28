@@ -9,20 +9,10 @@ exports.up = pgm => {
       primaryKey: true
     },
     first_name: {
-      type: "text",
-      notNull: true
+      type: "text"
     },
     last_name: {
-      type: "text",
-      notNull: true
-    },
-    middle_name: {
-      type: "text",
-      notNull: true
-    },
-    email: {
-      type: "text",
-      notNull: true
+      type: "text"
     },
     user_image: {
       type: "text"
