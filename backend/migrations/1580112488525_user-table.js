@@ -13,14 +13,21 @@ exports.up = pgm => {
       notNull: true,
       references: '"account_type"'
     },
-    user_profile_id: {
-      type: "integer",
-      notNull: true,
-      references: '"user_profile"'
-    },
     email: {
       type: "text",
       notNull: true
+    },
+    first_name: {
+      type: "text"
+    },
+    last_name: {
+      type: "text"
+    },
+    user_image: {
+      type: "text"
+    },
+    user_status: {
+      type: "boolean"
     }
   });
 };
