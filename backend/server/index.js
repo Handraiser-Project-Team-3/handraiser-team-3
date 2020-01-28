@@ -1,8 +1,16 @@
-const express = require("express");
 const massive = require("massive");
 const cors = require("cors");
 
-const auth = require("./controllers/auth");
+const express = require("express");
+const http = require("http");
+const socketIO = require("socket.io");
+
+const app = express();
+const server = http.Server(app);
+const io = socketIO(server);
+
+// const auth = require("./controllers/auth");
+const user = require("./controllers/users");
 
 massive({
   host: "localhost",
@@ -11,21 +19,22 @@ massive({
   user: "postgres",
   password: "handraiserdb"
 }).then(db => {
-  const app = express();
-
   app.set("db", db);
   app.use(express.json());
   app.use(cors());
 
   //login & signup here
+  app.get("/api/login", user.login);
+  app.post("/api/user", user.addUser);
+  app.patch("/api/user/:id", user.editUser);
 
-  app.use(auth.headers);
+  // app.use(auth.headers);
 
   //other pages that need headers
-  app.get("/api/user", user.login);
 
   const port = 3001;
-  app.listen(port, () => {
-    console.log(`Server is Ready on Port ${port}`);
+  server.listen(port, () => {
+    console.clear();
+    console.log(`Server is running at port ${port}`);
   });
 });
