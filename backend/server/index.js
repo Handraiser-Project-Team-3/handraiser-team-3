@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-/* code here */
-=======
 const express = require("express");
 const massive = require("massive");
 const cors = require("cors");
@@ -25,11 +22,10 @@ massive({
   app.use(auth.headers);
 
   //other pages that need headers
+  app.get("/api/user", user.login);
 
   const port = 3001;
-
   app.listen(port, () => {
     console.log(`Server is Ready`);
   });
 });
->>>>>>> c33adb4c6410a15370d415d7c6f89eb0b1308904
