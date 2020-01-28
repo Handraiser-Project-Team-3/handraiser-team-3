@@ -11,6 +11,7 @@ const io = socketIO(server);
 
 // const auth = require("./controllers/auth");
 const user = require("./controllers/users");
+const chats = require("./controllers/chats");
 
 massive({
   host: "localhost",
@@ -27,6 +28,12 @@ massive({
   app.get("/api/login", user.login);
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+
+  //chats
+  app.post("/api/chats/create", chats.createChat);
+  app.get("/api/chats/list", chats.chatList);
+  app.post("/api/chats/message/create", chats.createMessage);
+  app.get("/api/chats/participants/list", chats.participantList);
 
   // app.use(auth.headers);
 
