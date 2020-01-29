@@ -52,10 +52,9 @@ module.exports = {
   },
   messageList: (req, res) => {
     const db = req.app.get("db");
-    const { chat_room_id } = req.params;
 
     db.messages
-      .find({ chat_room_id })
+      .find({ id: req.params.id })
       .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
   },
@@ -77,7 +76,6 @@ module.exports = {
           .catch(() => res.status(500).end());
       })
       .catch(() => res.status(500).end());
-<<<<<<< HEAD
   },
 
   deleteMessages: (req, res) => {
@@ -96,7 +94,5 @@ module.exports = {
       .update({ id: req.params.id }, { content })
       .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
-=======
->>>>>>> 2d201f9eaf6642192df0b0c386c9cb2de9f7546b
   }
 };

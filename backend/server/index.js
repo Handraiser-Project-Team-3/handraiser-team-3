@@ -40,12 +40,12 @@ massive({
 
   //chats
   app.post("/api/chats/create", chats.createChat);
-  app.get("/api/chats/list", chats.chatList);
+  app.get("/api/chats/list/:id", chats.chatList);
   app.post("/api/chats/message/create", chats.createMessage);
-  app.get("/api/chats/participants/list", chats.participantList);
-  app.get("/api/chats/messages/list", chats.participantList);
-  app.delete("/api/chats/messages/delete", chats.deleteMessages);
-  app.patch("/api/chats/messages/edit", chats.editMessages);
+  app.get("/api/chats/participants/list/:chat_room_id", chats.participantList);
+  app.get("/api/chats/messages/list/:id", chats.messagesList);
+  app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
+  app.patch("/api/chats/messages/edit/id", chats.editMessages);
 
   // app.use(auth.headers);
 
