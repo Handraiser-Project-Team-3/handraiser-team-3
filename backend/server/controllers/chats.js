@@ -77,6 +77,7 @@ module.exports = {
           .catch(() => res.status(500).end());
       })
       .catch(() => res.status(500).end());
+<<<<<<< HEAD
   },
 
   deleteMessages: (req, res) => {
@@ -95,5 +96,7 @@ module.exports = {
       .update({ id: req.params.id }, { content })
       .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
+=======
+>>>>>>> 2d201f9eaf6642192df0b0c386c9cb2de9f7546b
   }
 };

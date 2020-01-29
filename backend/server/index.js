@@ -11,6 +11,7 @@ const io = socketIO(server);
 
 // const auth = require("./controllers/auth");
 const user = require("./controllers/users");
+const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
 
 massive({
@@ -26,8 +27,16 @@ massive({
 
   //login & signup here
   app.get("/api/login", user.login);
+
+  //user
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+
+  //classroom
+  app.get("/api/class", classroom.list);
+  app.post("/api/class", classroom.addClass);
+  app.patch("/api/class", classroom.editClass);
+  app.delete("/api/class/:id", classroom.deleteClass);
 
   //chats
   app.post("/api/chats/create", chats.createChat);
