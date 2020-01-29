@@ -36,26 +36,36 @@ module.exports = {
     const db = req.app.get("db");
     const { user_id, chat_room_id, content } = req.body;
 
-    db.users.findOne({ user_id }).then(data => {
-      db.messages.insert({
-        user_id = data.id,
-        chat_room_id,
-        content
-      }).then(message => res.status(200).json(message)).catch(()=> res.status(500).end())
-    }).catch(()=> res.status(500).end())
+    db.users
+      .findOne({ user_id })
+      .then(data => {
+        db.messages
+          .insert({
+            user_id: data.id,
+            chat_room_id,
+            content
+          })
+          .then(message => res.status(200).json(message))
+          .catch(() => res.status(500).end());
+      })
+      .catch(() => res.status(500).end());
   },
   participantList: (req, res) => {
-      const db = req.app.get("db")
-      const {chat_room_id} = req.params
+    const db = req.app.get("db");
+    const { chat_room_id } = req.params;
 
-      db.chat_room
-      .find({chat_room_id})
-      .then(()=> {
-        return db.query(`select * from participants, users 
+    db.chat_room
+      .find({ chat_room_id })
+      .then(() => {
+        return db
+          .query(
+            `select * from participants, users 
         where participants.chat_room_id = ${chat_room_id} 
-        and users.id = participants.user_id`)
-        .then(participants => res.status(200).json(participants))
-        .catch(() => res.status(500).end())
-      }).catch(() => res.status(500).end())
+        and users.id = participants.user_id`
+          )
+          .then(participants => res.status(200).json(participants))
+          .catch(() => res.status(500).end());
+      })
+      .catch(() => res.status(500).end());
   }
 };
