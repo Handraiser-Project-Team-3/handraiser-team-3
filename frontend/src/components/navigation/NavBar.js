@@ -22,159 +22,174 @@ import ClassIcon from "@material-ui/icons/Class";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
+import { GoogleLogout } from "react-google-login";
+import styled from "styled-components";
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		flexGrow: 1
-	},
-	menuButton: {
-		marginRight: theme.spacing(2)
-	},
-	title: {
-		flexGrow: 1
-	},
-	logo: {
-		width: "180px",
-		marginTop: "0.5vh"
-	},
-	pad: {
-		paddingLeft: "3px"
-	},
-	list: {
-		width: 250
-	}
+  root: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    flexGrow: 1
+  },
+  logo: {
+    width: "180px",
+    marginTop: "0.5vh"
+  },
+  pad: {
+    paddingLeft: "3px"
+  },
+  list: {
+    width: 250
+  }
 }));
 
 export default function ButtonAppBar() {
-	const classes = useStyles();
+  const classes = useStyles();
 
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
-	const [show, setShow] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const [show, setShow] = React.useState(true);
 
-	const handleClick = () => {
-		setShow(!show);
-	};
+  const handleClick = () => {
+    setShow(!show);
+  };
 
-	const handleMenu = event => {
-		setAnchorEl(event.currentTarget);
-	};
+  const handleMenu = event => {
+    setAnchorEl(event.currentTarget);
+  };
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-	const [state, setState] = React.useState({
-		left: false
-	});
+  const [state, setState] = React.useState({
+    left: false
+  });
 
-	const toggleDrawer = (side, open) => event => {
-		if (
-			event.type === "keydown" &&
-			(event.key === "Tab" || event.key === "Shift")
-		) {
-			return;
-		}
-		setState({ ...state, [side]: open });
-	};
+  const toggleDrawer = (side, open) => event => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setState({ ...state, [side]: open });
+  };
 
-	const sideList = side => (
-		<div
-			className={classes.list}
-			role="presentation"
-			onClick={toggleDrawer(side, true)}
-			onKeyDown={toggleDrawer(side, true)}
-		>
-			<List
-				component="nav"
-				aria-labelledby="nested-list-subheader"
-				subheader={
-					<ListSubheader component="div" id="nested-list-subheader">
-						Hand Raiser{" "}
-					</ListSubheader>
-				}
-				className={classes.root}
-			>
-				<ListItem button>
-					<ListItemIcon>
-						<ClassIcon />
-					</ListItemIcon>
-					<ListItemText primary="Classes" />
-				</ListItem>
-				<ListItem button onClick={handleClick}>
-					<ListItemIcon>
-						<InboxIcon />
-					</ListItemIcon>
-					<ListItemText primary="Enrolled" />
-					{show ? <ExpandLess /> : <ExpandMore />}
-				</ListItem>
-				<Collapse in={!show} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
-						<ListItem button className={classes.nested}>
-							<ListItemIcon>
-								<StarBorder />
-							</ListItemIcon>
-							<ListItemText primary="BoomCamp Frontend" />
-						</ListItem>
-					</List>
-				</Collapse>
-			</List>
-		</div>
-	);
+  const sideList = side => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer(side, true)}
+      onKeyDown={toggleDrawer(side, true)}
+    >
+      <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            Hand Raiser{" "}
+          </ListSubheader>
+        }
+        className={classes.root}
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <ClassIcon />
+          </ListItemIcon>
+          <ListItemText primary="Classes" />
+        </ListItem>
+        <ListItem button onClick={handleClick}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Enrolled" />
+          {show ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={!show} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="BoomCamp Frontend" />
+            </ListItem>
+          </List>
+        </Collapse>
+      </List>
+    </div>
+  );
 
-	return (
-		<div className={classes.root}>
-			<AppBar position="fixed" style={{ background: "#4abdac" }}>
-				<Toolbar>
-					<IconButton
-						edge="start"
-						className={classes.menuButton}
-						color="inherit"
-						aria-label="menu"
-						onClick={toggleDrawer("left", true)}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-						{sideList("left")}
-					</Drawer>
-					<Typography variant="h6" className={classes.title}>
-						<img src={logo} className={classes.logo} alt="logo" />
-					</Typography>
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" style={{ background: "#4abdac" }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer("left", true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
+            {sideList("left")}
+          </Drawer>
+          <Typography variant="h6" className={classes.title}>
+            <img src={logo} className={classes.logo} alt="logo" />
+          </Typography>
 
-					<div>
-						<IconButton
-							aria-label="account of current user"
-							aria-controls="menu-appbar"
-							aria-haspopup="true"
-							onClick={handleMenu}
-							color="inherit"
-						>
-							<AccountCircle />
-						</IconButton>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorEl}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "right"
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "right"
-							}}
-							open={open}
-							onClose={handleClose}
-						>
-							<MenuItem onClick={handleClose}>
-								<ExitToAppIcon fontSize="small" />
-								<span className={classes.pad}>Logout</span>
-							</MenuItem>
-						</Menu>
-					</div>
-				</Toolbar>
-			</AppBar>
-		</div>
-	);
+          <div>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>
+                <GoogleLogout
+                  clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
+                  buttonText="Logout"
+                  onLogoutSuccess={() => {}}
+                  render={renderProps => (
+                    <Btn onClick={renderProps.onClick}>
+                      <ExitToAppIcon fontSize="small" />
+                      <span className={classes.pad}>Logout</span>
+                    </Btn>
+                  )}
+                />
+              </MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
+const Btn = styled.span`
+  display: flex;
+  align-items: center;
+`;
