@@ -11,15 +11,22 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import Tooltip from "@material-ui/core/Tooltip";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 // component/s
-import Navigation from "../navigation/NavBar";
+import Navigation from "../../navigation/NavBar";
+import { Modal } from "./Modal";
 
 // images
-import head from "../assets/images/bg.jpg";
-import blackboard from "../assets/images/blackboard.png";
-import classroom from "../assets/images/classroom.jpg";
-import man from "../assets/images/man.png";
+import head from "../../assets/images/bg.jpg";
+import blackboard from "../../assets/images/blackboard.png";
+import classroom from "../../assets/images/classroom.jpg";
+import student from "../../assets/images/student.png";
+import trash from "../../assets/images/edit-tools.png";
+import edit from "../../assets/images/edit.png";
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -56,11 +63,52 @@ const useStyles = makeStyles(theme => ({
 	},
 	media: {
 		height: 140
+	},
+	addClass: {
+		cursor: "pointer",
+		color: "#8e9493"
+	},
+	icons: {
+		width: "20px",
+		cursor: "pointer",
+		"&:hover": {
+			width: "23px",
+			borderRadius: "10%"
+		}
 	}
 }));
 
-export default function Classroom() {
+export const Classroom = props => {
 	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
+	const [name, setName] = React.useState("");
+
+	const handleClickOpen = () => {
+		setOpen(true);
+		setName("Edit");
+	};
+
+	const handleClickOpenAdd = () => {
+		setOpen(true);
+		setName("Add");
+	};
+
+	const handleDelete = () => {
+		confirmAlert({
+			title: "Confirm to Delete",
+			message: "Are you sure you want to delete this Class?",
+			buttons: [
+				{
+					label: "Yes",
+					onClick: () => alert("Click Yes")
+				},
+				{
+					label: "No",
+					onClick: () => alert("Click No")
+				}
+			]
+		});
+	};
 
 	return (
 		<div>
@@ -74,7 +122,7 @@ export default function Classroom() {
 				>
 					<Grid item xs={12} sm={9} md={10} lg={10}>
 						<Typography variant="h5" className={classes.color}>
-							Welcome Marcial!
+							Welcome Mentor Vince!
 						</Typography>
 					</Grid>
 					<Grid item sm={3} md={2} lg={2}>
@@ -83,7 +131,7 @@ export default function Classroom() {
 							aria-label="breadcrumb"
 							className={classes.res}
 						>
-							<Link color="inherit">Marcial</Link>
+							<Link color="inherit">Vince</Link>
 							<Typography color="textPrimary">Classrooms</Typography>
 						</Breadcrumbs>
 					</Grid>
@@ -106,9 +154,30 @@ export default function Classroom() {
 						/>
 					</Grid>
 					<Grid item>
-						<Typography variant="h6" className={classes.classStyle}>
-							CLASSROOMS
-						</Typography>
+						<Grid
+							container
+							direction="row"
+							alignItems="flex-end"
+							spacing={1}
+							style={{ marginBottom: "1vh" }}
+						>
+							<Grid item>
+								<Typography variant="h6" className={classes.classStyle}>
+									CLASSROOMS
+								</Typography>
+							</Grid>
+							<Grid item>
+								<Tooltip title="Add Class">
+									<AddCircleOutlineIcon
+										fontSize="small"
+										className={classes.addClass}
+										onClick={() => {
+											handleClickOpenAdd();
+										}}
+									/>
+								</Tooltip>
+							</Grid>
+						</Grid>
 					</Grid>
 				</Grid>
 				<Grid container direction="row" alignItems="center" spacing={3}>
@@ -124,6 +193,7 @@ export default function Classroom() {
 									<Typography gutterBottom variant="h5">
 										BoomCamp Frontend
 									</Typography>
+
 									<Typography
 										variant="body2"
 										color="textSecondary"
@@ -142,7 +212,11 @@ export default function Classroom() {
 											justify="space-between"
 										>
 											<Grid item lg={2} xs={2}>
-												<img src={man} alt="man" style={{ width: "30px" }} />
+												<img
+													src={student}
+													alt="man"
+													style={{ width: "30px" }}
+												/>
 											</Grid>
 
 											<Grid item lg={10} xs={10}>
@@ -158,11 +232,11 @@ export default function Classroom() {
 															component="div"
 															variant="caption"
 														>
-															Mentor's Name:
+															Students:
 														</Typography>
 													</Grid>
 													<Grid item lg={12} xs={12}>
-														<b>Vince Gerard Ludovice</b>
+														<b>10</b>
 													</Grid>
 												</Grid>
 											</Grid>
@@ -170,17 +244,52 @@ export default function Classroom() {
 									</Typography>
 								</CardContent>
 							</CardActionArea>
-							<CardActions style={{ background: "#fbdfa1" }}>
-								<Grid container direction="column" alignItems="center">
-									<Button size="small" style={{ color: "#4abdab" }}>
-										Join Class
-									</Button>
+							<CardActions style={{ background: "#d0efea" }}>
+								<Grid
+									container
+									direction="row"
+									alignItems="center"
+									justify="space-between"
+								>
+									<Grid item lg={10} md={10} sm={9} xs={9}>
+										<Button size="small" style={{ color: "#b5855a" }}>
+											Enter Class
+										</Button>
+									</Grid>
+									<Grid item lg={2} md={2} sm={3} xs={3}>
+										<Grid container direction="row" alignItems="center">
+											<Tooltip title="Edit Class">
+												<img
+													src={edit}
+													alt="edit"
+													className={classes.icons}
+													style={{ marginRight: "10px" }}
+													onClick={() => {
+														handleClickOpen();
+													}}
+												/>
+											</Tooltip>
+											<Grid item>
+												<Tooltip title="Delete Class">
+													<img
+														src={trash}
+														alt="delete"
+														className={classes.icons}
+														onClick={() => {
+															handleDelete();
+														}}
+													/>
+												</Tooltip>
+											</Grid>
+										</Grid>
+									</Grid>
 								</Grid>
 							</CardActions>
 						</Card>
 					</Grid>
 				</Grid>
+				<Modal open={open} setOpen={setOpen} name={name} />
 			</div>
 		</div>
 	);
-}
+};

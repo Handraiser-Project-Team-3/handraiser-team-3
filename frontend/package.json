@@ -5,16 +5,23 @@
   "dependencies": {
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.40",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "react": "^16.12.0",
+    "react-confirm-alert": "^2.4.1",
     "react-dom": "^16.12.0",
     "react-google-login": "^5.0.7",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+<<<<<<< HEAD
     "styled-components": "^5.0.0"
+=======
+    "react-toastify": "^5.5.0",
+    "react-use-localstorage": "^3.4.1"
+>>>>>>> 330ed027eebc84d0b11647e2f982eeef7a871084
   },
   "scripts": {
     "start": "react-scripts start",

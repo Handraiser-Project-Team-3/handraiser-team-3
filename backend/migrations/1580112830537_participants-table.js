@@ -4,10 +4,6 @@ exports.shorthands = undefined;
 
 exports.up = pgm => {
   pgm.createTable("participants", {
-    id: {
-      type: "serial",
-      primaryKey: true
-    },
     chat_room_id: {
       type: "integer",
       notNull: true,
