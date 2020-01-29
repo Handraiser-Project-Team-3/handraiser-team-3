@@ -50,6 +50,16 @@ module.exports = {
       })
       .catch(() => res.status(500).end());
   },
+  messageList: (req, res) => {
+    const db = req.app.get("db");
+    const { chat_room_id } = req.params;
+
+    db.messages
+      .find({ chat_room_id })
+      .then(data => res.status(200).json(data))
+      .catch(() => res.status(500).end());
+  },
+
   participantList: (req, res) => {
     const db = req.app.get("db");
     const { chat_room_id } = req.params;
@@ -67,5 +77,26 @@ module.exports = {
           .catch(() => res.status(500).end());
       })
       .catch(() => res.status(500).end());
+<<<<<<< HEAD
+  },
+
+  deleteMessages: (req, res) => {
+    const db = req.app.get("db");
+    db.messages
+      .destroy({ id: req.params.id })
+      .then(data => res.status(200).json(data))
+      .catch(() => res.status(500).end());
+  },
+
+  editMessages: (req, res) => {
+    const db = req.app.get("db");
+    const { content } = req.body;
+
+    db.messages
+      .update({ id: req.params.id }, { content })
+      .then(data => res.status(200).json(data))
+      .catch(() => res.status(500).end());
+=======
+>>>>>>> 2d201f9eaf6642192df0b0c386c9cb2de9f7546b
   }
 };
