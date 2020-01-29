@@ -35,6 +35,8 @@ massive({
   app.post("/api/chats/message/create", chats.createMessage);
   app.get("/api/chats/participants/list", chats.participantList);
   app.get("/api/chats/messages/list", chats.participantList);
+  app.delete("/api/chats/messages/delete", chats.deleteMessages);
+  app.patch("/api/chats/messages/edit", chats.editMessages);
 
   // app.use(auth.headers);
 

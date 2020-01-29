@@ -51,11 +51,15 @@ module.exports = {
       .catch(() => res.status(500).end());
   },
   messageList: (req, res) => {
+    const db = req.app.get("db");
+    const { chat_room_id } = req.params;
+
     db.messages
       .find({ chat_room_id })
       .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
   },
+
   participantList: (req, res) => {
     const db = req.app.get("db");
     const { chat_room_id } = req.params;
@@ -72,6 +76,24 @@ module.exports = {
           .then(participants => res.status(200).json(participants))
           .catch(() => res.status(500).end());
       })
+      .catch(() => res.status(500).end());
+  },
+
+  deleteMessages: (req, res) => {
+    const db = req.app.get("db");
+    db.messages
+      .destroy({ id: req.params.id })
+      .then(data => res.status(200).json(data))
+      .catch(() => res.status(500).end());
+  },
+
+  editMessages: (req, res) => {
+    const db = req.app.get("db");
+    const { content } = req.body;
+
+    db.messages
+      .update({ id: req.params.id }, { content })
+      .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
   }
 };
