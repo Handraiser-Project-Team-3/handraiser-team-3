@@ -9,7 +9,7 @@ const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
 
-// const auth = require("./controllers/auth");
+const auth = require("./controllers/auth");
 const user = require("./controllers/users");
 const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
@@ -25,8 +25,10 @@ massive({
   app.use(express.json());
   app.use(cors());
 
-  //login & signup here
-  app.get("/api/login", user.login);
+  //login here
+  app.post("/api/login", user.login);
+
+  app.use(auth.headers);
 
   //user
   app.post("/api/user", user.addUser);
@@ -46,8 +48,6 @@ massive({
   app.get("/api/chats/messages/list/:id", chats.messagesList);
   app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
   app.patch("/api/chats/messages/edit/id", chats.editMessages);
-
-  // app.use(auth.headers);
 
   //other pages that need headers
 

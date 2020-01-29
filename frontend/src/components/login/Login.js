@@ -1,75 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import GoogleLogin from 'react-google-login';
+import React from "react";
+import axios from "axios";
+import GoogleLogin from "react-google-login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // images
-import Background from '../assets/images/bg.jpg';
-import Teacher from '../assets/images/undraw.svg';
-import Logo from '../assets/images/logo.png';
+import Background from "../assets/images/bg.jpg";
+import Teacher from "../assets/images/undraw.svg";
+import Logo from "../assets/images/logo.png";
 // material-ui
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import styled from "styled-components";
+import googleIcon from "../assets/images/google.svg";
 
 export const Login = props => {
-  const { metaData, setMetaData, user, setUser } = props.data;
+  const { setAccessToken } = props.data;
   const classes = useStyles();
-  const [redirect, setRedirect] = useState(false);
 
-  useEffect(() => {
-    if (localStorage.getItem('__accessToken')) {
-      setTimeout(() => {
-        window.location.href = '#/admin';
-      }, 1000);
-    }
-  }, []);
-
-  const responseGoogle = (res) => {
-    localStorage.setItem('__accessToken', res.accessToken)
-    localStorage.setItem('gId', res.profileObj.googleId)
-
-    setUser({
-      ...user,
+  const responseGoogle = res => {
+    const obj = {
       first_name: res.profileObj.givenName,
       last_name: res.profileObj.familyName,
       email: res.profileObj.email,
       user_image: res.profileObj.imageUrl
-    });
-    setRedirect(true);
-
-    axios({
-      method: 'post',
-      url: 'http://localhost:3001/api/login',
-      data: user
-    })
-      .then(() => {
-        toast.info("Log in Successful! Redirecting...", {
-          position: "top-right",
-          hideProgressBar: true,
-          autoClose: 1000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-        });
-        setTimeout(() => {
-          window.location.href = '#/admin';
-        }, 3000);
+    };
+    axios
+      .post("/api/login", obj)
+      .then(res => {
+        setAccessToken(res.data);
+        alertToast("Log in Successful!");
       })
-      .catch(e => {
-        toast.error("Unable to Login!", {
-          position: "top-right",
-          hideProgressBar: true,
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-        });
-      })
-  }
+      .catch(() => {
+        alertToast("Unable to Login!");
+      });
+  };
 
   return (
     <React.Fragment>
@@ -109,6 +76,17 @@ export const Login = props => {
                 <GoogleLogin
                   clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
                   buttonText="Login"
+                  render={renderProps => (
+                    <Button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >
+                      <Img src={googleIcon} />
+                      <span style={{ margin: "3px 0 0 0" }}>
+                        Sign-in using Google
+                      </span>
+                    </Button>
+                  )}
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
                   cookiePolicy={"single_host_origin"}
@@ -131,6 +109,16 @@ export const Login = props => {
     </React.Fragment>
   );
 };
+
+const alertToast = msg =>
+  toast.info(msg, {
+    position: "top-right",
+    hideProgressBar: true,
+    autoClose: 2000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -207,3 +195,17 @@ const useStyles = makeStyles(theme => ({
     height: "auto"
   }
 }));
+const Button = styled.button`
+  display: flex;
+  align-content: center;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 40px 10px 40px;
+  font-size: 22px;
+  background: #454b69;
+  color: white;
+`;
+const Img = styled.img`
+  width: 30px;
+  margin: 0 10px 0 0;
+`;
