@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Alert } from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar";
 import AdminTable from "./AdminTable";
-import BackGround from "../assets/images/bg1.png";
+import BackGround from "../assets/images/bg.jpg";
 
 const divStyle = {
   width: "90%",
