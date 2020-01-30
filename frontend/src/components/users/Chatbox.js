@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import ForumIcon from "@material-ui/icons/Forum";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
 import ChatBubble from "react-chat-bubble";
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,6 +41,13 @@ const useStyles = makeStyles(theme => ({
       width: "100%",
       margin: "50px"
     }
+  },
+  convoBox: {
+    backgroundColor: "whitesmoke",
+    maxHeight: 500,
+    height: "50vh",
+    overflow: "auto",
+    margin: "30px"
   }
   //   message: {
   //     color: "white",
@@ -60,7 +68,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChatBox() {
   const classes = useStyles();
-
+  const [messages, setMessages] = useState([
+    {
+      message: "semo"
+    },
+    {
+      reps: "eu"
+    }
+  ]);
   // this.state = {
   //   messages: [
   //     {
@@ -85,20 +100,93 @@ export default function ChatBox() {
             <Typography variant="h8">{"Mark Medes"}</Typography>
           </Grid>
         </Paper>
-        {/* <Paper className={classes.MainChatBox}>
-          <Grid container xs={4} className={classes.message}>
-            <Paper>message</Paper>
+
+        {/* messages] */}
+        <Paper className={classes.convoBox}>
+          <Grid container direction="column">
+            {messages.map(m => {
+              console.log(m.reps, m.message);
+            })}
+            <Grid
+              style={{ display: "flex", alignItems: "center" }}
+              xl={12}
+              lg={12}
+              item
+            >
+              <Grid
+                container
+                alignItems="center"
+                justify="flex-end"
+                style={{ padding: 5 }}
+              >
+                <Grid
+                  style={{
+                    margin: 15,
+                    display: "flex",
+                    justifyContent: "flex-end"
+                  }}
+                  xl={5}
+                  lg={5}
+                  md={6}
+                  sm={7}
+                  xs={8}
+                  item
+                >
+                  <span>sdasdad</span>
+                </Grid>
+
+                <Grid
+                  style={{
+                    height: "80px",
+                    display: "flex",
+                    alignItems: "flex-end"
+                  }}
+                  item
+                >
+                  <Avatar
+                    alt="aas"
+                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            ;
+            <Grid
+              container
+              alignItems="center"
+              justify="flex-start"
+              style={{ padding: 5 }}
+            >
+              <Grid
+                style={{
+                  margin: 15,
+                  display: "flex",
+                  justifyContent: "flex-start"
+                }}
+                item
+              >
+                <Avatar
+                  alt="mess"
+                  src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                />
+              </Grid>
+
+              <Grid
+                style={{ display: "flex", alignItems: "flex-end" }}
+                xl={5}
+                lg={5}
+                md={6}
+                sm={7}
+                xs={8}
+                item
+              >
+                <span>ssasas</span>
+              </Grid>
+            </Grid>
+            ;
           </Grid>
-          <Paper className={classes.message}>dasd</Paper>
-          <Grid container xs={4} className={classes.reply}>
-            <Paper>reply</Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper className={classes.reply}>messs</Paper>
-          </Grid>
+          {/* endofmessages */}
         </Paper>
-        <Paper className={classes.bottom}>asdasd</Paper> */}
-        {/* <ChatBubble messages={this.state.messages} /> */}
       </Paper>
     </React.Fragment>
   );

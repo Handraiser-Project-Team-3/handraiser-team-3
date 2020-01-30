@@ -157,6 +157,7 @@ export default function MentorsView() {
             >
               <Tab label="Need Help" {...a11yProps(0)} />
               <Tab label="Being Help" {...a11yProps(1)} />
+              <Tab label="Done" {...a11yProps(2)} />
             </Tabs>
           </AppBar>
 
@@ -182,6 +183,27 @@ export default function MentorsView() {
                       <LiveHelpIcon />
                     </Button>
                   </Tooltip>
+                </div>
+              </Paper>
+            </Paper>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <Paper className={classes.needContainer}>
+              <Paper className={classes.needHelp}>
+                {" "}
+                <Typography variant="h7" className={classes.studentsBeingHelp}>
+                  <Avatar
+                    alt="Student"
+                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                  />
+                  Papa Rex Rojo
+                </Typography>
+                <div className={classes.Icons}>
+                  {/* <Tooltip title="Remove">
+                    <Button>
+                      <RemoveCircleIcon className={classes.removeIcon} />
+                    </Button>
+                  </Tooltip> */}
                 </div>
               </Paper>
             </Paper>
