@@ -3,15 +3,15 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("mentors", {
+  pgm.createTable("classroom_users", {
     id: {
       type: "serial",
       primaryKey: true
     },
     user_id: {
-      type: "integer",
-      references: '"users"',
-      notNull: true
+      type: "serial",
+      notNull: true,
+      references: '"users"'
     },
     class_id: {
       type: "integer",
@@ -27,5 +27,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("mentors", { cascade: true });
+  pgm.dropTable("classroom_users");
 };
