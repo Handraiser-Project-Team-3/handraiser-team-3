@@ -16,7 +16,7 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 // component/s
-import Navigation from "../navigation/NavBar";
+
 import Chatbox from "../users/Chatbox";
 // images
 import head from "../assets/images/bg.png";
@@ -35,8 +35,15 @@ const useStyles = makeStyles(theme => ({
     },
     "@media (max-width: 425px)": {
       paddingLeft: "0px"
+    },
+    "@media(max-width:1024px)": {
+      paddingLeft: "270px"
+    },
+    "@media(max-width:768px)": {
+      paddingLeft: "150px"
     }
   },
+
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
@@ -125,7 +132,6 @@ export default function MentorsView() {
 
   return (
     <div>
-      <Navigation />
       <Paper elevation={0} className={classes.header}>
         <Grid
           container

@@ -7,18 +7,24 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import Button from "@material-ui/core/Button";
-import ChatBubble from "react-chat-bubble";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
+
 const useStyles = makeStyles(theme => ({
   root: {
     margin: "28px",
-    // display: "flex",
-    // flexWrap: "wrap",
     height: "70vh",
-    width: "45%",
+
     backgroundColor: "#4abdac",
     "@media (max-width: 320px)": {
       height: "50vh",
       width: "80%"
+    },
+    "@media (max-width: 1024px)": {
+      marginLeft: "200px"
+    },
+    "@media(max-width:768px)": {
+      marginLeft: "60px"
     }
   },
   top: {
@@ -52,13 +58,23 @@ const useStyles = makeStyles(theme => ({
     margin: "30px"
   },
   messageArea: {
-    outline: "none",
-    resize: "none",
-    borderRadius: "10px ",
-    width: "400px"
+    width: "800px"
   },
-  sendButton:{
-    marginRight: '90px'
+  inputArea: {
+    paddingTop: "5px",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  inputAreacontainer: {
+    display: "flex",
+    height: "8vh",
+    width: "820px",
+    margin: "20px",
+    marginTop: "-15px",
+
+    "@media (max-width: 1440px)": {
+      width: "600px"
+    }
   }
 }));
 
@@ -102,11 +118,14 @@ export default function ChatBox() {
                 style={{ padding: 5 }}
               >
                 <Grid
-                  style={{
-                    margin: 15,
-                    display: "flex",
-                    justifyContent: "flex-end"
-                  }}
+                  // style={{
+                  //   margin: 15,
+                  //   display: "flex",
+                  //   justifyContent: "flex-end",
+                  //   backgroundColor: "green",
+                  //   height: "10vh",
+                  //   wordBreak: " break-all"
+                  // }}
                   xl={5}
                   lg={5}
                   md={6}
@@ -114,7 +133,21 @@ export default function ChatBox() {
                   xs={8}
                   item
                 >
-                  <span>sdasdad</span>
+                  <span
+                    style={{
+                      margin: 15,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      backgroundColor: "whitesmoke",
+
+                      wordBreak: " break-all",
+                      border: " 2px solid #4ABDAC",
+                      padding: "10px",
+                      borderRadius: "5px 20px"
+                    }}
+                  >
+                    ssssssssssssssssssssssssssssssssssssssssssssssddasddddddddddddddddddddddddasdadad
+                  </span>
                 </Grid>
 
                 <Grid
@@ -162,59 +195,52 @@ export default function ChatBox() {
                 xs={8}
                 item
               >
-                <span>ssasas</span>
+                <span
+                  style={{
+                    margin: 15,
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    backgroundColor: "whitesmoke",
+
+                    wordBreak: " break-all",
+                    border: " 2px solid red",
+                    padding: "10px",
+                    borderRadius: "5px 20px"
+                  }}
+                >
+                  {" "}
+                  ssasas
+                </span>
               </Grid>
             </Grid>
           </Grid>
           {/* endofmessages */}
-
-          <Grid item style={{}} xl={12} lg={12} md={12} sm={12} xs={12}>
-            <Grid container>
-              <Grid
-                item
-                style={{
-                  height: "100px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
+        </Paper>
+        <Paper className={classes.inputAreacontainer}>
+          <Grid container className={classes.inputArea}>
+            <Grid
+              item
+              style={{
+                display: "flex"
+              }}
+              lg={11}
+              md={10}
+              sm={9}
+              xs={9}
+            >
+              <TextField
+                variant="outlined"
+                id="standard-basic"
+                label="Type your message..."
+                className={classes.messageArea}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Button endIcon={<SendIcon />}></Button>
+                    </InputAdornment>
+                  )
                 }}
-                lg={11}
-                md={10}
-                sm={9}
-                xs={9}
-              >
-                <textarea
-                  rows="2"
-                  autoFocus
-                  className={classes.messageArea}
-                  placeholder="Type your message..."
-                ></textarea>
-              </Grid>
-              <Grid
-                item
-                style={{
-                  height: "100px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 3
-                }}
-                lg={1}
-                md={2}
-                sm={3}
-                xs={3}
-              >
-                <Button
-                  style={{ height: "30px" }}
-                  size="small"
-                  variant="contained"
-                  color="grey"
-                  className={classes.sendButton}
-                  endIcon={<SendIcon />}
-                >
-                  <label className={classes.buttonLabel}>SEND</label>
-                </Button>
-              </Grid>
+              />
             </Grid>
           </Grid>
         </Paper>
