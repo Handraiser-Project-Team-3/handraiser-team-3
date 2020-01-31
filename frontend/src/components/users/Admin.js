@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Alert } from "@material-ui/lab";
-import Snackbar from "@material-ui/core/Snackbar";
-import AdminTable from "./AdminTable";
+// import { Alert } from "@material-ui/lab";
+// import Snackbar from "@material-ui/core/Snackbar";
+// import AdminTable from "./AdminTable";
 import BackGround from "../assets/images/bg.jpg";
 
 const divStyle = {
@@ -37,28 +37,28 @@ export const Admin = props => {
 
   return (
     <React.Fragment>
-      <div style={divAdminHeader}>
-        <Snackbar
-          open={state}
-          onClose={handleClose}
-          message="Welcome Admin"
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left"
-          }}
-        >
-          <Alert
-            style={{ marginTop: "50px", width: "350px", fontSize: "18px" }}
-            severity="success"
-            color="info"
+      {/* <div style={divAdminHeader}>
+          <Snackbar
+            open={state}
+            onClose={handleClose}
+            message="Welcome Admin"
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left"
+            }}
           >
-            Welcome Admin
-          </Alert>
-        </Snackbar>
-      </div>
-      <div style={divStyle}>
-        <AdminTable />
-      </div>
+            <Alert
+              style={{ marginTop: "50px", width: "350px", fontSize: "18px" }}
+              severity="success"
+              color="info"
+            >
+              Welcome Admin
+            </Alert>
+          </Snackbar>
+        </div>
+        <div style={divStyle}>
+          <AdminTable />
+        </div> */}
     </React.Fragment>
   );
 };
