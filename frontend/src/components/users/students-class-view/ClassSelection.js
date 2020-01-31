@@ -95,7 +95,7 @@ export const Classroom = props => {
 
         <Grid container direction="row" alignItems="center" spacing={2}>
           {classList.map(i => (
-            <Grid key={i.id} item lg={4} md={6} sm={6} xs={12}>
+            <Grid key={i.id} item lg={3} md={4} sm={6} xs={12}>
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia

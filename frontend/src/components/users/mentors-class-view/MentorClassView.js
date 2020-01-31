@@ -35,7 +35,6 @@ export const MentorClassView = props => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
-  const [tempList, setTempList] = React.useState([])
   const [classList, setClassList] = React.useState([]);
 
   const handleClickOpen = () => {
@@ -48,15 +47,6 @@ export const MentorClassView = props => {
     setName("Add");
   };
 
-  const mentorClassList = () => {
-    const filteredClass = tempList.filter(id => {
-      if (id.user_id === user.id) {
-        return setClassList(filteredClass);
-      }
-      return;
-    });
-  }
-
   useEffect(() => {
     let tempToken = localStorage.getItem('accessToken')
     let token = tempToken.substring(1, tempToken.length - 1);
@@ -66,8 +56,12 @@ export const MentorClassView = props => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
-        setTempList(res.data)
-        mentorClassList();
+        setClassList(res.data.filter(id => {
+          if (id.user_id === user.id) {
+            return id
+          }
+          return null;
+        }))
       })
       .catch(e => console.log(e))
   }, []);
@@ -158,9 +152,9 @@ export const MentorClassView = props => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid container direction="row" alignItems="center" spacing={2}>
           {classList.map(i => (
-            < Grid key={i.id} item lg={4} md={6} sm={6} xs={12} >
+            < Grid key={i.id} item lg={3} md={4} sm={6} xs={12} >
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
