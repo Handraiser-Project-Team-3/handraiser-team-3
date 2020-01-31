@@ -24,7 +24,9 @@ const useStyles = makeStyles(theme => ({
 
 export const JoinClassModal = props => {
 	const classes = useStyles();
-
+	const [code, setCode] = React.useState('');
+	const [warn, setWarn] = React.useState({ classcode: false });
+	const [help, setHelp] = React.useState({ classcode: "" });
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -33,6 +35,56 @@ export const JoinClassModal = props => {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	const handleChange = e => {
+		setCode({
+			...code,
+			[e.target.name]: e.target.value
+		})
+		if (e.target.value.length > 0) {
+			setWarn({
+				...warn,
+				[e.target.name]: false
+			})
+			setHelp({
+				...help,
+				[e.target.name]: ''
+			})
+		} else {
+			setWarn({
+				...warn,
+				[e.target.name]: true
+			})
+			setHelp({
+				...help,
+				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
+					e.target.name.slice(1)} field is required`
+			})
+		}
+	};
+
+	const warningUpdate = e => {
+		if (e.target.value.length === 0) {
+			setWarn({
+				...warn,
+				[e.target.name]: true
+			});
+			setHelp({
+				...help,
+				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
+					e.target.name.slice(1)} field is required`
+			});
+		} else {
+			setHelp({
+				...help,
+				[e.target.name]: ""
+			});
+		}
+	};
+
+	const handleSubmit = () => {
+
 	};
 
 	return (
@@ -69,11 +121,17 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form className={classes.root} noValidate autoComplete="off">
+					<form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
 						<TextField
-							id="outlined-basic"
+							required
+							id="classcode"
+							name="classcode"
 							label="Class Code"
 							variant="outlined"
+							error={warn.classcode}
+							helperText={help.classcode}
+							onBlur={warningUpdate}
+							onChange={handleChange}
 						/>
 					</form>
 				</DialogContent>
@@ -81,7 +139,7 @@ export const JoinClassModal = props => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button onClick={handleClose} color="primary">
+					<Button onClick={handleClose} color="primary" type="submit">
 						Join Class
 					</Button>
 				</DialogActions>

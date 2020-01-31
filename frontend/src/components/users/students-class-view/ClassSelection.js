@@ -20,20 +20,17 @@ import classroom from "../../assets/images/classroom.jpg";
 import man from "../../assets/images/man.png";
 
 export const Classroom = props => {
-  const { user } = props.data;
+  const { user, accessToken } = props.data;
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const classes = useStyles();
   const [classList, setClassList] = React.useState([])
 
   useEffect(() => {
-    let tempToken = localStorage.getItem('accessToken')
-    let token = tempToken.substring(1, tempToken.length - 1);
-    axios({
-      method: 'get',
-      url: `/api/class`,
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
+    axios
+      .get('/api/class', {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      })
       .then(res => {
         setClassList(res.data)
       })
@@ -45,8 +42,8 @@ export const Classroom = props => {
       <Layout first_name={first_name}>
         <ClassHead />
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {classList.map(i => (
-            <Grid key={i.id} item lg={3} md={4} sm={6} xs={12}>
+          {classList.map(data => (
+            <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
@@ -56,14 +53,14 @@ export const Classroom = props => {
                   ></CardMedia>
                   <CardContent>
                     <Typography gutterBottom variant="h5">
-                      {i.class_name}
+                      {data.class_name}
                     </Typography>
                     <Typography
                       variant="body2"
                       color="textSecondary"
                       component="p"
                     >
-                      {i.class_description}
+                      {data.class_description}
                     </Typography>
                   </CardContent>
                   <CardContent>

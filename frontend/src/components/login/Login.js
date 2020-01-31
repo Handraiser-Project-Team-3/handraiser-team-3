@@ -166,7 +166,8 @@ const useStyles = makeStyles(theme => ({
     margin: "3px 0 0 0",
     "@media (max-width: 415px)": {
       fontSize: "14px"
-    }
+    },
+    cursor: 'pointer'
   },
   lady: {
     width: "45vw",
