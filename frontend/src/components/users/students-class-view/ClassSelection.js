@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -14,10 +11,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 
 // component/s
 import { JoinClassModal } from "./JoinClassModal";
+import Layout from "../reusables/Layout";
+import ClassHead from "../reusables/ClassHead";
 
 // images
 import head from "../../assets/images/bg.jpg";
-import blackboard from "../../assets/images/blackboard.png";
 import classroom from "../../assets/images/classroom.jpg";
 import man from "../../assets/images/man.png";
 
@@ -44,56 +42,9 @@ export const Classroom = props => {
 
   return (
     <>
-      <Paper elevation={0} className={classes.header}>
-        <Grid
-          container
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-        >
-          <Grid item xs={12} sm={9} md={10} lg={10}>
-            <Typography variant="h5" className={classes.color}>
-              Welcome {first_name}!
-            </Typography>
-          </Grid>
-          <Grid item sm={3} md={2} lg={2}>
-            <Breadcrumbs
-              separator="›"
-              aria-label="breadcrumb"
-              className={classes.res}
-            >
-              <Link color="inherit" style={{ textDecoration: "none" }}>
-                {first_name}{" "}
-              </Link>
-              <Typography color="textPrimary">Classrooms</Typography>
-            </Breadcrumbs>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      <div className={classes.container}>
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-          spacing={5}
-          style={{ marginBottom: "1vh" }}
-        >
-          <Grid item>
-            <img
-              src={blackboard}
-              alt="blackboard"
-              className={classes.blackboard}
-            />
-          </Grid>
-          <Grid item>
-            <Typography variant="h6" className={classes.classStyle}>
-              CLASSROOMS
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid container direction="row" alignItems="center" spacing={2}>
+      <Layout first_name={first_name}>
+        <ClassHead />
+        <Grid container direction="row" alignItems="center" spacing={3}>
           {classList.map(i => (
             <Grid key={i.id} item lg={3} md={4} sm={6} xs={12}>
               <Card className={classes.card}>
@@ -161,7 +112,7 @@ export const Classroom = props => {
             </Grid>
           ))}
         </Grid>
-      </div>
+      </Layout>
     </>
   );
 };

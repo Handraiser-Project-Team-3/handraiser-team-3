@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
 import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -12,48 +9,44 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
-import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { useHistory } from "react-router-dom";
 
 // component/s
 import { Modal } from "./Modal";
+import ClassHead from "../reusables/ClassHead";
+import Layout from "../reusables/Layout";
 
 // images
 import head from "../../assets/images/bg.jpg";
-import blackboard from "../../assets/images/blackboard.png";
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
-import trash from "../../assets/images/edit-tools.png";
 import edit from "../../assets/images/edit.png";
 
 export const MentorClassView = props => {
-  const { user } = props.data;
-  const userDetails = user ? user : {};
-  const { first_name } = userDetails;
   const classes = useStyles();
+  const { user, accessToken } = props.data;
+  const userDetails = user ? user : {};
+  const { first_name, account_type_id } = userDetails;
+  const [headTitle, setHeadTitle] = React.useState("");
+  const [accountType] = React.useState("Mentor");
   const [open, setOpen] = React.useState(false);
-  const [name, setName] = React.useState("");
+  const [action, setAction] = React.useState("");
   const [classList, setClassList] = React.useState([]);
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setOpen(true);
-    setName("Edit");
-  };
-
-  const handleClickOpenAdd = () => {
-    setOpen(true);
-    setName("Add");
+    setAction("Save");
+    setHeadTitle("Edit");
   };
 
   useEffect(() => {
-    let tempToken = localStorage.getItem('accessToken')
-    let token = tempToken.substring(1, tempToken.length - 1);
     axios({
       method: 'get',
       url: `/api/class`,
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     })
       .then(res => {
         setClassList(res.data.filter(id => {
@@ -66,93 +59,16 @@ export const MentorClassView = props => {
       .catch(e => console.log(e))
   }, []);
 
-  const handleDelete = () => {
-    confirmAlert({
-      title: "Confirm to Delete",
-      message: "Are you sure you want to delete this Class?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => alert("Click Yes")
-        },
-        {
-          label: "No",
-          onClick: () => alert("Click No")
-        }
-      ]
-    });
-  };
-
   return (
     <>
-      <Paper elevation={0} className={classes.header}>
-        <Grid
-          container
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-        >
-          <Grid item xs={12} sm={9} md={10} lg={10}>
-            <Typography variant="h5" className={classes.color}>
-              Welcome {first_name}
-            </Typography>
-          </Grid>
-          <Grid item sm={3} md={2} lg={2}>
-            <Breadcrumbs
-              separator="›"
-              aria-label="breadcrumb"
-              className={classes.res}
-            >
-              <Link color="inherit">{first_name}</Link>
-              <Typography color="textPrimary">Classrooms</Typography>
-            </Breadcrumbs>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      <div className={classes.container}>
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-          spacing={5}
-          style={{ marginBottom: "1vh" }}
-        >
-          <Grid item>
-            <img
-              src={blackboard}
-              alt="blackboard"
-              className={classes.blackboard}
-            />
-          </Grid>
-          <Grid item>
-            <Grid
-              container
-              direction="row"
-              alignItems="flex-end"
-              spacing={1}
-              style={{ marginBottom: "1vh" }}
-            >
-              <Grid item>
-                <Typography variant="h6" className={classes.classStyle}>
-                  CLASSROOMS
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Tooltip title="Add Class">
-                  <AddCircleOutlineIcon
-                    fontSize="small"
-                    className={classes.addClass}
-                    onClick={() => {
-                      handleClickOpenAdd();
-                    }}
-                  />
-                </Tooltip>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center" spacing={2}>
+      <Layout accountType={accountType} first_name={first_name}>
+        <ClassHead
+          account_type_id={account_type_id}
+          setOpen={setOpen}
+          setAction={setAction}
+          setHeadTitle={setHeadTitle}
+        />
+        <Grid container direction="row" alignItems="center" spacing={3}>
           {classList.map(i => (
             < Grid key={i.id} item lg={3} md={4} sm={6} xs={12} >
               <Card className={classes.card}>
@@ -241,18 +157,6 @@ export const MentorClassView = props => {
                             }}
                           />
                         </Tooltip>
-                        <Grid item>
-                          <Tooltip title="Delete Class">
-                            <img
-                              src={trash}
-                              alt="delete"
-                              className={classes.icons}
-                              onClick={() => {
-                                handleDelete();
-                              }}
-                            />
-                          </Tooltip>
-                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -261,8 +165,13 @@ export const MentorClassView = props => {
             </Grid>
           ))}
         </Grid>
-        <Modal open={open} setOpen={setOpen} name={name} />
-      </div>
+        <Modal
+          open={open}
+          setOpen={setOpen}
+          action={action}
+          headTitle={headTitle}
+        />
+      </Layout>
     </>
   );
 };
