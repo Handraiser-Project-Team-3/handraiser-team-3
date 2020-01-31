@@ -1,12 +1,14 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
+import MentorsView from "../users/MentorsView";
 
 export const Routes = props => {
   const { accessToken } = props;
   return (
-    <Route
+    <Switch>
+      <Route
       exact
       path="/"
       render={() =>
@@ -17,5 +19,9 @@ export const Routes = props => {
         )
       }
     />
+    <Route path="/classroom" render={()=>
+     <MentorsView data={props}/>
+    }/>
+    </Switch>
   );
 };
