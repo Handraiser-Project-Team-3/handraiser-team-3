@@ -78,6 +78,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const MentorClassView = props => {
+  const { user, setUser, setAccessToken } = props.data;
+  const userDetails = user ? user : {};
+  const { account_type_id, first_name } = userDetails;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
@@ -120,7 +123,7 @@ export const MentorClassView = props => {
         >
           <Grid item xs={12} sm={9} md={10} lg={10}>
             <Typography variant="h5" className={classes.color}>
-              Welcome Mentor Vince!
+              Welcome Mentor {first_name}!
             </Typography>
           </Grid>
           <Grid item sm={3} md={2} lg={2}>
@@ -129,7 +132,7 @@ export const MentorClassView = props => {
               aria-label="breadcrumb"
               className={classes.res}
             >
-              <Link color="inherit">Vince</Link>
+              <Link color="inherit">{first_name} </Link>
               <Typography color="textPrimary">Classrooms</Typography>
             </Breadcrumbs>
           </Grid>
