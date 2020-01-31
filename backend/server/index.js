@@ -34,6 +34,7 @@ massive({
   //user
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+  app.get("/api/user/list", user.usersList);
 
   //classroom
   app.get("/api/class", classroom.list);
