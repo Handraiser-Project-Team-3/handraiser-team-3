@@ -23,10 +23,8 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
 import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
-import { Admin } from "../users/Admin";
-import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
-import { Classroom } from "../users/students-class-view/ClassSelection";
 import { toast } from "react-toastify";
+import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -53,8 +51,10 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar(props) {
 	const { user, setUser, setAccessToken } = props.data;
 	const userDetails = user ? user : {};
-	const { account_type_id, user_image } = userDetails;
+	const { user_image } = userDetails;
+	const history = useHistory();
 
+	const MyComponent = props.component;
 	const classes = useStyles();
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -149,7 +149,9 @@ export default function ButtonAppBar(props) {
 							{sideList("left")}
 						</Drawer>
 						<Typography variant="h6" className={classes.title}>
-							<img src={logo} className={classes.logo} alt="logo" />
+							<Link to="/">
+								<img src={logo} className={classes.logo} alt="logo" />
+							</Link>
 						</Typography>
 
 						<div>
@@ -183,7 +185,8 @@ export default function ButtonAppBar(props) {
 										buttonText="Logout"
 										onLogoutSuccess={() => {
 											setAccessToken("");
-											setUser();
+											setUser({});
+											history.push("/");
 											alertToast("Successfully logged out!");
 										}}
 										render={renderProps => (
@@ -200,13 +203,7 @@ export default function ButtonAppBar(props) {
 				</AppBar>
 			</div>
 
-			{account_type_id === 1 ? (
-				<Admin data={props.data} />
-			) : account_type_id === 2 ? (
-				<MentorClassView data={props.data} />
-			) : (
-				<Classroom data={props.data} />
-			)}
+			<MyComponent data={props.data} />
 		</div>
 	);
 }

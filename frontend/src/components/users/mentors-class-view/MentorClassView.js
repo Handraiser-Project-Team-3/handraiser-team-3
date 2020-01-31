@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 
 export const MentorClassView = props => {
 	const classes = useStyles();
-	const { user } = props.data;
+	const { user, setUser, setAccessToken } = props.data;
 	const userDetails = user ? user : {};
 	const { first_name, account_type_id } = userDetails;
 	const [headTitle, setHeadTitle] = React.useState("");
