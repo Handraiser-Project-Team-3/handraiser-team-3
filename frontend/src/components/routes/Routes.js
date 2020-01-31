@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
-import MentorsView from "./components/users/MentorsView";
+import MentorsView from "../users/MentorsView";
 
 export const Routes = props => {
   const { accessToken } = props;
