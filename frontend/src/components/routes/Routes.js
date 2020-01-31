@@ -34,7 +34,7 @@ export const Routes = props => {
         }
       />
       <Route
-        path={`/classroom/${accessToken}/:id`}
+        path={`/classroom/:classname`}
         render={props => (
           <Navigation {...props} data={props} component={MentorsView} />
         )}
