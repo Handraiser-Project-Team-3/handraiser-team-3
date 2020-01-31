@@ -1,21 +1,37 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
+import { Admin } from "../users/Admin";
+import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
+import { Classroom } from "../users/students-class-view/ClassSelection";
 
 export const Routes = props => {
-  const { accessToken } = props;
+  const { accessToken, user } = props;
+  const userDetails = user ? user : {};
+  const { account_type_id, user_image } = userDetails;
   return (
-    <Route
-      exact
-      path="/"
-      render={() =>
-        accessToken === "" ? (
-          <Login data={props} />
-        ) : (
-          <Navigation data={props} />
-        )
-      }
-    />
+    <Switch>
+      <Route
+        exact
+        path="/"
+        render={() =>
+          accessToken === "" ? (
+            <Login data={props} />
+          ) : (
+            <Navigation
+              data={props}
+              component={
+                account_type_id === 1
+                  ? Admin
+                  : account_type_id === 2
+                  ? MentorClassView
+                  : Classroom
+              }
+            />
+          )
+        }
+      />
+    </Switch>
   );
 };

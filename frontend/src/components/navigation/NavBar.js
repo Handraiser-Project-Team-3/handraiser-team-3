@@ -23,9 +23,6 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
 import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
-import { Admin } from "../users/Admin";
-import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
-import { Classroom } from "../users/students-class-view/ClassSelection";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +52,7 @@ export default function ButtonAppBar(props) {
   const userDetails = user ? user : {};
   const { account_type_id, user_image } = userDetails;
 
+  const MyComponent = props.component;
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -200,13 +198,7 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
 
-      {account_type_id === 1 ? (
-        <Admin data={props.data} />
-      ) : account_type_id === 2 ? (
-        <MentorClassView data={props.data} />
-      ) : (
-        <Classroom data={props.data} />
-      )}
+      <MyComponent data={props.data} />
     </div>
   );
 }
