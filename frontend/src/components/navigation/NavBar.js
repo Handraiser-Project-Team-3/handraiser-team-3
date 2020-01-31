@@ -183,7 +183,7 @@ export default function ButtonAppBar(props) {
                     buttonText="Logout"
                     onLogoutSuccess={() => {
                       setAccessToken("");
-                      setUser();
+                      setUser({});
                       alertToast("Successfully logged out!");
                     }}
                     render={renderProps => (
