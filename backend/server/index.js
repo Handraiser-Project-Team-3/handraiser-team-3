@@ -42,11 +42,8 @@ massive({
   app.delete("/api/class/:id", classroom.deleteClass);
 
   //chats
-  app.post("/api/chats/create", chats.createChat);
-  app.get("/api/chats/list/:id", chats.chatList);
-  app.post("/api/chats/message/create", chats.createMessage);
-  app.get("/api/chats/participants/list/:chat_room_id", chats.participantList);
-  app.get("/api/chats/messages/list/:id", chats.messagesList);
+  app.post("/api/chats/message/create/:id", chats.createMessage);
+  app.get("/api/chats/messages/list/:id", chats.messageList);
   app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
   app.patch("/api/chats/messages/edit/id", chats.editMessages);
 
