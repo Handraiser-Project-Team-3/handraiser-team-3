@@ -1,25 +1,28 @@
 import "./App.css";
 import React, { useState } from "react";
 import { Routes } from "./components/routes/Routes";
-import { HashRouter } from "react-router-dom";
-import useLocalStorage from "react-use-localstorage";
-import MentorsView from "./components/users/MentorsView";
-function App() {
-  const [metaData, setMetaData] = useState({});
-  const [user, setUser] = useLocalStorage("user", {});
+import { BrowserRouter } from "react-router-dom";
+import { useLocalStorage } from "./components/hooks/useLocalStorage";
+import jwt_decode from "jwt-decode";
 
+function App() {
+  const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+  const [user, setUser] = useState();
+  React.useEffect(() => {
+    if (accessToken) {
+      setUser(jwt_decode(accessToken));
+    }
+  }, [accessToken]);
   return (
-    // <HashRouter>
-    //   <Routes
-    //     metaData={metaData}
-    //     setMetaData={metaData}
-    //     user={user}
-    //     setUser={setUser}
-    //   />
-    // </HashRouter>
-    <div>
-      <MentorsView />
-    </div>
+    <BrowserRouter>
+      {console.log(user)}
+      <Routes
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        user={user}
+        setUser={setUser}
+      />
+    </BrowserRouter>
   );
 }
 

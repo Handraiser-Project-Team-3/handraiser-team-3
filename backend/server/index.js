@@ -9,8 +9,9 @@ const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
 
-// const auth = require("./controllers/auth");
+const auth = require("./controllers/auth");
 const user = require("./controllers/users");
+const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
 
 massive({
@@ -24,18 +25,27 @@ massive({
   app.use(express.json());
   app.use(cors());
 
-  //login & signup here
-  app.get("/api/login", user.login);
+  //login here
+  app.post("/api/login", user.login);
+
+  app.use(auth.headers);
+
+  //user
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+  app.get("/api/user/list", user.usersList);
+
+  //classroom
+  app.get("/api/class", classroom.list);
+  app.post("/api/class", classroom.addClass);
+  app.patch("/api/class", classroom.editClass);
+  app.delete("/api/class/:id", classroom.deleteClass);
 
   //chats
-  app.post("/api/chats/create", chats.createChat);
-  app.get("/api/chats/list", chats.chatList);
-  app.post("/api/chats/message/create", chats.createMessage);
-  app.get("/api/chats/participants/list", chats.participantList);
-
-  // app.use(auth.headers);
+  app.post("/api/chats/message/create/:id", chats.createMessage);
+  app.get("/api/chats/messages/list/:id", chats.messageList);
+  app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
+  app.patch("/api/chats/messages/edit/id", chats.editMessages);
 
   //other pages that need headers
 

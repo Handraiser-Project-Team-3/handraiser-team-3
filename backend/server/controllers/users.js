@@ -8,24 +8,36 @@ module.exports = {
 
     const { email } = req.body;
 
+    const getUserDetails = () =>
+      users
+        .findOne({
+          email: email
+        })
+        .then(user => {
+          const token = jwt.sign(user, secret);
+          res.status(200).send(token);
+        });
+
     users
       .findOne({
         email: email
       })
       .then(user => {
         if (!user) {
-          users
+          return users
             .insert(
               {
                 account_type_id: 3,
-                email: email
+                ...req.body,
+                user_status: true
               },
               { deepInsert: true }
             )
             .then(() => {
-              res.send({ message: "success" });
+              getUserDetails();
             });
         }
+        getUserDetails();
       });
   },
   addUser: (req, res) => {
@@ -67,5 +79,13 @@ module.exports = {
           ? res.status(400).json({ error: err.message })
           : res.status(500).end();
       });
+  },
+  usersList: (req, res) => {
+    const { users } = req.app.get(get(db));
+
+    users
+      .find()
+      .then(data => res.status(200).json(data))
+      .catch(() => res.status(500).end());
   }
 };

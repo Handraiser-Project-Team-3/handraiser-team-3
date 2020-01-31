@@ -3,22 +3,30 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("students", {
+  pgm.createTable("student_request", {
     id: {
       type: "serial",
       primaryKey: true
-    },
-    user_id: {
-      type: "serial",
-      notNull: true,
-      references: '"users"'
     },
     class_id: {
       type: "integer",
       notNull: true,
       references: '"class"'
     },
-    date_joined: {
+    student_id: {
+      type: "integer",
+      notNull: true,
+      references: '"classroom_users"'
+    },
+    title: {
+      type: "text",
+      notNull: true
+    },
+    status: {
+      type: "boolean",
+      notNull: true
+    },
+    date_posted: {
       type: "timestamp",
       notNull: true,
       default: pgm.func("current_timestamp")
@@ -27,5 +35,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("students");
+  pgm.dropTable("student_request");
 };

@@ -13,10 +13,10 @@ exports.up = pgm => {
       notNull: true,
       references: '"users"'
     },
-    chat_room_id: {
+    student_request_id: {
       type: "integer",
       notNull: true,
-      references: '"chat_room"'
+      references: '"student_request"'
     },
     content: {
       type: "text",
