@@ -23,10 +23,9 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
 import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
-import { Admin } from "../users/Admin";
-import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
-import { Classroom } from "../users/students-class-view/ClassSelection";
 import { toast } from "react-toastify";
+import { Link, useHistory } from "react-router-dom";
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -51,25 +50,32 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken } = props.data;
   const userDetails = user ? user : {};
-  const { component } = props;
-  const MyComponent = component.mentor;
-  const { account_type_id, user_image } = userDetails;
+  const { user_image } = userDetails;
+  const history = useHistory();
+
+  const MyComponent = props.component;
   const classes = useStyles();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const [show, setShow] = React.useState(true);
+
   const handleClick = () => {
     setShow(!show);
   };
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const [state, setState] = React.useState({
     left: false
   });
+
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -79,6 +85,7 @@ export default function ButtonAppBar(props) {
     }
     setState({ ...state, [side]: open });
   };
+
   const sideList = side => (
     <div
       className={classes.list}
@@ -122,10 +129,11 @@ export default function ButtonAppBar(props) {
       </List>
     </div>
   );
+
   return (
     <div>
       <div className={classes.root}>
-        <AppBar position="fixed" style={{ background: "#4ABDAC" }}>
+        <AppBar position="fixed" style={{ background: "#4abdac" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -140,8 +148,11 @@ export default function ButtonAppBar(props) {
               {sideList("left")}
             </Drawer>
             <Typography variant="h6" className={classes.title}>
-              <img src={logo} className={classes.logo} alt="logo" />
+              <Link to="/">
+                <img src={logo} className={classes.logo} alt="logo" />
+              </Link>
             </Typography>
+
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -173,7 +184,8 @@ export default function ButtonAppBar(props) {
                     buttonText="Logout"
                     onLogoutSuccess={() => {
                       setAccessToken("");
-                      setUser();
+                      setUser({});
+                      history.push("/");
                       alertToast("Successfully logged out!");
                     }}
                     render={renderProps => (
@@ -189,14 +201,8 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
+
       <MyComponent data={props.data} />
-      {/* {account_type_id === 1 ? (
-        <Admin data={props.data} />
-      ) : account_type_id === 2 ? (
-        <MentorClassView data={props.data} />
-      ) : (
-        <Classroom data={props.data} />
-      )} */}
     </div>
   );
 }

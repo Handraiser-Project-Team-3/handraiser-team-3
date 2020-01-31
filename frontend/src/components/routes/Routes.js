@@ -2,14 +2,14 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
-import MentorsView from "../users/MentorsView";
+import { Admin } from "../users/Admin";
 import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
+import { Classroom } from "../users/students-class-view/ClassSelection";
+import MentorsView from "../users/MentorsView";
 export const Routes = props => {
-  const { accessToken } = props;
-  const component = {
-    mentor: MentorsView,
-    clasroom: MentorsView
-  };
+  const { accessToken, user } = props;
+  const userDetails = user ? user : {};
+  const { account_type_id } = userDetails;
   return (
     <Switch>
       <Route
@@ -19,14 +19,22 @@ export const Routes = props => {
           accessToken === "" ? (
             <Login data={props} />
           ) : (
-            <Navigation data={props} component={component} />
+            <Navigation
+              data={props}
+              component={
+                account_type_id === 1
+                  ? Admin
+                  : account_type_id === 2
+                  ? MentorClassView
+                  : Classroom
+              }
+            />
           )
         }
       />
       <Route
-        exact
         path="/classroom"
-        render={() => <Navigation data={props} component={component} />}
+        render={() => <Navigation data={props} component={MentorsView} />}
       />
     </Switch>
   );
