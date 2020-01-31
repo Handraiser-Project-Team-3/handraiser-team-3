@@ -10,7 +10,7 @@ import MentorsView from "../users/MentorsView";
 export const Routes = props => {
   const { accessToken, user } = props;
   const userDetails = user ? user : {};
-  const { account_type_id, user_image } = userDetails;
+  const { account_type_id } = userDetails;
   return (
     <Switch>
       <Route
