@@ -5,6 +5,8 @@ import ForumIcon from "@material-ui/icons/Forum";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import SendIcon from "@material-ui/icons/Send";
+import Button from "@material-ui/core/Button";
 import ChatBubble from "react-chat-bubble";
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,22 +50,16 @@ const useStyles = makeStyles(theme => ({
     height: "50vh",
     overflow: "auto",
     margin: "30px"
+  },
+  messageArea: {
+    outline: "none",
+    resize: "none",
+    borderRadius: "10px ",
+    width: "400px"
+  },
+  sendButton:{
+    marginRight: '90px'
   }
-  //   message: {
-  //     color: "white",
-  //     backgroundColor: "black",
-  //     justifyContent: "flex-end"
-  //   },
-  //   reply: {
-  //     float: "left"
-
-  //     // backgroundColor: "black"
-  //   },
-  //   bottom: {
-  //     paddingLeft: "5px",
-  //     width: "95%",
-  //     height: "5vh"
-  //   }
 }));
 
 export default function ChatBox() {
@@ -76,20 +72,6 @@ export default function ChatBox() {
       reps: "eu"
     }
   ]);
-  // this.state = {
-  //   messages: [
-  //     {
-  //       type: 0,
-  //       image: "cat.jpg",
-  //       text: "Hello! Good Morning!"
-  //     },
-  //     {
-  //       type: 1,
-  //       image: "dog.jpg",
-  //       text: "Hello! Good Afternoon!"
-  //     }
-  //   ]
-  // };
 
   return (
     <React.Fragment>
@@ -150,7 +132,7 @@ export default function ChatBox() {
                 </Grid>
               </Grid>
             </Grid>
-            ;
+
             <Grid
               container
               alignItems="center"
@@ -183,9 +165,58 @@ export default function ChatBox() {
                 <span>ssasas</span>
               </Grid>
             </Grid>
-            ;
           </Grid>
           {/* endofmessages */}
+
+          <Grid item style={{}} xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Grid container>
+              <Grid
+                item
+                style={{
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                lg={11}
+                md={10}
+                sm={9}
+                xs={9}
+              >
+                <textarea
+                  rows="2"
+                  autoFocus
+                  className={classes.messageArea}
+                  placeholder="Type your message..."
+                ></textarea>
+              </Grid>
+              <Grid
+                item
+                style={{
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 3
+                }}
+                lg={1}
+                md={2}
+                sm={3}
+                xs={3}
+              >
+                <Button
+                  style={{ height: "30px" }}
+                  size="small"
+                  variant="contained"
+                  color="grey"
+                  className={classes.sendButton}
+                  endIcon={<SendIcon />}
+                >
+                  <label className={classes.buttonLabel}>SEND</label>
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
         </Paper>
       </Paper>
     </React.Fragment>
