@@ -20,24 +20,19 @@ import classroom from "../../assets/images/classroom.jpg";
 import man from "../../assets/images/man.png";
 
 export const Classroom = props => {
-  const { user, accessToken } = props.data;
+  const { user, headers } = props.data;
   const userDetails = user ? user : {};
-  const { first_name } = userDetails;
+  const { first_name, id } = userDetails;
   const classes = useStyles();
   const [classList, setClassList] = React.useState([]);
-  const headers = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  };
 
   useEffect(() => {
     axios
-      .get('/api/class', headers)
+      .get(`/api/class?id=${id}`, headers)
       .then(res => {
-        setClassList(res.data)
+        setClassList(res.data);
       })
-      .catch()
+      .catch();
   }, []);
 
   return (
@@ -92,7 +87,7 @@ export const Classroom = props => {
                                 variant="caption"
                               >
                                 Mentor's Name:
-                            </Typography>
+                              </Typography>
                             </Grid>
                             <Grid item lg={12} xs={12}>
                               <b>{}</b>

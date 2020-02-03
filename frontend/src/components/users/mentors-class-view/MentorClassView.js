@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -12,6 +11,8 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
+import copy from "clipboard-copy";
+import axios from "axios";
 
 // component/s
 import { Modal } from "./Modal";
@@ -26,15 +27,19 @@ import edit from "../../assets/images/edit.png";
 
 export const MentorClassView = props => {
   const classes = useStyles();
-  const { user, accessToken } = props.data;
+  const { user, headers } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
-  const [headTitle, setHeadTitle] = React.useState("");
-  const [accountType] = React.useState("Mentor");
-  const [open, setOpen] = React.useState(false);
-  const [action, setAction] = React.useState("");
-  const [classList, setClassList] = React.useState([]);
+  const [headTitle, setHeadTitle] = useState("");
+  const [accountType] = useState("Mentor");
+  const [open, setOpen] = useState(false);
+  const [action, setAction] = useState("");
+  const [classList, setClassList] = useState([]);
   const history = useHistory();
+  const [classRoom, setClassRoom] = useState({
+    class_name: "",
+    class_description: ""
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,18 +47,33 @@ export const MentorClassView = props => {
     setHeadTitle("Edit");
   };
 
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/class/${classid}`, headers)
+  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  // };
+
   useEffect(() => {
     axios
+<<<<<<< HEAD
       .get(`/api/class?id=${user.id}`, {
         headers: { 'Authorization': `Bearer ${accessToken}` }
       })
       .then(res => {
         setClassList(res.data)
+=======
+      .get(`/api/class?id=${user.id}`, headers)
+      .then(res => {
+        setClassList(res.data);
+>>>>>>> b0b4156ade4e2aab0825b2b5c596a016d519ce26
       })
-      .catch(e => console.log(e))
+      .catch(e => console.log(e));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
+<<<<<<< HEAD
     <>
       <Layout accountType={accountType} first_name={first_name}>
         <ClassHead
@@ -65,6 +85,20 @@ export const MentorClassView = props => {
         <Grid container direction="row" alignItems="center" spacing={3}>
           {classList.map(data => (
             <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
+=======
+    <Layout accountType={accountType} first_name={first_name}>
+      <ClassHead
+        account_type_id={account_type_id}
+        setOpen={setOpen}
+        setAction={setAction}
+        setHeadTitle={setHeadTitle}
+      />
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        {classList
+          .sort((a, b) => (a.id > b.id ? 1 : -1))
+          .map((data, i) => (
+            <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
+>>>>>>> b0b4156ade4e2aab0825b2b5c596a016d519ce26
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
@@ -113,7 +147,7 @@ export const MentorClassView = props => {
                                 variant="caption"
                               >
                                 Students:
-                            </Typography>
+                              </Typography>
                             </Grid>
                             <Grid item lg={12} xs={12}>
                               <b>{}</b>
@@ -132,11 +166,17 @@ export const MentorClassView = props => {
                     justify="space-between"
                   >
                     <Grid item lg={10} md={10} sm={9} xs={9}>
-                      <Button size="small" style={{ color: "#b5855a" }}>
+                      <Button
+                        onClick={() =>
+                          history.push(`/classroom/${data.class_name}`)
+                        }
+                        size="small"
+                        style={{ color: "#b5855a" }}
+                      >
                         Enter Class
                       </Button>
                     </Grid>
-                    <Grid item lg={2} md={2} sm={3} xs={3}>
+                    <Grid item lg={1}>
                       <Grid container direction="row" alignItems="center">
                         <Tooltip title="Edit Class">
                           <img
@@ -146,25 +186,41 @@ export const MentorClassView = props => {
                             style={{ marginRight: "10px" }}
                             onClick={() => {
                               handleClickOpen();
+                              setClassRoom({
+                                id: data.id,
+                                class_name: data.class_name,
+                                class_description: data.class_description
+                              });
                             }}
                           />
                         </Tooltip>
                       </Grid>
                     </Grid>
+                    {/* <Button onClick={() => deleteClass(data.id)}>delete</Button> */}
+                    <Tooltip title="Click to copy code">
+                      <Button onClick={() => copy(data.class_code)}>
+                        {data.class_code}
+                      </Button>
+                    </Tooltip>
                   </Grid>
                 </CardActions>
               </Card>
             </Grid>
           ))}
-        </Grid>
-        <Modal
-          open={open}
-          setOpen={setOpen}
-          action={action}
-          headTitle={headTitle}
-        />
-      </Layout>
-    </>
+      </Grid>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        action={action}
+        headTitle={headTitle}
+        setClassRoom={setClassRoom}
+        classRoom={classRoom}
+        headers={headers}
+        userId={user.id}
+        setClassList={setClassList}
+        classList={classList}
+      />
+    </Layout>
   );
 };
 
