@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		"& > *": {
 			margin: theme.spacing(1),
-			width: "95%"
+			width: "100%"
 		}
 	}
 }));
@@ -83,8 +83,9 @@ export const JoinClassModal = props => {
 		}
 	};
 
-	const handleSubmit = () => {
-
+	const handleSubmit = e => {
+		e.preventDefault();
+		console.log('submitted')
 	};
 
 	return (
@@ -121,7 +122,7 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+					<form id="code_form" className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
 						<TextField
 							required
 							id="classcode"
@@ -139,7 +140,7 @@ export const JoinClassModal = props => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button onClick={handleClose} color="primary" type="submit">
+					<Button color="primary" form="code_form" type="submit">
 						Join Class
 					</Button>
 				</DialogActions>
