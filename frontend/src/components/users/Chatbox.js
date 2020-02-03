@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     margin: "28px",
-    height: "70vh",
-
+    // height: "70vh",
+    borderRadius: "10px",
     backgroundColor: "#4abdac",
 
     "@media (max-width: 1024px)": {
@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
       height: "56vh",
       margin: "2px !important"
     },
+
     "@media (max-width: 320px)": {
       height: "57vh",
       width: "100% !important",
@@ -95,7 +96,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   messageArea: {
-    width: "800px"
+    width: "100%"
   },
   inputArea: {
     paddingTop: "5px",
@@ -154,11 +155,11 @@ export default function ChatBox() {
 
   return (
     <React.Fragment>
-      <Paper className={classes.root}>
+      <Grid className={classes.root}>
         <Paper className={classes.top} elevation={3}>
           <Grid className={classes.topName}>
             <Avatar alt="top" src={bubbles} />
-            <Typography variant="h6">{"Mark Medes"}</Typography>
+            <Typography variant="h6">{"Mark Jowen Medes"}</Typography>
           </Grid>
         </Paper>
 
@@ -204,9 +205,7 @@ export default function ChatBox() {
                       borderRadius: "5px 20px"
                     }}
                   >
-                    {
-                      "aceadssssssssssssssssssssssssssssssssssssssssssssssssssssshFKSHFjkjkdfhajkdfhjdhfjkadhjdjfajdhfjkasdhfjkadsjkfahdjfhjdkfhjdfhjdfhjsdfhjksdkjskjafhjkadhfjkdfhjkadjfhjksdfgjksdfhjksdhfjhsdfjkhdjkfhsjdkfhjsdfhjsdfhjsdfhhhhhhhhhhhhhhhhhhskdhfksadjkfdjk.ahjhdffjkadfjhfjhffjadfadfh "
-                    }
+                    {".ahjhdffjkadfjhfjhffjadfadfh "}
                   </span>
                 </Grid>
 
@@ -232,7 +231,7 @@ export default function ChatBox() {
               container
               alignItems="center"
               justify="flex-start"
-              // style={{ padding: 5 }}
+              style={{ padding: 10 }}
             >
               <Grid
                 style={{
@@ -309,7 +308,7 @@ export default function ChatBox() {
             </Grid>
           </Grid>
         </Paper>
-      </Paper>
+      </Grid>
     </React.Fragment>
   );
 }

@@ -79,7 +79,7 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: "space-around"
   },
   needContainer: {
-    maxHeight: 500,
+    maxHeight: 610,
     overflow: "auto",
     "@media (max-width: 320px)": {
       maxHeight: 300
@@ -113,6 +113,10 @@ const useStyles = makeStyles(theme => ({
       width: theme.spacing(3),
       height: theme.spacing(3)
     }
+  },
+  studentsAvatar: {
+    marginLeft: "15px",
+    marginTop: "5px"
   }
 }));
 
@@ -163,6 +167,27 @@ export default function MentorsView() {
     },
     {
       name: "Crystal Watson"
+    },
+    {
+      name: "George Wells"
+    },
+    {
+      name: "Willie Foster 5"
+    },
+    {
+      name: "Kathy Ellis"
+    },
+    {
+      name: "Kathy Ellis"
+    },
+    {
+      name: "Kathy Ellis"
+    },
+    {
+      name: "Kathy Ellis"
+    },
+    {
+      name: "Kathy Ellis"
     },
     {
       name: "George Wells"
@@ -243,6 +268,7 @@ export default function MentorsView() {
                     {" "}
                     <Typography variant="h7" className={classes.studentsNeed}>
                       <Avatar
+                        className={classes.studentsAvatar}
                         alt="Student"
                         src="https://image.flaticon.com/icons/png/512/522/522301.png"
                       />
@@ -276,6 +302,7 @@ export default function MentorsView() {
                       className={classes.studentsBeingHelp}
                     >
                       <Avatar
+                        className={classes.studentsAvatar}
                         alt="Student"
                         src="https://image.flaticon.com/icons/png/512/522/522301.png"
                       />
@@ -299,6 +326,7 @@ export default function MentorsView() {
                 {" "}
                 <Typography variant="h7" className={classes.studentsBeingHelp}>
                   <Avatar
+                    className={classes.studentsAvatar}
                     alt="Student"
                     src="https://image.flaticon.com/icons/png/512/522/522301.png"
                   />
