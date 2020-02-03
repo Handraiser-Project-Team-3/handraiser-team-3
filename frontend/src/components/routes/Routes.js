@@ -19,17 +19,17 @@ export const Routes = props => {
           accessToken === "" ? (
             <Login data={props} />
           ) : (
-            <Navigation
-              data={props}
-              component={
-                account_type_id === 1
-                  ? Admin
-                  : account_type_id === 2
-                  ? MentorClassView
-                  : Classroom
-              }
-            />
-          )
+              <Navigation
+                data={props}
+                component={
+                  account_type_id === 1
+                    ? Admin
+                    : account_type_id === 2
+                      ? MentorClassView
+                      : Classroom
+                }
+              />
+            )
         }
       />
       <Route

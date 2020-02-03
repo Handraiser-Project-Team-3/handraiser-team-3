@@ -83,12 +83,11 @@ export const MentorClassView = props => {
                     className={classes.media}
                     image={classroom}
                     title="Contemplative Reptile"
-                  ></CardMedia>
+                  />
                   <CardContent>
                     <Typography gutterBottom variant="h5">
                       {data.class_name}
                     </Typography>
-
                     <Typography
                       variant="body2"
                       color="textSecondary"
@@ -112,7 +111,6 @@ export const MentorClassView = props => {
                             style={{ width: "30px" }}
                           />
                         </Grid>
-
                         <Grid item lg={10} xs={10}>
                           <Grid
                             container
@@ -130,7 +128,7 @@ export const MentorClassView = props => {
                               </Typography>
                             </Grid>
                             <Grid item lg={12} xs={12}>
-                              <b>10</b>
+                              <b>{}</b>
                             </Grid>
                           </Grid>
                         </Grid>
