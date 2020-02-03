@@ -35,11 +35,12 @@ massive({
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
   app.get("/api/user/list", user.usersList);
+  app.get("/api/user/:id", user.userDetails);
 
   //classroom
   app.get("/api/class", classroom.list);
   app.post("/api/class", classroom.addClass);
-  app.patch("/api/class", classroom.editClass);
+  app.patch("/api/class/:id", classroom.editClass);
   app.delete("/api/class/:id", classroom.deleteClass);
 
   //chats

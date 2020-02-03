@@ -17,9 +17,6 @@ exports.up = pgm => {
       notNull: true,
       default: pgm.func("current_timestamp")
     },
-    class_end: {
-      type: "timestamp"
-    },
     class_description: {
       type: "text"
     },
