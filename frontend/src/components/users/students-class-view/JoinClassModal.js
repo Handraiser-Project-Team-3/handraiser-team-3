@@ -11,8 +11,9 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import TextField from "@material-ui/core/TextField";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -27,7 +28,17 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const JoinClassModal = props => {
+const alertToast = msg =>
+	toast.info(msg, {
+		position: "top-right",
+		hideProgressBar: true,
+		autoClose: 6000,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true
+	});
+
+export const JoinClassModal = ({ classId, className, codeClass }) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const [code, setCode] = React.useState('');
@@ -88,15 +99,18 @@ export const JoinClassModal = props => {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (props.classId) {
-			if (code === props.codeClass) {
-				history.push(`/classroom/${props.className}`)
+		if (classId) {
+			if (code === codeClass) {
+				history.push(`/classroom/${className}`)
+			} else {
+				alertToast("Invalid Class Code!");
 			}
 		}
 	};
 
 	return (
 		<div>
+			<ToastContainer enableMulticontainer />
 			<Button
 				size="small"
 				style={{ color: "#4abdab" }}
@@ -129,7 +143,7 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id={props.classId} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form id={classId} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
 						<FormControl variant="outlined">
 							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
 							<OutlinedInput
@@ -141,7 +155,7 @@ export const JoinClassModal = props => {
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id={props.classId}>{help.classcode}</FormHelperText>
+							<FormHelperText id={classId}>{help.classcode}</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
@@ -149,7 +163,7 @@ export const JoinClassModal = props => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button color="primary" form={`${props.classId}`} type="submit">
+					<Button color="primary" form={classId} type="submit">
 						Join Class
 					</Button>
 				</DialogActions>
