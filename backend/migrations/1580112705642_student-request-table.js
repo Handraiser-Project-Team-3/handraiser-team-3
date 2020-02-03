@@ -18,6 +18,11 @@ exports.up = pgm => {
       notNull: true,
       references: '"classroom_users"'
     },
+    mentor_id: {
+      type: "integer",
+      notNull: true,
+      references: '"classroom_users"'
+    },
     title: {
       type: "text",
       notNull: true
@@ -27,9 +32,9 @@ exports.up = pgm => {
       notNull: true
     },
     date_posted: {
-      type: "timestamp",
+      type: "date",
       notNull: true,
-      default: pgm.func("current_timestamp")
+      default: pgm.func("current_date")
     }
   });
 };

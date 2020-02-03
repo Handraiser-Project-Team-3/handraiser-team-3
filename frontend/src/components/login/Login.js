@@ -108,7 +108,6 @@ export const Login = props => {
 const alertToast = msg =>
   toast.info(msg, {
     position: "top-right",
-    hideProgressBar: true,
     autoClose: 6000,
     closeOnClick: true,
     pauseOnHover: true,

@@ -15,7 +15,11 @@ function App() {
   }, [accessToken]);
   return (
     <BrowserRouter>
-      {console.log(user)}
+      {console.log(
+        Math.random()
+          .toString(36)
+          .substring(2, 10)
+      )}
       <Routes
         accessToken={accessToken}
         setAccessToken={setAccessToken}
