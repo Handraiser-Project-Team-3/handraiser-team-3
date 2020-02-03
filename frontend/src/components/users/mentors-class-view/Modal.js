@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -9,90 +10,150 @@ import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		"& > *": {
-			margin: theme.spacing(1),
-			width: "500"
-		}
-	},
-	icons: {
-		width: "20px",
-		cursor: "pointer",
-		"&:hover": {
-			width: "23px",
-			borderRadius: "10%"
-		}
-	},
-	formControl: {
-		margin: theme.spacing(3)
-	}
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "500"
+    }
+  },
+  icons: {
+    width: "20px",
+    cursor: "pointer",
+    "&:hover": {
+      width: "23px",
+      borderRadius: "10%"
+    }
+  },
+  formControl: {
+    margin: theme.spacing(3)
+  }
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export const Modal = props => {
-	const classes = useStyles();
-	const { open, setOpen, headTitle, action } = props;
-	const [value, setValue] = useState("");
+  const classes = useStyles();
+  const {
+    open,
+    setOpen,
+    headTitle,
+    action,
+    setClassRoom,
+    classRoom,
+    headers,
+    userId,
+    setClassList,
+    classList
+  } = props;
 
-	const handleChange = event => {
-		setValue(event.target.value);
-	};
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-	const handleClose = () => {
-		setOpen(false);
-	};
+  const handleClass = () => {
+    if (action === "Add") {
+      axios
+        .post(
+          "/api/class",
+          {
+            user_id: userId,
+            class_code: Math.random()
+              .toString(36)
+              .substring(2, 10),
+            class_status: true,
+            ...classRoom
+          },
+          headers
+        )
+        .then(res => {
+          alert("Class Added");
+          setOpen(false);
+          setClassList([...classList, res.data]);
+          setClassRoom({
+            class_name: "",
+            class_description: ""
+          });
+        });
+    } else {
+      axios
+        .patch(
+          `/api/class/${classRoom.id}`,
+          {
+            ...classRoom
+          },
+          headers
+        )
+        .then(() =>
+          axios.get(`/api/class?id=${userId}`, headers).then(res => {
+            setClassList(res.data);
+            alert("edit");
+            setOpen(false);
+          })
+        );
+    }
+  };
 
-	return (
-		<div>
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-slide-title"
-				aria-describedby="alert-dialog-slide-description"
-			>
-				<DialogTitle
-					id="responsive-dialog-title"
-					style={{
-						background: "#4abdac",
-						color: "white"
-					}}
-				>
-					{headTitle} {" Class"}
-				</DialogTitle>
-				<DialogContent>
-					<form className={classes.root} noValidate autoComplete="off">
-						<TextField
-							label="Class Name"
-							variant="outlined"
-							value=""
-							style={{ width: "95%" }}
-						/>
-						<TextField
-							id="outlined-multiline-flexible"
-							label="Details"
-							multiline
-							rowsMax="4"
-							value=""
-							variant="outlined"
-							style={{ width: "95%" }}
-						/>
-					</form>
-				</DialogContent>
+  function handleInput(e) {
+    setClassRoom({
+      ...classRoom,
+      [`${e.target.name}`]: e.target.value
+    });
+  }
 
-				<DialogActions>
-					<Button autoFocus onClick={handleClose} color="primary">
-						Cancel
-					</Button>
-					<Button color="primary" autoFocus>
-						{action}
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
-	);
+  return (
+    <div>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle
+          id="responsive-dialog-title"
+          style={{
+            background: "#4abdac",
+            color: "white"
+          }}
+        >
+          {headTitle} {" Class"}
+        </DialogTitle>
+        <DialogContent>
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField
+              label="Class Name"
+              variant="outlined"
+              name="class_name"
+              value={classRoom.class_name}
+              style={{ width: "95%" }}
+              onChange={handleInput}
+            />
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Description"
+              name="class_description"
+              multiline
+              rowsMax="4"
+              value={classRoom.class_description}
+              variant="outlined"
+              style={{ width: "95%" }}
+              onChange={handleInput}
+            />
+          </form>
+        </DialogContent>
+
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClass} color="primary" autoFocus>
+            {action}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 };
