@@ -24,13 +24,16 @@ export const Classroom = props => {
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const classes = useStyles();
-  const [classList, setClassList] = React.useState([])
+  const [classList, setClassList] = React.useState([]);
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  };
 
   useEffect(() => {
     axios
-      .get('/api/class', {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      })
+      .get('/api/class', headers)
       .then(res => {
         setClassList(res.data)
       })
@@ -102,7 +105,10 @@ export const Classroom = props => {
                 </CardActionArea>
                 <CardActions style={{ background: "#fbdfa1" }}>
                   <Grid container direction="column" alignItems="center">
-                    <JoinClassModal />
+                    <JoinClassModal
+                      classId={data.id}
+                      codeClass={data.class_code}
+                    />
                   </Grid>
                 </CardActions>
               </Card>

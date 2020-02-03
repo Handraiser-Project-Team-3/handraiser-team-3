@@ -43,18 +43,12 @@ export const MentorClassView = props => {
   };
 
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: `/api/class`,
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    })
+    axios
+      .get(`/api/class?id=${user.id}`, {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      })
       .then(res => {
-        setClassList(res.data.filter(id => {
-          if (id.user_id === user.id) {
-            return id
-          }
-          return null;
-        }))
+        setClassList(res.data)
       })
       .catch(e => console.log(e))
   }, []);
@@ -69,26 +63,25 @@ export const MentorClassView = props => {
           setHeadTitle={setHeadTitle}
         />
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {classList.map(i => (
-            < Grid key={i.id} item lg={3} md={4} sm={6} xs={12} >
+          {classList.map(data => (
+            <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
                     className={classes.media}
                     image={classroom}
                     title="Contemplative Reptile"
-                  ></CardMedia>
+                  />
                   <CardContent>
                     <Typography gutterBottom variant="h5">
-                      {i.class_name}
+                      {data.class_name}
                     </Typography>
-
                     <Typography
                       variant="body2"
                       color="textSecondary"
                       component="p"
                     >
-                      {i.class_description}
+                      {data.class_description}
                     </Typography>
                   </CardContent>
                   <CardContent>
@@ -106,7 +99,6 @@ export const MentorClassView = props => {
                             style={{ width: "30px" }}
                           />
                         </Grid>
-
                         <Grid item lg={10} xs={10}>
                           <Grid
                             container
@@ -124,7 +116,7 @@ export const MentorClassView = props => {
                             </Typography>
                             </Grid>
                             <Grid item lg={12} xs={12}>
-                              <b>10</b>
+                              <b>{}</b>
                             </Grid>
                           </Grid>
                         </Grid>
