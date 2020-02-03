@@ -44,7 +44,6 @@ export const JoinClassModal = props => {
 	};
 
 	const handleChange = e => {
-		console.log(e.target.value)
 		setCode(e.target.value)
 		if (e.target.value.length > 0) {
 			setWarn({
@@ -89,10 +88,9 @@ export const JoinClassModal = props => {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		console.log(code)
 		if (props.classId) {
 			if (code === props.codeClass) {
-				history.push(`/classroom/${props.classId}`)
+				history.push(`/classroom/${props.className}`)
 			}
 		}
 	};
@@ -131,19 +129,19 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id="code_form" className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form id={`${props.classId}`} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
 						<FormControl variant="outlined">
-							<InputLabel htmlFor="classcode">Class Code</InputLabel>
+							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id="classcode"
-								name="classcode"
+								id='classcode'
+								name='classcode'
 								error={warn.classcode}
 								onBlur={warningUpdate}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id="classcode">{help.classcode}</FormHelperText>
+							<FormHelperText id={props.classId}>{help.classcode}</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
@@ -151,7 +149,7 @@ export const JoinClassModal = props => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button color="primary" form="code_form" type="submit">
+					<Button color="primary" form={`${props.classId}`} type="submit">
 						Join Class
 					</Button>
 				</DialogActions>

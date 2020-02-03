@@ -28,7 +28,7 @@ export const Classroom = props => {
 
   useEffect(() => {
     axios
-      .get(`/api/class?id=${id}`, headers)
+      .get(`/api/class/`, headers)
       .then(res => {
         setClassList(res.data);
       })
@@ -102,6 +102,7 @@ export const Classroom = props => {
                   <Grid container direction="column" alignItems="center">
                     <JoinClassModal
                       classId={data.id}
+                      className={data.class_name}
                       codeClass={data.class_code}
                     />
                   </Grid>
