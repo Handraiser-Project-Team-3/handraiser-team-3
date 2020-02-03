@@ -81,7 +81,7 @@ module.exports = {
 			});
 	},
 	usersList: (req, res) => {
-		const { users } = req.app.get(get(db));
+		const { users } = req.app.get("db");
 
 		users
 			.find()
