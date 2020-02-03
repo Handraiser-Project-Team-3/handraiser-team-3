@@ -20,7 +20,6 @@ function App() {
   };
   return (
     <BrowserRouter>
-      {console.log(user)}
       <Routes
         accessToken={accessToken}
         setAccessToken={setAccessToken}

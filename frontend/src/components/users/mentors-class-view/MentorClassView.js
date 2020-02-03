@@ -26,7 +26,7 @@ import edit from "../../assets/images/edit.png";
 
 export const MentorClassView = props => {
   const classes = useStyles();
-  const { user, accessToken, headers } = props.data;
+  const { user, headers } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
   const [headTitle, setHeadTitle] = useState("");
@@ -44,6 +44,12 @@ export const MentorClassView = props => {
     setOpen(true);
     setAction("Save");
     setHeadTitle("Edit");
+  };
+
+  const deleteClass = classid => {
+    axios
+      .delete(`/api/class/${classid}`, headers)
+      .then(() => setClassList(classList.filter(data => data.id !== classid)));
   };
 
   useEffect(() => {
@@ -162,6 +168,7 @@ export const MentorClassView = props => {
                         </Tooltip>
                       </Grid>
                     </Grid>
+                    <Button onClick={() => deleteClass(data.id)}>delete</Button>
                   </Grid>
                 </CardActions>
               </Card>
