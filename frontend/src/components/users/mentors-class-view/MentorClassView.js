@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
+import copy from "clipboard-copy";
 import axios from "axios";
 
 // component/s
@@ -46,40 +47,36 @@ export const MentorClassView = props => {
     setHeadTitle("Edit");
   };
 
-  const deleteClass = classid => {
-    axios
-      .delete(`/api/class/${classid}`, headers)
-      .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  };
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/class/${classid}`, headers)
+  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  // };
 
   useEffect(() => {
     axios
-      .get("/api/class", headers)
+      .get(`/api/class?id=${user.id}`, headers)
       .then(res => {
-        setClassList(
-          res.data.filter(id => {
-            if (id.user_id === user.id) {
-              return id;
-            }
-            return null;
-          })
-        );
+        setClassList(res.data);
       })
       .catch(e => console.log(e));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <>
-      <Layout accountType={accountType} first_name={first_name}>
-        <ClassHead
-          account_type_id={account_type_id}
-          setOpen={setOpen}
-          setAction={setAction}
-          setHeadTitle={setHeadTitle}
-        />
-        <Grid container direction="row" alignItems="center" spacing={3}>
-          {classList.map(data => (
-            <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
+    <Layout accountType={accountType} first_name={first_name}>
+      <ClassHead
+        account_type_id={account_type_id}
+        setOpen={setOpen}
+        setAction={setAction}
+        setHeadTitle={setHeadTitle}
+      />
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        {classList
+          .sort((a, b) => (a.id > b.id ? 1 : -1))
+          .map((data, i) => (
+            <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
@@ -149,7 +146,13 @@ export const MentorClassView = props => {
                     justify="space-between"
                   >
                     <Grid item lg={10} md={10} sm={9} xs={9}>
-                      <Button size="small" style={{ color: "#b5855a" }}>
+                      <Button
+                        onClick={() =>
+                          history.push(`/classroom/${data.class_name}`)
+                        }
+                        size="small"
+                        style={{ color: "#b5855a" }}
+                      >
                         Enter Class
                       </Button>
                     </Grid>
@@ -163,32 +166,41 @@ export const MentorClassView = props => {
                             style={{ marginRight: "10px" }}
                             onClick={() => {
                               handleClickOpen();
+                              setClassRoom({
+                                id: data.id,
+                                class_name: data.class_name,
+                                class_description: data.class_description
+                              });
                             }}
                           />
                         </Tooltip>
                       </Grid>
                     </Grid>
-                    <Button onClick={() => deleteClass(data.id)}>delete</Button>
+                    {/* <Button onClick={() => deleteClass(data.id)}>delete</Button> */}
+                    <Tooltip title="Click to copy code">
+                      <Button onClick={() => copy(data.class_code)}>
+                        {data.class_code}
+                      </Button>
+                    </Tooltip>
                   </Grid>
                 </CardActions>
               </Card>
             </Grid>
           ))}
-        </Grid>
-        <Modal
-          open={open}
-          setOpen={setOpen}
-          action={action}
-          headTitle={headTitle}
-          setClassRoom={setClassRoom}
-          classRoom={classRoom}
-          headers={headers}
-          userId={user.id}
-          setClassList={setClassList}
-          classList={classList}
-        />
-      </Layout>
-    </>
+      </Grid>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        action={action}
+        headTitle={headTitle}
+        setClassRoom={setClassRoom}
+        classRoom={classRoom}
+        headers={headers}
+        userId={user.id}
+        setClassList={setClassList}
+        classList={classList}
+      />
+    </Layout>
   );
 };
 

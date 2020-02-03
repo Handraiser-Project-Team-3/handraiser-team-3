@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -6,14 +6,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
-import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,7 +77,21 @@ export const Modal = props => {
           });
         });
     } else {
-      console.log("edit");
+      axios
+        .patch(
+          `/api/class/${classRoom.id}`,
+          {
+            ...classRoom
+          },
+          headers
+        )
+        .then(() =>
+          axios.get(`/api/class?id=${userId}`, headers).then(res => {
+            setClassList(res.data);
+            alert("edit");
+            setOpen(false);
+          })
+        );
     }
   };
 
