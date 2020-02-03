@@ -129,7 +129,7 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id={`${props.classId}`} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form id={props.classId} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
 						<FormControl variant="outlined">
 							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
 							<OutlinedInput
