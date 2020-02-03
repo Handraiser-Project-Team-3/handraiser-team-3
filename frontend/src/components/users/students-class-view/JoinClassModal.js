@@ -138,6 +138,8 @@ export const JoinClassModal = props => {
 								required
 								id="classcode"
 								name="classcode"
+								error={warn.classcode}
+								onBlur={warningUpdate}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
