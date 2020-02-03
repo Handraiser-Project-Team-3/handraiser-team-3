@@ -11,30 +11,30 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import head from "../../assets/images/bg.jpg";
 
 const useStyles = makeStyles(theme => ({
-	header: {
-		height: "auto",
-		backgroundImage: `url(${head})`,
-		backgroundSize: "cover",
-		padding: "20px",
-		paddingTop: "85px"
-	},
-	color: {
-		color: "gray",
-		paddingLeft: "35px"
-	},
-	res: {
-		"@media (max-width: 415px)": {
-			display: "none"
-		}
-	},
-	container: {
-		margin: "50px 8vw 10px 8vw"
-	}
+  header: {
+    height: "auto",
+    backgroundImage: `url(${head})`,
+    backgroundSize: "cover",
+    padding: "20px",
+    paddingTop: "85px"
+  },
+  color: {
+    color: "gray",
+    paddingLeft: "35px"
+  },
+  res: {
+    "@media (max-width: 415px)": {
+      display: "none"
+    }
+  },
+  container: {
+    margin: "50px 8vw 10px 8vw"
+  }
 }));
 
 export default function Layout(props) {
-	const classes = useStyles();
-	const { first_name, accountType } = props;
+  const classes = useStyles();
+  const { first_name, accountType } = props;
 
 	return (
 		<div>
