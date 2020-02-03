@@ -55,17 +55,9 @@ export const MentorClassView = props => {
 
   useEffect(() => {
     axios
-<<<<<<< HEAD
-      .get(`/api/class?id=${user.id}`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      })
-      .then(res => {
-        setClassList(res.data)
-=======
       .get(`/api/class?id=${user.id}`, headers)
       .then(res => {
         setClassList(res.data);
->>>>>>> b0b4156ade4e2aab0825b2b5c596a016d519ce26
       })
       .catch(e => console.log(e));
 
@@ -73,19 +65,6 @@ export const MentorClassView = props => {
   }, []);
 
   return (
-<<<<<<< HEAD
-    <>
-      <Layout accountType={accountType} first_name={first_name}>
-        <ClassHead
-          account_type_id={account_type_id}
-          setOpen={setOpen}
-          setAction={setAction}
-          setHeadTitle={setHeadTitle}
-        />
-        <Grid container direction="row" alignItems="center" spacing={3}>
-          {classList.map(data => (
-            <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
-=======
     <Layout accountType={accountType} first_name={first_name}>
       <ClassHead
         account_type_id={account_type_id}
@@ -98,7 +77,6 @@ export const MentorClassView = props => {
           .sort((a, b) => (a.id > b.id ? 1 : -1))
           .map((data, i) => (
             <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
->>>>>>> b0b4156ade4e2aab0825b2b5c596a016d519ce26
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
