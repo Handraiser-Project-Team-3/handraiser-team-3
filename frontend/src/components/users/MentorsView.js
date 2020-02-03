@@ -28,13 +28,14 @@ const useStyles = makeStyles(theme => ({
     paddingTop: "30px",
     paddingLeft: "200px",
     "@media (max-width: 320px)": {
-      paddingLeft: "0px"
+      paddingLeft: "0px !important"
     },
+
     "@media (max-width: 375px)": {
-      paddingLeft: "0px"
+      paddingLeft: "0px !important"
     },
     "@media (max-width: 425px)": {
-      paddingLeft: "0px"
+      paddingLeft: "0px !important"
     },
     "@media(max-width:1024px)": {
       paddingLeft: "270px"
@@ -66,7 +67,10 @@ const useStyles = makeStyles(theme => ({
   },
   needContainer: {
     maxHeight: 500,
-    overflow: "auto"
+    overflow: "auto",
+    "@media (max-width: 320px)": {
+      maxHeight: 300
+    }
   },
   Icons: {
     display: "inline-flex",
@@ -87,6 +91,9 @@ const useStyles = makeStyles(theme => ({
   },
   chatBox: {
     display: "inline-flex"
+  },
+  appBar: {
+    margin: "0px"
   }
 }));
 
@@ -149,9 +156,11 @@ export default function MentorsView() {
           </Grid>
         </Grid>
       </Paper>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div
+        style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
+      >
         <div className={classes.root}>
-          <AppBar position="static" color="default">
+          <AppBar position="static" color="default" className={classes.appBar}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -167,8 +176,30 @@ export default function MentorsView() {
           </AppBar>
 
           <TabPanel value={value} index={0}>
-            <Paper className={classes.needContainer}>
-              <Paper className={classes.needHelp}>
+            <Paper className={classes.needContainer} elevation={4}>
+              <Paper className={classes.needHelp} elevation={6}>
+                {" "}
+                <Typography variant="h7" className={classes.studentsNeed}>
+                  <Avatar
+                    alt="Student"
+                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                  />
+                  Edward Nayve
+                </Typography>
+                <div className={classes.Icons}>
+                  <Tooltip title="Remove">
+                    <Button>
+                      <RemoveCircleIcon className={classes.removeIcon} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Help">
+                    <Button>
+                      <LiveHelpIcon />
+                    </Button>
+                  </Tooltip>
+                </div>
+              </Paper>
+              <Paper className={classes.needHelp} elevation={6}>
                 {" "}
                 <Typography variant="h7" className={classes.studentsNeed}>
                   <Avatar
@@ -193,8 +224,8 @@ export default function MentorsView() {
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Paper className={classes.needContainer}>
-              <Paper className={classes.needHelp}>
+            <Paper className={classes.needContainer} elevation={6}>
+              <Paper className={classes.needHelp} elevation={6}>
                 {" "}
                 <Typography variant="h7" className={classes.studentsBeingHelp}>
                   <Avatar
@@ -214,8 +245,8 @@ export default function MentorsView() {
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Paper className={classes.needContainer}>
-              <Paper className={classes.needHelp}>
+            <Paper className={classes.needContainer} elevation={6}>
+              <Paper className={classes.needHelp} elevation={6}>
                 {" "}
                 <Typography variant="h7" className={classes.studentsBeingHelp}>
                   <Avatar
