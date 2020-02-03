@@ -1,64 +1,179 @@
-import React, { useEffect } from "react";
-import { Alert } from "@material-ui/lab";
-import Snackbar from "@material-ui/core/Snackbar";
-import AdminTable from "./AdminTable";
-import BackGround from "../assets/images/bg.jpg";
+import React, { useState, useEffect } from "react";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
+import axios from "axios";
 
-const divStyle = {
-  width: "90%",
-  margin: "70px auto 0px auto",
-  height: "92vh",
-  display: "flex",
-  flexDirection: "column"
-  // justifyContent: "center"
-};
-const divAdminHeader = {
-  backgroundImage: `url(${BackGround})`,
-  width: "100%",
-  height: "80px",
-  backgroundRepeat: "no-repeat",
-  marginTop: "60px",
-  fontSize: "24px"
-};
+import teacher from "../assets/images/mentor2.png";
+
+import Layout from "./reusables/Layout";
+import { PaperStat } from "./reusables/Paper";
+
+const StyledTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: "#a5a5a5",
+    color: theme.palette.common.white
+  },
+  body: {
+    fontSize: 14
+  }
+}))(TableCell);
+
+const StyledTableRow = withStyles(theme => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.background.default
+    }
+  }
+}))(TableRow);
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+// const [state, setState] = React.useState([]);
+
+const rows = [
+  createData("Frozen yoghurt"),
+  createData("Ice cream sandwich"),
+  createData("Eclair"),
+  createData("Cupcake"),
+  createData("Gingerbread"),
+  createData("Eclaira"),
+  createData("Cupcakea"),
+  createData("Gingerbreada")
+];
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 700,
+    height: "74vh"
+  },
+  mentor: {
+    width: "20px",
+    marginRight: "10px"
+  },
+  gridStyle: {
+    height: "8vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#d2efeb",
+    borderTopLeftRadius: "5px",
+    borderBottomLeftRadius: "5px"
+  },
+  paperStyle: {
+    height: "8vh",
+    background: "white",
+    marginBottom: "2vh"
+  }
+});
 
 export const Admin = props => {
-  const [state, setState] = React.useState(false);
-  const handleClose = () => {
-    setState({ ...state, open: false });
-  };
-  // const { metaData, setMetaData } = props.data;
+  const classes = useStyles();
+
+  const [accountType] = useState("Admin");
+  const { user, headers } = props.data;
+  const userDetails = user ? user : {};
+  const { first_name } = userDetails;
+  const [users, setUsers] = useState([]);
+  const [email, setEmail] = useState([]);
+  console.log(headers);
 
   useEffect(() => {
-    setState(true);
-    setTimeout(() => {
-      setState(false);
-    }, 5000);
+    axios.get("/api/user/list", headers).then(res => {
+      console.log(res.data);
+      setUsers(res.data);
+    });
   }, []);
 
   return (
-    <React.Fragment>
-      <div style={divAdminHeader}>
-        <Snackbar
-          open={state}
-          onClose={handleClose}
-          message="Welcome Admin"
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left"
-          }}
-        >
-          <Alert
-            style={{ marginTop: "50px", width: "350px", fontSize: "18px" }}
-            severity="success"
-            color="info"
-          >
-            Welcome Admin
-          </Alert>
-        </Snackbar>
-      </div>
-      <div style={divStyle}>
-        <AdminTable />
-      </div>
-    </React.Fragment>
+    <Layout accountType={accountType} first_name={first_name}>
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <Paper className={classes.paperStyle}>
+            <Grid container align="center" alignItems="center">
+              <Grid item xs={10} className={classes.gridStyle}>
+                <form noValidate autoComplete="off">
+                  <TextField
+                    id="standard-basic"
+                    label="Email Address"
+                    className={classes.textField}
+                  />
+                </form>
+              </Grid>
+              <Grid item xs={2}>
+                <Tooltip title="Add User">
+                  <AddCircleIcon
+                    value={email}
+                    fontSize="large"
+                    style={{
+                      color: "#4abdac",
+                      cursor: "pointer"
+                    }}
+                  />
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </Paper>
+          <PaperStat />
+        </Grid>
+        <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Email Address</StyledTableCell>
+                  <StyledTableCell
+                    align="right"
+                    style={{ paddingRight: "80px" }}
+                  >
+                    Action
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users.map(row => (
+                  <StyledTableRow key={row.email}>
+                    <StyledTableCell component="th" scope="row">
+                      {row.email}
+                    </StyledTableCell>
+
+                    <StyledTableCell align="right">
+                      <Button
+                        variant="contained"
+                        style={{ background: "#7dcec3" }}
+                        color="primary"
+                      >
+                        <img src={teacher} className={classes.mentor} />
+                        Set as Mentor
+                      </Button>
+
+                      {/* <Button
+												variant="contained"
+												style={{ background: "#fe8d8c" }}
+												color="primary"
+											>
+												Remove as Mentor
+											</Button> */}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    </Layout>
   );
 };

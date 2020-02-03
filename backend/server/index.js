@@ -1,5 +1,6 @@
 const massive = require("massive");
 const cors = require("cors");
+require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
@@ -15,11 +16,11 @@ const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
 
 massive({
-  host: "localhost",
-  port: 5432,
-  database: "handraiser",
-  user: "postgres",
-  password: "handraiserdb"
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD
 }).then(db => {
   app.set("db", db);
   app.use(express.json());
@@ -33,6 +34,7 @@ massive({
   //user
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+  app.get("/api/user/list", user.usersList);
 
   //classroom
   app.get("/api/class", classroom.list);

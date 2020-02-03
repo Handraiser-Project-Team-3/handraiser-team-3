@@ -31,8 +31,8 @@ export const Login = props => {
 		axios
 			.post("/api/login", obj)
 			.then(res => {
-				setAccessToken(res.data);
 				alertToast("Log in Successful!");
+				setAccessToken(res.data);
 			})
 			.catch(() => {
 				alertToast("Unable to Login!");
@@ -109,7 +109,7 @@ const alertToast = msg =>
 	toast.info(msg, {
 		position: "top-right",
 		hideProgressBar: true,
-		autoClose: 2000,
+		autoClose: 6000,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true
