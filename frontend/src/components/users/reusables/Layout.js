@@ -57,7 +57,7 @@ export default function Layout(props) {
 							aria-label="breadcrumb"
 							className={classes.res}
 						>
-							<Link color="inherit">{first_name}</Link>
+							<Typography color="inherit">{first_name}</Typography>
 							<Typography color="textPrimary">Classrooms</Typography>
 						</Breadcrumbs>
 					</Grid>
