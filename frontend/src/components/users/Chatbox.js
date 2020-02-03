@@ -58,7 +58,8 @@ const useStyles = makeStyles(theme => ({
 		width: "400px"
 	},
 	sendButton: {
-		marginRight: "90px"
+		marginRight: "90px",
+		color: "gray"
 	}
 }));
 
@@ -77,9 +78,9 @@ export default function ChatBox() {
 		<React.Fragment>
 			<Paper className={classes.root}>
 				<Paper className={classes.top}>
-					<Grid xs={12} className={classes.topName}>
+					<Grid className={classes.topName}>
 						<ForumIcon style={{ fill: "grey", fontSize: 35 }} />
-						<Typography variant="h8">{"Mark Medes"}</Typography>
+						<Typography variant="h6">{"Mark Medes"}</Typography>
 					</Grid>
 				</Paper>
 
@@ -102,6 +103,7 @@ export default function ChatBox() {
 								style={{ padding: 5 }}
 							>
 								<Grid
+									item
 									style={{
 										margin: 15,
 										display: "flex",
@@ -208,7 +210,6 @@ export default function ChatBox() {
 									style={{ height: "30px" }}
 									size="small"
 									variant="contained"
-									color="grey"
 									className={classes.sendButton}
 									endIcon={<SendIcon />}
 								>
