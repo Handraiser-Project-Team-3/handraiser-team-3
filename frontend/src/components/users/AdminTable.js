@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Navbar from "../navigation/NavBar";
-import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
