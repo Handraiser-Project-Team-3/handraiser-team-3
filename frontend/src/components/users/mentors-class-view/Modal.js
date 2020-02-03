@@ -1,19 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
-import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -79,8 +72,6 @@ export const Modal = props => {
 							value=""
 							style={{ width: "95%" }}
 						/>
-					</form>
-					<form className={classes.root} noValidate autoComplete="off">
 						<TextField
 							id="outlined-multiline-flexible"
 							label="Details"
@@ -91,41 +82,6 @@ export const Modal = props => {
 							style={{ width: "95%" }}
 						/>
 					</form>
-					<form className={classes.root} noValidate autoComplete="off">
-						<TextField
-							label="Class Code"
-							variant="outlined"
-							value=""
-							style={{ width: "95%" }}
-						/>
-					</form>
-					<FormControl component="fieldset" className={classes.formControl}>
-						<FormLabel component="legend">Status</FormLabel>
-						<RadioGroup
-							aria-label="Status"
-							name="status"
-							value={value}
-							onChange={handleChange}
-						>
-							<Grid container direction="row" alignItems="center" spacing={5}>
-								<Grid item>
-									{" "}
-									<FormControlLabel
-										value="true"
-										control={<Radio />}
-										label="Enable"
-									/>
-								</Grid>
-								<Grid item>
-									<FormControlLabel
-										value="false"
-										control={<Radio />}
-										label="Disable"
-									/>
-								</Grid>
-							</Grid>
-						</RadioGroup>
-					</FormControl>
 				</DialogContent>
 
 				<DialogActions>
