@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import ForumIcon from "@material-ui/icons/Forum";
+import bubbles from "../assets/images/speech-bubble.svg";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
@@ -11,6 +11,17 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "whitesmoke"
+    }
+  },
   root: {
     margin: "28px",
     height: "70vh",
@@ -128,9 +139,15 @@ export default function ChatBox() {
   const classes = useStyles();
   const [messages, setMessages] = useState([
     {
+      id: 1,
       message: "Nani?"
     },
     {
+      id: 1,
+      message: "Nani?"
+    },
+    {
+      id: 2,
       reps: "eu"
     }
   ]);
@@ -140,7 +157,7 @@ export default function ChatBox() {
       <Paper className={classes.root}>
         <Paper className={classes.top} elevation={3}>
           <Grid className={classes.topName}>
-            <ForumIcon style={{ fill: "grey", fontSize: 35 }} />
+            <Avatar alt="top" src={bubbles} />
             <Typography variant="h6">{"Mark Medes"}</Typography>
           </Grid>
         </Paper>
@@ -148,71 +165,69 @@ export default function ChatBox() {
         {/* messages] */}
         <Paper className={classes.convoBox} elevation={6}>
           <Grid container direction="column">
-            {messages.map(m => {
-              console.log(m.reps, m.message);
-
-              return (
+            {/* {messages.map(m => {
+              return ( */}
+            <Grid
+              style={{ display: "flex", alignItems: "center" }}
+              xl={12}
+              lg={12}
+              item
+            >
+              <Grid
+                container
+                alignItems="center"
+                justify="flex-end"
+                style={{ padding: 5, paddingRight: "10px" }}
+              >
                 <Grid
-                  style={{ display: "flex", alignItems: "center" }}
-                  xl={12}
-                  lg={12}
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    maxWidth: "300px",
+                    wordBreak: " break-all"
+                  }}
+                  xl={5}
+                  lg={5}
+                  md={6}
+                  sm={7}
+                  xs={8}
                   item
                 >
-                  <Grid
-                    container
-                    alignItems="center"
-                    justify="flex-end"
-                    style={{ padding: 5, paddingRight: "10px" }}
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      backgroundColor: "whitesmoke",
+                      wordBreak: " break-all",
+                      border: " 2px solid #4ABDAC",
+                      padding: "10px",
+                      borderRadius: "5px 20px"
+                    }}
                   >
-                    <Grid
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        maxWidth: "300px",
-                        wordBreak: " break-all"
-                      }}
-                      xl={5}
-                      lg={5}
-                      md={6}
-                      sm={7}
-                      xs={8}
-                      item
-                    >
-                      <span
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          backgroundColor: "whitesmoke",
-                          wordBreak: " break-all",
-                          border: " 2px solid #4ABDAC",
-                          padding: "10px",
-                          borderRadius: "5px 20px"
-                        }}
-                      >
-                        {
-                          "asdaasdddddddddddddddddddddddddddddddddddddddddddddddddddddddsdas"
-                        }
-                      </span>
-                    </Grid>
-
-                    <Grid
-                      style={{
-                        alignSelf: " flex-start",
-                        display: "flex",
-                        alignItems: "flex-end"
-                      }}
-                      item
-                    >
-                      <Avatar
-                        className={classes.mentorAvatar}
-                        alt="mentor"
-                        src="https://image.flaticon.com/icons/png/512/1866/1866089.png"
-                      />
-                    </Grid>
-                  </Grid>
+                    {
+                      "aceadssssssssssssssssssssssssssssssssssssssssssssssssssssshFKSHFjkjkdfhajkdfhjdhfjkadhjdjfajdhfjkasdhfjkadsjkfahdjfhjdkfhjdfhjdfhjsdfhjksdkjskjafhjkadhfjkdfhjkadjfhjksdfgjksdfhjksdhfjhsdfjkhdjkfhsjdkfhjsdfhjsdfhjsdfhhhhhhhhhhhhhhhhhhskdhfksadjkfdjk.ahjhdffjkadfjhfjhffjadfadfh "
+                    }
+                  </span>
                 </Grid>
-              );
-            })}
+
+                <Grid
+                  style={{
+                    alignSelf: " flex-start",
+                    display: "flex",
+                    alignItems: "flex-end"
+                  }}
+                  item
+                >
+                  <Avatar
+                    className={classes.mentorAvatar}
+                    alt="mentor"
+                    src="https://image.flaticon.com/icons/png/512/1866/1866089.png"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            {/* );
+            })} */}
             <Grid
               container
               alignItems="center"
@@ -258,9 +273,7 @@ export default function ChatBox() {
                     borderRadius: "20px 5px"
                   }}
                 >
-                  {
-                    "ssasaasdsdasdsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss "
-                  }
+                  {".ahjhdffjkadfjhfjhffjadfadfh "}
                 </span>
               </Grid>
             </Grid>
