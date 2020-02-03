@@ -10,6 +10,10 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+<<<<<<< HEAD
+=======
+    "clipboard-copy": "^3.1.0",
+>>>>>>> b0b4156ade4e2aab0825b2b5c596a016d519ce26
     "jwt-decode": "^2.2.0",
     "material-table": "^1.56.1",
     "react": "^16.12.0",
