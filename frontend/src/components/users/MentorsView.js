@@ -16,7 +16,7 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 // component/s
-
+import AddClassRoom from "./classroomModal";
 import Chatbox from "../users/Chatbox";
 // images
 import head from "../assets/images/bg.png";
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    width: 460,
     paddingTop: "30px",
     paddingLeft: "200px",
     "@media (max-width: 320px)": {
@@ -79,7 +79,7 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: "space-around"
   },
   needContainer: {
-    maxHeight: 575,
+    height: "50vh",
     overflow: "auto",
     "@media (max-width: 320px)": {
       maxHeight: 300
@@ -110,11 +110,11 @@ const useStyles = makeStyles(theme => ({
       width: theme.spacing(3),
       height: theme.spacing(3)
     }
+  },
+  modalButton: {
+    marginTop: "-47px ",
+    marginLeft: "10px"
   }
-  // studentsAvatar: {
-  //   marginLeft: "15px",
-  //   marginTop: "5px"
-  // }
 }));
 
 //Tabs
@@ -166,46 +166,103 @@ export default function MentorsView() {
       name: "Crystal Watson"
     },
     {
-      name: "George Wells"
+      name: "Stephen Dunn"
     },
     {
-      name: "Willie Foster 5"
+      name: "Nathan Young "
     },
     {
-      name: "Kathy Ellis"
+      name: "Crystal Watson"
     },
     {
-      name: "Kathy Ellis"
+      name: "Nathan Young "
     },
     {
-      name: "Kathy Ellis"
+      name: "Crystal Watson"
     },
     {
-      name: "Kathy Ellis"
+      name: "Stephen Dunn"
     },
     {
-      name: "Kathy Ellis"
+      name: "Nathan Young "
     },
     {
-      name: "George Wells"
+      name: "Crystal Watson"
     },
     {
-      name: "Willie Foster 5"
+      name: "Nathan Young "
     },
     {
-      name: "Kathy Ellis"
+      name: "Crystal Watson"
     },
     {
-      name: "Kathy Ellis"
+      name: "Stephen Dunn"
     },
     {
-      name: "Kathy Ellis"
+      name: "Nathan Young "
     },
     {
-      name: "Kathy Ellis"
+      name: "Crystal Watson"
     },
     {
-      name: "Kathy Ellis"
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Stephen Dunn"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Stephen Dunn"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Stephen Dunn"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
+    },
+    {
+      name: "Stephen Dunn"
+    },
+    {
+      name: "Nathan Young "
+    },
+    {
+      name: "Crystal Watson"
     }
   ]);
   return (
@@ -263,7 +320,7 @@ export default function MentorsView() {
                 return (
                   <Paper id={e.name} className={classes.needHelp} elevation={6}>
                     {" "}
-                    <Typography variant="h7" className={classes.studentsNeed}>
+                    <Typography className={classes.studentsNeed}>
                       <Avatar
                         className={classes.studentsAvatar}
                         alt="Student"
@@ -287,6 +344,9 @@ export default function MentorsView() {
                 );
               })}
             </Paper>
+            <div className={classes.modalButton}>
+              <AddClassRoom />
+            </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Paper className={classes.needContainer} elevation={6}>
@@ -294,10 +354,7 @@ export default function MentorsView() {
                 return (
                   <Paper className={classes.needHelp} elevation={6}>
                     {" "}
-                    <Typography
-                      variant="h7"
-                      className={classes.studentsBeingHelp}
-                    >
+                    <Typography className={classes.studentsBeingHelp}>
                       <Avatar
                         className={classes.studentsAvatar}
                         alt="Student"
@@ -316,12 +373,15 @@ export default function MentorsView() {
                 );
               })}
             </Paper>
+            <div className={classes.modalButton}>
+              <AddClassRoom />
+            </div>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Paper className={classes.needContainer} elevation={6}>
               <Paper className={classes.needHelp} elevation={6}>
                 {" "}
-                <Typography variant="h7" className={classes.studentsBeingHelp}>
+                <Typography className={classes.studentsBeingHelp}>
                   <Avatar
                     className={classes.studentsAvatar}
                     alt="Student"
@@ -329,17 +389,14 @@ export default function MentorsView() {
                   />
                   Papa Rex Rojo
                 </Typography>
-                {/* <div className={classes.Icons}>
-                  <Tooltip title="Remove">
-                    <Button>
-                      <RemoveCircleIcon className={classes.removeIcon} />
-                    </Button>
-                  </Tooltip>
-                </div> */}
               </Paper>
             </Paper>
+            <div className={classes.modalButton}>
+              <AddClassRoom />
+            </div>
           </TabPanel>
         </div>
+
         <Chatbox />
       </div>
     </div>

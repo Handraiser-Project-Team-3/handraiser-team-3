@@ -34,9 +34,6 @@ const useStyles = makeStyles(theme => ({
     }
   },
   top: {
-    padding: "0px",
-    margin: "0px",
-    // hei
     width: "100%"
   },
   topName: {
@@ -123,6 +120,55 @@ export default function ChatBox() {
             {/* {messages.map(m => {
               return ( */}
             <Grid
+              container
+              alignItems="center"
+              justify="flex-start"
+              // style={{ padding: 5 }}
+            >
+              <Grid
+                style={{
+                  margin: 5,
+                  alignSelf: " flex-end",
+                  display: "flex",
+                  justifyContent: "flex-start"
+                }}
+                item
+              >
+                <Avatar
+                  alt="student"
+                  src="https://image.flaticon.com/icons/svg/2302/2302834.svg"
+                />
+              </Grid>
+
+              <Grid
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  maxWidth: "300px"
+                }}
+                xl={5}
+                lg={5}
+                md={6}
+                sm={7}
+                xs={8}
+                item
+              >
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    backgroundColor: "whitesmoke",
+                    wordBreak: " break-all",
+                    border: " 2px solid #F7B732",
+                    padding: "10px",
+                    borderRadius: "20px 5px"
+                  }}
+                >
+                  {".ahjhdffjkadfjhfjhffjadfadfh "}
+                </span>
+              </Grid>
+            </Grid>
+            <Grid
               style={{ display: "flex", alignItems: "center" }}
               xl={12}
               lg={12}
@@ -159,9 +205,7 @@ export default function ChatBox() {
                       borderRadius: "5px 20px"
                     }}
                   >
-                    {
-                      "aceadssssssssssssssssssssssssssssssssssssssssssssssssssssshFKSHFjkjkdfhajkdfhjdhfjkadhjdjfajdhfjkasdhfjkadsjkfahdjfhjdkfhjdfhjdfhjsdfhjksdkjskjafhjkadhfjkdfhjkadjfhjksdfgjksdfhjksdhfjhsdfjkhdjkfhsjdkfhjsdfhjsdfhjsdfhhhhhhhhhhhhhhhhhhskdhfksadjkfdjk.ahjhdffjkadfjhfjhffjadfadfh "
-                    }
+                    {".ahjhdffjkadfjhfjhffjadfadfh "}
                   </span>
                 </Grid>
 
