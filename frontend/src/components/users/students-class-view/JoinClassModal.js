@@ -153,7 +153,7 @@ export const JoinClassModal = (props) => {
 							<OutlinedInput
 								required
 								id='classcode'
-								name={className}
+								name={props.className}
 								error={warn.classcode}
 								onBlur={warningUpdate}
 								onChange={handleChange}
@@ -167,7 +167,7 @@ export const JoinClassModal = (props) => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button color="primary" form={classId} type="submit">
+					<Button color="primary" form={props.classId} type="submit">
 						Join Class
 					</Button>
 				</DialogActions>
