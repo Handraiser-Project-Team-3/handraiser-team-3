@@ -70,16 +70,16 @@ const useStyles = makeStyles(theme => ({
   },
 
   needHelp: {
-    paddingTop: "20px",
+    padding: "15px",
     margin: "20px",
-    width: "90%",
+    // width: "90%",
     display: "flex",
-    justifyContent: "space-between",
-    height: "5vh"
+    justifyContent: "space-between"
+    // height: "5vh"
     // justifyContent: "space-around"
   },
   needContainer: {
-    maxHeight: 617,
+    maxHeight: 575,
     overflow: "auto",
     "@media (max-width: 320px)": {
       maxHeight: 300
@@ -89,18 +89,15 @@ const useStyles = makeStyles(theme => ({
     display: "inline-flex",
     justifyContent: "space-between",
     width: " 100px",
-    paddingRight: "20px",
-    marginTop: "-20px"
+    paddingRight: "20px"
   },
   studentsNeed: {
     display: "flex",
-    color: "gray",
-    marginTop: "-10px"
+    color: "gray"
   },
   studentsBeingHelp: {
     display: "flex",
-    color: "gray",
-    marginTop: "-10px"
+    color: "gray"
   },
   chatBox: {
     display: "inline-flex"
@@ -113,11 +110,11 @@ const useStyles = makeStyles(theme => ({
       width: theme.spacing(3),
       height: theme.spacing(3)
     }
-  },
-  studentsAvatar: {
-    marginLeft: "15px",
-    marginTop: "5px"
   }
+  // studentsAvatar: {
+  //   marginLeft: "15px",
+  //   marginTop: "5px"
+  // }
 }));
 
 //Tabs

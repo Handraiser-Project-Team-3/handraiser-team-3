@@ -24,37 +24,19 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     margin: "28px",
-    // height: "70vh",
+    // he
+    padding: "15px",
     borderRadius: "10px",
     backgroundColor: "#4abdac",
-
-    "@media (max-width: 1024px)": {
-      marginLeft: "200px"
-    },
-    "@media(max-width:768px)": {
-      marginLeft: "60px"
-    },
-    "@media (max-width: 375px)": {
-      width: "100%",
-      height: "56vh",
-      margin: "2px !important"
-    },
-    "@media (max-width: 425px)": {
-      width: "100%",
-      height: "56vh",
-      margin: "2px !important"
-    },
-
-    "@media (max-width: 320px)": {
-      height: "57vh",
-      width: "100% !important",
-      marginLeft: "2px !important"
+    width: "45%",
+    "@media(max-width:1024px)": {
+      width: "100%"
     }
   },
   top: {
     padding: "0px",
     margin: "0px",
-    height: "5.5vh",
+    // hei
     width: "100%"
   },
   topName: {
@@ -79,24 +61,18 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 500,
     height: "50vh",
     overflow: "auto",
-    margin: "30px",
+    margin: "10px 0 10px 0 ",
 
     "@media (max-width: 320px)": {
-      maxHeight: 250,
-      margin: 10
+      maxHeight: 250
     },
     "@media (max-width: 425px)": {
-      maxHeight: 350,
-      margin: 10
+      maxHeight: 350
     },
 
     "@media (max-width: 375px)": {
-      maxHeight: 350,
-      margin: 10
+      maxHeight: 350
     }
-  },
-  messageArea: {
-    width: "800px"
   },
   inputArea: {
     paddingTop: "5px",
@@ -105,30 +81,8 @@ const useStyles = makeStyles(theme => ({
   },
   inputAreacontainer: {
     display: "flex",
-    height: "8vh",
-    width: "807px",
-    margin: "27px",
-    marginTop: "-15px",
-
-    "@media (max-width: 1440px)": {
-      width: "600px"
-    },
-
-    "@media (max-width: 425px)": {
-      width: "404.5px !important",
-      marginLeft: "8px",
-      marginTop: "10px"
-    },
-
-    "@media (max-width: 375px)": {
-      width: "356.5px !important",
-      marginLeft: "8px",
-      marginTop: "10px"
-    },
-    "@media (max-width: 320px)": {
-      width: "300.5px !important",
-      marginLeft: "8px",
-      marginTop: "10px"
+    "@media (max-width: 1024px)": {
+      margin: "0px "
     },
     mentorAvatar: {
       position: "fixed"
@@ -213,7 +167,7 @@ export default function ChatBox() {
 
                 <Grid
                   style={{
-                    alignSelf: " flex-start",
+                    alignSelf: " flex-end",
                     display: "flex",
                     alignItems: "flex-end"
                   }}
@@ -238,7 +192,7 @@ export default function ChatBox() {
               <Grid
                 style={{
                   margin: 5,
-                  alignSelf: " flex-start",
+                  alignSelf: " flex-end",
                   display: "flex",
                   justifyContent: "flex-start"
                 }}
@@ -283,7 +237,11 @@ export default function ChatBox() {
           {/* endofmessages */}
         </Paper>
         <Paper className={classes.inputAreacontainer} elevation={6}>
-          <Grid container className={classes.inputArea}>
+          {/* <Grid
+            container
+            className={classes.inputArea}
+            style={{ backgroundColor: "grey" }}
+          >
             <Grid
               item
               style={{
@@ -293,22 +251,23 @@ export default function ChatBox() {
               md={10}
               sm={9}
               xs={9}
-            >
-              <TextField
-                variant="outlined"
-                id="standard-basic"
-                label="Type your message..."
-                className={classes.messageArea}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Button endIcon={<SendIcon />}></Button>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-          </Grid>
+            > */}
+          <TextField
+            variant="outlined"
+            id="standard-basic"
+            label="Type your message..."
+            // className={classes.messageArea}
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Button endIcon={<SendIcon />}></Button>
+                </InputAdornment>
+              )
+            }}
+          />
+          {/* </Grid>
+          </Grid> */}
         </Paper>
       </Paper>
     </React.Fragment>
