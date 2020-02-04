@@ -32,12 +32,7 @@ export const Routes = props => {
           )
         }
       />
-      <Route
-        path={`/classroom`}
-        render={props => (
-          <Navigation {...props} data={props} component={MentorsView} />
-        )}
-      />
+
       <Route
         path={`/classroom/:classname`}
         render={props => (
