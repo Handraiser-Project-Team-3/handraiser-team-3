@@ -24,6 +24,7 @@ import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
+import key from "../../assets/images/key.png";
 
 export const MentorClassView = props => {
   const classes = useStyles();
@@ -46,13 +47,14 @@ export const MentorClassView = props => {
     setOpen(true);
     setAction("Save");
     setHeadTitle("Edit");
+    setClassRoom({});
   };
 
-  const deleteClass = classid => {
-    axios
-      .delete(`/api/class/${classid}`, headers)
-      .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  };
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/class/${classid}`, headers)
+  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  // };
   useEffect(() => {
     axios
       .get(`/api/class?id=${user.id}`, headers)
@@ -64,10 +66,6 @@ export const MentorClassView = props => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  React.useEffect(() => {
-    filter && console.log(filter);
-  }, [filter]);
 
   return (
     <Layout accountType={accountType} first_name={first_name}>
@@ -109,35 +107,87 @@ export const MentorClassView = props => {
                       <Grid
                         container
                         direction="row"
-                        alignItems="center"
-                        justify="space-between"
+                        justify="center"
+                        align="center"
+                        spacing={5}
                       >
-                        <Grid item lg={2} xs={2}>
-                          <img
-                            src={student}
-                            alt="man"
-                            style={{ width: "30px" }}
-                          />
-                        </Grid>
-
-                        <Grid item lg={10} xs={10}>
+                        <Grid item xs={6}>
                           <Grid
                             container
-                            direction="column"
-                            alignItems="flex-start"
+                            direction="row"
+                            alignItems="center"
                             justify="space-between"
                           >
-                            <Grid item lg={12} xs={12}>
-                              <Typography
-                                gutterBottom
-                                component="div"
-                                variant="caption"
-                              >
-                                Students:
-                              </Typography>
+                            <Grid item lg={2} xs={2}>
+                              <img
+                                src={student}
+                                alt="man"
+                                style={{ width: "30px" }}
+                              />
                             </Grid>
-                            <Grid item lg={12} xs={12}>
-                              <b>10</b>
+
+                            <Grid item lg={10} xs={10}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Students:
+                                  </Typography>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>10</b>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item lg={2} xs={2}>
+                              <img
+                                src={key}
+                                alt="class-code"
+                                style={{ width: "30px" }}
+                              />
+                            </Grid>
+
+                            <Grid item lg={10} xs={10}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Class Code:
+                                  </Typography>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <Tooltip title="Click to copy code">
+                                    <b onClick={() => copy(data.class_code)}>
+                                      {data.class_code}
+                                    </b>
+                                  </Tooltip>
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
@@ -154,9 +204,7 @@ export const MentorClassView = props => {
                   >
                     <Grid item lg={10} md={10} sm={9} xs={9}>
                       <Button
-                        onClick={() =>
-                          history.push(`/classroom/${data.class_name}`)
-                        }
+                        onClick={() => history.push(`/classroom/${data.id}`)}
                         size="small"
                         style={{ color: "#b5855a" }}
                       >
@@ -183,12 +231,6 @@ export const MentorClassView = props => {
                         </Tooltip>
                       </Grid>
                     </Grid>
-                    <Button onClick={() => deleteClass(data.id)}>delete</Button>
-                    <Tooltip title="Click to copy code">
-                      <Button onClick={() => copy(data.class_code)}>
-                        {data.class_code}
-                      </Button>
-                    </Tooltip>
                   </Grid>
                 </CardActions>
               </Card>

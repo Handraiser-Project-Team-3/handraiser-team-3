@@ -8,6 +8,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,6 +34,16 @@ const useStyles = makeStyles(theme => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const alertToast = msg =>
+  toast.info(msg, {
+    position: "bottom-right",
+    hideProgressBar: true,
+    autoClose: 6000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });
 
 export const Modal = props => {
   const classes = useStyles();
@@ -84,13 +96,13 @@ export const Modal = props => {
           headers
         )
         .then(res => {
-          alert("Class Added");
           setOpen(false);
           setClassList([...classList, res.data]);
           setClassRoom({
             class_name: "",
             class_description: ""
           });
+          alertToast("Successfully Added a New Class!");
         });
     } else {
       axios
@@ -104,7 +116,6 @@ export const Modal = props => {
         .then(() =>
           axios.get(`/api/class?id=${userId}`, headers).then(res => {
             setClassList(res.data);
-            alert("edit");
             setOpen(false);
           })
         );
@@ -113,6 +124,8 @@ export const Modal = props => {
 
   return (
     <div>
+      <ToastContainer enableMulticontainer />
+
       <Dialog
         open={open}
         TransitionComponent={Transition}
