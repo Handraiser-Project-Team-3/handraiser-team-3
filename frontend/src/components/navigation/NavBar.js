@@ -202,7 +202,7 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
 
-      <MyComponent data={props.data} />
+      <MyComponent data={props.data} match={props.match} />
     </div>
   );
 }

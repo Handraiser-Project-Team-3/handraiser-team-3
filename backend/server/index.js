@@ -4,11 +4,11 @@ require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
-const socketIO = require("socket.io");
+const socketio = require("socket.io");
 
 const app = express();
 const server = http.Server(app);
-const io = socketIO(server);
+const io = socketio(server);
 
 const auth = require("./controllers/auth");
 const user = require("./controllers/users");
@@ -26,6 +26,23 @@ massive({
   app.use(express.json());
   app.use(cors());
 
+  // WS
+  io.on("connection", socket => {
+    const { student_request } = app.get("db");
+
+    // student_request.find().then(res => {
+    //   socket.emit("requests_list", res);
+    // });
+
+    socket.on("add_request", data => {
+      student_request.insert(data, { deepInsert: true }).then(() => {
+        student_request.find().then(res => {
+          socket.broadcast.emit("requests_list", res);
+        });
+      });
+    });
+  });
+
   //login here
   app.post("/api/login", user.login);
 
@@ -42,6 +59,10 @@ massive({
   app.post("/api/class", classroom.addClass);
   app.patch("/api/class/:id", classroom.editClass);
   app.delete("/api/class/:id", classroom.deleteClass);
+  app.get("/api/class/:id", classroom.classDetails);
+
+  //classroom_users
+  app.post("/api/classroom-users/", classroom.addClassroomUser);
 
   //chats
   app.post("/api/chats/message/create/:id", chats.createMessage);

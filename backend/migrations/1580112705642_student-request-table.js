@@ -20,7 +20,6 @@ exports.up = pgm => {
     },
     mentor_id: {
       type: "integer",
-      notNull: true,
       references: '"classroom_users"'
     },
     title: {
