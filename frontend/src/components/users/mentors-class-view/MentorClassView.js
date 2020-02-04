@@ -34,6 +34,7 @@ export const MentorClassView = props => {
   const [accountType] = useState("Mentor");
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState("");
+  const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
@@ -47,22 +48,26 @@ export const MentorClassView = props => {
     setHeadTitle("Edit");
   };
 
-  // const deleteClass = classid => {
-  //   axios
-  //     .delete(`/api/class/${classid}`, headers)
-  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  // };
-
+  const deleteClass = classid => {
+    axios
+      .delete(`/api/class/${classid}`, headers)
+      .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  };
   useEffect(() => {
     axios
       .get(`/api/class?id=${user.id}`, headers)
       .then(res => {
         setClassList(res.data);
+        setFilter(res.data);
       })
       .catch(e => console.log(e));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    filter && console.log(filter);
+  }, [filter]);
 
   return (
     <Layout accountType={accountType} first_name={first_name}>
@@ -71,6 +76,8 @@ export const MentorClassView = props => {
         setOpen={setOpen}
         setAction={setAction}
         setHeadTitle={setHeadTitle}
+        filter={filter}
+        setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList
@@ -176,7 +183,7 @@ export const MentorClassView = props => {
                         </Tooltip>
                       </Grid>
                     </Grid>
-                    {/* <Button onClick={() => deleteClass(data.id)}>delete</Button> */}
+                    <Button onClick={() => deleteClass(data.id)}>delete</Button>
                     <Tooltip title="Click to copy code">
                       <Button onClick={() => copy(data.class_code)}>
                         {data.class_code}

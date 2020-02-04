@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -48,11 +48,27 @@ export const Modal = props => {
     classList
   } = props;
 
+  const isEnabled =
+    classRoom.class_name.length > 0 && classRoom.class_description.length > 0;
+
   const handleClose = () => {
     setOpen(false);
+    setClassRoom({
+      class_name: "",
+      class_description: ""
+    });
   };
 
-  const handleClass = () => {
+  const handleInput = e => {
+    const { name, value } = e.target;
+    setClassRoom({
+      ...classRoom,
+      [name]: value
+    });
+  };
+
+  const handleClass = e => {
+    e.preventDefault();
     if (action === "Add") {
       axios
         .post(
@@ -95,13 +111,6 @@ export const Modal = props => {
     }
   };
 
-  function handleInput(e) {
-    setClassRoom({
-      ...classRoom,
-      [`${e.target.name}`]: e.target.value
-    });
-  }
-
   return (
     <div>
       <Dialog
@@ -122,7 +131,12 @@ export const Modal = props => {
           {headTitle} {" Class"}
         </DialogTitle>
         <DialogContent>
-          <form className={classes.root} noValidate autoComplete="off">
+          <form
+            onSubmit={handleClass}
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+          >
             <TextField
               label="Class Name"
               variant="outlined"
@@ -142,17 +156,22 @@ export const Modal = props => {
               style={{ width: "95%" }}
               onChange={handleInput}
             />
+
+            <DialogActions>
+              <Button autoFocus onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="primary"
+                autoFocus
+                disabled={!isEnabled}
+              >
+                {action}
+              </Button>
+            </DialogActions>
           </form>
         </DialogContent>
-
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClass} color="primary" autoFocus>
-            {action}
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
