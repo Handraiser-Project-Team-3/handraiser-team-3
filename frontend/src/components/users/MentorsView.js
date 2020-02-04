@@ -1,11 +1,11 @@
 import React from "react";
+
+// Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
-
-//tabs
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -15,110 +15,15 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-// component/s
 
+// component/s
 import Chatbox from "../users/Chatbox";
+
 // images
 import head from "../assets/images/bg.png";
 
-const useStyles = makeStyles(theme => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em"
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "whitesmoke"
-    }
-  },
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-    paddingTop: "30px",
-    paddingLeft: "200px",
-    "@media (max-width: 320px)": {
-      paddingLeft: "0px !important"
-    },
-
-    "@media (max-width: 375px)": {
-      paddingLeft: "0px !important"
-    },
-    "@media (max-width: 425px)": {
-      paddingLeft: "0px !important"
-    },
-    "@media(max-width:1024px)": {
-      paddingLeft: "270px"
-    },
-    "@media(max-width:768px)": {
-      paddingLeft: "150px"
-    }
-  },
-
-  header: {
-    height: "auto",
-    backgroundImage: `url(${head})`,
-    backgroundSize: "cover",
-    paddingTop: "85px"
-  },
-  headersIcon: {},
-  color: {
-    display: "flex",
-    color: "gray",
-    paddingLeft: "35px"
-  },
-
-  needHelp: {
-    padding: "15px",
-    margin: "20px",
-    // width: "90%",
-    display: "flex",
-    justifyContent: "space-between"
-    // height: "5vh"
-    // justifyContent: "space-around"
-  },
-  needContainer: {
-    maxHeight: 575,
-    overflow: "auto",
-    "@media (max-width: 320px)": {
-      maxHeight: 300
-    }
-  },
-  Icons: {
-    display: "inline-flex",
-    justifyContent: "space-between",
-    width: " 100px",
-    paddingRight: "20px"
-  },
-  studentsNeed: {
-    display: "flex",
-    color: "gray"
-  },
-  studentsBeingHelp: {
-    display: "flex",
-    color: "gray"
-  },
-  chatBox: {
-    display: "inline-flex"
-  },
-  appBar: {
-    margin: "0px"
-  },
-  mentorsAvatar: {
-    small: {
-      width: theme.spacing(3),
-      height: theme.spacing(3)
-    }
-  }
-  // studentsAvatar: {
-  //   marginLeft: "15px",
-  //   marginTop: "5px"
-  // }
-}));
-
 //Tabs
-function TabPanel(props) {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -141,7 +46,7 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
+const a11yProps = (index) => {
   return {
     id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`
@@ -155,59 +60,22 @@ export default function MentorsView() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   const [val, setVal] = React.useState([
     {
+      id: 1,
       name: "Stephen Dunn"
     },
     {
+      id: 2,
       name: "Nathan Young "
     },
     {
+      id: 3,
       name: "Crystal Watson"
-    },
-    {
-      name: "George Wells"
-    },
-    {
-      name: "Willie Foster 5"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "George Wells"
-    },
-    {
-      name: "Willie Foster 5"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
     }
   ]);
+
   return (
     <div>
       <Paper elevation={0} className={classes.header}>
@@ -231,7 +99,7 @@ export default function MentorsView() {
                 alt="Mentor"
                 src="https://image.flaticon.com/icons/png/512/522/522301.png"
               />
-              Mentor Dan
+              Mentor {}
             </Typography>
           </Grid>
         </Grid>
@@ -258,10 +126,8 @@ export default function MentorsView() {
           <TabPanel value={value} index={0}>
             <Paper className={classes.needContainer} elevation={4}>
               {val.map(e => {
-                console.log(e);
-
                 return (
-                  <Paper id={e.name} className={classes.needHelp} elevation={6}>
+                  <Paper id={e.id} className={classes.needHelp} elevation={6}>
                     {" "}
                     <Typography variant="h7" className={classes.studentsNeed}>
                       <Avatar
@@ -329,13 +195,6 @@ export default function MentorsView() {
                   />
                   Papa Rex Rojo
                 </Typography>
-                {/* <div className={classes.Icons}>
-                  <Tooltip title="Remove">
-                    <Button>
-                      <RemoveCircleIcon className={classes.removeIcon} />
-                    </Button>
-                  </Tooltip>
-                </div> */}
               </Paper>
             </Paper>
           </TabPanel>
@@ -345,3 +204,92 @@ export default function MentorsView() {
     </div>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "whitesmoke"
+    }
+  },
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    width: 500,
+    paddingTop: "30px",
+    paddingLeft: "200px",
+    "@media (max-width: 320px)": {
+      paddingLeft: "0px !important"
+    },
+
+    "@media (max-width: 375px)": {
+      paddingLeft: "0px !important"
+    },
+    "@media (max-width: 425px)": {
+      paddingLeft: "0px !important"
+    },
+    "@media(max-width:1024px)": {
+      paddingLeft: "270px"
+    },
+    "@media(max-width:768px)": {
+      paddingLeft: "150px"
+    }
+  },
+
+  header: {
+    height: "auto",
+    backgroundImage: `url(${head})`,
+    backgroundSize: "cover",
+    paddingTop: "85px"
+  },
+  headersIcon: {},
+  color: {
+    display: "flex",
+    color: "gray",
+    paddingLeft: "35px"
+  },
+
+  needHelp: {
+    padding: "15px",
+    margin: "20px",
+    display: "flex",
+    justifyContent: "space-between"
+  },
+  needContainer: {
+    maxHeight: 575,
+    overflow: "auto",
+    "@media (max-width: 320px)": {
+      maxHeight: 300
+    }
+  },
+  Icons: {
+    display: "inline-flex",
+    justifyContent: "space-between",
+    width: " 100px",
+    paddingRight: "20px"
+  },
+  studentsNeed: {
+    display: "flex",
+    color: "gray"
+  },
+  studentsBeingHelp: {
+    display: "flex",
+    color: "gray"
+  },
+  chatBox: {
+    display: "inline-flex"
+  },
+  appBar: {
+    margin: "0px"
+  },
+  mentorsAvatar: {
+    small: {
+      width: theme.spacing(3),
+      height: theme.spacing(3)
+    }
+  }
+}));
