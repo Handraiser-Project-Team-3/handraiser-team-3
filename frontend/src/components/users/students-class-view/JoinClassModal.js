@@ -143,19 +143,19 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id={classId} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form id={classId} noValidate className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
 						<FormControl variant="outlined">
 							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
 							<OutlinedInput
 								required
 								id='classcode'
-								name='classcode'
+								name={className}
 								error={warn.classcode}
 								onBlur={warningUpdate}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id={classId}>{help.classcode}</FormHelperText>
+							<FormHelperText id='classcode'>{help.classcode}</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>

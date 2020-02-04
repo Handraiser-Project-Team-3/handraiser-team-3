@@ -5,10 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 
-
-import Classrom from '../src/components/users/MentorsView'
-
-
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
   const [user, setUser] = useState();
@@ -32,7 +28,7 @@ function App() {
         headers={headers}
       />
     </BrowserRouter>
-   
+
   );
 }
 

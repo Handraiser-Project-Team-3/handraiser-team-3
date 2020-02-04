@@ -147,7 +147,7 @@ function a11yProps(index) {
   };
 }
 
-export default function MentorsView() {
+export default function MentorsView(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -186,6 +186,8 @@ export default function MentorsView() {
       name: "Kathy Ellis"
     }
   ]);
+  console.log(props.data)
+
   return (
     <div>
       <Paper elevation={0} className={classes.header}>
@@ -207,7 +209,7 @@ export default function MentorsView() {
               <Avatar
                 className={classes.mentorsAvatar}
                 alt="Mentor"
-                src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                src='https://image.flaticon.com/icons/png/512/1866/1866089.png'
               />
               Mentor Dan
             </Typography>
@@ -241,11 +243,11 @@ export default function MentorsView() {
                 return (
                   <Paper className={classes.needHelp} elevation={6}>
                     {" "}
-                    <Typography variant="h7" className={classes.studentsNeed}>
-                      <Avatar
-                        alt="Student"
-                        src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                      />
+                    <Avatar
+                      alt="Student"
+                      src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                    />
+                    <Typography variant="body2" className={classes.studentsNeed}>
                       {e.name}
                     </Typography>
                     <div className={classes.Icons}>

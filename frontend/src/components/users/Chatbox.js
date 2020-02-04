@@ -232,7 +232,7 @@ export default function ChatBox() {
               container
               alignItems="center"
               justify="flex-start"
-              // style={{ padding: 5 }}
+            // style={{ padding: 5 }}
             >
               <Grid
                 style={{

@@ -32,7 +32,7 @@ export const Classroom = props => {
       .then(res => {
         setClassList(res.data);
       })
-      .catch();
+      .catch(e => console.log(e));
   }, []);
 
   return (
