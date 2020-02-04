@@ -15,11 +15,14 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-// component/s
 
+// component/s
 import Chatbox from "../users/Chatbox";
+import Layout from "../users/reusables/Layout";
+
 // images
 import head from "../assets/images/bg.png";
+import student from "../assets/images/student.png";
 
 const useStyles = makeStyles(theme => ({
 	"@global": {
@@ -74,7 +77,8 @@ const useStyles = makeStyles(theme => ({
 		margin: "20px",
 		// width: "90%",
 		display: "flex",
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		alignItems: "center"
 		// height: "5vh"
 		// justifyContent: "space-around"
 	},
@@ -93,28 +97,31 @@ const useStyles = makeStyles(theme => ({
 	},
 	studentsNeed: {
 		display: "flex",
-		color: "gray"
+		color: "gray",
+		alignItems: "center"
 	},
 	studentsBeingHelp: {
 		display: "flex",
+		alignItems: "center",
 		color: "gray"
 	},
 	chatBox: {
 		display: "inline-flex"
 	},
 	appBar: {
-		margin: "0px"
+		margin: "0px",
+		background:
+			"linear-gradient(207deg, rgba(171,171,250,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 76%, rgba(171,171,250,1) 76%, rgba(171,171,250,1) 86%)"
 	},
 	mentorsAvatar: {
 		small: {
 			width: theme.spacing(3),
 			height: theme.spacing(3)
 		}
+	},
+	studentsAvatar: {
+		marginRight: "15px"
 	}
-	// studentsAvatar: {
-	//   marginLeft: "15px",
-	//   marginTop: "5px"
-	// }
 }));
 
 //Tabs
@@ -185,33 +192,7 @@ export default function MentorsView() {
 		}
 	]);
 	return (
-		<div>
-			<Paper elevation={0} className={classes.header}>
-				<Grid
-					container
-					direction="row"
-					justify="space-evenly"
-					alignItems="center"
-				>
-					<Grid
-						item
-						xs={12}
-						sm={9}
-						md={10}
-						lg={10}
-						className={classes.headersIcon}
-					>
-						<Typography variant="h5" className={classes.color}>
-							<Avatar
-								className={classes.mentorsAvatar}
-								alt="Mentor"
-								src="https://image.flaticon.com/icons/png/512/522/522301.png"
-							/>
-							Mentor Dan
-						</Typography>
-					</Grid>
-				</Grid>
-			</Paper>
+		<Layout>
 			<div
 				style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
 			>
@@ -243,7 +224,7 @@ export default function MentorsView() {
 											<Avatar
 												className={classes.studentsAvatar}
 												alt="Student"
-												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+												src={student}
 											/>
 											{e.name}
 										</Typography>
@@ -277,7 +258,7 @@ export default function MentorsView() {
 											<Avatar
 												className={classes.studentsAvatar}
 												alt="Student"
-												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+												src={student}
 											/>
 											{e.name}
 										</Typography>
@@ -301,7 +282,7 @@ export default function MentorsView() {
 									<Avatar
 										className={classes.studentsAvatar}
 										alt="Student"
-										src="https://image.flaticon.com/icons/png/512/522/522301.png"
+										src={student}
 									/>
 									Papa Rex Rojo
 								</Typography>
@@ -318,6 +299,6 @@ export default function MentorsView() {
 				</div>
 				<Chatbox />
 			</div>
-		</div>
+		</Layout>
 	);
 }
