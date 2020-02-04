@@ -13,9 +13,8 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
-
+import { ToastContainer, toast } from "react-toastify";
 import teacher from "../assets/images/mentor2.png";
-
 import Layout from "./reusables/Layout";
 import { PaperStat } from "./reusables/Paper";
 
@@ -40,19 +39,6 @@ const StyledTableRow = withStyles(theme => ({
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
-
-// const [state, setState] = React.useState([]);
-
-const rows = [
-  createData("Frozen yoghurt"),
-  createData("Ice cream sandwich"),
-  createData("Eclair"),
-  createData("Cupcake"),
-  createData("Gingerbread"),
-  createData("Eclaira"),
-  createData("Cupcakea"),
-  createData("Gingerbreada")
-];
 
 const useStyles = makeStyles({
   table: {
@@ -88,17 +74,50 @@ export const Admin = props => {
   const { first_name } = userDetails;
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState([]);
-  console.log(headers);
+  const [userType, setUserType] = useState(3);
 
   useEffect(() => {
+    // DISPLAY LIST
     axios.get("/api/user/list", headers).then(res => {
-      console.log(res.data);
       setUsers(res.data);
     });
   }, []);
 
+  function handleClickRemove(e) {
+    // REMOVE MENTOR
+    axios
+      .patch(
+        `/api/user/${e}`,
+        {
+          account_type_id: 3
+        },
+        headers
+      )
+      .then(() => toast.info("Mentor has been Removed!"));
+  }
+  function handleSetMentor(e) {
+    // SET MENTOR
+    axios
+      .patch(
+        `/api/user/${e}`,
+        {
+          account_type_id: 2
+        },
+        headers
+      )
+      .then(() => toast.info("Mentor has been Added!"));
+  }
+  function handleChange(e) {
+    console.log(e);
+  }
+
+  function handleClickAdd(e) {
+    console.log("clicked!");
+  }
+
   return (
     <Layout accountType={accountType} first_name={first_name}>
+      <ToastContainer enableMulticontainer />
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <Paper className={classes.paperStyle}>
@@ -108,6 +127,8 @@ export const Admin = props => {
                   <TextField
                     id="standard-basic"
                     label="Email Address"
+                    value={email}
+                    onChange={handleChange}
                     className={classes.textField}
                   />
                 </form>
@@ -117,6 +138,7 @@ export const Admin = props => {
                   <AddCircleIcon
                     value={email}
                     fontSize="large"
+                    onClick={handleClickAdd}
                     style={{
                       color: "#4abdac",
                       cursor: "pointer"
@@ -131,6 +153,25 @@ export const Admin = props => {
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
+              <Button
+                variant="contained"
+                style={{ background: "#7dcec3" }}
+                color="primary"
+                onClick={() => setUserType(3)}
+              >
+                <img src={teacher} className={classes.mentor} />
+                Student
+              </Button>
+              &nbsp;
+              <Button
+                variant="contained"
+                style={{ background: "#7dcec3" }}
+                color="primary"
+                onClick={() => setUserType(2)}
+              >
+                <img src={teacher} className={classes.mentor} />
+                Mentor
+              </Button>
               <TableHead>
                 <TableRow>
                   <StyledTableCell>Email Address</StyledTableCell>
@@ -143,32 +184,40 @@ export const Admin = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map(row => (
-                  <StyledTableRow key={row.email}>
-                    <StyledTableCell component="th" scope="row">
-                      {row.email}
-                    </StyledTableCell>
+                {users.map(
+                  row =>
+                    row.account_type_id === userType && (
+                      <StyledTableRow key={row.email}>
+                        <StyledTableCell component="th" scope="row">
+                          {row.email}
+                        </StyledTableCell>
 
-                    <StyledTableCell align="right">
-                      <Button
-                        variant="contained"
-                        style={{ background: "#7dcec3" }}
-                        color="primary"
-                      >
-                        <img src={teacher} className={classes.mentor} />
-                        Set as Mentor
-                      </Button>
-
-                      {/* <Button
-												variant="contained"
-												style={{ background: "#fe8d8c" }}
-												color="primary"
-											>
-												Remove as Mentor
-											</Button> */}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                        <StyledTableCell align="right">
+                          {row.account_type_id === 3 && (
+                            <Button
+                              variant="contained"
+                              style={{ background: "#7dcec3" }}
+                              color="primary"
+                              onClick={() => handleSetMentor(row.id)}
+                            >
+                              <img src={teacher} className={classes.mentor} />
+                              Set as Mentor
+                            </Button>
+                          )}
+                          {row.account_type_id === 2 && (
+                            <Button
+                              variant="contained"
+                              style={{ background: "#fe8d8c" }}
+                              color="primary"
+                              onClick={() => handleClickRemove(row.id)}
+                            >
+                              Remove as Mentor
+                            </Button>
+                          )}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                )}
               </TableBody>
             </Table>
           </TableContainer>
