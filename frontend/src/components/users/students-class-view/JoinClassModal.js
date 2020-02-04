@@ -1,4 +1,11 @@
 import React from "react";
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import moment from 'moment';
+
+// Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -11,9 +18,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { useHistory } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -101,7 +105,28 @@ export const JoinClassModal = (props) => {
 		e.preventDefault();
 		if (props.classId) {
 			if (code === props.codeClass) {
-				history.push(`/classroom/${props.className}`);
+				history.push(`/classroom/${props.classId}`);
+
+				// axios
+				// 	.post(`/api/classroom-users/`,
+				// 		props.headers,
+				// 		{
+				// 				{
+				// 				user_id: props.user.user_id,
+				// 				class_id: props.classId,
+				// 				date_joined: function (timestamp) {
+				// 					moment(new Date(timestamp))
+				// 						.format("YYYY-MM-DD HH:MM:SS")
+				// 				}
+				// 			}
+				// 		})
+				// 	.then(() => {
+				// 		alertToast(`Welcome ${props.user.first_name}!`)
+				// 	})
+				// 	.catch(e => console.log(e))
+
+			} else {
+				alertToast('Invalid Code!')
 			}
 		}
 	};
@@ -152,14 +177,14 @@ export const JoinClassModal = (props) => {
 							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id='classcode'
+								id={props.classId}
 								name={props.className}
 								error={warn.classcode}
 								onBlur={warningUpdate}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id='classcode'>{help.classcode}</FormHelperText>
+							<FormHelperText id={props.classId}>{help.classcode}</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
