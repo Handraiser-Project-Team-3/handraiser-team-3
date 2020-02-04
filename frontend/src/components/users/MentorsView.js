@@ -264,7 +264,7 @@ export default function MentorsView() {
                 console.log(e);
 
                 return (
-                  <Paper className={classes.needHelp} elevation={6}>
+                  <Paper id={e.name} className={classes.needHelp} elevation={6}>
                     {" "}
                     <Typography variant="h7" className={classes.studentsNeed}>
                       <Avatar

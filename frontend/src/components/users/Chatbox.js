@@ -96,7 +96,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   messageArea: {
-    width: "100%"
+    width: "800px"
   },
   inputArea: {
     paddingTop: "5px",
@@ -155,11 +155,11 @@ export default function ChatBox() {
 
   return (
     <React.Fragment>
-      <Grid className={classes.root}>
+      <Paper className={classes.root}>
         <Paper className={classes.top} elevation={3}>
           <Grid className={classes.topName}>
             <Avatar alt="top" src={bubbles} />
-            <Typography variant="h6">{"Mark Jowen Medes"}</Typography>
+            <Typography variant="h6">{"Mark Medes"}</Typography>
           </Grid>
         </Paper>
 
@@ -205,7 +205,9 @@ export default function ChatBox() {
                       borderRadius: "5px 20px"
                     }}
                   >
-                    {".ahjhdffjkadfjhfjhffjadfadfh "}
+                    {
+                      "aceadssssssssssssssssssssssssssssssssssssssssssssssssssssshFKSHFjkjkdfhajkdfhjdhfjkadhjdjfajdhfjkasdhfjkadsjkfahdjfhjdkfhjdfhjdfhjsdfhjksdkjskjafhjkadhfjkdfhjkadjfhjksdfgjksdfhjksdhfjhsdfjkhdjkfhsjdkfhjsdfhjsdfhjsdfhhhhhhhhhhhhhhhhhhskdhfksadjkfdjk.ahjhdffjkadfjhfjhffjadfadfh "
+                    }
                   </span>
                 </Grid>
 
@@ -231,7 +233,7 @@ export default function ChatBox() {
               container
               alignItems="center"
               justify="flex-start"
-              style={{ padding: 10 }}
+              // style={{ padding: 5 }}
             >
               <Grid
                 style={{
@@ -308,7 +310,7 @@ export default function ChatBox() {
             </Grid>
           </Grid>
         </Paper>
-      </Grid>
+      </Paper>
     </React.Fragment>
   );
 }

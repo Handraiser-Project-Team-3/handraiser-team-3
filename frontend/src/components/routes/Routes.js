@@ -32,7 +32,6 @@ export const Routes = props => {
           )
         }
       />
-
       <Route
         path={`/classroom/:classname`}
         render={props => (
