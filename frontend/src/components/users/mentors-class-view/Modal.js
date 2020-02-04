@@ -153,7 +153,7 @@ export const Modal = props => {
 							style={{ width: "100%" }}
 							onChange={handleInput}
 							inputProps={{
-								maxLength: 75
+								maxLength: 45
 							}}
 						/>
 					</form>
