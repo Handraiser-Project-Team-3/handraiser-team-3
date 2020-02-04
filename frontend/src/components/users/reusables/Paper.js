@@ -35,7 +35,7 @@ export const PaperStat = props => {
 			<Paper className={classes.total}>
 				<Grid container justify="center" align="center">
 					<Grid item xs={6} className={classes.ipadView}>
-						<img src={both} className={classes.imgStyle} alt="student" />
+						<img src={both} className={classes.imgStyle} alt="all" />
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="column" justify="center">
@@ -89,7 +89,7 @@ export const PaperStat = props => {
 			<Paper className={classes.total}>
 				<Grid container justify="center" align="center">
 					<Grid item xs={6}>
-						<img src={student} className={classes.imgStyle} alt="mentor&student" />
+						<img src={student} className={classes.imgStyle} alt="student" />
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="column" justify="center">

@@ -141,7 +141,11 @@ export const Admin = props => {
 												style={{ background: "#7dcec3" }}
 												color="primary"
 											>
-												<img src={teacher} className={classes.mentor} alt="mentor" />
+												<img
+													src={teacher}
+													className={classes.mentor}
+													alt="teacher"
+												/>
 												Set as Mentor
 											</Button>
 											{/* <Button

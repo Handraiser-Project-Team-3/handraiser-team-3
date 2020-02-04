@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
 		width: 200
 	},
 	search: {
+		marginBottom: "1vh",
 		position: "relative",
 		borderRadius: theme.shape.borderRadius,
 		backgroundColor: "#bfe8e2",
