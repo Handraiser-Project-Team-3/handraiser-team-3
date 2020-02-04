@@ -40,34 +40,25 @@ export const Classroom = props => {
       <Layout first_name={first_name}>
         <ClassHead />
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {classList.map(i => (
-            <Grid key={i.id} item lg={3} md={4} sm={6} xs={12}>
-              <Card className={classes.card}>
-                <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
-                    image={classroom}
-                    title="Contemplative Reptile"
-                  ></CardMedia>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5">
-                      {i.class_name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {i.class_description}
-                    </Typography>
-                  </CardContent>
-                  <CardContent>
-                    <Typography gutterBottom component="div" variant="inherit">
-                      <Grid
-                        container
-                        direction="row"
-                        alignItems="center"
-                        justify="space-between"
+          {classList
+            .sort((a, b) => (a.id > b.id ? 1 : -1))
+            .map((data, i) => (
+              <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
+                <Card className={classes.card}>
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={classroom}
+                      title="Contemplative Reptile"
+                    ></CardMedia>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5">
+                        {data.class_name}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
                       >
                         <Grid item lg={2} xs={2}>
                           <UserDetails
@@ -102,18 +93,21 @@ export const Classroom = props => {
                             </Grid>
                           </Grid>
                         </Grid>
-                      </Grid>
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions style={{ background: "#fbdfa1" }}>
-                  <Grid container direction="column" alignItems="center">
-                    <JoinClassModal />
-                  </Grid>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions style={{ background: "#fbdfa1" }}>
+                    <Grid container direction="column" alignItems="center">
+                      <JoinClassModal
+                        classId={data.id}
+                        className={data.class_name}
+                        codeClass={data.class_code}
+                      />
+                    </Grid>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       </Layout>
     </>

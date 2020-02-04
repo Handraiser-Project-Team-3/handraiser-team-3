@@ -8,16 +8,16 @@ import jwt_decode from "jwt-decode";
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
   const [user, setUser] = useState();
-  const headers = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  };
   React.useEffect(() => {
     if (accessToken) {
       setUser(jwt_decode(accessToken));
     }
   }, [accessToken]);
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  };
   return (
     <BrowserRouter>
       <Routes
@@ -28,6 +28,7 @@ function App() {
         headers={headers}
       />
     </BrowserRouter>
+   
   );
 }
 

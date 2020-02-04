@@ -28,8 +28,7 @@ exports.up = pgm => {
       notNull: true
     },
     status: {
-      type: "boolean",
-      notNull: true
+      type: "boolean"
     },
     date_posted: {
       type: "date",

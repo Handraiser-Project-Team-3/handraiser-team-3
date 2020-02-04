@@ -115,96 +115,97 @@ const alertToast = msg =>
   });
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    height: "100vh",
-    flexGrow: 1
-  },
-  bg: {
-    backgroundImage: `url(${Background})`,
-    height: "100vh",
-    backgroundSize: "cover"
-  },
-  handRaiser: {
-    padding: "0vh 5vw 1vh 5vw"
-  },
-  hand: {
-    "@media (max-width: 415px)": {
-      width: "50%"
-    }
-  },
-  signin: {
-    fontSize: "70px",
-    marginTop: "80px",
-    color: "#4ABDAC",
-    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-    "@media (max-width: 1024px)": {
-      marginTop: "100px",
-      fontSize: "90px"
-    },
-    "@media (max-width: 415px)": {
-      marginTop: "50px",
-      fontSize: "40px"
-    }
-  },
-  subtitle: {
-    fontSize: "20px",
-    color: "#ABABAB",
-    "@media (max-width: 1024px)": {
-      fontSize: "25px"
-    },
-    "@media (max-width: 415px)": {
-      fontSize: "16px"
-    }
-  },
-  hr: {
-    height: "0px",
-    border: "4px solid #4ABDAC",
-    marginTop: "35px"
-  },
-  googleSignin: {
-    margin: "3px 0 0 0",
-    "@media (max-width: 415px)": {
-      fontSize: "14px"
-    }
-  },
-  lady: {
-    width: "45vw",
-    "@media (max-width: 360px)": {
-      width: "20rem",
-      marginTop: "70px"
-    },
-    "@media (width: 320px)": {
-      width: "18rem",
-      marginTop: "10px"
-    },
-    "@media (width: 375px), (height: 667px)": {
-      width: "21rem",
-      marginTop: "80px"
-    },
-    "@media (width: 411px), (height: 731px)": {
-      width: "23rem",
-      marginTop: "130px"
-    },
-    "@media (height: 823px)": {
-      width: "23rem",
-      marginTop: "200px"
-    },
-    "@media (width: 414px)": {
-      width: "23rem",
-      marginTop: "15vh"
-    },
-    "@media (width: 411px)": {
-      marginTop: "15vh"
-    },
-    "@media (width: 768px)": {
-      width: "40rem",
-      marginTop: "10vh"
-    },
-    "@media (width: 1024px)": {
-      width: "50rem",
-      marginTop: "25vh"
-    }
-  }
+	root: {
+		height: "100vh",
+		flexGrow: 1
+	},
+	bg: {
+		backgroundImage: `url(${Background})`,
+		height: "100vh",
+		backgroundSize: "cover"
+	},
+	handRaiser: {
+		padding: "0vh 5vw 1vh 5vw"
+	},
+	hand: {
+		"@media (max-width: 415px)": {
+			width: "50%"
+		}
+	},
+	signin: {
+		fontSize: "70px",
+		marginTop: "80px",
+		color: "#4ABDAC",
+		textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+		"@media (max-width: 1024px)": {
+			marginTop: "100px",
+			fontSize: "90px"
+		},
+		"@media (max-width: 415px)": {
+			marginTop: "50px",
+			fontSize: "40px"
+		}
+	},
+	subtitle: {
+		fontSize: "20px",
+		color: "#ABABAB",
+		"@media (max-width: 1024px)": {
+			fontSize: "25px"
+		},
+		"@media (max-width: 415px)": {
+			fontSize: "16px"
+		}
+	},
+	hr: {
+		height: "0px",
+		border: "4px solid #4ABDAC",
+		marginTop: "35px"
+	},
+	googleSignin: {
+		margin: "3px 0 0 0",
+		"@media (max-width: 415px)": {
+			fontSize: "14px"
+		},
+		cursor: 'pointer'
+	},
+	lady: {
+		width: "45vw",
+		"@media (max-width: 360px)": {
+			width: "20rem",
+			marginTop: "70px"
+		},
+		"@media (width: 320px)": {
+			width: "18rem",
+			marginTop: "10px"
+		},
+		"@media (width: 375px), (height: 667px)": {
+			width: "21rem",
+			marginTop: "80px"
+		},
+		"@media (width: 411px), (height: 731px)": {
+			width: "23rem",
+			marginTop: "130px"
+		},
+		"@media (height: 823px)": {
+			width: "23rem",
+			marginTop: "200px"
+		},
+		"@media (width: 414px)": {
+			width: "23rem",
+			marginTop: "15vh"
+		},
+		"@media (width: 411px)": {
+			marginTop: "15vh"
+		},
+		"@media (width: 768px)": {
+			width: "40rem",
+			marginTop: "10vh"
+		},
+		"@media (width: 1024px)": {
+			width: "50rem",
+			marginTop: "25vh"
+		}
+	}
 }));
 
 const Button = styled.button`
@@ -223,9 +224,9 @@ const Button = styled.button`
   }
 `;
 const Img = styled.img`
-  width: 25px;
-  margin: 0 10px 0 0;
-  @media (max-width: 415px) {
-    width: 15px;
-  }
+	width: 25px;
+	margin: 0 10px 0 0;
+	@media (max-width: 415px) {
+		width: 15px;
+	}
 `;

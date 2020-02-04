@@ -9,13 +9,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import mentor from "../assets/images/man.png";
-import work from "../assets/images/work.svg";
 import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
+
+import teacher from "../assets/images/mentor2.png";
 
 import Layout from "./reusables/Layout";
+import { PaperStat } from "./reusables/Paper";
 
 const StyledTableCell = withStyles(theme => ({
 	head: {
@@ -40,27 +41,38 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-	createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-	createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-	createData("Eclair", 262, 16.0, 24, 6.0),
-	createData("Cupcake", 305, 3.7, 67, 4.3),
-	createData("Gingerbread", 356, 16.0, 49, 3.9)
+	createData("Frozen yoghurt"),
+	createData("Ice cream sandwich"),
+	createData("Eclair"),
+	createData("Cupcake"),
+	createData("Gingerbread"),
+	createData("Eclaira"),
+	createData("Cupcakea"),
+	createData("Gingerbreada")
 ];
 
 const useStyles = makeStyles({
 	table: {
-		minWidth: 700
-	},
-	total: {
-		width: "100%",
-		height: "22vh",
-		marginBottom: "2vh",
-		background:
-			"linear-gradient(207deg, rgba(74,189,172,1) 0%, rgba(74,189,172,1) 37%, rgba(255,255,255,1) 37%)"
+		minWidth: 700,
+		height: "74vh"
 	},
 	mentor: {
 		width: "20px",
 		marginRight: "10px"
+	},
+	gridStyle: {
+		height: "8vh",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		background: "#d2efeb",
+		borderTopLeftRadius: "5px",
+		borderBottomLeftRadius: "5px"
+	},
+	paperStyle: {
+		height: "8vh",
+		background: "white",
+		marginBottom: "2vh"
 	}
 });
 
@@ -76,48 +88,44 @@ export const Admin = props => {
 		<Layout accountType={accountType} first_name={first_name}>
 			<Grid container direction="row" spacing={2}>
 				<Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-					<Paper
-						className={classes.total}
-						direction="column"
-						style={{ height: "8vh", background: "white" }}
-					>
-						<Grid container justify="flex-start">
-							<Grid item xs={4} align="center">
+					<Paper className={classes.paperStyle}>
+						<Grid container align="center" alignItems="center">
+							<Grid item xs={10} className={classes.gridStyle}>
+								<form noValidate autoComplete="off">
+									<TextField
+										id="standard-basic"
+										label="Email Address"
+										className={classes.textField}
+									/>
+								</form>
+							</Grid>
+							<Grid item xs={2}>
 								<Tooltip title="Add User">
 									<AddCircleIcon
 										fontSize="large"
 										style={{
-											marginTop: "20px",
 											color: "#4abdac",
 											cursor: "pointer"
 										}}
 									/>
 								</Tooltip>
 							</Grid>
-
-							<Grid item xs={8}>
-								<div
-									style={{
-										backgroundImage: `url(${work})`,
-										backgroundSize: "cover",
-										backgroundPositionY: "-30px",
-										height: "8vh"
-									}}
-								></div>
-							</Grid>
 						</Grid>
 					</Paper>
-					<Paper className={classes.total}></Paper>
-					<Paper className={classes.total}></Paper>
+					<PaperStat />
 				</Grid>
 				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
 					<TableContainer component={Paper}>
 						<Table className={classes.table} aria-label="customized table">
 							<TableHead>
 								<TableRow>
-									<StyledTableCell>Names</StyledTableCell>
 									<StyledTableCell>Email Address</StyledTableCell>
-									<StyledTableCell align="center">Action</StyledTableCell>
+									<StyledTableCell
+										align="right"
+										style={{ paddingRight: "80px" }}
+									>
+										Action
+									</StyledTableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -126,14 +134,14 @@ export const Admin = props => {
 										<StyledTableCell component="th" scope="row">
 											{row.name}
 										</StyledTableCell>
-										<StyledTableCell>{row.calories}</StyledTableCell>
-										<StyledTableCell align="center">
+
+										<StyledTableCell align="right">
 											<Button
 												variant="contained"
 												style={{ background: "#7dcec3" }}
 												color="primary"
 											>
-												<img src={mentor} className={classes.mentor} />
+												<img src={teacher} className={classes.mentor} />
 												Set as Mentor
 											</Button>
 											{/* <Button
