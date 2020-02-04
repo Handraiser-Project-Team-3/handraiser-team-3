@@ -35,6 +35,7 @@ export const MentorClassView = props => {
 	const [accountType] = useState("Mentor");
 	const [open, setOpen] = useState(false);
 	const [action, setAction] = useState("");
+	const [filter, setFilter] = useState([]);
 	const [classList, setClassList] = useState([]);
 	const history = useHistory();
 	const [classRoom, setClassRoom] = useState({
@@ -54,12 +55,12 @@ export const MentorClassView = props => {
 	//     .delete(`/api/class/${classid}`, headers)
 	//     .then(() => setClassList(classList.filter(data => data.id !== classid)));
 	// };
-
 	useEffect(() => {
 		axios
 			.get(`/api/class?id=${user.id}`, headers)
 			.then(res => {
 				setClassList(res.data);
+				setFilter(res.data);
 			})
 			.catch(e => console.log(e));
 
@@ -73,6 +74,8 @@ export const MentorClassView = props => {
 				setOpen={setOpen}
 				setAction={setAction}
 				setHeadTitle={setHeadTitle}
+				filter={filter}
+				setClassList={setClassList}
 			/>
 			<Grid container direction="row" alignItems="center" spacing={3}>
 				{classList
