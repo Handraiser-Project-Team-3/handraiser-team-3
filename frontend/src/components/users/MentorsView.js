@@ -15,55 +15,36 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-// component/s
 
+// component/s
+import Layout from "./reusables/Layout";
 import Chatbox from "../users/Chatbox";
+
 // images
 import head from "../assets/images/bg.png";
-import Layout from "./reusables/Layout";
 
 const useStyles = makeStyles(theme => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em"
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "whitesmoke"
-    }
-  },
   root: {
     backgroundColor: theme.palette.background.paper,
     width: 500,
     paddingTop: "30px",
     paddingLeft: "200px",
     "@media (max-width: 320px)": {
-      paddingLeft: "0px !important"
+      paddingLeft: "0px"
     },
-
     "@media (max-width: 375px)": {
-      paddingLeft: "0px !important"
+      paddingLeft: "0px"
     },
     "@media (max-width: 425px)": {
-      paddingLeft: "0px !important"
-    },
-    "@media(max-width:1024px)": {
-      paddingLeft: "270px"
-    },
-    "@media(max-width:768px)": {
-      paddingLeft: "150px"
+      paddingLeft: "0px"
     }
   },
-
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
     backgroundSize: "cover",
     paddingTop: "85px"
   },
-  headersIcon: {},
   color: {
     display: "flex",
     color: "gray",
@@ -75,16 +56,12 @@ const useStyles = makeStyles(theme => ({
     margin: "20px",
     width: "90%",
     display: "flex",
-    justifyContent: "space-between",
-    height: "5vh"
+    justifyContent: "space-between"
     // justifyContent: "space-around"
   },
   needContainer: {
     maxHeight: 500,
-    overflow: "auto",
-    "@media (max-width: 320px)": {
-      maxHeight: 300
-    }
+    overflow: "auto"
   },
   Icons: {
     display: "inline-flex",
@@ -105,15 +82,6 @@ const useStyles = makeStyles(theme => ({
   },
   chatBox: {
     display: "inline-flex"
-  },
-  appBar: {
-    margin: "0px"
-  },
-  mentorsAvatar: {
-    small: {
-      width: theme.spacing(3),
-      height: theme.spacing(3)
-    }
   }
 }));
 
@@ -150,79 +118,17 @@ function a11yProps(index) {
 
 export default function MentorsView(props) {
   const classes = useStyles();
-  const { user, headers } = props.data;
-  const userDetails = user ? user : {};
-  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [val, setVal] = React.useState([
-    {
-      name: "Stephen Dunn"
-    },
-    {
-      name: "Nathan Young "
-    },
-    {
-      name: "Crystal Watson"
-    },
-    {
-      name: "George Wells"
-    },
-    {
-      name: "Willie Foster 5"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    },
-    {
-      name: "Kathy Ellis"
-    }
-  ]);
+
   return (
-    <div>
-      <Paper elevation={0} className={classes.header}>
-        <Grid
-          container
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-        >
-          <Grid
-            item
-            xs={12}
-            sm={9}
-            md={10}
-            lg={10}
-            className={classes.headersIcon}
-          >
-            <Typography variant="h5" className={classes.color}>
-              <Avatar
-                className={classes.mentorsAvatar}
-                alt="Mentor"
-                src="https://image.flaticon.com/icons/png/512/522/522301.png"
-              />
-              Mentor Dan
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-      <div
-        style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
-      >
+    <Layout>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
         <div className={classes.root}>
-          <AppBar position="static" color="default" className={classes.appBar}>
+          <AppBar position="static" color="default">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -238,66 +144,55 @@ export default function MentorsView(props) {
           </AppBar>
 
           <TabPanel value={value} index={0}>
-            <Paper className={classes.needContainer} elevation={4}>
-              {val.map(e => {
-                return (
-                  <Paper className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography variant="h7" className={classes.studentsNeed}>
-                      <Avatar
-                        alt="Student"
-                        src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Help">
-                        <Button>
-                          <LiveHelpIcon />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
-              })}
-            </Paper>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Paper className={classes.needContainer} elevation={6}>
-              {val.map(e => {
-                return (
-                  <Paper className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography
-                      variant="h7"
-                      className={classes.studentsBeingHelp}
-                    >
-                      <Avatar
-                        alt="Student"
-                        src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
-              })}
+            <Paper className={classes.needContainer}>
+              <Paper className={classes.needHelp}>
+                {" "}
+                <Typography variant="h6" className={classes.studentsNeed}>
+                  <Avatar
+                    alt="Student"
+                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                  />
+                  Edward Nayve
+                </Typography>
+                <div className={classes.Icons}>
+                  <Tooltip title="Remove">
+                    <Button>
+                      <RemoveCircleIcon className={classes.removeIcon} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Help">
+                    <Button>
+                      <LiveHelpIcon />
+                    </Button>
+                  </Tooltip>
+                </div>
+              </Paper>
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Paper className={classes.needContainer} elevation={6}>
-              <Paper className={classes.needHelp} elevation={6}>
+            <Paper className={classes.needContainer}>
+              <Paper className={classes.needHelp}>
+                {" "}
+                <Typography variant="h6" className={classes.studentsBeingHelp}>
+                  <Avatar
+                    alt="Student"
+                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
+                  />
+                  Papa Rex Rojo
+                </Typography>
+                <div className={classes.Icons}>
+                  {/* <Tooltip title="Remove">
+              <Button>
+                <RemoveCircleIcon className={classes.removeIcon} />
+              </Button>
+            </Tooltip> */}
+                </div>
+              </Paper>
+            </Paper>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Paper className={classes.needContainer}>
+              <Paper className={classes.needHelp}>
                 {" "}
                 <Typography variant="h7" className={classes.studentsBeingHelp}>
                   <Avatar
@@ -306,19 +201,19 @@ export default function MentorsView(props) {
                   />
                   Papa Rex Rojo
                 </Typography>
-                {/* <div className={classes.Icons}>
+                <div className={classes.Icons}>
                   <Tooltip title="Remove">
                     <Button>
                       <RemoveCircleIcon className={classes.removeIcon} />
                     </Button>
                   </Tooltip>
-                </div> */}
+                </div>
               </Paper>
             </Paper>
           </TabPanel>
         </div>
         <Chatbox />
       </div>
-    </div>
+    </Layout>
   );
 }
