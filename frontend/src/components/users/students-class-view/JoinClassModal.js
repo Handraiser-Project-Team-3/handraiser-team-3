@@ -38,10 +38,10 @@ const alertToast = msg =>
 		draggable: true
 	});
 
-export const JoinClassModal = ({ classId, className, codeClass }) => {
+export const JoinClassModal = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
-	const [code, setCode] = React.useState('');
+	const [code, setCode] = React.useState("");
 	const [warn, setWarn] = React.useState({ classcode: false });
 	const [help, setHelp] = React.useState({ classcode: "" });
 	const [open, setOpen] = React.useState(false);
@@ -55,26 +55,26 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 	};
 
 	const handleChange = e => {
-		setCode(e.target.value)
+		setCode(e.target.value);
 		if (e.target.value.length > 0) {
 			setWarn({
 				...warn,
 				[e.target.name]: false
-			})
+			});
 			setHelp({
 				...help,
-				[e.target.name]: ''
-			})
+				[e.target.name]: ""
+			});
 		} else {
 			setWarn({
 				...warn,
 				[e.target.name]: true
-			})
+			});
 			setHelp({
 				...help,
 				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
 					e.target.name.slice(1)} field is required *`
-			})
+			});
 		}
 	};
 
@@ -99,11 +99,9 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (classId) {
-			if (code === codeClass) {
-				history.push(`/classroom/${classId}`)
-			} else {
-				alertToast("Invalid Class Code!");
+		if (props.classId) {
+			if (code === props.codeClass) {
+				history.push(`/classroom/${props.className}`);
 			}
 		}
 	};
@@ -113,7 +111,7 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 			<ToastContainer enableMulticontainer />
 			<Button
 				size="small"
-				style={{ color: "#4abdab" }}
+				style={{ color: "white" }}
 				onClick={() => {
 					handleClickOpen();
 				}}
@@ -130,7 +128,7 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 			>
 				<DialogTitle
 					id="alert-dialog-slide-title"
-					style={{ background: "#4abdac", color: "white" }}
+					style={{ background: "#ababfa", color: "white" }}
 				>
 					{"Join Class"}
 				</DialogTitle>
@@ -143,9 +141,15 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id={classId} noValidate className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form
+						id={props.classId}
+						noValidate
+						className={classes.root}
+						autoComplete="off"
+						onSubmit={handleSubmit}
+					>
 						<FormControl variant="outlined">
-							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
+							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
 								id='classcode'

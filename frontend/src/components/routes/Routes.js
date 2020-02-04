@@ -6,6 +6,7 @@ import { Admin } from "../users/Admin";
 import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
 import { Classroom } from "../users/students-class-view/ClassSelection";
 import MentorsView from "../users/MentorsView";
+
 export const Routes = props => {
   const { accessToken, user } = props;
   const userDetails = user ? user : {};
@@ -19,17 +20,17 @@ export const Routes = props => {
           accessToken === "" ? (
             <Login data={props} />
           ) : (
-            <Navigation
-              data={props}
-              component={
-                account_type_id === 1
-                  ? Admin
-                  : account_type_id === 2
-                  ? MentorClassView
-                  : Classroom
-              }
-            />
-          )
+              <Navigation
+                data={props}
+                component={
+                  account_type_id === 1
+                    ? Admin
+                    : account_type_id === 2
+                      ? MentorClassView
+                      : Classroom
+                }
+              />
+            )
         }
       />
       <Route

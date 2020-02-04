@@ -24,272 +24,294 @@ import head from "../assets/images/bg.png";
 
 //Tabs
 const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
+	const { children, value, index, ...other } = props;
 
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={3}>{children}</Box>}
-    </Typography>
-  );
+	return (
+		<Typography
+			component="div"
+			role="tabpanel"
+			hidden={value !== index}
+			id={`full-width-tabpanel-${index}`}
+			aria-labelledby={`full-width-tab-${index}`}
+			{...other}
+		>
+			{value === index && <Box p={3}>{children}</Box>}
+		</Typography>
+	);
 }
 
 TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+	children: PropTypes.node,
+	index: PropTypes.any.isRequired,
+	value: PropTypes.any.isRequired
 };
 
 const a11yProps = (index) => {
-  return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`
-  };
+	return {
+		id: `full-width-tab-${index}`,
+		"aria-controls": `full-width-tabpanel-${index}`
+	};
 }
 
 export default function MentorsView() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+	const classes = useStyles();
+	const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
+	const [val, setVal] = React.useState([
+		{
+			name: "Stephen Dunn"
+		},
+		{
+			name: "Nathan Young "
+		},
+		{
+			name: "Crystal Watson"
+		},
+		{
+			name: "George Wells"
+		},
+		{
+			name: "Willie Foster 5"
+		},
+		{
+			name: "Kathy Ellis"
+		},
+		{
+			name: "Kathy Ellis"
+		},
+		{
+			name: "Kathy Ellis"
+		},
+		{
+			name: "Kathy Ellis"
+		}
+	]);
+	return (
+		<div>
+			<Paper elevation={0} className={classes.header}>
+				<Grid
+					container
+					direction="row"
+					justify="space-evenly"
+					alignItems="center"
+				>
+					<Grid
+						item
+						xs={12}
+						sm={9}
+						md={10}
+						lg={10}
+						className={classes.headersIcon}
+					>
+						<Typography variant="h5" className={classes.color}>
+							<Avatar
+								className={classes.mentorsAvatar}
+								alt="Mentor"
+								src="https://image.flaticon.com/icons/png/512/522/522301.png"
+							/>
+							Mentor Dan
+						</Typography>
+					</Grid>
+				</Grid>
+			</Paper>
+			<div
+				style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
+			>
+				<div className={classes.root}>
+					<AppBar position="static" color="default" className={classes.appBar}>
+						<Tabs
+							value={value}
+							onChange={handleChange}
+							indicatorColor="primary"
+							textColor="primary"
+							variant="fullWidth"
+							aria-label="full width tabs example"
+						>
+							<Tab label="Need Help" {...a11yProps(0)} />
+							<Tab label="Being Help" {...a11yProps(1)} />
+							<Tab label="Done" {...a11yProps(2)} />
+						</Tabs>
+					</AppBar>
 
-  const [val, setVal] = React.useState([
-    {
-      id: 1,
-      name: "Stephen Dunn"
-    },
-    {
-      id: 2,
-      name: "Nathan Young "
-    },
-    {
-      id: 3,
-      name: "Crystal Watson"
-    }
-  ]);
+					<TabPanel value={value} index={0}>
+						<Paper className={classes.needContainer} elevation={4}>
+							{val.map(e => {
+								console.log(e);
 
-  return (
-    <div>
-      <Paper elevation={0} className={classes.header}>
-        <Grid
-          container
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-        >
-          <Grid
-            item
-            xs={12}
-            sm={9}
-            md={10}
-            lg={10}
-            className={classes.headersIcon}
-          >
-            <Typography variant="h5" className={classes.color}>
-              <Avatar
-                className={classes.mentorsAvatar}
-                alt="Mentor"
-                src="https://image.flaticon.com/icons/png/512/522/522301.png"
-              />
-              Mentor {}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-      <div
-        style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
-      >
-        <div className={classes.root}>
-          <AppBar position="static" color="default" className={classes.appBar}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Need Help" {...a11yProps(0)} />
-              <Tab label="Being Help" {...a11yProps(1)} />
-              <Tab label="Done" {...a11yProps(2)} />
-            </Tabs>
-          </AppBar>
-
-          <TabPanel value={value} index={0}>
-            <Paper className={classes.needContainer} elevation={4}>
-              {val.map(e => {
-                return (
-                  <Paper id={e.id} className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography variant="h7" className={classes.studentsNeed}>
-                      <Avatar
-                        className={classes.studentsAvatar}
-                        alt="Student"
-                        src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Help">
-                        <Button>
-                          <LiveHelpIcon />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
-              })}
-            </Paper>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Paper className={classes.needContainer} elevation={6}>
-              {val.map(e => {
-                return (
-                  <Paper className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography
-                      variant="h7"
-                      className={classes.studentsBeingHelp}
-                    >
-                      <Avatar
-                        className={classes.studentsAvatar}
-                        alt="Student"
-                        src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
-              })}
-            </Paper>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <Paper className={classes.needContainer} elevation={6}>
-              <Paper className={classes.needHelp} elevation={6}>
-                {" "}
-                <Typography variant="h7" className={classes.studentsBeingHelp}>
-                  <Avatar
-                    className={classes.studentsAvatar}
-                    alt="Student"
-                    src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                  />
-                  Papa Rex Rojo
-                </Typography>
-              </Paper>
-            </Paper>
-          </TabPanel>
-        </div>
-        <Chatbox />
-      </div>
-    </div>
-  );
+								return (
+									<Paper id={e.name} className={classes.needHelp} elevation={6}>
+										{" "}
+										<Typography variant="h7" className={classes.studentsNeed}>
+											<Avatar
+												className={classes.studentsAvatar}
+												alt="Student"
+												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+											/>
+											{e.name}
+										</Typography>
+										<div className={classes.Icons}>
+											<Tooltip title="Remove">
+												<Button>
+													<RemoveCircleIcon className={classes.removeIcon} />
+												</Button>
+											</Tooltip>
+											<Tooltip title="Help">
+												<Button>
+													<LiveHelpIcon />
+												</Button>
+											</Tooltip>
+										</div>
+									</Paper>
+								);
+							})}
+						</Paper>
+					</TabPanel>
+					<TabPanel value={value} index={1}>
+						<Paper className={classes.needContainer} elevation={6}>
+							{val.map(e => {
+								return (
+									<Paper className={classes.needHelp} elevation={6}>
+										{" "}
+										<Typography
+											variant="h7"
+											className={classes.studentsBeingHelp}
+										>
+											<Avatar
+												className={classes.studentsAvatar}
+												alt="Student"
+												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+											/>
+											{e.name}
+										</Typography>
+										<div className={classes.Icons}>
+											<Tooltip title="Remove">
+												<Button>
+													<RemoveCircleIcon className={classes.removeIcon} />
+												</Button>
+											</Tooltip>
+										</div>
+									</Paper>
+								);
+							})}
+						</Paper>
+					</TabPanel>
+					<TabPanel value={value} index={2}>
+						<Paper className={classes.needContainer} elevation={6}>
+							<Paper className={classes.needHelp} elevation={6}>
+								{" "}
+								<Typography variant="h7" className={classes.studentsBeingHelp}>
+									<Avatar
+										className={classes.studentsAvatar}
+										alt="Student"
+										src="https://image.flaticon.com/icons/png/512/522/522301.png"
+									/>
+									Papa Rex Rojo
+								</Typography>
+								{/* <div className={classes.Icons}>
+                  <Tooltip title="Remove">
+                    <Button>
+                      <RemoveCircleIcon className={classes.removeIcon} />
+                    </Button>
+                  </Tooltip>
+                </div> */}
+							</Paper>
+						</Paper>
+					</TabPanel>
+				</div>
+				<Chatbox />
+			</div>
+		</div>
+	);
 }
 
 const useStyles = makeStyles(theme => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em"
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "whitesmoke"
-    }
-  },
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-    paddingTop: "30px",
-    paddingLeft: "200px",
-    "@media (max-width: 320px)": {
-      paddingLeft: "0px !important"
-    },
+	"@global": {
+		"*::-webkit-scrollbar": {
+			width: "0.4em"
+		},
+		"*::-webkit-scrollbar-track": {
+			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+		},
+		"*::-webkit-scrollbar-thumb": {
+			backgroundColor: "whitesmoke"
+		}
+	},
+	root: {
+		backgroundColor: theme.palette.background.paper,
+		width: 500,
+		paddingTop: "30px",
+		paddingLeft: "200px",
+		"@media (max-width: 320px)": {
+			paddingLeft: "0px !important"
+		},
 
-    "@media (max-width: 375px)": {
-      paddingLeft: "0px !important"
-    },
-    "@media (max-width: 425px)": {
-      paddingLeft: "0px !important"
-    },
-    "@media(max-width:1024px)": {
-      paddingLeft: "270px"
-    },
-    "@media(max-width:768px)": {
-      paddingLeft: "150px"
-    }
-  },
+		"@media (max-width: 375px)": {
+			paddingLeft: "0px !important"
+		},
+		"@media (max-width: 425px)": {
+			paddingLeft: "0px !important"
+		},
+		"@media(max-width:1024px)": {
+			paddingLeft: "270px"
+		},
+		"@media(max-width:768px)": {
+			paddingLeft: "150px"
+		}
+	},
 
-  header: {
-    height: "auto",
-    backgroundImage: `url(${head})`,
-    backgroundSize: "cover",
-    paddingTop: "85px"
-  },
-  headersIcon: {},
-  color: {
-    display: "flex",
-    color: "gray",
-    paddingLeft: "35px"
-  },
+	header: {
+		height: "auto",
+		backgroundImage: `url(${head})`,
+		backgroundSize: "cover",
+		paddingTop: "85px"
+	},
+	headersIcon: {},
+	color: {
+		display: "flex",
+		color: "gray",
+		paddingLeft: "35px"
+	},
 
-  needHelp: {
-    padding: "15px",
-    margin: "20px",
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  needContainer: {
-    maxHeight: 575,
-    overflow: "auto",
-    "@media (max-width: 320px)": {
-      maxHeight: 300
-    }
-  },
-  Icons: {
-    display: "inline-flex",
-    justifyContent: "space-between",
-    width: " 100px",
-    paddingRight: "20px"
-  },
-  studentsNeed: {
-    display: "flex",
-    color: "gray"
-  },
-  studentsBeingHelp: {
-    display: "flex",
-    color: "gray"
-  },
-  chatBox: {
-    display: "inline-flex"
-  },
-  appBar: {
-    margin: "0px"
-  },
-  mentorsAvatar: {
-    small: {
-      width: theme.spacing(3),
-      height: theme.spacing(3)
-    }
-  }
+	needHelp: {
+		padding: "15px",
+		margin: "20px",
+		display: "flex",
+		justifyContent: "space-between"
+	},
+	needContainer: {
+		maxHeight: 575,
+		overflow: "auto",
+		"@media (max-width: 320px)": {
+			maxHeight: 300
+		}
+	},
+	Icons: {
+		display: "inline-flex",
+		justifyContent: "space-between",
+		width: " 100px",
+		paddingRight: "20px"
+	},
+	studentsNeed: {
+		display: "flex",
+		color: "gray"
+	},
+	studentsBeingHelp: {
+		display: "flex",
+		color: "gray"
+	},
+	chatBox: {
+		display: "inline-flex"
+	},
+	appBar: {
+		margin: "0px"
+	},
+	mentorsAvatar: {
+		small: {
+			width: theme.spacing(3),
+			height: theme.spacing(3)
+		}
+	}
 }));
