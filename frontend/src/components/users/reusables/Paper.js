@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 		height: "20vh",
 		marginBottom: "2vh",
 		background:
-			"linear-gradient(207deg, rgba(74,189,172,1) 0%, rgba(74,189,172,1) 63%, rgba(255,255,255,1) 63%)"
+			"linear-gradient(207deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 63%, rgba(255,255,255,1) 63%)"
 	},
 	imgStyle: {
 		width: "70%",

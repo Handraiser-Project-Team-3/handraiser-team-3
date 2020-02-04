@@ -21,9 +21,11 @@ const useStyles = makeStyles(theme => ({
 		marginBottom: "1vh",
 		position: "relative",
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: "#bfe8e2",
+		backgroundColor: "#ababfa",
+		color: "white",
 		"&:hover": {
-			backgroundColor: "#efefef"
+			backgroundColor: "#efefef",
+			color: "gray"
 		},
 		marginRight: theme.spacing(2),
 		marginLeft: 0,

@@ -128,7 +128,7 @@ export const Modal = props => {
 				<DialogTitle
 					id="responsive-dialog-title"
 					style={{
-						background: "#4abdac",
+						background: "#ababfa",
 						color: "white"
 					}}
 				>
