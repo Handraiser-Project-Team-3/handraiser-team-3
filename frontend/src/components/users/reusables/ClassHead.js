@@ -71,8 +71,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function ClassHead(props) {
   const classes = useStyles();
-  const { account_type_id, setOpen, setAction, setHeadTitle } = props;
-
+  const {
+    account_type_id,
+    setOpen,
+    setAction,
+    setHeadTitle,
+    filter,
+    setClassList
+  } = props;
   const handleClickOpenAdd = () => {
     setOpen(true);
     setAction("Add");
@@ -130,7 +136,7 @@ export default function ClassHead(props) {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={4} md={3} lg={3} xl={2}>
-          <Search />
+          <Search filter={filter} setClassList={setClassList} />
         </Grid>
       </Grid>
     </>
