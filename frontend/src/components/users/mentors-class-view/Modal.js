@@ -13,10 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		"& > *": {
-			margin: theme.spacing(1),
-			width: "500"
-		}
+		margin: theme.spacing(1),
+		width: "250px"
 	},
 	icons: {
 		width: "20px",
@@ -25,9 +23,6 @@ const useStyles = makeStyles(theme => ({
 			width: "23px",
 			borderRadius: "10%"
 		}
-	},
-	formControl: {
-		margin: theme.spacing(3)
 	}
 }));
 
@@ -141,7 +136,7 @@ export const Modal = props => {
 							variant="outlined"
 							name="class_name"
 							value={classRoom.class_name}
-							style={{ width: "95%" }}
+							style={{ width: "100%", marginBottom: "1vh" }}
 							onChange={handleInput}
 						/>
 						<TextField
@@ -152,7 +147,7 @@ export const Modal = props => {
 							rowsMax="4"
 							value={classRoom.class_description}
 							variant="outlined"
-							style={{ width: "95%" }}
+							style={{ width: "100%" }}
 							onChange={handleInput}
 						/>
 					</form>
