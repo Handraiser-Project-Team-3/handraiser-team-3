@@ -33,9 +33,9 @@ export const Routes = props => {
         }
       />
       <Route
-        path={`/classroom/:classname`}
-        render={props => (
-          <Navigation {...props} data={props} component={MentorsView} />
+        path={`/classroom/:id`}
+        render={history => (
+          <Navigation {...history} data={props} component={MentorsView} />
         )}
       />
     </Switch>

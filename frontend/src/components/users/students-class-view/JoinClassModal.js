@@ -101,7 +101,7 @@ export const JoinClassModal = ({ classId, className, codeClass }) => {
 		e.preventDefault();
 		if (classId) {
 			if (code === codeClass) {
-				history.push(`/classroom/${className}`)
+				history.push(`/classroom/${classId}`)
 			} else {
 				alertToast("Invalid Class Code!");
 			}
