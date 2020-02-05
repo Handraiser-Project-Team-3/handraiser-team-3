@@ -11,8 +11,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 
@@ -90,9 +90,9 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	Icons: {
-		display: "inline-flex",
+		display: "flex",
 		justifyContent: "space-between",
-		width: " 100px",
+		width: "100px",
 		paddingRight: "20px"
 	},
 	studentsNeed: {
@@ -231,12 +231,18 @@ export default function MentorsView() {
 										<div className={classes.Icons}>
 											<Tooltip title="Remove">
 												<Button>
-													<RemoveCircleIcon className={classes.removeIcon} />
+													<RemoveCircleOutlineIcon
+														fontSize="small"
+														style={{ color: "gray" }}
+													/>
 												</Button>
 											</Tooltip>
 											<Tooltip title="Help">
 												<Button>
-													<LiveHelpIcon />
+													<HelpOutlineIcon
+														fontSize="small"
+														style={{ color: "#f7b731" }}
+													/>
 												</Button>
 											</Tooltip>
 										</div>
@@ -262,10 +268,16 @@ export default function MentorsView() {
 											/>
 											{e.name}
 										</Typography>
-										<div className={classes.Icons}>
+										<div
+											className={classes.Icons}
+											style={{ justifyContent: "flex-end" }}
+										>
 											<Tooltip title="Remove">
 												<Button>
-													<RemoveCircleIcon className={classes.removeIcon} />
+													<RemoveCircleOutlineIcon
+														fontSize="small"
+														style={{ color: "gray" }}
+													/>
 												</Button>
 											</Tooltip>
 										</div>

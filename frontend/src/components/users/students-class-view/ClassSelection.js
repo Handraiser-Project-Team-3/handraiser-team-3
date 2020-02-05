@@ -100,7 +100,7 @@ export const Classroom = props => {
 																</Typography>
 															</Grid>
 															<Grid item lg={12} xs={12}>
-																<b>{}</b>
+																<b>Eric</b>
 															</Grid>
 														</Grid>
 													</Grid>
