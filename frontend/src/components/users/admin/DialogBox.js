@@ -4,8 +4,59 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Confirmation(props) {
+  const { open, setOpen, details, headers, handle, setUsers } = props;
+
+  const handleClose = () => {
+    // cancel button clicked
+    setOpen(false);
+  };
+
+  function handleMentor() {
+    // SET MENTOR
+    if (handle === "set") {
+      axios
+        .patch(
+          `/api/user/${details.id}`,
+          {
+            account_type_id: 2
+          },
+          headers
+        )
+        .then(res => {
+          toast.info("Mentor has been Added!");
+          setOpen(false);
+        })
+        .then(() =>
+          axios.get("/api/user/list", headers).then(res => {
+            setUsers(res.data);
+          })
+        );
+    } else {
+      axios
+        .patch(
+          `/api/user/${details.id}`,
+          {
+            account_type_id: 3
+          },
+          headers
+        )
+        .then(res => {
+          toast.info("Mentor has been Removed!");
+          setOpen(false);
+        })
+        .then(() =>
+          axios.get("/api/user/list", headers).then(res => {
+            setUsers(res.data);
+          })
+        );
+    }
+  }
+
   return (
     <div>
       <Dialog
@@ -20,31 +71,18 @@ export default function Confirmation(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you want to Set {row.email} a Mentor?
+            {handle === "set"
+              ? `Do you want to set ${details.email} as a Mentor?`
+              : `Do you want to remove ${details.email} as a Mentor?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          {row.account_type_id === 3 && (
-            <Button
-              onClick={() => handleSetMentor(row.id)}
-              color="primary"
-              autoFocus
-            >
-              Ok
-            </Button>
-          )}
-          {row.account_type_id === 2 && (
-            <Button
-              onClick={() => handleClickRemove(row.id)}
-              color="primary"
-              autoFocus
-            >
-              Ok
-            </Button>
-          )}
+          <Button color="primary" onClick={handleMentor} autoFocus>
+            Ok
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

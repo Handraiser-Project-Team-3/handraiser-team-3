@@ -1,35 +1,49 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import ForumIcon from "@material-ui/icons/Forum";
+import bubbles from "../assets/images/chat-box.png";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import Button from "@material-ui/core/Button";
-// import ChatBubble from "react-chat-bubble";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
+import student from "../assets/images/student.png";
+import mentor from "../assets/images/mentor2.png";
+
 const useStyles = makeStyles(theme => ({
+	"@global": {
+		"*::-webkit-scrollbar": {
+			width: "0.4em"
+		},
+		"*::-webkit-scrollbar-track": {
+			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+		},
+		"*::-webkit-scrollbar-thumb": {
+			backgroundColor: "whitesmoke"
+		}
+	},
 	root: {
 		margin: "28px",
-		// display: "flex",
-		// flexWrap: "wrap",
-		height: "70vh",
+		padding: "15px",
+		borderRadius: "10px",
+		backgroundColor: "#ababfa",
 		width: "45%",
-		backgroundColor: "#4abdac",
-		"@media (max-width: 320px)": {
-			height: "50vh",
-			width: "80%"
+		"@media(max-width:1024px)": {
+			width: "100%"
 		}
 	},
 	top: {
 		padding: "0px",
 		margin: "0px",
-		height: "5.5vh",
 		width: "100%"
 	},
 	topName: {
 		padding: "8px",
-		display: "flex"
+		display: "flex",
+		justifyContent: "flex-start",
+		alignItems: "center"
 	},
 	MainChatBox: {
 		maxHeight: 500,
@@ -49,46 +63,56 @@ const useStyles = makeStyles(theme => ({
 		maxHeight: 500,
 		height: "50vh",
 		overflow: "auto",
-		margin: "30px"
+		margin: "10px 0 10px 0 ",
+
+		"@media (max-width: 320px)": {
+			maxHeight: 250
+		},
+		"@media (max-width: 425px)": {
+			maxHeight: 350
+		},
+
+		"@media (max-width: 375px)": {
+			maxHeight: 350
+		}
 	},
-	messageArea: {
-		outline: "none",
-		resize: "none",
-		borderRadius: "10px ",
-		width: "400px"
+	inputArea: {
+		paddingTop: "5px",
+		alignItems: "center",
+		justifyContent: "center"
 	},
-	sendButton: {
-		marginRight: "90px"
+	inputAreacontainer: {
+		display: "flex",
+		"@media (max-width: 1024px)": {
+			margin: "0px "
+		},
+		mentorAvatar: {
+			position: "fixed"
+		}
 	}
 }));
 
 export default function ChatBox() {
 	const classes = useStyles();
-	const [messages, setMessages] = useState([
-		{
-			message: "semo"
-		},
-		{
-			reps: "eu"
-		}
-	]);
+
 
 	return (
 		<React.Fragment>
 			<Paper className={classes.root}>
-				<Paper className={classes.top}>
-					<Grid xs={12} className={classes.topName}>
-						<ForumIcon style={{ fill: "grey", fontSize: 35 }} />
-						<Typography variant="h8">{"Mark Medes"}</Typography>
+				<Paper className={classes.top} elevation={3}>
+					<Grid className={classes.topName}>
+						<Avatar alt="top" src={bubbles} />
+						<Typography variant="h6" style={{ paddingLeft: "10px" }}>
+							Mark Medes
+						</Typography>
 					</Grid>
 				</Paper>
 
 				{/* messages] */}
-				<Paper className={classes.convoBox}>
+				<Paper className={classes.convoBox} elevation={6}>
 					<Grid container direction="column">
-						{messages.map(m => {
-							console.log(m.reps, m.message);
-						})}
+						{/* {messages.map(m => {
+              return ( */}
 						<Grid
 							style={{ display: "flex", alignItems: "center" }}
 							xl={12}
@@ -99,13 +123,14 @@ export default function ChatBox() {
 								container
 								alignItems="center"
 								justify="flex-end"
-								style={{ padding: 5 }}
+								style={{ padding: 5, paddingRight: "10px" }}
 							>
 								<Grid
 									style={{
-										margin: 15,
 										display: "flex",
-										justifyContent: "flex-end"
+										justifyContent: "flex-end",
+										maxWidth: "300px",
+										wordBreak: " break-all"
 									}}
 									xl={5}
 									lg={5}
@@ -114,47 +139,65 @@ export default function ChatBox() {
 									xs={8}
 									item
 								>
-									<span>sdasdad</span>
+									<span
+										style={{
+											display: "flex",
+											justifyContent: "flex-end",
+											backgroundColor: "whitesmoke",
+											wordBreak: " break-all",
+											border: " 2px solid #ababfa",
+											padding: "10px",
+											borderRadius: "5px 20px"
+										}}
+									>
+										{
+											"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ipsum purus, bibendum sit amet vulputate eget, porta semper ligula. Donec bibendum"
+										}
+									</span>
 								</Grid>
 
 								<Grid
 									style={{
-										height: "80px",
+										alignSelf: " flex-end",
 										display: "flex",
 										alignItems: "flex-end"
 									}}
 									item
 								>
 									<Avatar
-										alt="aas"
-										src="https://image.flaticon.com/icons/png/512/522/522301.png"
+										className={classes.mentorAvatar}
+										alt="mentor"
+										src={mentor}
 									/>
 								</Grid>
 							</Grid>
 						</Grid>
-
+						{/* );
+            })} */}
 						<Grid
 							container
 							alignItems="center"
 							justify="flex-start"
-							style={{ padding: 5 }}
+						// style={{ padding: 5 }}
 						>
 							<Grid
 								style={{
-									margin: 15,
+									margin: 5,
+									alignSelf: " flex-end",
 									display: "flex",
 									justifyContent: "flex-start"
 								}}
 								item
 							>
-								<Avatar
-									alt="mess"
-									src="https://image.flaticon.com/icons/png/512/522/522301.png"
-								/>
+								<Avatar alt="student" src={student} />
 							</Grid>
 
 							<Grid
-								style={{ display: "flex", alignItems: "flex-end" }}
+								style={{
+									display: "flex",
+									alignItems: "flex-end",
+									maxWidth: "300px"
+								}}
 								xl={5}
 								lg={5}
 								md={6}
@@ -162,61 +205,41 @@ export default function ChatBox() {
 								xs={8}
 								item
 							>
-								<span>ssasas</span>
-							</Grid>
-						</Grid>
-					</Grid>
-					{/* endofmessages */}
-
-					<Grid item style={{}} xl={12} lg={12} md={12} sm={12} xs={12}>
-						<Grid container>
-							<Grid
-								item
-								style={{
-									height: "100px",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center"
-								}}
-								lg={11}
-								md={10}
-								sm={9}
-								xs={9}
-							>
-								<textarea
-									rows="2"
-									autoFocus
-									className={classes.messageArea}
-									placeholder="Type your message..."
-								></textarea>
-							</Grid>
-							<Grid
-								item
-								style={{
-									height: "100px",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									padding: 3
-								}}
-								lg={1}
-								md={2}
-								sm={3}
-								xs={3}
-							>
-								<Button
-									style={{ height: "30px" }}
-									size="small"
-									variant="contained"
-									color="grey"
-									className={classes.sendButton}
-									endIcon={<SendIcon />}
+								<span
+									style={{
+										display: "flex",
+										justifyContent: "flex-end",
+										backgroundColor: "whitesmoke",
+										wordBreak: " break-all",
+										border: " 2px solid #F7B732",
+										padding: "10px",
+										borderRadius: "20px 5px"
+									}}
 								>
-									<label className={classes.buttonLabel}>SEND</label>
-								</Button>
+									{".ahjhdffjkadfjhfjhffjadfadfh "}
+								</span>
 							</Grid>
 						</Grid>
 					</Grid>
+
+					{/* endofmessages */}
+				</Paper>
+				<Paper className={classes.inputAreacontainer} elevation={6}>
+					<TextField
+						variant="outlined"
+						id="standard-basic"
+						label="Type your message..."
+						fullWidth
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<Button endIcon={<SendIcon />}></Button>
+								</InputAdornment>
+							)
+						}}
+					/>
+					{/* </Grid>
+          </Grid> */}
 				</Paper>
 			</Paper>
 		</React.Fragment>

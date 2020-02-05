@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
@@ -18,11 +18,14 @@ const useStyles = makeStyles(theme => ({
 		width: 200
 	},
 	search: {
+		marginBottom: "1vh",
 		position: "relative",
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: "#bfe8e2",
+		backgroundColor: "#ababfa",
+		color: "white",
 		"&:hover": {
-			backgroundColor: "#efefef"
+			backgroundColor: "#efefef",
+			color: "gray"
 		},
 		marginRight: theme.spacing(2),
 		marginLeft: 0,
@@ -53,8 +56,23 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function Search() {
+export default function Search(props) {
 	const classes = useStyles();
+	const [searchTerm, setSearchTerm] = useState("");
+	const { filter, setClassList } = props;
+
+	const handleChange = e => {
+		setSearchTerm(e.target.value);
+	};
+
+	useEffect(() => {
+		filter &&
+			setClassList(
+				filter.filter(row => row.class_name.toLowerCase().includes(searchTerm))
+			);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchTerm]);
 
 	return (
 		<div className={classes.search}>
@@ -63,6 +81,8 @@ export default function Search() {
 			</div>
 			<InputBase
 				placeholder="Search…"
+				value={searchTerm}
+				onChange={handleChange}
 				classes={{
 					root: classes.inputRoot,
 					input: classes.inputInput

@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 		height: "20vh",
 		marginBottom: "2vh",
 		background:
-			"linear-gradient(207deg, rgba(74,189,172,1) 0%, rgba(74,189,172,1) 63%, rgba(255,255,255,1) 63%)"
+			"linear-gradient(207deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 63%, rgba(255,255,255,1) 63%)"
 	},
 	imgStyle: {
 		width: "70%",
@@ -35,7 +35,7 @@ export const PaperStat = props => {
 			<Paper className={classes.total}>
 				<Grid container justify="center" align="center">
 					<Grid item xs={6} className={classes.ipadView}>
-						<img src={both} className={classes.imgStyle} />
+						<img src={both} className={classes.imgStyle} alt="all" />
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="column" justify="center">
@@ -62,7 +62,7 @@ export const PaperStat = props => {
 			<Paper className={classes.total}>
 				<Grid container justify="center" align="center">
 					<Grid item xs={6}>
-						<img src={teacher} className={classes.imgStyle} />
+						<img src={teacher} className={classes.imgStyle} alt="mentor" />
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="column" justify="center">
@@ -89,7 +89,7 @@ export const PaperStat = props => {
 			<Paper className={classes.total}>
 				<Grid container justify="center" align="center">
 					<Grid item xs={6}>
-						<img src={student} className={classes.imgStyle} />
+						<img src={student} className={classes.imgStyle} alt="student" />
 					</Grid>
 					<Grid item xs={6}>
 						<Grid container direction="column" justify="center">

@@ -17,12 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import teacher from "../../assets/images/mentor2.png";
 import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
-
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogBox from "./DialogBox";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -75,9 +70,11 @@ export const Admin = props => {
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const [users, setUsers] = useState([]);
-  const [email, setEmail] = useState([]);
+  const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(3);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [handle, setHandle] = useState("");
+  const [details, setDetails] = useState({});
 
   useEffect(() => {
     // DISPLAY LIST
@@ -86,48 +83,13 @@ export const Admin = props => {
     });
   }, []);
 
-  function handleClickRemove(e) {
-    // REMOVE MENTOR
-    axios
-      .patch(
-        `/api/user/${e}`,
-        {
-          account_type_id: 3
-        },
-        headers
-      )
-      .then(() => toast.info("Mentor has been Removed!"));
-  }
-  function handleSetMentor(e) {
-    // SET MENTOR
-    axios
-      .patch(
-        `/api/user/${e}`,
-        {
-          account_type_id: 2
-        },
-        headers
-      )
-      .then(() => toast.info("Mentor has been Added!"));
-  }
   function handleChange(e) {
-    console.log(e);
+    console.log(e.target.value);
   }
 
   function handleClickAdd(e) {
-    console.log("clicked!");
+    console.log(e.target.value);
   }
-
-  const handleClickOpen = e => {
-    console.log(e);
-    // when set as mentor/set as student has been clicked
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    // cancel button clicked
-    setOpen(false);
-  };
 
   return (
     <Layout accountType={accountType} first_name={first_name}>
@@ -141,9 +103,9 @@ export const Admin = props => {
                   <TextField
                     id="standard-basic"
                     label="Email Address"
-                    value={email}
                     onChange={handleChange}
                     className={classes.textField}
+                    type="text"
                   />
                 </form>
               </Grid>
@@ -212,7 +174,11 @@ export const Admin = props => {
                               variant="contained"
                               style={{ background: "#7dcec3" }}
                               color="primary"
-                              onClick={() => handleClickOpen(row.id)} // // ()=>handleSetMentor(row.id)
+                              onClick={() => {
+                                setDetails(row);
+                                setOpen(true);
+                                setHandle("set");
+                              }}
                             >
                               <img src={teacher} className={classes.mentor} />
                               Set as Mentor
@@ -223,50 +189,15 @@ export const Admin = props => {
                               variant="contained"
                               style={{ background: "#fe8d8c" }}
                               color="primary"
-                              onClick={() => handleClickOpen(row.id)}
+                              onClick={() => {
+                                setDetails(row);
+                                setOpen(true);
+                                setHandle("remove");
+                              }}
                             >
                               Remove as Mentor
                             </Button>
                           )}
-                          <Dialog
-                            key={props.id}
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Confirmation Message:"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Do you want to Set {row.email} a Mentor?
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleClose} color="primary">
-                                Cancel
-                              </Button>
-                              {row.account_type_id === 3 && (
-                                <Button
-                                  onClick={() => handleSetMentor(row.id)}
-                                  color="primary"
-                                  autoFocus
-                                >
-                                  Ok
-                                </Button>
-                              )}
-                              {row.account_type_id === 2 && (
-                                <Button
-                                  onClick={() => handleClickRemove(row.id)}
-                                  color="primary"
-                                  autoFocus
-                                >
-                                  Ok
-                                </Button>
-                              )}
-                            </DialogActions>
-                          </Dialog>
                         </StyledTableCell>
                       </StyledTableRow>
                     )
@@ -276,6 +207,14 @@ export const Admin = props => {
           </TableContainer>
         </Grid>
       </Grid>
+      <DialogBox
+        setOpen={setOpen}
+        open={open}
+        details={details}
+        headers={headers}
+        handle={handle}
+        setUsers={setUsers}
+      />
     </Layout>
   );
 };

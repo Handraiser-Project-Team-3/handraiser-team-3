@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   logo: {
-    width: "180px",
+    width: "140px",
     marginTop: "0.5vh"
   },
   pad: {
@@ -47,7 +47,6 @@ const useStyles = makeStyles(theme => ({
     width: 250
   }
 }));
-
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken } = props.data;
   const userDetails = user ? user : {};
@@ -134,7 +133,13 @@ export default function ButtonAppBar(props) {
   return (
     <div>
       <div className={classes.root}>
-        <AppBar position="fixed" style={{ background: "#4abdac" }}>
+        <AppBar
+          position="fixed"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
+          }}
+        >
           <Toolbar>
             <IconButton
               edge="start"
@@ -202,7 +207,6 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
-
       <MyComponent data={props.data} />
     </div>
   );

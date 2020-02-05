@@ -13,16 +13,13 @@ function App() {
       setUser(jwt_decode(accessToken));
     }
   }, [accessToken]);
-
   const headers = {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
   };
-
   return (
     <BrowserRouter>
-      {console.log(user)}
       <Routes
         accessToken={accessToken}
         setAccessToken={setAccessToken}
