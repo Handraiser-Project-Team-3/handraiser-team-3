@@ -79,7 +79,7 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: "space-around"
   },
   needContainer: {
-    height: "50vh",
+    height: "59vh",
     overflow: "auto",
     "@media (max-width: 320px)": {
       maxHeight: 300
@@ -112,8 +112,8 @@ const useStyles = makeStyles(theme => ({
     }
   },
   modalButton: {
-    marginTop: "-47px ",
-    marginLeft: "10px"
+    marginTop: "-65px ",
+    marginLeft: "12px"
   }
 }));
 
