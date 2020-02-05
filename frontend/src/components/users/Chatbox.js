@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import bubbles from "../assets/images/chat-box.png";
@@ -95,7 +95,6 @@ const useStyles = makeStyles(theme => ({
 export default function ChatBox() {
 	const classes = useStyles();
 
-
 	return (
 		<React.Fragment>
 			<Paper className={classes.root}>
@@ -178,7 +177,7 @@ export default function ChatBox() {
 							container
 							alignItems="center"
 							justify="flex-start"
-						// style={{ padding: 5 }}
+							// style={{ padding: 5 }}
 						>
 							<Grid
 								style={{

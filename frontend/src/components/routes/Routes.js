@@ -3,8 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
 import { Admin } from "../users/Admin";
-import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
-import { Classroom } from "../users/students-class-view/ClassSelection";
+import { ClassView } from "../users/classroom/ClassView";
 import MentorsView from "../users/MentorsView";
 
 export const Routes = props => {
@@ -20,17 +19,11 @@ export const Routes = props => {
           accessToken === "" ? (
             <Login data={props} />
           ) : (
-              <Navigation
-                data={props}
-                component={
-                  account_type_id === 1
-                    ? Admin
-                    : account_type_id === 2
-                      ? MentorClassView
-                      : Classroom
-                }
-              />
-            )
+            <Navigation
+              data={props}
+              component={account_type_id === 1 ? Admin : ClassView}
+            />
+          )
         }
       />
       <Route
