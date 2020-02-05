@@ -211,7 +211,7 @@ export const MentorClassView = props => {
                         </Typography>
                       </CardContent>
                     </CardActionArea>
-                    <CardActions style={{ background: "#d0efea" }}>
+                    <CardActions style={{ background: "#97a4f7" }}>
                       <Grid
                         container
                         direction="row"
@@ -224,7 +224,7 @@ export const MentorClassView = props => {
                               history.push(`/classroom/${data.id}`)
                             }
                             size="small"
-                            style={{ color: "#b5855a" }}
+                            style={{ color: "white" }}
                           >
                             Enter Class
                           </Button>
