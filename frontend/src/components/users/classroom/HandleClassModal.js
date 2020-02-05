@@ -40,7 +40,7 @@ const alertToast = msg =>
     draggable: true
   });
 
-export const Modal = props => {
+export const HandleClassModal = props => {
   const classes = useStyles();
   const {
     open,
