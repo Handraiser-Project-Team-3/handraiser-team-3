@@ -36,34 +36,34 @@ export default function Layout(props) {
   const classes = useStyles();
   const { first_name, accountType } = props;
 
-	return (
-		<div>
-			<Paper elevation={0} className={classes.header}>
-				<Grid
-					container
-					direction="row"
-					justify="space-evenly"
-					alignItems="center"
-				>
-					<Grid item xs={12} sm={9} md={10} lg={10}>
-						<Typography variant="h5" className={classes.color}>
-							Welcome {accountType ? accountType : ""}
-							{first_name ? " " + first_name : ""}!
-						</Typography>
-					</Grid>
-					<Grid item sm={3} md={2} lg={2}>
-						<Breadcrumbs
-							separator="›"
-							aria-label="breadcrumb"
-							className={classes.res}
-						>
-							<Typography color="inherit">{first_name}</Typography>
-							<Typography color="textPrimary">Classrooms</Typography>
-						</Breadcrumbs>
-					</Grid>
-				</Grid>
-			</Paper>
-			<div className={classes.container}>{props.children}</div>
-		</div>
-	);
+  return (
+    <div>
+      <Paper elevation={0} className={classes.header}>
+        <Grid
+          container
+          direction="row"
+          justify="space-evenly"
+          alignItems="center"
+        >
+          <Grid item xs={12} sm={9} md={10} lg={10}>
+            <Typography variant="h5" className={classes.color}>
+              Welcome {accountType ? accountType : ""}
+              {first_name ? " " + first_name : ""}!
+            </Typography>
+          </Grid>
+          <Grid item sm={3} md={2} lg={2}>
+            <Breadcrumbs
+              separator="›"
+              aria-label="breadcrumb"
+              className={classes.res}
+            >
+              <Typography color="inherit">{first_name}</Typography>
+              <Typography color="textPrimary">Classrooms</Typography>
+            </Breadcrumbs>
+          </Grid>
+        </Grid>
+      </Paper>
+      <div className={classes.container}>{props.children}</div>
+    </div>
+  );
 }
