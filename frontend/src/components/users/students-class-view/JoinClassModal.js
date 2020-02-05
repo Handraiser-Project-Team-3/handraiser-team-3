@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import moment from "moment";
+// import moment from "moment";
 
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,7 +17,7 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FormHelperText from "@material-ui/core/FormHelperText";
+// import FormHelperText from "@material-ui/core/FormHelperText";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -140,7 +140,7 @@ export const JoinClassModal = props => {
 							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id={classId}
+								id="classId"
 								name={className}
 								onChange={handleChange}
 								labelWidth={85}
