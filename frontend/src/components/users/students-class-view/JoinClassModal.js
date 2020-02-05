@@ -36,7 +36,7 @@ const alertToast = msg =>
 	toast.info(msg, {
 		position: "top-right",
 		hideProgressBar: true,
-		autoClose: 6000,
+		autoClose: 3000,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true
@@ -44,10 +44,9 @@ const alertToast = msg =>
 
 export const JoinClassModal = (props) => {
 	const classes = useStyles();
+	const { classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
 	const [code, setCode] = React.useState("");
-	const [warn, setWarn] = React.useState({ classcode: false });
-	const [help, setHelp] = React.useState({ classcode: "" });
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -60,60 +59,21 @@ export const JoinClassModal = (props) => {
 
 	const handleChange = e => {
 		setCode(e.target.value);
-		if (e.target.value.length > 0) {
-			setWarn({
-				...warn,
-				[e.target.name]: false
-			});
-			setHelp({
-				...help,
-				[e.target.name]: ""
-			});
-		} else {
-			setWarn({
-				...warn,
-				[e.target.name]: true
-			});
-			setHelp({
-				...help,
-				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-					e.target.name.slice(1)} field is required *`
-			});
-		}
-	};
-
-	const warningUpdate = e => {
-		if (e.target.value.length === 0) {
-			setWarn({
-				...warn,
-				[e.target.name]: true
-			});
-			setHelp({
-				...help,
-				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-					e.target.name.slice(1)} field is required *`
-			});
-		} else {
-			setHelp({
-				...help,
-				[e.target.name]: ""
-			});
-		}
 	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (props.classId) {
-			if (code === props.codeClass) {
-				history.push(`/classroom/${props.classId}`);
+		if (classId) {
+			if (code === codeClass) {
+				history.push(`/classroom/${classId}`);
 
 				// axios
 				// 	.post(`/api/classroom-users/`,
-				// 		props.headers,
+				// 		headers,
 				// 		{
 				// 				{
-				// 				user_id: props.user.user_id,
-				// 				class_id: props.classId,
+				// 				user_id: user.user_id,
+				// 				class_id: classId,
 				// 				date_joined: function (timestamp) {
 				// 					moment(new Date(timestamp))
 				// 						.format("YYYY-MM-DD HH:MM:SS")
@@ -121,7 +81,7 @@ export const JoinClassModal = (props) => {
 				// 			}
 				// 		})
 				// 	.then(() => {
-				// 		alertToast(`Welcome ${props.user.first_name}!`)
+				// 		alertToast(`Welcome ${user.first_name}!`)
 				// 	})
 				// 	.catch(e => console.log(e))
 
@@ -171,7 +131,7 @@ export const JoinClassModal = (props) => {
 				</DialogContent>
 				<DialogContent>
 					<form
-						id={props.classId}
+						id={classId}
 						noValidate
 						className={classes.root}
 						autoComplete="off"
@@ -181,14 +141,11 @@ export const JoinClassModal = (props) => {
 							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id={props.classId}
-								name={props.className}
-								error={warn.classcode}
-								onBlur={warningUpdate}
+								id={classId}
+								name={className}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id={props.classId}>{help.classcode}</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
@@ -196,7 +153,7 @@ export const JoinClassModal = (props) => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button color="primary" form={props.classId} type="submit">
+					<Button color="primary" form={classId} type="submit">
 						Join Class
 					</Button>
 				</DialogActions>
