@@ -94,20 +94,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChatBox() {
 	const classes = useStyles();
-	const [messages, setMessages] = useState([
-		{
-			id: 1,
-			message: "Nani?"
-		},
-		{
-			id: 1,
-			message: "Nani?"
-		},
-		{
-			id: 2,
-			reps: "eu"
-		}
-	]);
+
 
 	return (
 		<React.Fragment>
@@ -191,7 +178,7 @@ export default function ChatBox() {
 							container
 							alignItems="center"
 							justify="flex-start"
-							// style={{ padding: 5 }}
+						// style={{ padding: 5 }}
 						>
 							<Grid
 								style={{
@@ -238,26 +225,10 @@ export default function ChatBox() {
 					{/* endofmessages */}
 				</Paper>
 				<Paper className={classes.inputAreacontainer} elevation={6}>
-					{/* <Grid
-            container
-            className={classes.inputArea}
-            style={{ backgroundColor: "grey" }}
-          >
-            <Grid
-              item
-              style={{
-                display: "flex"
-              }}
-              lg={11}
-              md={10}
-              sm={9}
-              xs={9}
-            > */}
 					<TextField
 						variant="outlined"
 						id="standard-basic"
 						label="Type your message..."
-						// className={classes.messageArea}
 						fullWidth
 						InputProps={{
 							endAdornment: (

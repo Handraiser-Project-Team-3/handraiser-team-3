@@ -32,7 +32,7 @@ export const Classroom = props => {
 			.then(res => {
 				setClassList(res.data);
 			})
-			.catch();
+			.catch(e => console.log(e));
 	}, []);
 
 	return (
@@ -114,6 +114,8 @@ export const Classroom = props => {
 												classId={data.id}
 												className={data.class_name}
 												codeClass={data.class_code}
+												user={user}
+												headers={headers}
 											/>
 										</Grid>
 									</CardActions>
