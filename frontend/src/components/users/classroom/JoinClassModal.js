@@ -1,4 +1,11 @@
 import React from "react";
+// import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import moment from "moment";
+
+// Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -10,8 +17,7 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import { useHistory } from "react-router-dom";
+// import FormHelperText from "@material-ui/core/FormHelperText";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -26,12 +32,21 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const alertToast = msg =>
+	toast.info(msg, {
+		position: "top-right",
+		hideProgressBar: true,
+		autoClose: 3000,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true
+	});
+
 export const JoinClassModal = props => {
 	const classes = useStyles();
+	const { classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
 	const [code, setCode] = React.useState("");
-	const [warn, setWarn] = React.useState({ classcode: false });
-	const [help, setHelp] = React.useState({ classcode: "" });
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -44,58 +59,44 @@ export const JoinClassModal = props => {
 
 	const handleChange = e => {
 		setCode(e.target.value);
-		if (e.target.value.length > 0) {
-			setWarn({
-				...warn,
-				[e.target.name]: false
-			});
-			setHelp({
-				...help,
-				[e.target.name]: ""
-			});
-		} else {
-			setWarn({
-				...warn,
-				[e.target.name]: true
-			});
-			setHelp({
-				...help,
-				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-					e.target.name.slice(1)} field is required *`
-			});
-		}
-	};
-
-	const warningUpdate = e => {
-		if (e.target.value.length === 0) {
-			setWarn({
-				...warn,
-				[e.target.name]: true
-			});
-			setHelp({
-				...help,
-				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-					e.target.name.slice(1)} field is required *`
-			});
-		} else {
-			setHelp({
-				...help,
-				[e.target.name]: ""
-			});
-		}
 	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (props.classId) {
-			if (code === props.codeClass) {
-				history.push(`/classroom/${props.className}`);
+		if (classId) {
+			if (code === codeClass) {
+				history.push(`/classroom/${classId}`);
+
+				// axios
+				// 	.post(`/api/classroom-users/`,
+				// 		headers,
+				// 		{
+				// 				{
+				// 				user_id: user.user_id,
+				// 				class_id: classId,
+				// 				date_joined: function (timestamp) {
+				// 					moment(new Date(timestamp))
+				// 						.format("YYYY-MM-DD HH:MM:SS")
+				// 				}
+				// 			}
+				// 		})
+				// 	.then(() => {
+				// 		alertToast(`Welcome ${user.first_name}!`)
+				// 	})
+				// 	.catch(e => console.log(e))
+			} else {
+				if (code === "") {
+					alertToast("Code required to enter class!");
+				} else {
+					alertToast("Invalid Code!");
+				}
 			}
 		}
 	};
 
 	return (
 		<div>
+			<ToastContainer enableMulticontainer />
 			<Button
 				size="small"
 				style={{ color: "white" }}
@@ -129,7 +130,8 @@ export const JoinClassModal = props => {
 				</DialogContent>
 				<DialogContent>
 					<form
-						id={props.classId}
+						id={classId}
+						noValidate
 						className={classes.root}
 						autoComplete="off"
 						onSubmit={handleSubmit}
@@ -138,16 +140,11 @@ export const JoinClassModal = props => {
 							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id="classcode"
-								name="classcode"
-								error={warn.classcode}
-								onBlur={warningUpdate}
+								id="classId"
+								name={className}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id={props.classId}>
-								{help.classcode}
-							</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
@@ -155,7 +152,7 @@ export const JoinClassModal = props => {
 					<Button onClick={handleClose} color="primary">
 						Cancel
 					</Button>
-					<Button color="primary" form={`${props.classId}`} type="submit">
+					<Button color="primary" form={classId} type="submit">
 						Join Class
 					</Button>
 				</DialogActions>
