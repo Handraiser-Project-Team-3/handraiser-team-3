@@ -42,27 +42,34 @@ const alertToast = msg =>
 
 export const JoinClassModal = props => {
 	const classes = useStyles();
-	const { classroomUsers, classId, className, codeClass, user, headers } = props;
+	const { classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
 	const [code, setCode] = useState("");
 	const [open, setOpen] = useState(false);
+	const [classroomUsers, setClassroomUsers] = useState([]);
 
-	// useEffect(() => {
-	// 	let filterUser = classroomUsers.filter(userClass => {
-	// 		if (user.id) {
-	// 			if (userClass.user_id === user.id) {
-	// 				return userClass;
-	// 			}
-	// 			return null;
-	// 		}
+	useEffect(() => {
+		axios
+			.get(`/api/classroom-users/`, headers)
+			.then(classUsers => {
+				setClassroomUsers(classUsers.data)
+			})
+			.catch(e => console.log(e))
+		// let filterUser = classroomUsers.filter(userClass => {
+		// 	if (user.id) {
+		// 		if (userClass.user_id === user.id) {
+		// 			return userClass;
+		// 		}
+		// 		return null;
+		// 	}
 
-	// 		if (filterUser) {
-	// 			history.push(`/classroom/${classId}`)
-	// 		} else {
-	// 			history.push('/')
-	// 		}
-	// 	})
-	// })
+		// 	if (filterUser) {
+		// 		history.push(`/classroom/${classId}`)
+		// 	} else {
+		// 		history.push('/')
+		// 	}
+		// })
+	}, [])
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -113,9 +120,9 @@ export const JoinClassModal = props => {
 				return null;
 			}
 		})
-
 		console.log(filterUser)
-		if (!filterUser) {
+
+		if (filterUser) {
 			return (
 				<Button
 					size="small"
