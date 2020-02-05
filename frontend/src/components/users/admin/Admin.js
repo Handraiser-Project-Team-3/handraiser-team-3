@@ -14,9 +14,15 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import teacher from "../assets/images/mentor2.png";
-import Layout from "./reusables/Layout";
-import { PaperStat } from "./reusables/Paper";
+import teacher from "../../assets/images/mentor2.png";
+import Layout from "../reusables/Layout";
+import { PaperStat } from "../reusables/Paper";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -35,10 +41,6 @@ const StyledTableRow = withStyles(theme => ({
     }
   }
 }))(TableRow);
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
 const useStyles = makeStyles({
   table: {
@@ -75,6 +77,7 @@ export const Admin = props => {
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState([]);
   const [userType, setUserType] = useState(3);
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     // DISPLAY LIST
@@ -114,6 +117,17 @@ export const Admin = props => {
   function handleClickAdd(e) {
     console.log("clicked!");
   }
+
+  const handleClickOpen = e => {
+    console.log(e);
+    // when set as mentor/set as student has been clicked
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    // cancel button clicked
+    setOpen(false);
+  };
 
   return (
     <Layout accountType={accountType} first_name={first_name}>
@@ -187,7 +201,7 @@ export const Admin = props => {
                 {users.map(
                   row =>
                     row.account_type_id === userType && (
-                      <StyledTableRow key={row.email}>
+                      <StyledTableRow key={row.id}>
                         <StyledTableCell component="th" scope="row">
                           {row.email}
                         </StyledTableCell>
@@ -198,7 +212,7 @@ export const Admin = props => {
                               variant="contained"
                               style={{ background: "#7dcec3" }}
                               color="primary"
-                              onClick={() => handleSetMentor(row.id)}
+                              onClick={() => handleClickOpen(row.id)} // // ()=>handleSetMentor(row.id)
                             >
                               <img src={teacher} className={classes.mentor} />
                               Set as Mentor
@@ -209,11 +223,50 @@ export const Admin = props => {
                               variant="contained"
                               style={{ background: "#fe8d8c" }}
                               color="primary"
-                              onClick={() => handleClickRemove(row.id)}
+                              onClick={() => handleClickOpen(row.id)}
                             >
                               Remove as Mentor
                             </Button>
                           )}
+                          <Dialog
+                            key={props.id}
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Confirmation Message:"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Do you want to Set {row.email} a Mentor?
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleClose} color="primary">
+                                Cancel
+                              </Button>
+                              {row.account_type_id === 3 && (
+                                <Button
+                                  onClick={() => handleSetMentor(row.id)}
+                                  color="primary"
+                                  autoFocus
+                                >
+                                  Ok
+                                </Button>
+                              )}
+                              {row.account_type_id === 2 && (
+                                <Button
+                                  onClick={() => handleClickRemove(row.id)}
+                                  color="primary"
+                                  autoFocus
+                                >
+                                  Ok
+                                </Button>
+                              )}
+                            </DialogActions>
+                          </Dialog>
                         </StyledTableCell>
                       </StyledTableRow>
                     )
