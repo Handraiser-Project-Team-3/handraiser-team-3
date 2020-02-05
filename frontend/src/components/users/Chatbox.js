@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import bubbles from "../assets/images/speech-bubble.svg";
+import bubbles from "../assets/images/chat-box.png";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
@@ -9,6 +9,8 @@ import SendIcon from "@material-ui/icons/Send";
 import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
+import student from "../assets/images/student.png";
+import mentor from "../assets/images/mentor2.png";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -26,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     margin: "28px",
     padding: "15px",
     borderRadius: "10px",
-    backgroundColor: "#4abdac",
+    backgroundColor: "#ababfa",
     width: "45%",
     "@media(max-width:1024px)": {
       width: "100%"
@@ -39,7 +41,9 @@ const useStyles = makeStyles(theme => ({
   },
   topName: {
     padding: "8px",
-    display: "flex"
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center"
   },
   MainChatBox: {
     maxHeight: 500,
@@ -97,12 +101,17 @@ export default function ChatBox() {
         <Paper className={classes.top} elevation={3}>
           <Grid className={classes.topName}>
             <Avatar alt="top" src={bubbles} />
-            <Typography variant="h6">{"Mark Medes"}</Typography>
+            <Typography variant="h6" style={{ paddingLeft: "10px" }}>
+              Mark Medes
+            </Typography>
           </Grid>
         </Paper>
 
+        {/* messages] */}
         <Paper className={classes.convoBox} elevation={6}>
           <Grid container direction="column">
+            {/* {messages.map(m => {
+              return ( */}
             <Grid
               style={{ display: "flex", alignItems: "center" }}
               xl={12}
@@ -135,13 +144,13 @@ export default function ChatBox() {
                       justifyContent: "flex-end",
                       backgroundColor: "whitesmoke",
                       wordBreak: " break-all",
-                      border: " 2px solid #4ABDAC",
+                      border: " 2px solid #ababfa",
                       padding: "10px",
                       borderRadius: "5px 20px"
                     }}
                   >
                     {
-                      "aceadssssssssssssssssssssssssssssssssssssssssssssssssssssshFKSHFjkjkdfhajkdfhjdhfjkadhjdjfajdhfjkasdhfjkadsjkfahdjfhjdkfhjdfhjdfhjsdfhjksdkjskjafhjkadhfjkdfhjkadjfhjksdfgjksdfhjksdhfjhsdfjkhdjkfhsjdkfhjsdfhjsdfhjsdfhhhhhhhhhhhhhhhhhhskdhfksadjkfdjk.ahjhdffjkadfjhfjhffjadfadfh "
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ipsum purus, bibendum sit amet vulputate eget, porta semper ligula. Donec bibendum"
                     }
                   </span>
                 </Grid>
@@ -157,12 +166,19 @@ export default function ChatBox() {
                   <Avatar
                     className={classes.mentorAvatar}
                     alt="mentor"
-                    src="https://image.flaticon.com/icons/png/512/1866/1866089.png"
+                    src={mentor}
                   />
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container alignItems="center" justify="flex-start">
+            {/* );
+            })} */}
+            <Grid
+              container
+              alignItems="center"
+              justify="flex-start"
+              // style={{ padding: 5 }}
+            >
               <Grid
                 style={{
                   margin: 5,
@@ -172,10 +188,7 @@ export default function ChatBox() {
                 }}
                 item
               >
-                <Avatar
-                  alt="student"
-                  src="https://image.flaticon.com/icons/svg/2302/2302834.svg"
-                />
+                <Avatar alt="student" src={student} />
               </Grid>
 
               <Grid
@@ -207,12 +220,30 @@ export default function ChatBox() {
               </Grid>
             </Grid>
           </Grid>
+
+          {/* endofmessages */}
         </Paper>
         <Paper className={classes.inputAreacontainer} elevation={6}>
+          {/* <Grid
+            container
+            className={classes.inputArea}
+            style={{ backgroundColor: "grey" }}
+          >
+            <Grid
+              item
+              style={{
+                display: "flex"
+              }}
+              lg={11}
+              md={10}
+              sm={9}
+              xs={9}
+            > */}
           <TextField
             variant="outlined"
             id="standard-basic"
             label="Type your message..."
+            // className={classes.messageArea}
             fullWidth
             InputProps={{
               endAdornment: (
@@ -222,6 +253,8 @@ export default function ChatBox() {
               )
             }}
           />
+          {/* </Grid>
+          </Grid> */}
         </Paper>
       </Paper>
     </React.Fragment>

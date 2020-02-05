@@ -14,17 +14,18 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-// component/s
 
+// component/s
 import Chatbox from "../users/Chatbox";
+import Layout from "../users/reusables/Layout";
+
 // images
 import head from "../assets/images/bg.png";
-import Layout from "./reusables/Layout";
+import student from "../assets/images/student.png";
 
 //WS
 import io from "socket.io-client";
 const socket = io(`localhost:3001`);
-
 const useStyles = makeStyles(theme => ({
   "@global": {
     "*::-webkit-scrollbar": {
@@ -39,13 +40,32 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     backgroundColor: theme.palette.background.paper,
-    paddingTop: "30px"
+    width: 500,
+    paddingTop: "30px",
+    paddingLeft: "200px",
+    "@media (max-width: 320px)": {
+      paddingLeft: "0px !important"
+    },
+
+    "@media (max-width: 375px)": {
+      paddingLeft: "0px !important"
+    },
+    "@media (max-width: 425px)": {
+      paddingLeft: "0px !important"
+    },
+    "@media(max-width:1024px)": {
+      paddingLeft: "270px"
+    },
+    "@media(max-width:768px)": {
+      paddingLeft: "150px"
+    }
   },
 
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
-    backgroundSize: "cover"
+    backgroundSize: "cover",
+    paddingTop: "85px"
   },
   headersIcon: {},
   color: {
@@ -58,10 +78,11 @@ const useStyles = makeStyles(theme => ({
     padding: "15px",
     margin: "20px",
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   needContainer: {
-    height: 550,
+    maxHeight: 575,
     overflow: "auto",
     "@media (max-width: 320px)": {
       maxHeight: 300
@@ -75,23 +96,30 @@ const useStyles = makeStyles(theme => ({
   },
   studentsNeed: {
     display: "flex",
-    color: "gray"
+    color: "gray",
+    alignItems: "center"
   },
   studentsBeingHelp: {
     display: "flex",
+    alignItems: "center",
     color: "gray"
   },
   chatBox: {
     display: "inline-flex"
   },
   appBar: {
-    margin: "0px"
+    margin: "0px",
+    background:
+      "linear-gradient(207deg, rgba(171,171,250,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 76%, rgba(171,171,250,1) 76%, rgba(171,171,250,1) 86%)"
   },
   mentorsAvatar: {
     small: {
       width: theme.spacing(3),
       height: theme.spacing(3)
     }
+  },
+  studentsAvatar: {
+    marginRight: "15px"
   }
 }));
 function TabPanel(props) {
@@ -126,15 +154,13 @@ function a11yProps(index) {
 
 export default function MentorsView(props) {
   const classes = useStyles();
-  const { user, headers } = props.data;
-  const userDetails = user ? user : {};
-  const { first_name, account_type_id } = userDetails;
+  const { user } = props.data;
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [val, setVal] = React.useState([
+  const [val] = React.useState([
     {
       name: "Stephen Dunn"
     },
@@ -143,12 +169,6 @@ export default function MentorsView(props) {
     },
     {
       name: "Crystal Watson"
-    },
-    {
-      name: "George Wells"
-    },
-    {
-      name: "Willie Foster 5"
     }
   ]);
 
@@ -158,126 +178,115 @@ export default function MentorsView(props) {
     });
   }, []);
   return (
-    <Layout account_type_id={account_type_id} first_name={first_name}>
+    <Layout>
       <div
-        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
       >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div className={classes.root}>
-            <AppBar
-              position="static"
-              color="default"
-              className={classes.appBar}
+        <div className={classes.root}>
+          <AppBar position="static" color="default" className={classes.appBar}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
             >
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
-                aria-label="full width tabs example"
-              >
-                <Tab label="Need Help" {...a11yProps(0)} />
-                <Tab label="Being Help" {...a11yProps(1)} />
-                <Tab label="Done" {...a11yProps(2)} />
-              </Tabs>
-            </AppBar>
+              <Tab label="Need Help" {...a11yProps(0)} />
+              <Tab label="Being Help" {...a11yProps(1)} />
+              <Tab label="Done" {...a11yProps(2)} />
+            </Tabs>
+          </AppBar>
 
-            <TabPanel value={value} index={0}>
-              <Paper className={classes.needContainer} elevation={4}>
-                {val.map(e => {
-                  return (
-                    <Paper
-                      id={e.name}
-                      className={classes.needHelp}
-                      elevation={6}
+          <TabPanel value={value} index={0}>
+            <Paper className={classes.needContainer} elevation={4}>
+              {val.map(e => {
+                console.log(e);
+
+                return (
+                  <Paper id={e.name} className={classes.needHelp} elevation={6}>
+                    {" "}
+                    <Typography variant="h7" className={classes.studentsNeed}>
+                      <Avatar
+                        className={classes.studentsAvatar}
+                        alt="Student"
+                        src={student}
+                      />
+                      {e.name}
+                    </Typography>
+                    <div className={classes.Icons}>
+                      <Tooltip title="Remove">
+                        <Button>
+                          <RemoveCircleIcon className={classes.removeIcon} />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="Help">
+                        <Button>
+                          <LiveHelpIcon />
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  </Paper>
+                );
+              })}
+            </Paper>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Paper className={classes.needContainer} elevation={6}>
+              {val.map(e => {
+                return (
+                  <Paper className={classes.needHelp} elevation={6}>
+                    {" "}
+                    <Typography
+                      variant="h7"
+                      className={classes.studentsBeingHelp}
                     >
-                      {" "}
-                      <Typography variant="h7" className={classes.studentsNeed}>
-                        <Avatar
-                          className={classes.studentsAvatar}
-                          alt="Student"
-                          src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                        />
-                        {e.name}
-                      </Typography>
-                      <div className={classes.Icons}>
-                        <Tooltip title="Remove">
-                          <Button>
-                            <RemoveCircleIcon className={classes.removeIcon} />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Help">
-                          <Button>
-                            <LiveHelpIcon />
-                          </Button>
-                        </Tooltip>
-                      </div>
-                    </Paper>
-                  );
-                })}
+                      <Avatar
+                        className={classes.studentsAvatar}
+                        alt="Student"
+                        src={student}
+                      />
+                      {e.name}
+                    </Typography>
+                    <div className={classes.Icons}>
+                      <Tooltip title="Remove">
+                        <Button>
+                          <RemoveCircleIcon className={classes.removeIcon} />
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  </Paper>
+                );
+              })}
+            </Paper>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <Paper className={classes.needContainer} elevation={6}>
+              <Paper className={classes.needHelp} elevation={6}>
+                {" "}
+                <Typography variant="h7" className={classes.studentsBeingHelp}>
+                  <Avatar
+                    className={classes.studentsAvatar}
+                    alt="Student"
+                    src={student}
+                  />
+                  Papa Rex Rojo
+                </Typography>
               </Paper>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Paper className={classes.needContainer} elevation={6}>
-                {val.map(e => {
-                  return (
-                    <Paper className={classes.needHelp} elevation={6}>
-                      {" "}
-                      <Typography
-                        variant="h7"
-                        className={classes.studentsBeingHelp}
-                      >
-                        <Avatar
-                          className={classes.studentsAvatar}
-                          alt="Student"
-                          src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                        />
-                        {e.name}
-                      </Typography>
-                      <div className={classes.Icons}>
-                        <Tooltip title="Remove">
-                          <Button>
-                            <RemoveCircleIcon className={classes.removeIcon} />
-                          </Button>
-                        </Tooltip>
-                      </div>
-                    </Paper>
-                  );
-                })}
-              </Paper>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <Paper className={classes.needContainer} elevation={6}>
-                <Paper className={classes.needHelp} elevation={6}>
-                  {" "}
-                  <Typography
-                    variant="h7"
-                    className={classes.studentsBeingHelp}
-                  >
-                    <Avatar
-                      className={classes.studentsAvatar}
-                      alt="Student"
-                      src="https://image.flaticon.com/icons/png/512/522/522301.png"
-                    />
-                    Papa Rex Rojo
-                  </Typography>
-                </Paper>
-              </Paper>
-            </TabPanel>
-          </div>
-          <button
-            onClick={() => {
-              socket.emit("add_request", {
-                class_id: props.match.params.id,
-                student_id: user.id,
-                title: "try"
-              });
-            }}
-          >
-            test
-          </button>
+            </Paper>
+          </TabPanel>
         </div>
+        <button
+          onClick={() => {
+            socket.emit("add_request", {
+              class_id: props.match.params.id,
+              student_id: user.id,
+              title: "try"
+            });
+          }}
+        >
+          test
+        </button>
         <Chatbox />
       </div>
     </Layout>

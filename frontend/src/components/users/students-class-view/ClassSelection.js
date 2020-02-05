@@ -22,7 +22,7 @@ import classroom from "../../assets/images/classroom.jpg";
 export const Classroom = props => {
   const { user, headers } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, id } = userDetails;
+  const { first_name } = userDetails;
   const classes = useStyles();
   const [classList, setClassList] = React.useState([]);
 
@@ -33,7 +33,7 @@ export const Classroom = props => {
         setClassList(res.data);
       })
       .catch();
-  }, []);
+  }, [headers]);
 
   return (
     <>
@@ -42,7 +42,7 @@ export const Classroom = props => {
         <Grid container direction="row" alignItems="center" spacing={3}>
           {classList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
-            .map((data, i) => (
+            .map(data => (
               <Grid key={data.id} item lg={3} md={4} sm={6} xs={12}>
                 <Card className={classes.card}>
                   <CardActionArea>
@@ -60,43 +60,58 @@ export const Classroom = props => {
                         color="textSecondary"
                         component="p"
                       >
-                        <Grid item lg={2} xs={2}>
-                          <UserDetails
-                            id={i.user_id}
-                            headers={headers}
-                            action="img"
-                          />
-                        </Grid>
-
-                        <Grid item lg={10} xs={10}>
-                          <Grid
-                            container
-                            direction="column"
-                            alignItems="flex-start"
-                            justify="space-between"
-                          >
-                            <Grid item lg={12} xs={12}>
-                              <Typography
-                                gutterBottom
-                                component="div"
-                                variant="caption"
-                              >
-                                Mentor's Name:
-                              </Typography>
-                            </Grid>
-                            <Grid item lg={12} xs={12}>
-                              <UserDetails
-                                id={i.user_id}
-                                headers={headers}
-                                action="name"
-                              />
+                        {data.class_description}
+                      </Typography>
+                    </CardContent>
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        component="div"
+                        variant="inherit"
+                      >
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justify="space-between"
+                        >
+                          <Grid item lg={2} xs={2}>
+                            <UserDetails
+                              id={data.user_id}
+                              headers={headers}
+                              action="img"
+                            />
+                          </Grid>
+                          <Grid item lg={10} xs={10}>
+                            <Grid
+                              container
+                              direction="column"
+                              alignItems="flex-start"
+                              justify="space-between"
+                            >
+                              <Grid item lg={12} xs={12}>
+                                <Typography
+                                  gutterBottom
+                                  component="div"
+                                  variant="caption"
+                                >
+                                  Mentor's Name:
+                                </Typography>
+                              </Grid>
+                              <Grid item lg={12} xs={12}>
+                                <UserDetails
+                                  id={data.user_id}
+                                  headers={headers}
+                                  action="name"
+                                />
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#fbdfa1" }}>
+                  <CardActions style={{ background: "#fb9e57" }}>
                     <Grid container direction="column" alignItems="center">
                       <JoinClassModal
                         classId={data.id}
@@ -114,7 +129,7 @@ export const Classroom = props => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,

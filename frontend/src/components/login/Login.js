@@ -125,17 +125,18 @@ const useStyles = makeStyles(theme => ({
 		backgroundSize: "cover"
 	},
 	handRaiser: {
-		padding: "0vh 5vw 1vh 5vw"
+		padding: "1vh 5vw 1vh 5vw"
 	},
 	hand: {
+		width: "140px",
 		"@media (max-width: 415px)": {
-			width: "50%"
+			width: "30%"
 		}
 	},
 	signin: {
 		fontSize: "70px",
 		marginTop: "80px",
-		color: "#4ABDAC",
+		color: "#ababfa",
 		textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
 		"@media (max-width: 1024px)": {
 			marginTop: "100px",
@@ -158,15 +159,15 @@ const useStyles = makeStyles(theme => ({
 	},
 	hr: {
 		height: "0px",
-		border: "4px solid #4ABDAC",
-		marginTop: "35px"
+		border: "4px solid #ababfa",
+		marginTop: "55px"
 	},
 	googleSignin: {
 		margin: "3px 0 0 0",
 		"@media (max-width: 415px)": {
 			fontSize: "14px"
 		},
-		cursor: 'pointer'
+		cursor: "pointer"
 	},
 	lady: {
 		width: "45vw",
@@ -209,6 +210,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Button = styled.button`
+<<<<<<< HEAD
   display: flex;
   align-items: center;
   border: none;
@@ -222,6 +224,21 @@ const Button = styled.button`
   @media (max-width: 768px) {
     font-size: 20px;
   }
+=======
+	display: flex;
+	align-items: center;
+	border: none;
+	border-radius: 30px;
+	padding: 10px 40px 10px 40px;
+	font-size: 20px;
+	background: #ffc7c982;
+	color: gray;
+	margin-top: 50px;
+	outline: none;
+	@media (max-width: 768px) {
+		font-size: 20px;
+	}
+>>>>>>> 1f1b27d507105b08b73ca493aea78b951b66d6a6
 `;
 const Img = styled.img`
 	width: 25px;

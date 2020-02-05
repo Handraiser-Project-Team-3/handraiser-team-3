@@ -12,7 +12,7 @@ export const UserDetails = ({ id, headers, action }) => {
         console.error(err);
       }
     })();
-  }, id);
+  }, [id, headers]);
 
   return action === "name" ? (
     <b>{user.first_name + " " + user.last_name}</b>

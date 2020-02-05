@@ -45,10 +45,7 @@ const rows = [
 	createData("Ice cream sandwich"),
 	createData("Eclair"),
 	createData("Cupcake"),
-	createData("Gingerbread"),
-	createData("Eclaira"),
-	createData("Cupcakea"),
-	createData("Gingerbreada")
+	createData("Gingerbread")
 ];
 
 const useStyles = makeStyles({
@@ -65,7 +62,7 @@ const useStyles = makeStyles({
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "center",
-		background: "#d2efeb",
+		background: "#ababfa70",
 		borderTopLeftRadius: "5px",
 		borderBottomLeftRadius: "5px"
 	},
@@ -104,7 +101,7 @@ export const Admin = props => {
 									<AddCircleIcon
 										fontSize="large"
 										style={{
-											color: "#4abdac",
+											color: "#ababfa",
 											cursor: "pointer"
 										}}
 									/>
@@ -138,7 +135,7 @@ export const Admin = props => {
 										<StyledTableCell align="right">
 											<Button
 												variant="contained"
-												style={{ background: "#7dcec3" }}
+												style={{ background: "#ababfa" }}
 												color="primary"
 											>
 												<img

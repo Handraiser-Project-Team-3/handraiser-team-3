@@ -11,7 +11,6 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import TextField from "@material-ui/core/TextField";
 import { useHistory } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -99,7 +98,7 @@ export const JoinClassModal = props => {
     <div>
       <Button
         size="small"
-        style={{ color: "#4abdab" }}
+        style={{ color: "white" }}
         onClick={() => {
           handleClickOpen();
         }}
@@ -116,7 +115,7 @@ export const JoinClassModal = props => {
       >
         <DialogTitle
           id="alert-dialog-slide-title"
-          style={{ background: "#4abdac", color: "white" }}
+          style={{ background: "#ababfa", color: "white" }}
         >
           {"Join Class"}
         </DialogTitle>

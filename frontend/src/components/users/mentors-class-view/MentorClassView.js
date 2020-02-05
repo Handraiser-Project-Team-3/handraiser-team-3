@@ -35,6 +35,7 @@ export const MentorClassView = props => {
   const [accountType] = useState("Mentor");
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState("");
+  const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
@@ -54,12 +55,12 @@ export const MentorClassView = props => {
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
-
   useEffect(() => {
     axios
       .get(`/api/class?id=${user.id}`, headers)
       .then(res => {
         setClassList(res.data);
+        setFilter(res.data);
       })
       .catch(e => console.log(e));
 
@@ -67,12 +68,14 @@ export const MentorClassView = props => {
   }, []);
 
   return (
-    <Layout account_type_id={account_type_id} first_name={first_name}>
+    <Layout accountType={accountType} first_name={first_name}>
       <ClassHead
         account_type_id={account_type_id}
         setOpen={setOpen}
         setAction={setAction}
         setHeadTitle={setHeadTitle}
+        filter={filter}
+        setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList
@@ -192,7 +195,7 @@ export const MentorClassView = props => {
                     </Typography>
                   </CardContent>
                 </CardActionArea>
-                <CardActions style={{ background: "#d0efea" }}>
+                <CardActions style={{ background: "#97a4f7" }}>
                   <Grid
                     container
                     direction="row"
@@ -203,7 +206,7 @@ export const MentorClassView = props => {
                       <Button
                         onClick={() => history.push(`/classroom/${data.id}`)}
                         size="small"
-                        style={{ color: "#b5855a" }}
+                        style={{ color: "white" }}
                       >
                         Enter Class
                       </Button>
@@ -284,7 +287,8 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 345
   },
   media: {
-    height: 140
+    height: 140,
+    backgroundPositionY: "-40px"
   },
   addClass: {
     cursor: "pointer",
