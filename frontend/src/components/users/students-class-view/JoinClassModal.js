@@ -126,7 +126,11 @@ export const JoinClassModal = (props) => {
 				// 	.catch(e => console.log(e))
 
 			} else {
-				alertToast('Invalid Code!')
+				if (code === '') {
+					alertToast('Code required to enter class!');
+				} else {
+					alertToast('Invalid Code!')
+				}
 			}
 		}
 	};
