@@ -29,10 +29,14 @@ const useStyles = makeStyles(theme => ({
 		padding: "15px",
 		borderRadius: "10px",
 		backgroundColor: "#ababfa",
-		width: "45%",
+    width: "45%",
+    "@media(max-width:320px)": {
+			width: "100% !important"
+		},
 		"@media(max-width:1024px)": {
 			width: "100%"
-		}
+    },
+  
 	},
 	top: {
 		padding: "0px",

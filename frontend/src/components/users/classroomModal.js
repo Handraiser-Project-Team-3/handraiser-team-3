@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3)
   },
   titleOfrequest: {
-    backgroundColor: "#42B05C"
+    backgroundColor: "#AAAAF9"
   },
     // dialogMainContainer:{
     //   width:'100%'
@@ -55,7 +55,7 @@ export default function() {
   return (
     <div>
       <Tooltip title="Add" placement="right-start">
-        <Fab onClick={handleClickOpen} style={{ backgroundColor: "#42B05C" }}>
+        <Fab onClick={handleClickOpen} style={{ backgroundColor: "#AAAAF9" }}>
           {/* <Avatar
             alt="Modal"
             src="https://image.flaticon.com/icons/svg/148/148764.svg"
@@ -70,7 +70,7 @@ export default function() {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title" className={classes.titleOfrequest}>
+        <DialogTitle id="form-dialog-title" className={classes.titleOfrequest} style={{color:'whitesmoke'}}>
           Title of Request{" "}
         </DialogTitle>
         <DialogContent>
@@ -87,7 +87,7 @@ export default function() {
           </form>
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions> 
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>

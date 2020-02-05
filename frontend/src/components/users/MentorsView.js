@@ -22,7 +22,7 @@ import Layout from "../users/reusables/Layout";
 
 // images
 import head from "../assets/images/bg.png";
-import student from "../assets/images/student.png";
+
 
 //Tabs
 const TabPanel = (props) => {
@@ -258,7 +258,7 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: "space-between"
 	},
 	needContainer: {
-		maxHeight: 575,
+		height: 580,
 		overflow: "auto",
 		"@media (max-width: 320px)": {
 			maxHeight: 300
@@ -289,5 +289,9 @@ const useStyles = makeStyles(theme => ({
 			width: theme.spacing(3),
 			height: theme.spacing(3)
 		}
-	}
+  },
+  modalButton: {
+    marginTop: "-65px ",
+    marginLeft: "12px"
+  }
 }));
