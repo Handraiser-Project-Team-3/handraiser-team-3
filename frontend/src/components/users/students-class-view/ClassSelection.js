@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +8,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import Tooltip from "@material-ui/core/Tooltip";
 
 // component/s
 import { JoinClassModal } from "./JoinClassModal";
@@ -24,7 +25,8 @@ export const Classroom = props => {
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const classes = useStyles();
-  const [classList, setClassList] = React.useState([]);
+  const [classList, setClassList] = useState([]);
+  const [classroomUsers, setClassroomUsers] = useState([]);
 
   useEffect(() => {
     axios
@@ -33,6 +35,13 @@ export const Classroom = props => {
         setClassList(res.data);
       })
       .catch(e => console.log(e));
+
+    axios
+      .get(`/api/classroom-users/`, headers)
+      .then(classUsers => {
+        setClassroomUsers(classUsers.data)
+      })
+      .catch(e => console.log(e))
   }, []);
 
   return (
@@ -55,13 +64,23 @@ export const Classroom = props => {
                       <Typography gutterBottom variant="h5">
                         {data.class_name}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
+                      <Tooltip
+                        title={
+                          data.class_description.length > 35
+                            ? data.class_description.substring(0)
+                            : ""
+                        }
                       >
-                        {data.class_description}
-                      </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {data.class_description.length > 35
+                            ? data.class_description.substring(0, 30) + "..."
+                            : data.class_description}
+                        </Typography>
+                      </Tooltip>
                     </CardContent>
                     <CardContent>
                       <Typography
@@ -111,6 +130,7 @@ export const Classroom = props => {
                   <CardActions style={{ background: "#fb9e57" }}>
                     <Grid container direction="column" alignItems="center">
                       <JoinClassModal
+                        classroomUsers={classroomUsers}
                         classId={data.id}
                         className={data.class_name}
                         codeClass={data.class_code}

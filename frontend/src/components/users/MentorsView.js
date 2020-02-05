@@ -4,7 +4,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -64,33 +63,11 @@ export default function MentorsView() {
 	};
 	const [val, setVal] = React.useState([
 		{
+			id: 1,
 			name: "Stephen Dunn"
-		},
-		{
-			name: "Nathan Young "
-		},
-		{
-			name: "Crystal Watson"
-		},
-		{
-			name: "George Wells"
-		},
-		{
-			name: "Willie Foster 5"
-		},
-		{
-			name: "Kathy Ellis"
-		},
-		{
-			name: "Kathy Ellis"
-		},
-		{
-			name: "Kathy Ellis"
-		},
-		{
-			name: "Kathy Ellis"
 		}
 	]);
+
 	return (
 		<Layout>
 			<div
@@ -115,17 +92,16 @@ export default function MentorsView() {
 					<TabPanel value={value} index={0}>
 						<Paper className={classes.needContainer} elevation={4}>
 							{val.map(e => {
-								console.log(e);
 
 								return (
-									<Paper id={e.name} className={classes.needHelp} elevation={6}>
+									<Paper key={e.id} className={classes.needHelp} elevation={6}>
 										{" "}
-										<Typography variant="h7" className={classes.studentsNeed}>
-											<Avatar
-												className={classes.studentsAvatar}
-												alt="Student"
-												src={student}
-											/>
+										<Avatar
+											className={classes.studentsAvatar}
+											alt="Student"
+											src={student}
+										/>
+										<Typography variant="body2" className={classes.studentsNeed}>
 											{e.name}
 										</Typography>
 										<div className={classes.Icons}>
@@ -149,17 +125,17 @@ export default function MentorsView() {
 						<Paper className={classes.needContainer} elevation={6}>
 							{val.map(e => {
 								return (
-									<Paper className={classes.needHelp} elevation={6}>
+									<Paper key={e.id} className={classes.needHelp} elevation={6}>
 										{" "}
+										<Avatar
+											className={classes.studentsAvatar}
+											alt="Student"
+											src={student}
+										/>
 										<Typography
-											variant="h7"
+											variant="body2"
 											className={classes.studentsBeingHelp}
 										>
-											<Avatar
-												className={classes.studentsAvatar}
-												alt="Student"
-												src={student}
-											/>
 											{e.name}
 										</Typography>
 										<div className={classes.Icons}>
@@ -178,7 +154,7 @@ export default function MentorsView() {
 						<Paper className={classes.needContainer} elevation={6}>
 							<Paper className={classes.needHelp} elevation={6}>
 								{" "}
-								<Typography variant="h7" className={classes.studentsBeingHelp}>
+								<Typography variant="body2" className={classes.studentsBeingHelp}>
 									<Avatar
 										className={classes.studentsAvatar}
 										alt="Student"
@@ -186,20 +162,13 @@ export default function MentorsView() {
 									/>
 									Papa Rex Rojo
 								</Typography>
-								{/* <div className={classes.Icons}>
-                  <Tooltip title="Remove">
-                    <Button>
-                      <RemoveCircleIcon className={classes.removeIcon} />
-                    </Button>
-                  </Tooltip>
-                </div> */}
 							</Paper>
 						</Paper>
 					</TabPanel>
 				</div>
 				<Chatbox />
 			</div>
-		</Layout>
+		</Layout >
 	);
 }
 

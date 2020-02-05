@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import moment from 'moment';
 
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,7 +16,6 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -44,10 +42,10 @@ const alertToast = msg =>
 
 export const JoinClassModal = (props) => {
 	const classes = useStyles();
-	const { classId, className, codeClass, user, headers } = props;
+	const { classroomUsers, classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
-	const [code, setCode] = React.useState("");
-	const [open, setOpen] = React.useState(false);
+	const [code, setCode] = useState("");
+	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -65,48 +63,64 @@ export const JoinClassModal = (props) => {
 		e.preventDefault();
 		if (classId) {
 			if (code === codeClass) {
-				history.push(`/classroom/${classId}`);
-
-				// axios
-				// 	.post(`/api/classroom-users/`,
-				// 		headers,
-				// 		{
-				// 				{
-				// 				user_id: user.user_id,
-				// 				class_id: classId,
-				// 				date_joined: function (timestamp) {
-				// 					moment(new Date(timestamp))
-				// 						.format("YYYY-MM-DD HH:MM:SS")
-				// 				}
-				// 			}
-				// 		})
-				// 	.then(() => {
-				// 		alertToast(`Welcome ${user.first_name}!`)
-				// 	})
-				// 	.catch(e => console.log(e))
-
+				let data = {
+					user_id: user.id,
+					class_id: classId
+				}
+				axios
+					.post(`/api/classroom-users/`, data, headers)
+					.then(() => {
+						history.push(`/classroom/${classId}`);
+					})
+					.catch(e => console.log(e))
 			} else {
 				if (code === '') {
 					alertToast('Code required to enter class!');
 				} else {
-					alertToast('Invalid Code!')
+					alertToast('Invalid Code!');
 				}
 			}
 		}
 	};
 
-	return (
-		<div>
-			<ToastContainer enableMulticontainer />
+	const classEnter = () => {
+		history.push(`/classroom/${classId}`)
+	}
+
+	const ButtonComponent = () => {
+		const filterUser = classroomUsers.filter(userClass => console.log(userClass))
+
+		if (filterUser) {
+			return (
+				<Button
+					size="small"
+					style={{ color: "white" }}
+					onClick={() => {
+						handleClickOpen();
+					}}
+				>
+					Join Class
+				</Button>
+			)
+		}
+		return (
+
 			<Button
 				size="small"
 				style={{ color: "white" }}
 				onClick={() => {
-					handleClickOpen();
+					classEnter();
 				}}
 			>
-				Join Class
+				Enter Class
 			</Button>
+		)
+	}
+
+	return (
+		<div>
+			<ToastContainer enableMulticontainer />
+			<ButtonComponent />
 			<Dialog
 				open={open}
 				TransitionComponent={Transition}
