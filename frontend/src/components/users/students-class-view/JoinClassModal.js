@@ -1,9 +1,9 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import moment from 'moment';
+import moment from "moment";
 
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,10 +14,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -42,7 +42,7 @@ const alertToast = msg =>
 		draggable: true
 	});
 
-export const JoinClassModal = (props) => {
+export const JoinClassModal = props => {
 	const classes = useStyles();
 	const { classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
@@ -84,12 +84,11 @@ export const JoinClassModal = (props) => {
 				// 		alertToast(`Welcome ${user.first_name}!`)
 				// 	})
 				// 	.catch(e => console.log(e))
-
 			} else {
-				if (code === '') {
-					alertToast('Code required to enter class!');
+				if (code === "") {
+					alertToast("Code required to enter class!");
 				} else {
-					alertToast('Invalid Code!')
+					alertToast("Invalid Code!");
 				}
 			}
 		}

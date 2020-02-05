@@ -5,7 +5,7 @@ import Navigation from "../navigation/NavBar";
 import { Admin } from "../users/Admin";
 import { MentorClassView } from "../users/mentors-class-view/MentorClassView";
 import { Classroom } from "../users/students-class-view/ClassSelection";
-import MentorsView from "../users/MentorsView";
+import MentorsView from "../users/Classroom";
 
 export const Routes = props => {
   const { accessToken, user } = props;

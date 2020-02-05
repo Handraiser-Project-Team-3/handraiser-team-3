@@ -70,7 +70,8 @@ const useStyles = makeStyles(theme => ({
 		margin: "10px 0 10px 0 ",
 
 		"@media (max-width: 320px)": {
-			maxHeight: 250
+			maxHeight: 250,
+			width: '250px'
 		},
 		"@media (max-width: 425px)": {
 			maxHeight: 350
@@ -219,6 +220,7 @@ export default function ChatBox() {
 										padding: "10px",
 										borderRadius: "20px 5px"
 									}}
+									// value="dasd"
 								>
 									{".ahjhdffjkadfjhfjhffjadfadfh "}
 								</span>
@@ -237,7 +239,7 @@ export default function ChatBox() {
 						InputProps={{
 							endAdornment: (
 								<InputAdornment position="end">
-									<Button endIcon={<SendIcon />}></Button>
+									<Button endIcon={<SendIcon />} >Send</Button>
 								</InputAdornment>
 							)
 						}}

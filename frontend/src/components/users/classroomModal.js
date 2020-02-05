@@ -54,8 +54,8 @@ export default function() {
 
   return (
     <div>
-      <Tooltip title="Add" placement="right-start">
-        <Fab onClick={handleClickOpen} style={{ backgroundColor: "#AAAAF9" }}>
+      <Tooltip title="Add Request" placement="right-start">
+        <Fab onClick={handleClickOpen} style={{ backgroundColor: "#AAAAF9" }} size="small">
           {/* <Avatar
             alt="Modal"
             src="https://image.flaticon.com/icons/svg/148/148764.svg"
@@ -78,11 +78,13 @@ export default function() {
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
               autoFocus
-              margin="dense"
+              variant="outlined"  
+              margin="normal"
               id="name"
               label="Request"
               type="email"
               fullWidth
+
             />
           </form>
         </DialogContent>
