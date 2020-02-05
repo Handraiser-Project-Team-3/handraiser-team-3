@@ -71,8 +71,8 @@ module.exports = {
 
     users
       .update({ id: id }, req.body, { deepInsert: true })
-      .then(() => {
-        res.send({ message: "success" });
+      .then(data => {
+        res.send(data);
       })
       .catch(err => {
         err.message

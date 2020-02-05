@@ -89,7 +89,7 @@ export const JoinClassModal = props => {
     e.preventDefault();
     if (props.classId) {
       if (code === props.codeClass) {
-        history.push(`/classroom/${props.className}`);
+        history.push(`/classroom/${props.classId}`);
       }
     }
   };

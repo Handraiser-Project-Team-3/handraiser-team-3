@@ -35,12 +35,5 @@ module.exports = {
     db.class
       .findOne({ id: req.params.id })
       .then(details => res.status(200).send(details));
-  },
-  addClassroomUser: (req, res) => {
-    const { classroom_users } = req.app.get("db");
-
-    classroom_users
-      .insert(req.body, { deepInsert: true })
-      .then(() => res.status(200).send({ message: "success" }));
   }
 };

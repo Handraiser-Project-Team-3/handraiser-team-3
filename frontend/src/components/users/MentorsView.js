@@ -14,6 +14,7 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import Axios from "axios";
 
 // component/s
 import Chatbox from "../users/Chatbox";
@@ -154,29 +155,48 @@ function a11yProps(index) {
 
 export default function MentorsView(props) {
   const classes = useStyles();
-  const { user } = props.data;
+  const { headers, user } = props.data;
+  const [studentDetails, setStudentDetails] = React.useState({});
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [val] = React.useState([
-    {
-      name: "Stephen Dunn"
-    },
-    {
-      name: "Nathan Young "
-    },
-    {
-      name: "Crystal Watson"
-    }
-  ]);
+  const [requests, setRequests] = React.useState([]);
 
   React.useEffect(() => {
-    socket.on("requests_list", data => {
-      console.log(data);
+    socket.on(`request_list`, data => {
+      setRequests(data);
+    });
+    socket.on(`update_request_list`, data => {
+      setRequests(data);
     });
   }, []);
+  React.useEffect(() => {
+    if (user) {
+      (async () => {
+        try {
+          const res = await Axios.get(`/api/request/list`, headers);
+          setRequests(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+  }, [user, headers]);
+  React.useEffect(() => {
+    if (user) {
+      (async () => {
+        try {
+          const res = await Axios.get(`/api/classroom-users`, headers);
+          setStudentDetails(res.data.filter(x => x.user_id === user.id)[0]);
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+  }, [user, headers]);
+
   return (
     <Layout>
       <div
@@ -200,63 +220,72 @@ export default function MentorsView(props) {
 
           <TabPanel value={value} index={0}>
             <Paper className={classes.needContainer} elevation={4}>
-              {val.map(e => {
-                console.log(e);
-
-                return (
-                  <Paper id={e.name} className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography variant="h7" className={classes.studentsNeed}>
-                      <Avatar
-                        className={classes.studentsAvatar}
-                        alt="Student"
-                        src={student}
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Help">
-                        <Button>
-                          <LiveHelpIcon />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
+              {requests.map(x => {
+                if (x.status === null) {
+                  return (
+                    <Paper
+                      id={x.id}
+                      key={x.id}
+                      className={classes.needHelp}
+                      elevation={6}
+                    >
+                      {" "}
+                      <Typography variant="h7" className={classes.studentsNeed}>
+                        <Avatar
+                          className={classes.studentsAvatar}
+                          alt="Student"
+                          src={student}
+                        />
+                        {x.title}
+                      </Typography>
+                      <div className={classes.Icons}>
+                        <Tooltip title="Remove">
+                          <Button>
+                            <RemoveCircleIcon className={classes.removeIcon} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Help">
+                          <Button>
+                            <LiveHelpIcon />
+                          </Button>
+                        </Tooltip>
+                      </div>
+                    </Paper>
+                  );
+                }
               })}
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Paper className={classes.needContainer} elevation={6}>
-              {val.map(e => {
-                return (
-                  <Paper className={classes.needHelp} elevation={6}>
-                    {" "}
-                    <Typography
-                      variant="h7"
-                      className={classes.studentsBeingHelp}
-                    >
-                      <Avatar
-                        className={classes.studentsAvatar}
-                        alt="Student"
-                        src={student}
-                      />
-                      {e.name}
-                    </Typography>
-                    <div className={classes.Icons}>
-                      <Tooltip title="Remove">
-                        <Button>
-                          <RemoveCircleIcon className={classes.removeIcon} />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </Paper>
-                );
+              {requests.map(x => {
+                if (x.status === false) {
+                  return (
+                    <Paper id={x.id} className={classes.needHelp} elevation={6}>
+                      {" "}
+                      <Typography variant="h7" className={classes.studentsNeed}>
+                        <Avatar
+                          className={classes.studentsAvatar}
+                          alt="Student"
+                          src={student}
+                        />
+                        {x.title}
+                      </Typography>
+                      <div className={classes.Icons}>
+                        <Tooltip title="Remove">
+                          <Button>
+                            <RemoveCircleIcon className={classes.removeIcon} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Help">
+                          <Button>
+                            <LiveHelpIcon />
+                          </Button>
+                        </Tooltip>
+                      </div>
+                    </Paper>
+                  );
+                }
               })}
             </Paper>
           </TabPanel>
@@ -278,11 +307,12 @@ export default function MentorsView(props) {
         </div>
         <button
           onClick={() => {
-            socket.emit("add_request", {
+            const obj = {
               class_id: props.match.params.id,
-              student_id: user.id,
-              title: "try"
-            });
+              student_id: studentDetails.id,
+              title: "try2"
+            };
+            socket.emit("add_request", obj);
           }}
         >
           test

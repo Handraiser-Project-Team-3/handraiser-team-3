@@ -14,6 +14,8 @@ const auth = require("./controllers/auth");
 const user = require("./controllers/users");
 const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
+const classroomUsers = require("./controllers/classroomUsers");
+const requests = require("./controllers/requests");
 
 massive({
   host: process.env.DB_HOST,
@@ -28,18 +30,16 @@ massive({
 
   // WS
   io.on("connection", socket => {
-    const { student_request } = app.get("db");
-
-    // student_request.find().then(res => {
-    //   socket.emit("requests_list", res);
-    // });
+    const getRequestData = () =>
+      db.student_request.find().then(list => {
+        socket.broadcast.emit(`request_list`, list);
+        socket.emit(`update_request_list`, list);
+      });
 
     socket.on("add_request", data => {
-      student_request.insert(data, { deepInsert: true }).then(() => {
-        student_request.find().then(res => {
-          socket.broadcast.emit("requests_list", res);
-        });
-      });
+      db.student_request
+        .insert(data, { deepInsert: true })
+        .then(() => getRequestData());
     });
   });
 
@@ -62,7 +62,11 @@ massive({
   app.get("/api/class/:id", classroom.classDetails);
 
   //classroom_users
-  app.post("/api/classroom-users/", classroom.addClassroomUser);
+  app.post("/api/classroom-users/", classroomUsers.addClassroomUser);
+  app.get("/api/classroom-users/", classroomUsers.list);
+
+  //student_requests
+  app.get("/api/request/list", requests.list);
 
   //chats
   app.post("/api/chats/message/create/:id", chats.createMessage);
