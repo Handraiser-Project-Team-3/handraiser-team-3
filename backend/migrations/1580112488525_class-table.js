@@ -30,6 +30,11 @@ exports.up = pgm => {
     class_status: {
       type: "boolean",
       notNull: true
+    },
+    user_id: {
+      type: "integer",
+      notNull: true,
+      references: '"users"'
     }
   });
 };
