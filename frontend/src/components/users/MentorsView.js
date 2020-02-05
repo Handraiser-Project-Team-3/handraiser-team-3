@@ -114,13 +114,21 @@ export default function MentorsView() {
 
 					<TabPanel value={value} index={0}>
 						<Paper className={classes.needContainer} elevation={4}>
-							{val.map(e => {
+							{val.map((e, i) => {
 								console.log(e);
 
 								return (
-									<Paper id={e.name} className={classes.needHelp} elevation={6}>
+									<Paper
+										key={i}
+										id={e.name}
+										className={classes.needHelp}
+										elevation={6}
+									>
 										{" "}
-										<Typography variant="h7" className={classes.studentsNeed}>
+										<Typography
+											variant="inherit"
+											className={classes.studentsNeed}
+										>
 											<Avatar
 												className={classes.studentsAvatar}
 												alt="Student"
@@ -153,12 +161,12 @@ export default function MentorsView() {
 					</TabPanel>
 					<TabPanel value={value} index={1}>
 						<Paper className={classes.needContainer} elevation={6}>
-							{val.map(e => {
+							{val.map((e, v) => {
 								return (
-									<Paper className={classes.needHelp} elevation={6}>
+									<Paper key={v} className={classes.needHelp} elevation={6}>
 										{" "}
 										<Typography
-											variant="h7"
+											variant="inherit"
 											className={classes.studentsBeingHelp}
 										>
 											<Avatar
@@ -190,7 +198,10 @@ export default function MentorsView() {
 						<Paper className={classes.needContainer} elevation={6}>
 							<Paper className={classes.needHelp} elevation={6}>
 								{" "}
-								<Typography variant="h7" className={classes.studentsBeingHelp}>
+								<Typography
+									variant="inherit"
+									className={classes.studentsBeingHelp}
+								>
 									<Avatar
 										className={classes.studentsAvatar}
 										alt="Student"
@@ -270,6 +281,8 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: "space-between"
 	},
 	needContainer: {
+		background:
+			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
 		maxHeight: 575,
 		overflow: "auto",
 		"@media (max-width: 320px)": {
@@ -284,22 +297,30 @@ const useStyles = makeStyles(theme => ({
 	},
 	studentsNeed: {
 		display: "flex",
+		alignItems: "center",
 		color: "gray"
 	},
 	studentsBeingHelp: {
 		display: "flex",
+		alignItems: "center",
 		color: "gray"
 	},
 	chatBox: {
-		display: "inline-flex"
+		display: "inline-flex",
+		alignItems: "center"
 	},
 	appBar: {
-		margin: "0px"
+		margin: "0px",
+		background:
+			"linear-gradient(207deg, rgba(171,171,250,1) 20%, rgba(171,171,250,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 76%, rgba(171,171,250,1) 76%, rgba(171,171,250,1) 86%)"
 	},
 	mentorsAvatar: {
 		small: {
 			width: theme.spacing(3),
 			height: theme.spacing(3)
 		}
+	},
+	studentsAvatar: {
+		marginRight: "10px"
 	}
 }));

@@ -18,11 +18,14 @@ const useStyles = makeStyles({
 	},
 	imgStyle: {
 		width: "70%",
+		height: "auto",
 		marginTop: "3vh"
 	},
-	ipadView: {
-		"@media (width: 768)": {
-			width: "50%"
+	label: {
+		marginTop: "1vh",
+		color: "white",
+		"@media (max-width: 1024px)": {
+			color: "#565cce"
 		}
 	}
 });
@@ -33,17 +36,14 @@ export const PaperStat = props => {
 	return (
 		<>
 			<Paper className={classes.total}>
-				<Grid container justify="center" align="center">
-					<Grid item xs={6} className={classes.ipadView}>
+				<Grid container justify="center" align="center" alignItems="center">
+					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 						<img src={both} className={classes.imgStyle} alt="all" />
 					</Grid>
-					<Grid item xs={6}>
+					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
 						<Grid container direction="column" justify="center">
 							<Grid item xs={12}>
-								<Typography
-									variant="h6"
-									style={{ marginTop: "5vh", color: "white" }}
-								>
+								<Typography variant="h6" className={classes.label}>
 									All
 								</Typography>
 							</Grid>
@@ -60,17 +60,14 @@ export const PaperStat = props => {
 				</Grid>
 			</Paper>
 			<Paper className={classes.total}>
-				<Grid container justify="center" align="center">
-					<Grid item xs={6}>
+				<Grid container justify="center" align="center" alignItems="center">
+					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 						<img src={teacher} className={classes.imgStyle} alt="mentor" />
 					</Grid>
-					<Grid item xs={6}>
+					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
 						<Grid container direction="column" justify="center">
 							<Grid item xs={12}>
-								<Typography
-									variant="h6"
-									style={{ marginTop: "5vh", color: "white" }}
-								>
+								<Typography variant="h6" className={classes.label}>
 									Mentors
 								</Typography>
 							</Grid>
@@ -87,17 +84,14 @@ export const PaperStat = props => {
 				</Grid>
 			</Paper>
 			<Paper className={classes.total}>
-				<Grid container justify="center" align="center">
-					<Grid item xs={6}>
+				<Grid container justify="center" align="center" alignItems="center">
+					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 						<img src={student} className={classes.imgStyle} alt="student" />
 					</Grid>
-					<Grid item xs={6}>
+					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
 						<Grid container direction="column" justify="center">
 							<Grid item xs={12}>
-								<Typography
-									variant="h6"
-									style={{ marginTop: "5vh", color: "white" }}
-								>
+								<Typography variant="h6" className={classes.label}>
 									Students
 								</Typography>
 							</Grid>
