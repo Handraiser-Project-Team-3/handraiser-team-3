@@ -18,9 +18,11 @@ import Button from "@material-ui/core/Button";
 
 // component/s
 import Chatbox from "../users/Chatbox";
+import Layout from "../users/reusables/Layout";
 
 // images
 import head from "../assets/images/bg.png";
+import student from "../assets/images/student.png";
 
 //Tabs
 const TabPanel = (props) => {
@@ -90,33 +92,7 @@ export default function MentorsView() {
 		}
 	]);
 	return (
-		<div>
-			<Paper elevation={0} className={classes.header}>
-				<Grid
-					container
-					direction="row"
-					justify="space-evenly"
-					alignItems="center"
-				>
-					<Grid
-						item
-						xs={12}
-						sm={9}
-						md={10}
-						lg={10}
-						className={classes.headersIcon}
-					>
-						<Typography variant="h5" className={classes.color}>
-							<Avatar
-								className={classes.mentorsAvatar}
-								alt="Mentor"
-								src="https://image.flaticon.com/icons/png/512/522/522301.png"
-							/>
-							Mentor Dan
-						</Typography>
-					</Grid>
-				</Grid>
-			</Paper>
+		<Layout>
 			<div
 				style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
 			>
@@ -148,7 +124,7 @@ export default function MentorsView() {
 											<Avatar
 												className={classes.studentsAvatar}
 												alt="Student"
-												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+												src={student}
 											/>
 											{e.name}
 										</Typography>
@@ -182,7 +158,7 @@ export default function MentorsView() {
 											<Avatar
 												className={classes.studentsAvatar}
 												alt="Student"
-												src="https://image.flaticon.com/icons/png/512/522/522301.png"
+												src={student}
 											/>
 											{e.name}
 										</Typography>
@@ -206,7 +182,7 @@ export default function MentorsView() {
 									<Avatar
 										className={classes.studentsAvatar}
 										alt="Student"
-										src="https://image.flaticon.com/icons/png/512/522/522301.png"
+										src={student}
 									/>
 									Papa Rex Rojo
 								</Typography>
@@ -223,7 +199,7 @@ export default function MentorsView() {
 				</div>
 				<Chatbox />
 			</div>
-		</div>
+		</Layout>
 	);
 }
 

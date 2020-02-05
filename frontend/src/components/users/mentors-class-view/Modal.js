@@ -138,6 +138,9 @@ export const Modal = props => {
 							value={classRoom.class_name}
 							style={{ width: "100%", marginBottom: "1vh" }}
 							onChange={handleInput}
+							inputProps={{
+								maxLength: 25
+							}}
 						/>
 						<TextField
 							id="outlined-multiline-flexible"
@@ -149,6 +152,9 @@ export const Modal = props => {
 							variant="outlined"
 							style={{ width: "100%" }}
 							onChange={handleInput}
+							inputProps={{
+								maxLength: 45
+							}}
 						/>
 					</form>
 				</DialogContent>
