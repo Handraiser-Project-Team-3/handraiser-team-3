@@ -40,7 +40,7 @@ const alertToast = msg =>
 		draggable: true
 	});
 
-export const JoinClassModal = (props) => {
+export const JoinClassModal = props => {
 	const classes = useStyles();
 	const { classroomUsers, classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
@@ -74,8 +74,8 @@ export const JoinClassModal = (props) => {
 					})
 					.catch(e => console.log(e))
 			} else {
-				if (code === '') {
-					alertToast('Code required to enter class!');
+				if (code === "") {
+					alertToast("Code required to enter class!");
 				} else {
 					alertToast('Invalid Code!');
 				}

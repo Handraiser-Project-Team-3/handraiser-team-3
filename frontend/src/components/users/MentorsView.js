@@ -10,8 +10,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 
@@ -24,7 +24,7 @@ import head from "../assets/images/bg.png";
 import student from "../assets/images/student.png";
 
 //Tabs
-const TabPanel = (props) => {
+const TabPanel = props => {
 	const { children, value, index, ...other } = props;
 
 	return (
@@ -39,7 +39,7 @@ const TabPanel = (props) => {
 			{value === index && <Box p={3}>{children}</Box>}
 		</Typography>
 	);
-}
+};
 
 TabPanel.propTypes = {
 	children: PropTypes.node,
@@ -47,12 +47,12 @@ TabPanel.propTypes = {
 	value: PropTypes.any.isRequired
 };
 
-const a11yProps = (index) => {
+const a11yProps = index => {
 	return {
 		id: `full-width-tab-${index}`,
 		"aria-controls": `full-width-tabpanel-${index}`
 	};
-}
+};
 
 export default function MentorsView() {
 	const classes = useStyles();
@@ -107,12 +107,18 @@ export default function MentorsView() {
 										<div className={classes.Icons}>
 											<Tooltip title="Remove">
 												<Button>
-													<RemoveCircleIcon className={classes.removeIcon} />
+													<RemoveCircleOutlineIcon
+														fontSize="small"
+														style={{ color: "gray" }}
+													/>
 												</Button>
 											</Tooltip>
 											<Tooltip title="Help">
 												<Button>
-													<LiveHelpIcon />
+													<HelpOutlineIcon
+														fontSize="small"
+														style={{ color: "#f7b731" }}
+													/>
 												</Button>
 											</Tooltip>
 										</div>
@@ -138,10 +144,16 @@ export default function MentorsView() {
 										>
 											{e.name}
 										</Typography>
-										<div className={classes.Icons}>
+										<div
+											className={classes.Icons}
+											style={{ justifyContent: "flex-end" }}
+										>
 											<Tooltip title="Remove">
 												<Button>
-													<RemoveCircleIcon className={classes.removeIcon} />
+													<RemoveCircleOutlineIcon
+														fontSize="small"
+														style={{ color: "gray" }}
+													/>
 												</Button>
 											</Tooltip>
 										</div>
