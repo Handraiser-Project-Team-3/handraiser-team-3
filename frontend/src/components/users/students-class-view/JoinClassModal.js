@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +16,9 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+
+// compoenent
+import Classroom from './ClassSelection';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -47,6 +50,23 @@ export const JoinClassModal = props => {
 	const [code, setCode] = useState("");
 	const [open, setOpen] = useState(false);
 
+	// useEffect(() => {
+	// 	let filterUser = classroomUsers.filter(userClass => {
+	// 		if (user.id) {
+	// 			if (userClass.user_id === user.id) {
+	// 				return userClass;
+	// 			}
+	// 			return null;
+	// 		}
+
+	// 		if (filterUser) {
+	// 			history.push(`/classroom/${classId}`)
+	// 		} else {
+	// 			history.push('/')
+	// 		}
+	// 	})
+	// })
+
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -70,7 +90,7 @@ export const JoinClassModal = props => {
 				axios
 					.post(`/api/classroom-users/`, data, headers)
 					.then(() => {
-						history.push(`/classroom/${classId}`);
+						classEnter();
 					})
 					.catch(e => console.log(e))
 			} else {
@@ -88,9 +108,17 @@ export const JoinClassModal = props => {
 	}
 
 	const ButtonComponent = () => {
-		const filterUser = classroomUsers.filter(userClass => console.log(userClass))
+		let filterUser = classroomUsers.filter(userClass => {
+			if (user.id) {
+				if (userClass.user_id === user.id) {
+					return userClass;
+				}
+				return null;
+			}
+		})
 
-		if (filterUser) {
+		console.log(filterUser)
+		if (!filterUser) {
 			return (
 				<Button
 					size="small"
@@ -104,7 +132,6 @@ export const JoinClassModal = props => {
 			)
 		}
 		return (
-
 			<Button
 				size="small"
 				style={{ color: "white" }}
