@@ -50,11 +50,11 @@ export const MentorClassView = props => {
     setClassRoom({});
   };
 
-  const deleteClass = classid => {
-    axios
-      .delete(`/api/class/${classid}`, headers)
-      .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  };
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/class/${classid}`, headers)
+  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  // };
   useEffect(() => {
     axios
       .get(`/api/class?id=${user.id}`, headers)
@@ -228,9 +228,9 @@ export const MentorClassView = props => {
                           >
                             Enter Class
                           </Button>
-                          <Button onClick={() => deleteClass(data.id)}>
+                          {/* <Button onClick={() => deleteClass(data.id)}>
                             delete
-                          </Button>
+                          </Button> */}
                         </Grid>
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">
@@ -309,7 +309,8 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 345
   },
   media: {
-    height: 140
+    height: 140,
+    backgroundPositionY: "-40px"
   },
   addClass: {
     cursor: "pointer",

@@ -7,11 +7,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import { useHistory } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -30,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 export const JoinClassModal = props => {
 	const classes = useStyles();
 	const history = useHistory();
-	const [code, setCode] = React.useState('');
+	const [code, setCode] = React.useState("");
 	const [warn, setWarn] = React.useState({ classcode: false });
 	const [help, setHelp] = React.useState({ classcode: "" });
 	const [open, setOpen] = React.useState(false);
@@ -44,26 +43,26 @@ export const JoinClassModal = props => {
 	};
 
 	const handleChange = e => {
-		setCode(e.target.value)
+		setCode(e.target.value);
 		if (e.target.value.length > 0) {
 			setWarn({
 				...warn,
 				[e.target.name]: false
-			})
+			});
 			setHelp({
 				...help,
-				[e.target.name]: ''
-			})
+				[e.target.name]: ""
+			});
 		} else {
 			setWarn({
 				...warn,
 				[e.target.name]: true
-			})
+			});
 			setHelp({
 				...help,
 				[e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
 					e.target.name.slice(1)} field is required *`
-			})
+			});
 		}
 	};
 
@@ -90,7 +89,7 @@ export const JoinClassModal = props => {
 		e.preventDefault();
 		if (props.classId) {
 			if (code === props.codeClass) {
-				history.push(`/classroom/${props.className}`)
+				history.push(`/classroom/${props.className}`);
 			}
 		}
 	};
@@ -99,7 +98,7 @@ export const JoinClassModal = props => {
 		<div>
 			<Button
 				size="small"
-				style={{ color: "#4abdab" }}
+				style={{ color: "white" }}
 				onClick={() => {
 					handleClickOpen();
 				}}
@@ -116,7 +115,7 @@ export const JoinClassModal = props => {
 			>
 				<DialogTitle
 					id="alert-dialog-slide-title"
-					style={{ background: "#4abdac", color: "white" }}
+					style={{ background: "#ababfa", color: "white" }}
 				>
 					{"Join Class"}
 				</DialogTitle>
@@ -129,19 +128,26 @@ export const JoinClassModal = props => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogContent>
-					<form id={props.classId} className={classes.root} autoComplete="off" onSubmit={handleSubmit}>
+					<form
+						id={props.classId}
+						className={classes.root}
+						autoComplete="off"
+						onSubmit={handleSubmit}
+					>
 						<FormControl variant="outlined">
-							<InputLabel htmlFor='classcode'>Class Code</InputLabel>
+							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id='classcode'
-								name='classcode'
+								id="classcode"
+								name="classcode"
 								error={warn.classcode}
 								onBlur={warningUpdate}
 								onChange={handleChange}
 								labelWidth={85}
 							/>
-							<FormHelperText id={props.classId}>{help.classcode}</FormHelperText>
+							<FormHelperText id={props.classId}>
+								{help.classcode}
+							</FormHelperText>
 						</FormControl>
 					</form>
 				</DialogContent>
