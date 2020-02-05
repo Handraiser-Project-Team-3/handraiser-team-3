@@ -22,7 +22,7 @@ import man from "../../assets/images/man.png";
 export const Classroom = props => {
   const { user, headers } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, id } = userDetails;
+  const { first_name } = userDetails;
   const classes = useStyles();
   const [classList, setClassList] = React.useState([]);
 
@@ -32,7 +32,7 @@ export const Classroom = props => {
       .then(res => {
         setClassList(res.data);
       })
-      .catch();
+      .catch(e => console.log(e));
   }, []);
 
   return (
@@ -64,7 +64,11 @@ export const Classroom = props => {
                       </Typography>
                     </CardContent>
                     <CardContent>
-                      <Typography gutterBottom component="div" variant="inherit">
+                      <Typography
+                        gutterBottom
+                        component="div"
+                        variant="inherit"
+                      >
                         <Grid
                           container
                           direction="row"
@@ -72,7 +76,11 @@ export const Classroom = props => {
                           justify="space-between"
                         >
                           <Grid item lg={2} xs={2}>
-                            <img src={man} alt="man" style={{ width: "30px" }} />
+                            <img
+                              src={man}
+                              alt="man"
+                              style={{ width: "30px" }}
+                            />
                           </Grid>
 
                           <Grid item lg={10} xs={10}>
@@ -89,7 +97,7 @@ export const Classroom = props => {
                                   variant="caption"
                                 >
                                   Mentor's Name:
-                              </Typography>
+																</Typography>
                               </Grid>
                               <Grid item lg={12} xs={12}>
                                 <b>{}</b>
@@ -100,12 +108,14 @@ export const Classroom = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#fbdfa1" }}>
+                  <CardActions style={{ background: "#fb9e57" }}>
                     <Grid container direction="column" alignItems="center">
                       <JoinClassModal
                         classId={data.id}
                         className={data.class_name}
                         codeClass={data.class_code}
+                        user={user}
+                        headers={headers}
                       />
                     </Grid>
                   </CardActions>
