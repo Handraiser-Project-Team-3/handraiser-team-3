@@ -22,7 +22,7 @@ import man from "../../assets/images/man.png";
 export const Classroom = props => {
 	const { user, headers } = props.data;
 	const userDetails = user ? user : {};
-	const { first_name, id } = userDetails;
+	const { first_name } = userDetails;
 	const classes = useStyles();
 	const [classList, setClassList] = React.useState([]);
 
@@ -100,7 +100,7 @@ export const Classroom = props => {
 																</Typography>
 															</Grid>
 															<Grid item lg={12} xs={12}>
-																<b>Eric</b>
+																<b>{}</b>
 															</Grid>
 														</Grid>
 													</Grid>

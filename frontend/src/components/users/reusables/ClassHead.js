@@ -5,13 +5,10 @@ import Grid from "@material-ui/core/Grid";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
 // images
 import blackboard from "../../assets/images/blackboard.png";
-
 //components
 import Search from "./Search";
-
 const useStyles = makeStyles(theme => ({
 	blackboard: {
 		width: "35px",
@@ -68,17 +65,21 @@ const useStyles = makeStyles(theme => ({
 		}
 	}
 }));
-
 export default function ClassHead(props) {
 	const classes = useStyles();
-	const { account_type_id, setOpen, setAction, setHeadTitle } = props;
-
+	const {
+		account_type_id,
+		setOpen,
+		setAction,
+		setHeadTitle,
+		filter,
+		setClassList
+	} = props;
 	const handleClickOpenAdd = () => {
 		setOpen(true);
 		setAction("Add");
 		setHeadTitle("Add");
 	};
-
 	return (
 		<>
 			<Grid container direction="row" justify="space-between">
@@ -130,7 +131,7 @@ export default function ClassHead(props) {
 					</Grid>
 				</Grid>
 				<Grid item xs={12} sm={4} md={3} lg={3} xl={2}>
-					<Search />
+					<Search filter={filter} setClassList={setClassList} />
 				</Grid>
 			</Grid>
 		</>
