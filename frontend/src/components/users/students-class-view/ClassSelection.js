@@ -32,7 +32,7 @@ export const Classroom = props => {
       .then(res => {
         setClassList(res.data);
       })
-      .catch();
+      .catch(e => console.log(e));
   }, []);
 
   return (
@@ -97,7 +97,7 @@ export const Classroom = props => {
                                   variant="caption"
                                 >
                                   Mentor's Name:
-                                </Typography>
+																</Typography>
                               </Grid>
                               <Grid item lg={12} xs={12}>
                                 <b>{}</b>
@@ -114,6 +114,8 @@ export const Classroom = props => {
                         classId={data.id}
                         className={data.class_name}
                         codeClass={data.class_code}
+                        user={user}
+                        headers={headers}
                       />
                     </Grid>
                   </CardActions>
