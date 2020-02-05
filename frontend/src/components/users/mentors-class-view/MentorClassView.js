@@ -255,7 +255,7 @@ export const MentorClassView = props => {
 						))
 				) : (
 					<div className={classes.margin}>
-						<span className={classes.noClasses}>No classes added yet</span>
+						<span className={classes.noClasses}>No added classes yet</span>
 						<div className="spinner">
 							<div className="bounce1"></div>
 							<div className="bounce2"></div>
@@ -281,6 +281,17 @@ export const MentorClassView = props => {
 };
 
 const useStyles = makeStyles(theme => ({
+	"@global": {
+		"*::-webkit-scrollbar": {
+			width: "0.4em"
+		},
+		"*::-webkit-scrollbar-track": {
+			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+		},
+		"*::-webkit-scrollbar-thumb": {
+			backgroundColor: "whitesmoke"
+		}
+	},
 	header: {
 		height: "auto",
 		backgroundImage: `url(${head})`,

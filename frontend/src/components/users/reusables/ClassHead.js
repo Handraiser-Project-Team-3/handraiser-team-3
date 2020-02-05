@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 		padding: "0"
 	},
 	classStyle: {
-		color: "#fb9e57",
+		color: "#ff6f61ff",
 		textDecoration: "underline",
 		textDecorationColor: "lightgray",
 		textUnderlinePosition: "under"
@@ -75,6 +75,7 @@ export default function ClassHead(props) {
 		filter,
 		setClassList
 	} = props;
+
 	const handleClickOpenAdd = () => {
 		setOpen(true);
 		setAction("Add");
@@ -88,7 +89,7 @@ export default function ClassHead(props) {
 						container
 						direction="row"
 						alignItems="center"
-						spacing={5}
+						spacing={3}
 						style={{ marginBottom: "1vh" }}
 					>
 						<Grid item>
