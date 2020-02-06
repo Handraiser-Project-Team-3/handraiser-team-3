@@ -90,17 +90,9 @@ export const ClassView = props => {
       })
       .catch(e => console.log(e))
 
-    // let filterUser = classroomUsers.filter(userClass => {
-    //   if (user.id) {
-    //     if (userClass.user_id === user.id) {
-    //       return userClass;
-    //     }
-    //     return null;
-    //   }
-
-    //   if (filterUser) {
+    //   if () {
     //     history.push(`/classroom/${classList.id}`)
-    //   } else if (userClass.class_id === classList.id) {
+    //   } else if (user.id !== userClass.user_id) {
     //     return <JoinClassModal />
     //   } else {
     //     history.push('/')
@@ -140,7 +132,7 @@ export const ClassView = props => {
                       </Typography>
                       <Tooltip
                         title={
-                          data.class_description.length > 48
+                          data.class_description.length > 30
                             ? data.class_description.substring(0)
                             : ""
                         }
@@ -150,8 +142,8 @@ export const ClassView = props => {
                           color="textSecondary"
                           component="p"
                         >
-                          {data.class_description.length > 50
-                            ? data.class_description.substring(0, 36) + "..."
+                          {data.class_description.length > 30
+                            ? data.class_description.substring(0, 35) + "..."
                             : data.class_description}
                         </Typography>
                       </Tooltip>

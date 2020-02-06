@@ -77,7 +77,7 @@ export const JoinClassModal = props => {
 				if (code === "") {
 					alertToast("Code required to enter class!");
 				} else {
-					alertToast('Invalid Code!');
+					alertToast('Invalid Class Code!');
 				}
 			}
 		}
@@ -88,29 +88,20 @@ export const JoinClassModal = props => {
 	}
 
 	const ButtonComponent = () => {
+		const [check, setCheck] = React.useState({});
+
 		let filterClassUser = classroomUsers.filter(userClass => {
 			if (userClass.user_id === user.id) {
 				return userClass;
 			}
 			return null;
 		})
-		console.log(filterClassUser)
 
-		if (!filterClassUser) {
-			return (
-				<Button
-					size="small"
-					style={{ color: "white" }}
-					onClick={() => {
-						handleClickOpen();
-					}}
-				>
-					Join Class
-				</Button>
-			)
-		}
-		return (
-			<Button
+		React.useEffect(() => {
+			setCheck(filterClassUser.filter(x => x.class_id === classId)[0])
+		}, [])
+		return <>{
+			check ? <Button
 				size="small"
 				style={{ color: "white" }}
 				onClick={() => {
@@ -118,8 +109,16 @@ export const JoinClassModal = props => {
 				}}
 			>
 				Enter Class
-			</Button>
-		)
+			</Button> : <Button
+					size="small"
+					style={{ color: "white" }}
+					onClick={() => {
+						handleClickOpen();
+					}}
+				>
+					Join Class
+					</Button>
+		}</>
 	}
 
 	return (
