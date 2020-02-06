@@ -26,7 +26,6 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
-import man from "../../assets/images/man.png";
 
 export const ClassView = props => {
   const classes = useStyles();
@@ -44,6 +43,7 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
+  const [classroomUsers, setClassroomUsers] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,6 +82,31 @@ export const ClassView = props => {
           console.error(err);
         }
       })();
+
+    axios
+      .get(`/api/classroom-users/`, headers)
+      .then(classUsers => {
+        setClassroomUsers(classUsers.data)
+      })
+      .catch(e => console.log(e))
+
+    // let filterUser = classroomUsers.filter(userClass => {
+    //   if (user.id) {
+    //     if (userClass.user_id === user.id) {
+    //       return userClass;
+    //     }
+    //     return null;
+    //   }
+
+    //   if (filterUser) {
+    //     history.push(`/classroom/${classList.id}`)
+    //   } else if (userClass.class_id === classList.id) {
+    //     return <JoinClassModal />
+    //   } else {
+    //     history.push('/')
+    //   }
+    // })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
   return (
     <Layout
@@ -126,7 +151,7 @@ export const ClassView = props => {
                           component="p"
                         >
                           {data.class_description.length > 50
-                            ? data.class_description.substring(0, 42) + "..."
+                            ? data.class_description.substring(0, 36) + "..."
                             : data.class_description}
                         </Typography>
                       </Tooltip>
@@ -321,6 +346,7 @@ export const ClassView = props => {
                     ) : (
                         <Grid container direction="column" alignItems="center">
                           <JoinClassModal
+                            classroomUsers={classroomUsers}
                             classId={data.id}
                             className={data.class_name}
                             codeClass={data.class_code}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -42,34 +42,10 @@ const alertToast = msg =>
 
 export const JoinClassModal = props => {
 	const classes = useStyles();
-	const { classId, className, codeClass, user, headers } = props;
+	const { classroomUsers, classId, className, codeClass, user, headers } = props;
 	const history = useHistory();
 	const [code, setCode] = useState("");
 	const [open, setOpen] = useState(false);
-	const [classroomUsers, setClassroomUsers] = useState([]);
-
-	useEffect(() => {
-		axios
-			.get(`/api/classroom-users/`, headers)
-			.then(classUsers => {
-				setClassroomUsers(classUsers.data)
-			})
-			.catch(e => console.log(e))
-		// let filterUser = classroomUsers.filter(userClass => {
-		// 	if (user.id) {
-		// 		if (userClass.user_id === user.id) {
-		// 			return userClass;
-		// 		}
-		// 		return null;
-		// 	}
-
-		// 	if (filterUser) {
-		// 		history.push(`/classroom/${classId}`)
-		// 	} else {
-		// 		history.push('/')
-		// 	}
-		// })
-	}, [])
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -112,17 +88,15 @@ export const JoinClassModal = props => {
 	}
 
 	const ButtonComponent = () => {
-		let filterUser = classroomUsers.filter(userClass => {
-			if (user.id) {
-				if (userClass.user_id === user.id) {
-					return userClass;
-				}
-				return null;
+		let filterClassUser = classroomUsers.filter(userClass => {
+			if (userClass.user_id === user.id) {
+				return userClass;
 			}
+			return null;
 		})
-		console.log(filterUser)
+		console.log(filterClassUser)
 
-		if (filterUser) {
+		if (!filterClassUser) {
 			return (
 				<Button
 					size="small"
