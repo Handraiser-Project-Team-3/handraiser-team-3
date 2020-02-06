@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     },
     "@media(max-width:1024px)": {
       width: "100%"
-    }
+	},
+	
   },
   top: {
     padding: "0px",

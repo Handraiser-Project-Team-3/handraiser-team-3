@@ -4,7 +4,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -15,15 +14,16 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-// component/s
-import AddClassRoom from "./classroomModal";
-import Chatbox from "./Chatbox";
-import Layout from "./reusables/Layout";
 
+// component/s
+
+import Chatbox from "../users/Chatbox";
+import Layout from "../users/reusables/Layout";
+import ClassRoomModal from "../users/classroomModal";
 // images
 import head from "../assets/images/bg.png";
 import student from "../assets/images/student.png";
-import nodata from "../assets/images/nodata.png";
+
 //Tabs
 const TabPanel = props => {
   const { children, value, index, ...other } = props;
@@ -64,30 +64,14 @@ export default function MentorsView() {
   };
   const [val, setVal] = React.useState([
     {
-      id: 2,
+      id: 1,
       name: "Stephen Dunn"
-    },
-    { id: 3, name: "Nathan Young " },
-    {
-      id: 4,
-      name: "Crystal Watson"
-    },
-    {
-      id: 5,
-      name: "George Wells"
-    }
-  ]);
-  const [history] = React.useState([
-    {
-      history: 0
     }
   ]);
 
   return (
     <Layout>
-      <div
-        style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
-      >
+      <div className={classes.mainContainer}>
         <div className={classes.root}>
           <AppBar position="static" color="default" className={classes.appBar}>
             <Tabs
@@ -107,8 +91,6 @@ export default function MentorsView() {
           <TabPanel value={value} index={0}>
             <Paper className={classes.needContainer} elevation={4}>
               {val.map(e => {
-                console.log(e);
-
                 return (
                   <Paper key={e.id} className={classes.needHelp} elevation={6}>
                     {" "}
@@ -118,8 +100,19 @@ export default function MentorsView() {
                         alt="Student"
                         src={student}
                       />
-                      <Typography>{e.name}</Typography>
+                      <Typography variant="body2">{e.name}</Typography>
                     </div>
+                    {/* <Avatar
+                      className={classes.studentsAvatar}
+                      alt="Student"
+                      src={student}
+                    />
+                    <Typography
+                      variant="body2"
+                      className={classes.studentsNeed}
+                    >
+                      {e.name}
+                    </Typography> */}
                     <div className={classes.Icons}>
                       <Tooltip title="Remove">
                         <Button>
@@ -143,12 +136,12 @@ export default function MentorsView() {
               })}
             </Paper>
             <div className={classes.modalButton}>
-              <AddClassRoom />
+              <ClassRoomModal />
             </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Paper className={classes.needContainer} elevation={6}>
-              {val.map(e => {
+              {val.map((e, v) => {
                 return (
                   <Paper key={e.id} className={classes.needHelp} elevation={6}>
                     {" "}
@@ -158,9 +151,7 @@ export default function MentorsView() {
                         alt="Student"
                         src={student}
                       />
-                      <Typography className={classes.studentsBeingHelp}>
-                        {e.name}
-                      </Typography>
+                      <Typography variant="body2">{e.name}</Typography>
                     </div>
                     <div
                       className={classes.Icons}
@@ -180,58 +171,25 @@ export default function MentorsView() {
               })}
             </Paper>
             <div className={classes.modalButton}>
-              <AddClassRoom />
+              <ClassRoomModal />
             </div>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Paper className={classes.needContainer} elevation={6}>
-              {history === 1 ? (
-                <Paper className={classes.needHelp} elevation={6}>
-                  <div className={classes.studentsNeed}>
-                    <Avatar
-                      className={classes.studentsAvatar}
-                      alt="Student"
-                      src={student}
-                    />
-                    <Typography className={classes.studentsBeingHelp}>
-                      Papa Rex Rojo
-                    </Typography>
-                  </div>
-                </Paper>
-              ) : (
-                <Paper
-                  elevation={6}
-                  style={{
-                    margin: "40px",
-                    marginTop: "100px"
-                    // backgroundColor: "#ABABFA"
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: "10px",
-                      display: "flex",
-                      justifyContent: "center"
-                    }}
-                  >
-                    <Typography variant="h6">No Data</Typography>
-                  </div>
-                  <div
-                    style={{
-                      padding: "10px",
-                      display: "flex",
-                      justifyContent: "center",
-                      flexWrap: "wrap"
-                    }}
-                  >
-                    <img src={nodata} width="50%" />
-                  </div>
-                </Paper>
-              )}
+              <Paper className={classes.needHelp} elevation={6}>
+                {" "}
+                <div className={classes.studentsNeed}>
+                  <Avatar
+                    className={classes.studentsAvatar}
+                    alt="Student"
+                    src={student}
+                  />
+                  <Typography variant="body2">Papa Rex Rojo</Typography>
+                </div>
+              </Paper>
             </Paper>
-
             <div className={classes.modalButton}>
-              <AddClassRoom />
+              <ClassRoomModal />
             </div>
           </TabPanel>
         </div>
@@ -257,10 +215,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     width: 500,
     paddingTop: "30px",
-    paddingLeft: "160px",
-    "@media(max-width:1440px)": {
-      paddingLeft: "0px"
-    },
+    paddingLeft: "80px",
+
     "@media (max-width: 320px)": {
       paddingLeft: "0px !important"
     },
@@ -274,11 +230,22 @@ const useStyles = makeStyles(theme => ({
     "@media(max-width:1024px)": {
       paddingLeft: "200px"
     },
+
     "@media(max-width:768px)": {
-      paddingLeft: "95px"
+      paddingLeft: "90px"
     }
   },
-
+  mainContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+	alignContent: "center",
+	"@media(max-width:1440px)":{
+		flexWrap:'nowrap'
+	},
+	"@media(max-width:1024px)":{
+		flexWrap:'wrap'
+	}
+  },
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
@@ -299,6 +266,8 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "space-between"
   },
   needContainer: {
+    background:
+      "linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
     height: 580,
     overflow: "auto",
     "@media (max-width: 320px)": {
@@ -313,23 +282,31 @@ const useStyles = makeStyles(theme => ({
   },
   studentsNeed: {
     display: "flex",
+    alignItems: "center",
     color: "gray"
   },
   studentsBeingHelp: {
     display: "flex",
+    alignItems: "center",
     color: "gray"
   },
   chatBox: {
-    display: "inline-flex"
+    display: "inline-flex",
+    alignItems: "center"
   },
   appBar: {
-    margin: "0px"
+    margin: "0px",
+    background:
+      "linear-gradient(207deg, rgba(171,171,250,1) 20%, rgba(171,171,250,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 76%, rgba(171,171,250,1) 76%, rgba(171,171,250,1) 86%)"
   },
   mentorsAvatar: {
     small: {
       width: theme.spacing(3),
       height: theme.spacing(3)
     }
+  },
+  studentsAvatar: {
+    marginRight: "10px"
   },
   modalButton: {
     marginTop: "-50px ",
