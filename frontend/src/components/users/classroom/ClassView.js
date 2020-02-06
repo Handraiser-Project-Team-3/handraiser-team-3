@@ -26,7 +26,6 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
-import man from "../../assets/images/man.png";
 
 export const ClassView = props => {
   const classes = useStyles();
@@ -44,6 +43,7 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
+  const [classroomUsers, setClassroomUsers] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,6 +82,23 @@ export const ClassView = props => {
           console.error(err);
         }
       })();
+
+    axios
+      .get(`/api/classroom-users/`, headers)
+      .then(classUsers => {
+        setClassroomUsers(classUsers.data)
+      })
+      .catch(e => console.log(e))
+
+    //   if () {
+    //     history.push(`/classroom/${classList.id}`)
+    //   } else if (user.id !== userClass.user_id) {
+    //     return <JoinClassModal />
+    //   } else {
+    //     history.push('/')
+    //   }
+    // })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
   return (
     <Layout
@@ -99,138 +116,138 @@ export const ClassView = props => {
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length !== 0
           ? classList
-              .sort((a, b) => (a.id > b.id ? 1 : -1))
-              .map((data, i) => (
-                <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
-                  <Card className={classes.card}>
-                    <CardActionArea>
-                      <CardMedia
-                        className={classes.media}
-                        image={classroom}
-                        title="Contemplative Reptile"
-                      ></CardMedia>
-                      <CardContent>
-                        <Typography gutterBottom variant="h5">
-                          {data.class_name}
-                        </Typography>
-                        <Tooltip
-                          title={
-                            data.class_description.length > 48
-                              ? data.class_description.substring(0)
-                              : ""
-                          }
-                        >
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {data.class_description.length > 50
-                              ? data.class_description.substring(0, 42) + "..."
-                              : data.class_description}
-                          </Typography>
-                        </Tooltip>
-                      </CardContent>
-                      <CardContent>
+            .sort((a, b) => (a.id > b.id ? 1 : -1))
+            .map((data, i) => (
+              <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
+                <Card className={classes.card}>
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={classroom}
+                      title="Contemplative Reptile"
+                    ></CardMedia>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5">
+                        {data.class_name}
+                      </Typography>
+                      <Tooltip
+                        title={
+                          data.class_description.length > 30
+                            ? data.class_description.substring(0)
+                            : ""
+                        }
+                      >
                         <Typography
-                          gutterBottom
-                          component="div"
-                          variant="inherit"
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
                         >
-                          {account_type_id === 2 ? (
-                            <Grid
-                              container
-                              direction="row"
-                              justify="center"
-                              align="center"
-                              spacing={5}
-                            >
-                              <Grid item xs={6}>
-                                <Grid
-                                  container
-                                  direction="row"
-                                  alignItems="center"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={2} xs={2}>
-                                    <img
-                                      src={student}
-                                      alt="man"
-                                      style={{ width: "30px" }}
-                                    />
-                                  </Grid>
-
-                                  <Grid item lg={10} xs={10}>
-                                    <Grid
-                                      container
-                                      direction="column"
-                                      alignItems="flex-start"
-                                      justify="space-between"
-                                    >
-                                      <Grid item lg={12} xs={12}>
-                                        <Typography
-                                          gutterBottom
-                                          component="div"
-                                          variant="caption"
-                                        >
-                                          Students:
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item lg={12} xs={12}>
-                                        <b>10</b>
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
+                          {data.class_description.length > 30
+                            ? data.class_description.substring(0, 35) + "..."
+                            : data.class_description}
+                        </Typography>
+                      </Tooltip>
+                    </CardContent>
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        component="div"
+                        variant="inherit"
+                      >
+                        {account_type_id === 2 ? (
+                          <Grid
+                            container
+                            direction="row"
+                            justify="center"
+                            align="center"
+                            spacing={5}
+                          >
+                            <Grid item xs={6}>
+                              <Grid
+                                container
+                                direction="row"
+                                alignItems="center"
+                                justify="space-between"
+                              >
+                                <Grid item lg={2} xs={2}>
+                                  <img
+                                    src={student}
+                                    alt="man"
+                                    style={{ width: "30px" }}
+                                  />
                                 </Grid>
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Grid
-                                  container
-                                  direction="row"
-                                  alignItems="center"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={2} xs={2}>
-                                    <img
-                                      src={key}
-                                      alt="class-code"
-                                      style={{ width: "30px" }}
-                                    />
-                                  </Grid>
 
-                                  <Grid item lg={10} xs={10}>
-                                    <Grid
-                                      container
-                                      direction="column"
-                                      alignItems="flex-start"
-                                      justify="space-between"
-                                    >
-                                      <Grid item lg={12} xs={12}>
-                                        <Typography
-                                          gutterBottom
-                                          component="div"
-                                          variant="caption"
-                                        >
-                                          Class Code:
+                                <Grid item lg={10} xs={10}>
+                                  <Grid
+                                    container
+                                    direction="column"
+                                    alignItems="flex-start"
+                                    justify="space-between"
+                                  >
+                                    <Grid item lg={12} xs={12}>
+                                      <Typography
+                                        gutterBottom
+                                        component="div"
+                                        variant="caption"
+                                      >
+                                        Students:
                                         </Typography>
-                                      </Grid>
-                                      <Grid item lg={12} xs={12}>
-                                        <Tooltip title="Click to copy code">
-                                          <b
-                                            onClick={() =>
-                                              copy(data.class_code)
-                                            }
-                                          >
-                                            {data.class_code}
-                                          </b>
-                                        </Tooltip>
-                                      </Grid>
+                                    </Grid>
+                                    <Grid item lg={12} xs={12}>
+                                      <b>10</b>
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          ) : (
+                            <Grid item xs={6}>
+                              <Grid
+                                container
+                                direction="row"
+                                alignItems="center"
+                                justify="space-between"
+                              >
+                                <Grid item lg={2} xs={2}>
+                                  <img
+                                    src={key}
+                                    alt="class-code"
+                                    style={{ width: "30px" }}
+                                  />
+                                </Grid>
+
+                                <Grid item lg={10} xs={10}>
+                                  <Grid
+                                    container
+                                    direction="column"
+                                    alignItems="flex-start"
+                                    justify="space-between"
+                                  >
+                                    <Grid item lg={12} xs={12}>
+                                      <Typography
+                                        gutterBottom
+                                        component="div"
+                                        variant="caption"
+                                      >
+                                        Class Code:
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item lg={12} xs={12}>
+                                      <Tooltip title="Click to copy code">
+                                        <b
+                                          onClick={() =>
+                                            copy(data.class_code)
+                                          }
+                                        >
+                                          {data.class_code}
+                                        </b>
+                                      </Tooltip>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        ) : (
                             <Grid
                               container
                               direction="row"
@@ -272,65 +289,68 @@ export const ClassView = props => {
                               </Grid>
                             </Grid>
                           )}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions style={{ background: "#97a4f7" }}>
-                      {account_type_id === 2 ? (
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justify="space-between"
-                        >
-                          <Grid item lg={10} md={10} sm={9} xs={9}>
-                            <Button
-                              onClick={() =>
-                                history.push(`/classroom/${data.id}`)
-                              }
-                              size="small"
-                              style={{ color: "white" }}
-                            >
-                              Enter Class
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions style={{ background: "#97a4f7" }}>
+                    {account_type_id === 2 ? (
+                      <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                        justify="space-between"
+                      >
+                        <Grid item lg={10} md={10} sm={9} xs={9}>
+                          <Button
+                            onClick={() =>
+                              history.push(`/classroom/${data.id}`)
+                            }
+                            size="small"
+                            style={{ color: "white" }}
+                          >
+                            Enter Class
                             </Button>
-                            {/* <Button onClick={() => deleteClass(data.id)}>
+                          {/* <Button onClick={() => deleteClass(data.id)}>
                             delete
                           </Button> */}
-                          </Grid>
-                          <Grid item lg={1}>
-                            <Grid container direction="row" alignItems="center">
-                              <Tooltip title="Edit Class">
-                                <img
-                                  src={edit}
-                                  alt="edit"
-                                  className={classes.icons}
-                                  style={{ marginRight: "10px" }}
-                                  onClick={() => {
-                                    handleClickOpen();
-                                    setClassRoom({
-                                      id: data.id,
-                                      class_name: data.class_name,
-                                      class_description: data.class_description
-                                    });
-                                  }}
-                                />
-                              </Tooltip>
-                            </Grid>
+                        </Grid>
+                        <Grid item lg={1}>
+                          <Grid container direction="row" alignItems="center">
+                            <Tooltip title="Edit Class">
+                              <img
+                                src={edit}
+                                alt="edit"
+                                className={classes.icons}
+                                style={{ marginRight: "10px" }}
+                                onClick={() => {
+                                  handleClickOpen();
+                                  setClassRoom({
+                                    id: data.id,
+                                    class_name: data.class_name,
+                                    class_description: data.class_description
+                                  });
+                                }}
+                              />
+                            </Tooltip>
                           </Grid>
                         </Grid>
-                      ) : (
+                      </Grid>
+                    ) : (
                         <Grid container direction="column" alignItems="center">
                           <JoinClassModal
+                            classroomUsers={classroomUsers}
                             classId={data.id}
                             className={data.class_name}
                             codeClass={data.class_code}
+                            user={user}
+                            headers={headers}
                           />
                         </Grid>
                       )}
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))
           : "No Data Result"}
       </Grid>
       <HandleClassModal
