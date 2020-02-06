@@ -83,31 +83,9 @@ module.exports = {
   usersList: (req, res) => {
     const { users } = req.app.get(get(db));
 
-<<<<<<< HEAD
     users
       .find()
       .then(data => res.status(200).json(data))
       .catch(() => res.status(500).end());
   }
-=======
-		users
-			.update({ id: id }, req.body, { deepInsert: true })
-			.then(() => {
-				res.send({ message: "success" });
-			})
-			.catch(err => {
-				err.message
-					? res.status(400).json({ error: err.message })
-					: res.status(500).end();
-			});
-	},
-	usersList: (req, res) => {
-		const { users } = req.app.get("db");
-
-		users
-			.find()
-			.then(data => res.status(200).json(data))
-			.catch(() => res.status(500).end());
-	}
->>>>>>> e74db7bdb87eee8bab38d3dc9bcbfc07d6a188c9
 };

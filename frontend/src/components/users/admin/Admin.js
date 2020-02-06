@@ -85,10 +85,34 @@ export const Admin = props => {
 
   function handleChange(e) {
     console.log(e.target.value);
+    setEmail(e.target.value);
   }
 
   function handleClickAdd(e) {
-    console.log(e.target.value);
+    console.log(e);
+
+    const EmailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    axios.get("/api/user/list", headers).then(res => {
+      console.log(res.data[0].email);
+    });
+
+    if (e.match(EmailVal)) {
+      axios
+        .post(
+          "/api/user",
+          {
+            email: email,
+            account_type_id: 3
+          },
+          headers
+        )
+        .then(res => {
+          toast.info("Email Address has been Added!");
+        });
+    } else {
+      toast.error("Please Enter Valid Email Address");
+    }
   }
 
   return (
@@ -105,7 +129,8 @@ export const Admin = props => {
                     label="Email Address"
                     onChange={handleChange}
                     className={classes.textField}
-                    type="text"
+                    value={email}
+                    type="email"
                   />
                 </form>
               </Grid>
@@ -114,7 +139,7 @@ export const Admin = props => {
                   <AddCircleIcon
                     value={email}
                     fontSize="large"
-                    onClick={handleClickAdd}
+                    onClick={() => handleClickAdd(email)}
                     style={{
                       color: "#4abdac",
                       cursor: "pointer"
