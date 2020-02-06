@@ -54,8 +54,8 @@ module.exports = {
           throw new Error("email already exists");
         }
 
-        users.insert(req.body, { deepInsert: true }).then(() => {
-          res.send({ message: "success" });
+        users.insert(req.body, { deepInsert: true }).then(data => {
+          res.send(data);
         });
       })
       .catch(err => {
@@ -69,16 +69,9 @@ module.exports = {
 
     const { id } = req.params;
 
-    users
-      .update({ id: id }, req.body, { deepInsert: true })
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        err.message
-          ? res.status(400).json({ error: err.message })
-          : res.status(500).end();
-      });
+    users.update({ id: id }, req.body, { deepInsert: true }).then(data => {
+      res.send(data);
+    });
   },
   usersList: (req, res) => {
     const { users } = req.app.get("db");
@@ -89,5 +82,12 @@ module.exports = {
     const { users } = req.app.get("db");
 
     users.findOne(req.params.id).then(user => res.status(200).send(user));
+  },
+  deleteUser: (req, res) => {
+    const { users } = req.app.get("db");
+
+    const { id } = req.params;
+
+    users.destroy({ id: id }).then(data => res.send(data));
   }
 };

@@ -5,20 +5,17 @@ import Grid from "@material-ui/core/Grid";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
 // images
 import blackboard from "../../assets/images/blackboard.png";
-
 //components
 import Search from "./Search";
-
 const useStyles = makeStyles(theme => ({
   blackboard: {
     width: "35px",
     padding: "0"
   },
   classStyle: {
-    color: "#fb9e57",
+    color: "#ff6f61ff",
     textDecoration: "underline",
     textDecorationColor: "lightgray",
     textUnderlinePosition: "under"
@@ -68,7 +65,6 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
 export default function ClassHead(props) {
   const classes = useStyles();
   const {

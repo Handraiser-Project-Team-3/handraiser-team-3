@@ -1,6 +1,5 @@
 import React from "react";
 import Axios from "axios";
-
 export const UserDetails = ({ id, headers, action }) => {
   const [user, setUser] = React.useState("");
   React.useEffect(() => {
@@ -13,7 +12,6 @@ export const UserDetails = ({ id, headers, action }) => {
       }
     })();
   }, [id, headers]);
-
   return action === "name" ? (
     <b>{user.first_name + " " + user.last_name}</b>
   ) : action === "img" ? (

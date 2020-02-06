@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -10,8 +16,6 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import { useHistory } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -26,13 +30,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const alertToast = msg =>
+  toast.info(msg, {
+    position: "top-right",
+    hideProgressBar: true,
+    autoClose: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });
+
 export const JoinClassModal = props => {
   const classes = useStyles();
+  const {
+    classroomUsers,
+    classId,
+    className,
+    codeClass,
+    user,
+    headers
+  } = props;
   const history = useHistory();
-  const [code, setCode] = React.useState("");
-  const [warn, setWarn] = React.useState({ classcode: false });
-  const [help, setHelp] = React.useState({ classcode: "" });
-  const [open, setOpen] = React.useState(false);
+  const [code, setCode] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,67 +64,80 @@ export const JoinClassModal = props => {
 
   const handleChange = e => {
     setCode(e.target.value);
-    if (e.target.value.length > 0) {
-      setWarn({
-        ...warn,
-        [e.target.name]: false
-      });
-      setHelp({
-        ...help,
-        [e.target.name]: ""
-      });
-    } else {
-      setWarn({
-        ...warn,
-        [e.target.name]: true
-      });
-      setHelp({
-        ...help,
-        [e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-          e.target.name.slice(1)} field is required *`
-      });
-    }
-  };
-
-  const warningUpdate = e => {
-    if (e.target.value.length === 0) {
-      setWarn({
-        ...warn,
-        [e.target.name]: true
-      });
-      setHelp({
-        ...help,
-        [e.target.name]: `${e.target.name.charAt(0).toUpperCase() +
-          e.target.name.slice(1)} field is required *`
-      });
-    } else {
-      setHelp({
-        ...help,
-        [e.target.name]: ""
-      });
-    }
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (props.classId) {
-      if (code === props.codeClass) {
-        history.push(`/classroom/${props.classId}`);
+    if (classId) {
+      if (code === codeClass) {
+        let data = {
+          user_id: user.id,
+          class_id: classId
+        };
+        axios
+          .post(`/api/classroom-users/`, data, headers)
+          .then(() => {
+            classEnter();
+          })
+          .catch(e => console.log(e));
+      } else {
+        if (code === "") {
+          alertToast("Code required to enter class!");
+        } else {
+          alertToast("Invalid Class Code!");
+        }
       }
     }
   };
 
+  const classEnter = () => {
+    history.push(`/classroom/${classId}`);
+  };
+
+  const ButtonComponent = () => {
+    const [check, setCheck] = React.useState({});
+
+    let filterClassUser = classroomUsers.filter(userClass => {
+      if (userClass.user_id === user.id) {
+        return userClass;
+      }
+      return null;
+    });
+
+    React.useEffect(() => {
+      setCheck(filterClassUser.filter(x => x.class_id === classId)[0]);
+    }, []);
+    return (
+      <>
+        {check ? (
+          <Button
+            size="small"
+            style={{ color: "white" }}
+            onClick={() => {
+              classEnter();
+            }}
+          >
+            Enter Class
+          </Button>
+        ) : (
+          <Button
+            size="small"
+            style={{ color: "white" }}
+            onClick={() => {
+              handleClickOpen();
+            }}
+          >
+            Join Class
+          </Button>
+        )}
+      </>
+    );
+  };
+
   return (
     <div>
-      <Button
-        size="small"
-        style={{ color: "white" }}
-        onClick={() => {
-          handleClickOpen();
-        }}
-      >
-        Join Class
-      </Button>
+      <ToastContainer enableMulticontainer />
+      <ButtonComponent />
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -129,7 +162,8 @@ export const JoinClassModal = props => {
         </DialogContent>
         <DialogContent>
           <form
-            id={props.classId}
+            id={classId}
+            noValidate
             className={classes.root}
             autoComplete="off"
             onSubmit={handleSubmit}
@@ -138,16 +172,11 @@ export const JoinClassModal = props => {
               <InputLabel htmlFor="classcode">Class Code</InputLabel>
               <OutlinedInput
                 required
-                id="classcode"
-                name="classcode"
-                error={warn.classcode}
-                onBlur={warningUpdate}
+                id="classId"
+                name={className}
                 onChange={handleChange}
                 labelWidth={85}
               />
-              <FormHelperText id={props.classId}>
-                {help.classcode}
-              </FormHelperText>
             </FormControl>
           </form>
         </DialogContent>
@@ -155,7 +184,7 @@ export const JoinClassModal = props => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary" form={`${props.classId}`} type="submit">
+          <Button color="primary" form={classId} type="submit">
             Join Class
           </Button>
         </DialogActions>

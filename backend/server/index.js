@@ -31,7 +31,51 @@ massive({
 
   // WS
   io.on("connection", socket => {
-    ws.requests(socket, db);
+    // ws.requests(socket, db, io);
+
+    let requests = [];
+    let classroom;
+    let user;
+
+    socket.on(`save_requests`, data => {
+      requests = data;
+    });
+
+    socket.on(`join_classroom`, ({ username, classId }) => {
+      if (username !== undefined) {
+        console.log(`${username} is`, "\x1b[32m", "online", "\x1b[0m");
+        user = username;
+        classroom = classId;
+        socket.join(`${classroom}`);
+      }
+    });
+
+    const emitData = data => {
+      io.to(`${classroom}`).emit(`update_request_list`, data);
+    };
+
+    const newData = () =>
+      db.student_request.find().then(data => emitData(data));
+
+    socket.on(`add_request`, data => {
+      db.student_request
+        .insert(data, { deepInsert: true })
+        .then(inserted => emitData([...requests, inserted]));
+    });
+
+    socket.on(`remove_request`, data => {
+      db.student_request.destroy({ id: data.id }).then(() => newData());
+    });
+
+    socket.on(`update_request`, () => {
+      newData();
+    });
+
+    socket.on(`disconnect`, () => {
+      if (user) {
+        console.log(`${user} is`, "\x1b[31m", `offline`, "\x1b[0m");
+      }
+    });
   });
 
   //login here
@@ -42,6 +86,7 @@ massive({
   //user
   app.post("/api/user", user.addUser);
   app.patch("/api/user/:id", user.editUser);
+  app.delete("/api/user/:id", user.deleteUser);
   app.get("/api/user/list", user.usersList);
   app.get("/api/user/:id", user.userDetails);
 

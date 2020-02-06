@@ -224,26 +224,10 @@ export default function ChatBox() {
           {/* endofmessages */}
         </Paper>
         <Paper className={classes.inputAreacontainer} elevation={6}>
-          {/* <Grid
-            container
-            className={classes.inputArea}
-            style={{ backgroundColor: "grey" }}
-          >
-            <Grid
-              item
-              style={{
-                display: "flex"
-              }}
-              lg={11}
-              md={10}
-              sm={9}
-              xs={9}
-            > */}
           <TextField
             variant="outlined"
             id="standard-basic"
             label="Type your message..."
-            // className={classes.messageArea}
             fullWidth
             InputProps={{
               endAdornment: (

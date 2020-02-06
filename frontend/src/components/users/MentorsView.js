@@ -1,4 +1,6 @@
 import React from "react";
+
+// Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -146,16 +148,18 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
+const a11yProps = index => {
   return {
     id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`
   };
-}
+};
 
 export default function MentorsView(props) {
   const classes = useStyles();
   const { headers, user } = props.data;
+  const userDetails = user ? user : {};
+  const { first_name, account_type_id, id } = userDetails;
   const [studentDetails, setStudentDetails] = React.useState({});
   const [value, setValue] = React.useState(0);
 
@@ -165,14 +169,16 @@ export default function MentorsView(props) {
   const [requests, setRequests] = React.useState([]);
 
   React.useEffect(() => {
-    socket.emit(`join_classroom`, props.match.params.id);
-    socket.on(`request_list`, data => {
-      setRequests(data);
+    socket.emit(`join_classroom`, {
+      classId: props.match.params.id,
+      username: first_name
     });
     socket.on(`update_request_list`, data => {
       setRequests(data);
     });
-  }, []);
+
+    return () => socket.emit(`disconnect`);
+  }, [user]);
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -210,7 +216,7 @@ export default function MentorsView(props) {
     }
   };
   return (
-    <Layout>
+    <Layout accountType={account_type_id} first_name={first_name}>
       <div
         style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
       >
