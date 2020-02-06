@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import bubbles from "../assets/images/chat-box.png";
@@ -32,12 +32,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#ababfa",
     width: "45%",
     "@media(max-width:320px)": {
-      width: "100% !important",
-     
+      width: "100% !important"
     },
     "@media(max-width:1024px)": {
-      width: "100%",
-      
+      width: "100%"
     }
   },
   top: {
@@ -109,15 +107,12 @@ export default function ChatBox() {
 
   return (
     <React.Fragment>
-      <Paper
-        className={classes.root}
-        
-      >
+      <Paper className={classes.root}>
         <Paper className={classes.top} elevation={3}>
           <Grid className={classes.topName}>
             <Avatar alt="top" src={bubbles} />
             <Typography variant="h6" style={{ paddingLeft: "10px" }}>
-              {"Mark Medes"}
+              Mark Medes
             </Typography>
           </Grid>
         </Paper>
@@ -257,7 +252,6 @@ export default function ChatBox() {
           </Grid> */}
         </Paper>
       </Paper>
-     
     </React.Fragment>
   );
 }
