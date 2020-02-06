@@ -10,7 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
 
@@ -20,6 +20,7 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
+import { PageNotFound } from "../reusables/PageNotFound";
 // images
 import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
@@ -44,6 +45,12 @@ export const ClassView = props => {
     class_description: ""
   });
   const [classroomUsers, setClassroomUsers] = useState([]);
+  const [check, setCheck] = useState({});
+  const match = useRouteMatch({
+    path: '/classroom/:id',
+    strict: true,
+    sensitive: true
+  })
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -89,17 +96,19 @@ export const ClassView = props => {
         setClassroomUsers(classUsers.data)
       })
       .catch(e => console.log(e))
-
-    //   if () {
-    //     history.push(`/classroom/${classList.id}`)
-    //   } else if (user.id !== userClass.user_id) {
-    //     return <JoinClassModal />
-    //   } else {
-    //     history.push('/')
-    //   }
-    // })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
+
+
+  let filterClassUser = classroomUsers.filter(userClass => {
+    if (userClass.user_id === user.id) {
+      return userClass;
+    }
+    return null;
+  })
+  console.log(filterClassUser)
+
+
   return (
     <Layout
       accountType={account_type_id === 2 ? accountType : null}
@@ -194,7 +203,7 @@ export const ClassView = props => {
                                         </Typography>
                                     </Grid>
                                     <Grid item lg={12} xs={12}>
-                                      <b>10</b>
+                                      <b>{}</b>
                                     </Grid>
                                   </Grid>
                                 </Grid>

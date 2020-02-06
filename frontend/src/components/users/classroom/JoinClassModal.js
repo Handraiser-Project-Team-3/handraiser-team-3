@@ -99,7 +99,7 @@ export const JoinClassModal = props => {
 
 		React.useEffect(() => {
 			setCheck(filterClassUser.filter(x => x.class_id === classId)[0])
-		}, [])
+		}, [filterClassUser])
 		return <>{
 			check ? <Button
 				size="small"
@@ -159,7 +159,7 @@ export const JoinClassModal = props => {
 							<InputLabel htmlFor="classcode">Class Code</InputLabel>
 							<OutlinedInput
 								required
-								id="classId"
+								id={`classid-${classId}`}
 								name={className}
 								onChange={handleChange}
 								labelWidth={85}

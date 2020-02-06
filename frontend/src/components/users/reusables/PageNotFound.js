@@ -26,7 +26,7 @@ export default function PageNotFound(props) {
 						alignItems="center"
 					>
 						<Grid item xs={12} sm={12} md={12} lg={12} xl={6}>
-							<img src={NotFound} className={classes.imgStyle} />
+							<img src={NotFound} className={classes.imgStyle} alt='Not Found' />
 						</Grid>
 						<Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 							<Typography variant="h4" style={{ color: "#717171" }}>

@@ -61,7 +61,7 @@ export default function MentorsView() {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-	const [val, setVal] = React.useState([
+	const [val] = React.useState([
 		{
 			id: 1,
 			name: "Stephen Dunn"
