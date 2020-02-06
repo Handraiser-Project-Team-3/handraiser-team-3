@@ -16,6 +16,7 @@ const classroom = require("./controllers/classroom");
 const chats = require("./controllers/chats");
 const classroomUsers = require("./controllers/classroomUsers");
 const requests = require("./controllers/requests");
+const ws = require("./controllers/ws");
 
 massive({
   host: process.env.DB_HOST,
@@ -30,17 +31,7 @@ massive({
 
   // WS
   io.on("connection", socket => {
-    const getRequestData = () =>
-      db.student_request.find().then(list => {
-        socket.broadcast.emit(`request_list`, list);
-        socket.emit(`update_request_list`, list);
-      });
-
-    socket.on("add_request", data => {
-      db.student_request
-        .insert(data, { deepInsert: true })
-        .then(() => getRequestData());
-    });
+    ws.requests(socket, db);
   });
 
   //login here
@@ -66,7 +57,8 @@ massive({
   app.get("/api/classroom-users/", classroomUsers.list);
 
   //student_requests
-  app.get("/api/request/list", requests.list);
+  app.get("/api/request/list/:id", requests.list);
+  app.patch("/api/request/:id", requests.editRequest);
 
   //chats
   app.post("/api/chats/message/create/:id", chats.createMessage);

@@ -10,11 +10,12 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
+import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
+import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
 import Chatbox from "../users/Chatbox";
@@ -165,6 +166,7 @@ export default function MentorsView(props) {
   const [requests, setRequests] = React.useState([]);
 
   React.useEffect(() => {
+    socket.emit(`join_classroom`, props.match.params.id);
     socket.on(`request_list`, data => {
       setRequests(data);
     });
@@ -176,7 +178,10 @@ export default function MentorsView(props) {
     if (user) {
       (async () => {
         try {
-          const res = await Axios.get(`/api/request/list`, headers);
+          const res = await Axios.get(
+            `/api/request/list/${props.match.params.id}`,
+            headers
+          );
           setRequests(res.data);
         } catch (err) {
           console.log(err);
@@ -197,6 +202,14 @@ export default function MentorsView(props) {
     }
   }, [user, headers]);
 
+  const updateRequest = async (id, data) => {
+    try {
+      await Axios.patch(`/api/request/${id}`, { status: data }, headers);
+      socket.emit("update_request");
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <Layout>
       <div
@@ -220,9 +233,9 @@ export default function MentorsView(props) {
 
           <TabPanel value={value} index={0}>
             <Paper className={classes.needContainer} elevation={4}>
-              {requests.map(x => {
-                if (x.status === null) {
-                  return (
+              {requests.map(
+                x =>
+                  x.status === null && (
                     <Paper
                       id={x.id}
                       key={x.id}
@@ -240,28 +253,39 @@ export default function MentorsView(props) {
                       </Typography>
                       <div className={classes.Icons}>
                         <Tooltip title="Remove">
-                          <Button>
-                            <RemoveCircleIcon className={classes.removeIcon} />
+                          <Button
+                            onClick={() => {
+                              socket.emit("remove_request", x);
+                            }}
+                          >
+                            <RemoveCircleIcon
+                              style={{ color: "#9da1f0" }}
+                              className={classes.removeIcon}
+                            />
                           </Button>
                         </Tooltip>
                         <Tooltip title="Help">
-                          <Button>
-                            <LiveHelpIcon />
+                          <Button onClick={() => updateRequest(x.id, false)}>
+                            <Help style={{ color: "#9da1f0" }} />
                           </Button>
                         </Tooltip>
                       </div>
                     </Paper>
-                  );
-                }
-              })}
+                  )
+              )}
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Paper className={classes.needContainer} elevation={6}>
-              {requests.map(x => {
-                if (x.status === false) {
-                  return (
-                    <Paper id={x.id} className={classes.needHelp} elevation={6}>
+              {requests.map(
+                x =>
+                  x.status === false && (
+                    <Paper
+                      id={x.id}
+                      key={x.id}
+                      className={classes.needHelp}
+                      elevation={6}
+                    >
                       {" "}
                       <Typography variant="h7" className={classes.studentsNeed}>
                         <Avatar
@@ -272,21 +296,23 @@ export default function MentorsView(props) {
                         {x.title}
                       </Typography>
                       <div className={classes.Icons}>
-                        <Tooltip title="Remove">
-                          <Button>
-                            <RemoveCircleIcon className={classes.removeIcon} />
+                        <Tooltip title="return back to queue">
+                          <Button onClick={() => updateRequest(x.id, null)}>
+                            <AssignmentReturnIcon
+                              style={{ color: "#9da1f0" }}
+                              className={classes.removeIcon}
+                            />
                           </Button>
                         </Tooltip>
                         <Tooltip title="Help">
-                          <Button>
-                            <LiveHelpIcon />
+                          <Button onClick={() => updateRequest(x.id, true)}>
+                            <Help style={{ color: "#9da1f0" }} />
                           </Button>
                         </Tooltip>
                       </div>
                     </Paper>
-                  );
-                }
-              })}
+                  )
+              )}
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={2}>
@@ -312,6 +338,7 @@ export default function MentorsView(props) {
               student_id: studentDetails.id,
               title: "try2"
             };
+            socket.emit("save_requests", requests);
             socket.emit("add_request", obj);
           }}
         >
