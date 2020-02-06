@@ -9,15 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import Tooltip from "@material-ui/core/Tooltip";
-import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import teacher from "../../assets/images/mentor2.png";
 import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
-import DialogBox from "./DialogBox";
+import AddEmail from "./AddEmail";
+import Confirmation from "./HandleUsers";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -28,7 +26,6 @@ const StyledTableCell = withStyles(theme => ({
     fontSize: 14
   }
 }))(TableCell);
-
 const StyledTableRow = withStyles(theme => ({
   root: {
     "&:nth-of-type(odd)": {
@@ -36,7 +33,6 @@ const StyledTableRow = withStyles(theme => ({
     }
   }
 }))(TableRow);
-
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
@@ -61,16 +57,13 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   }
 });
-
 export const Admin = props => {
   const classes = useStyles();
-
   const [accountType] = useState("Admin");
   const { user, headers } = props.data;
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const [users, setUsers] = useState([]);
-  const [email, setEmail] = useState("");
   const [userType, setUserType] = useState(3);
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState("");
@@ -83,37 +76,11 @@ export const Admin = props => {
     });
   }, []);
 
-  function handleChange(e) {
-    console.log(e.target.value);
-    setEmail(e.target.value);
-  }
-
-  function handleClickAdd(e) {
-    console.log(e);
-
-    const EmailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    axios.get("/api/user/list", headers).then(res => {
-      console.log(res.data[0].email);
-    });
-
-    if (e.match(EmailVal)) {
-      axios
-        .post(
-          "/api/user",
-          {
-            email: email,
-            account_type_id: 3
-          },
-          headers
-        )
-        .then(res => {
-          toast.info("Email Address has been Added!");
-        });
-    } else {
-      toast.error("Please Enter Valid Email Address");
-    }
-  }
+  const deleteClass = classid => {
+    axios
+      .delete(`/api/user/${classid}`, headers)
+      .then(() => setUsers(users.filter(data => data.id !== classid)));
+  };
 
   return (
     <Layout accountType={accountType} first_name={first_name}>
@@ -121,33 +88,7 @@ export const Admin = props => {
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <Paper className={classes.paperStyle}>
-            <Grid container align="center" alignItems="center">
-              <Grid item xs={10} className={classes.gridStyle}>
-                <form noValidate autoComplete="off">
-                  <TextField
-                    id="standard-basic"
-                    label="Email Address"
-                    onChange={handleChange}
-                    className={classes.textField}
-                    value={email}
-                    type="email"
-                  />
-                </form>
-              </Grid>
-              <Grid item xs={2}>
-                <Tooltip title="Add User">
-                  <AddCircleIcon
-                    value={email}
-                    fontSize="large"
-                    onClick={() => handleClickAdd(email)}
-                    style={{
-                      color: "#4abdac",
-                      cursor: "pointer"
-                    }}
-                  />
-                </Tooltip>
-              </Grid>
-            </Grid>
+            <AddEmail headers={headers} setUsers={setUsers} users={users} />
           </Paper>
           <PaperStat />
         </Grid>
@@ -192,22 +133,26 @@ export const Admin = props => {
                         <StyledTableCell component="th" scope="row">
                           {row.email}
                         </StyledTableCell>
-
                         <StyledTableCell align="right">
                           {row.account_type_id === 3 && (
-                            <Button
-                              variant="contained"
-                              style={{ background: "#7dcec3" }}
-                              color="primary"
-                              onClick={() => {
-                                setDetails(row);
-                                setOpen(true);
-                                setHandle("set");
-                              }}
-                            >
-                              <img src={teacher} className={classes.mentor} />
-                              Set as Mentor
-                            </Button>
+                            <>
+                              <Button
+                                variant="contained"
+                                style={{ background: "#7dcec3" }}
+                                color="primary"
+                                onClick={() => {
+                                  setDetails(row);
+                                  setOpen(true);
+                                  setHandle("set");
+                                }}
+                              >
+                                <img src={teacher} className={classes.mentor} />
+                                Set as Mentor
+                              </Button>
+                              <Button onClick={() => deleteClass(row.id)}>
+                                delete
+                              </Button>
+                            </>
                           )}
                           {row.account_type_id === 2 && (
                             <Button
@@ -232,7 +177,7 @@ export const Admin = props => {
           </TableContainer>
         </Grid>
       </Grid>
-      <DialogBox
+      <Confirmation
         setOpen={setOpen}
         open={open}
         details={details}

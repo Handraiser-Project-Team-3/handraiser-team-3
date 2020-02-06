@@ -6,13 +6,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-export default function Confirmation(props) {
+export default function HandleUsers(props) {
   const { open, setOpen, details, headers, handle, setUsers } = props;
 
   const handleClose = () => {
-    // cancel button clicked
     setOpen(false);
   };
 
@@ -56,7 +55,6 @@ export default function Confirmation(props) {
         );
     }
   }
-
   return (
     <div>
       <Dialog
