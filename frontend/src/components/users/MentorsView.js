@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -92,9 +93,7 @@ const useStyles = makeStyles(theme => ({
   },
   Icons: {
     display: "inline-flex",
-    justifyContent: "space-between",
-    width: " 100px",
-    paddingRight: "20px"
+    justifyContent: "space-between"
   },
   studentsNeed: {
     display: "flex",
@@ -236,41 +235,13 @@ export default function MentorsView(props) {
               {requests.map(
                 x =>
                   x.status === null && (
-                    <Paper
-                      id={x.id}
+                    <RequestComponent
                       key={x.id}
-                      className={classes.needHelp}
-                      elevation={6}
-                    >
-                      {" "}
-                      <Typography variant="h7" className={classes.studentsNeed}>
-                        <Avatar
-                          className={classes.studentsAvatar}
-                          alt="Student"
-                          src={student}
-                        />
-                        {x.title}
-                      </Typography>
-                      <div className={classes.Icons}>
-                        <Tooltip title="Remove">
-                          <Button
-                            onClick={() => {
-                              socket.emit("remove_request", x);
-                            }}
-                          >
-                            <RemoveCircleIcon
-                              style={{ color: "#9da1f0" }}
-                              className={classes.removeIcon}
-                            />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Help">
-                          <Button onClick={() => updateRequest(x.id, false)}>
-                            <Help style={{ color: "#9da1f0" }} />
-                          </Button>
-                        </Tooltip>
-                      </div>
-                    </Paper>
+                      data={x}
+                      updateRequest={updateRequest}
+                      classes={classes}
+                      action={"need"}
+                    />
                   )
               )}
             </Paper>
@@ -280,54 +251,33 @@ export default function MentorsView(props) {
               {requests.map(
                 x =>
                   x.status === false && (
-                    <Paper
-                      id={x.id}
+                    <RequestComponent
                       key={x.id}
-                      className={classes.needHelp}
-                      elevation={6}
-                    >
-                      {" "}
-                      <Typography variant="h7" className={classes.studentsNeed}>
-                        <Avatar
-                          className={classes.studentsAvatar}
-                          alt="Student"
-                          src={student}
-                        />
-                        {x.title}
-                      </Typography>
-                      <div className={classes.Icons}>
-                        <Tooltip title="return back to queue">
-                          <Button onClick={() => updateRequest(x.id, null)}>
-                            <AssignmentReturnIcon
-                              style={{ color: "#9da1f0" }}
-                              className={classes.removeIcon}
-                            />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Help">
-                          <Button onClick={() => updateRequest(x.id, true)}>
-                            <Help style={{ color: "#9da1f0" }} />
-                          </Button>
-                        </Tooltip>
-                      </div>
-                    </Paper>
+                      data={x}
+                      updateRequest={updateRequest}
+                      classes={classes}
+                      bool1={null}
+                      action={"help"}
+                    />
                   )
               )}
             </Paper>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Paper className={classes.needContainer} elevation={6}>
-              <Paper className={classes.needHelp} elevation={6}>
-                {" "}
-                <Typography variant="h7" className={classes.studentsBeingHelp}>
-                  <Avatar
-                    className={classes.studentsAvatar}
-                    alt="Student"
-                    src={student}
-                  />
-                  Papa Rex Rojo
-                </Typography>
-              </Paper>
+              {requests.map(
+                x =>
+                  x.status === true && (
+                    <RequestComponent
+                      key={x.id}
+                      data={x}
+                      updateRequest={updateRequest}
+                      classes={classes}
+                      bool1={null}
+                      action={"done"}
+                    />
+                  )
+              )}
             </Paper>
           </TabPanel>
         </div>
@@ -349,3 +299,71 @@ export default function MentorsView(props) {
     </Layout>
   );
 }
+const RequestComponent = ({ data, updateRequest, classes, action }) => {
+  return (
+    <Paper
+      id={data.id}
+      key={data.id}
+      className={classes.needHelp}
+      elevation={6}
+    >
+      {" "}
+      <Typography variant="h7" className={classes.studentsNeed}>
+        <Avatar
+          className={classes.studentsAvatar}
+          alt="Student"
+          src={student}
+        />
+        {data.title}
+      </Typography>
+      {action === "need" ? (
+        <div className={classes.Icons}>
+          <Tooltip title="Remove">
+            <Button
+              onClick={() => {
+                socket.emit("remove_request", data);
+              }}
+            >
+              <RemoveCircleIcon
+                style={{ color: "#9da1f0" }}
+                className={classes.removeIcon}
+              />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Help">
+            <Button onClick={() => updateRequest(data.id, false)}>
+              <Help style={{ color: "#9da1f0" }} />
+            </Button>
+          </Tooltip>
+        </div>
+      ) : action === "help" ? (
+        <div className={classes.Icons}>
+          <Tooltip title="Move back to 'Need Help'">
+            <Button onClick={() => updateRequest(data.id, null)}>
+              <AssignmentReturnIcon
+                style={{ color: "#9da1f0" }}
+                className={classes.removeIcon}
+              />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Help">
+            <Button onClick={() => updateRequest(data.id, true)}>
+              <CheckCircleIcon style={{ color: "#9da1f0" }} />
+            </Button>
+          </Tooltip>
+        </div>
+      ) : (
+        <div className={classes.Icons}>
+          <Tooltip title="Move back to 'Being Help'">
+            <Button onClick={() => updateRequest(data.id, false)}>
+              <AssignmentReturnIcon
+                style={{ color: "#9da1f0" }}
+                className={classes.removeIcon}
+              />
+            </Button>
+          </Tooltip>
+        </div>
+      )}
+    </Paper>
+  );
+};
