@@ -129,7 +129,9 @@ export const HandleClassModal = props => {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={() => {
+          !classRoom && handleClose();
+        }}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >

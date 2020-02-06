@@ -26,7 +26,6 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
-import man from "../../assets/images/man.png";
 
 export const ClassView = props => {
   const classes = useStyles();
@@ -82,6 +81,7 @@ export const ClassView = props => {
           console.error(err);
         }
       })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
   return (
     <Layout
@@ -115,9 +115,13 @@ export const ClassView = props => {
                         </Typography>
                         <Tooltip
                           title={
-                            data.class_description.length > 48
-                              ? data.class_description.substring(0)
-                              : ""
+                            data.class_description.length > 48 ? (
+                              <Typography>
+                                {data.class_description.substring(0)}
+                              </Typography>
+                            ) : (
+                              ""
+                            )
                           }
                         >
                           <Typography
@@ -125,7 +129,7 @@ export const ClassView = props => {
                             color="textSecondary"
                             component="p"
                           >
-                            {data.class_description.length > 50
+                            {data.class_description.length > 45
                               ? data.class_description.substring(0, 42) + "..."
                               : data.class_description}
                           </Typography>
