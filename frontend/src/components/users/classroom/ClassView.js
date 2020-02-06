@@ -45,12 +45,6 @@ export const ClassView = props => {
     class_description: ""
   });
   const [classroomUsers, setClassroomUsers] = useState([]);
-  const [check, setCheck] = useState({});
-  const match = useRouteMatch({
-    path: '/classroom/:id',
-    strict: true,
-    sensitive: true
-  })
 
   const handleClickOpen = () => {
     setOpen(true);
