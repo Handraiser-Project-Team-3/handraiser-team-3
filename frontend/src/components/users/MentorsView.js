@@ -4,7 +4,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-// import Grid from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -17,11 +17,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 
 // component/s
-import Chatbox from "../users/Chatbox";
 import Layout from "../users/reusables/Layout";
+import Stats from "../users/reusables/Stats";
 
 // images
-import head from "../assets/images/bg.png";
 import student from "../assets/images/student.png";
 
 //Tabs
@@ -73,30 +72,28 @@ export default function MentorsView() {
 			name: "Crystal Watson"
 		},
 		{
-			name: "George Wells"
+			name: "Nathan Young "
 		},
 		{
-			name: "Willie Foster 5"
+			name: "Crystal Watson"
 		},
 		{
-			name: "Kathy Ellis"
+			name: "Nathan Young "
 		},
 		{
-			name: "Kathy Ellis"
+			name: "Crystal Watson"
 		},
 		{
-			name: "Kathy Ellis"
+			name: "Crystal Watson"
 		},
 		{
-			name: "Kathy Ellis"
+			name: "Crystal Watson"
 		}
 	]);
 	return (
 		<Layout>
-			<div
-				style={{ display: "flex", flexWrap: "wrap", alignContent: "center" }}
-			>
-				<div className={classes.root}>
+			<Grid container justify="flex-start" spacing={2}>
+				<Grid item xs={12} sm={12} md={12} lg={4}>
 					<AppBar position="static" color="default" className={classes.appBar}>
 						<Tabs
 							value={value}
@@ -107,16 +104,13 @@ export default function MentorsView() {
 							aria-label="full width tabs example"
 						>
 							<Tab label="Need Help" {...a11yProps(0)} />
-							<Tab label="Being Help" {...a11yProps(1)} />
+							<Tab label="Being Helped" {...a11yProps(1)} />
 							<Tab label="Done" {...a11yProps(2)} />
 						</Tabs>
 					</AppBar>
-
-					<TabPanel value={value} index={0}>
-						<Paper className={classes.needContainer} elevation={4}>
+					<div className={classes.root}>
+						<TabPanel value={value} index={0}>
 							{val.map((e, i) => {
-								console.log(e);
-
 								return (
 									<Paper
 										key={i}
@@ -124,104 +118,131 @@ export default function MentorsView() {
 										className={classes.needHelp}
 										elevation={6}
 									>
-										{" "}
-										<Typography
-											variant="inherit"
-											className={classes.studentsNeed}
+										<Grid
+											container
+											justify="space-between"
+											spacing={3}
+											alignItems="center"
 										>
-											<Avatar
-												className={classes.studentsAvatar}
-												alt="Student"
-												src={student}
-											/>
-											{e.name}
-										</Typography>
-										<div className={classes.Icons}>
-											<Tooltip title="Remove">
-												<Button>
-													<RemoveCircleOutlineIcon
-														fontSize="small"
-														style={{ color: "gray" }}
+											<Grid item xs={7}>
+												<Typography
+													variant="inherit"
+													className={classes.studentsNeed}
+												>
+													<Avatar
+														className={classes.studentsAvatar}
+														alt="Student"
+														src={student}
 													/>
-												</Button>
-											</Tooltip>
-											<Tooltip title="Help">
-												<Button>
-													<HelpOutlineIcon
-														fontSize="small"
-														style={{ color: "#f7b731" }}
-													/>
-												</Button>
-											</Tooltip>
-										</div>
+													{e.name}
+												</Typography>
+											</Grid>
+											<Grid item xs={5}>
+												<Grid container justify="flex-end" spacing={3}>
+													<Grid item>
+														<Tooltip title="Remove">
+															<RemoveCircleOutlineIcon
+																fontSize="small"
+																style={{ color: "gray", cursor: "pointer" }}
+															/>
+														</Tooltip>
+													</Grid>
+													<Grid item>
+														<Tooltip title="Help">
+															<HelpOutlineIcon
+																fontSize="small"
+																style={{ color: "#ff6f61", cursor: "pointer" }}
+															/>
+														</Tooltip>
+													</Grid>
+												</Grid>
+											</Grid>
+										</Grid>
 									</Paper>
 								);
 							})}
-						</Paper>
-					</TabPanel>
-					<TabPanel value={value} index={1}>
-						<Paper className={classes.needContainer} elevation={6}>
+						</TabPanel>
+						<TabPanel value={value} index={1}>
 							{val.map((e, v) => {
 								return (
 									<Paper key={v} className={classes.needHelp} elevation={6}>
-										{" "}
-										<Typography
-											variant="inherit"
-											className={classes.studentsBeingHelp}
-										>
-											<Avatar
-												className={classes.studentsAvatar}
-												alt="Student"
-												src={student}
-											/>
-											{e.name}
-										</Typography>
-										<div
-											className={classes.Icons}
-											style={{ justifyContent: "flex-end" }}
-										>
-											<Tooltip title="Remove">
-												<Button>
-													<RemoveCircleOutlineIcon
-														fontSize="small"
-														style={{ color: "gray" }}
+										<Grid container justify="space-between">
+											<Grid item xs={9} sm={11} md={9} lg={10} xl={10}>
+												<Typography
+													variant="inherit"
+													className={classes.studentsNeed}
+												>
+													<Avatar
+														className={classes.studentsAvatar}
+														alt="Student"
+														src={student}
 													/>
-												</Button>
-											</Tooltip>
-										</div>
+													{e.name}
+												</Typography>
+											</Grid>
+											<Grid item xs={3} sm={1} md={3} lg={2} xl={2}>
+												<Tooltip title="Remove">
+													<Button>
+														<RemoveCircleOutlineIcon
+															fontSize="small"
+															style={{ color: "gray" }}
+														/>
+													</Button>
+												</Tooltip>
+											</Grid>
+										</Grid>
 									</Paper>
 								);
 							})}
-						</Paper>
-					</TabPanel>
-					<TabPanel value={value} index={2}>
-						<Paper className={classes.needContainer} elevation={6}>
+						</TabPanel>
+						<TabPanel value={value} index={2}>
 							<Paper className={classes.needHelp} elevation={6}>
 								{" "}
-								<Typography
-									variant="inherit"
-									className={classes.studentsBeingHelp}
-								>
+								<Typography variant="inherit" className={classes.studentsNeed}>
 									<Avatar
 										className={classes.studentsAvatar}
 										alt="Student"
 										src={student}
 									/>
-									Papa Rex Rojo
+									Eric Atento
 								</Typography>
-								{/* <div className={classes.Icons}>
-                  <Tooltip title="Remove">
-                    <Button>
-                      <RemoveCircleIcon className={classes.removeIcon} />
-                    </Button>
-                  </Tooltip>
-                </div> */}
 							</Paper>
-						</Paper>
-					</TabPanel>
-				</div>
-				<Chatbox />
-			</div>
+						</TabPanel>
+					</div>
+					<div className={classes.divStyle}>
+						<Grid
+							container
+							justify="space-between"
+							alignItems="center"
+							style={{ padding: "15px" }}
+						>
+							<Grid item>
+								<Grid container spacing={3} alignItems="center">
+									<Grid item xs={4}>
+										<Avatar
+											className={classes.studentsAvatar}
+											alt="Student"
+											src={student}
+										/>
+									</Grid>
+									<Grid item xs={8}>
+										<Typography variant="h6">Eric Atento</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+							<Grid item>
+								<Tooltip title="Ask for help">
+									<HelpOutlineIcon
+										fontSize="large"
+										style={{ color: "#ff6f61", cursor: "pointer" }}
+									/>
+								</Tooltip>
+							</Grid>
+						</Grid>
+					</div>
+				</Grid>
+				<Stats />
+			</Grid>
 		</Layout>
 	);
 }
@@ -239,88 +260,38 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	root: {
-		backgroundColor: theme.palette.background.paper,
-		width: 500,
-		paddingTop: "30px",
-		paddingLeft: "200px",
-		"@media (max-width: 320px)": {
-			paddingLeft: "0px !important"
-		},
-
-		"@media (max-width: 375px)": {
-			paddingLeft: "0px !important"
-		},
-		"@media (max-width: 425px)": {
-			paddingLeft: "0px !important"
-		},
-		"@media(max-width:1024px)": {
-			paddingLeft: "270px"
-		},
-		"@media(max-width:768px)": {
-			paddingLeft: "150px"
-		}
+		background:
+			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
+		border: "1px solid lightgray",
+		height: "65vh",
+		overflow: "auto",
+		padding: "0"
 	},
-
-	header: {
-		height: "auto",
-		backgroundImage: `url(${head})`,
-		backgroundSize: "cover",
-		paddingTop: "85px"
-	},
-	headersIcon: {},
-	color: {
-		display: "flex",
-		color: "gray",
-		paddingLeft: "35px"
-	},
-
 	needHelp: {
 		padding: "15px",
 		margin: "20px",
 		display: "flex",
 		justifyContent: "space-between"
 	},
-	needContainer: {
-		background:
-			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		maxHeight: 575,
-		overflow: "auto",
-		"@media (max-width: 320px)": {
-			maxHeight: 300
-		}
-	},
-	Icons: {
-		display: "inline-flex",
-		justifyContent: "space-between",
-		width: " 100px",
-		paddingRight: "20px"
-	},
 	studentsNeed: {
 		display: "flex",
 		alignItems: "center",
 		color: "gray"
 	},
-	studentsBeingHelp: {
-		display: "flex",
-		alignItems: "center",
-		color: "gray"
-	},
-	chatBox: {
-		display: "inline-flex",
-		alignItems: "center"
-	},
 	appBar: {
-		margin: "0px",
-		background:
-			"linear-gradient(207deg, rgba(171,171,250,1) 20%, rgba(171,171,250,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 21%, rgba(255,255,255,1) 76%, rgba(171,171,250,1) 76%, rgba(171,171,250,1) 86%)"
-	},
-	mentorsAvatar: {
-		small: {
-			width: theme.spacing(3),
-			height: theme.spacing(3)
-		}
+		// background:
+		// 	"linear-gradient(207deg, rgba(171,171,250,1) 15%, rgba(255,255,255,1) 15%, rgba(255,255,255,1) 86%, rgba(171,171,250,1) 86%)"
+		background: "#f1f0fa"
 	},
 	studentsAvatar: {
 		marginRight: "10px"
+	},
+	divStyle: {
+		width: "100%",
+		height: "auto",
+		background: "#eff1fa",
+		marginTop: "0.5vh",
+		border: "1px solid lightgray",
+		borderRadius: "5px"
 	}
 }));

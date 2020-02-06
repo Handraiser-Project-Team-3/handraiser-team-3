@@ -25,16 +25,14 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	root: {
-		margin: "28px",
 		padding: "15px",
-		borderRadius: "10px",
-		backgroundColor: "#ababfa",
-		width: "45%",
-		"@media(max-width:1024px)": {
-			width: "100%"
-		}
+		backgroundColor: "#e2e3f7",
+		marginTop: "1vh",
+		borderRadius: "5px"
 	},
 	top: {
+		background:
+			"linear-gradient(207deg, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 22%, rgba(255,255,255,1) 24%, rgba(255,255,255,1) 26%, rgba(255,255,255,1) 72%, rgba(171,171,250,1) 72%, rgba(171,171,250,1) 73%)",
 		padding: "0px",
 		margin: "0px",
 		width: "100%"
@@ -45,36 +43,12 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: "flex-start",
 		alignItems: "center"
 	},
-	MainChatBox: {
-		maxHeight: 500,
-		overflow: "auto",
-		width: "95%",
-		margin: "20px",
-		height: "60vh",
-
-		"@media (max-width: 320px)": {
-			marginTop: "-20px",
-			width: "100%",
-			margin: "50px"
-		}
-	},
 	convoBox: {
 		backgroundColor: "whitesmoke",
 		maxHeight: 500,
 		height: "50vh",
 		overflow: "auto",
-		margin: "10px 0 10px 0 ",
-
-		"@media (max-width: 320px)": {
-			maxHeight: 250
-		},
-		"@media (max-width: 425px)": {
-			maxHeight: 350
-		},
-
-		"@media (max-width: 375px)": {
-			maxHeight: 350
-		}
+		margin: "10px 0 10px 0 "
 	},
 	inputArea: {
 		paddingTop: "5px",
@@ -83,12 +57,18 @@ const useStyles = makeStyles(theme => ({
 	},
 	inputAreacontainer: {
 		display: "flex",
-		"@media (max-width: 1024px)": {
-			margin: "0px "
-		},
 		mentorAvatar: {
 			position: "fixed"
 		}
+	},
+	spanStyle: {
+		display: "flex",
+		justifyContent: "flex-end",
+		backgroundColor: "whitesmoke",
+		wordBreak: " break-all",
+		border: " 2px solid #ababfa",
+		padding: "10px",
+		borderRadius: "5px 20px"
 	}
 }));
 
@@ -96,151 +76,107 @@ export default function ChatBox() {
 	const classes = useStyles();
 
 	return (
-		<React.Fragment>
-			<Paper className={classes.root}>
-				<Paper className={classes.top} elevation={3}>
-					<Grid className={classes.topName}>
-						<Avatar alt="top" src={bubbles} />
-						<Typography variant="h6" style={{ paddingLeft: "10px" }}>
-							Mark Medes
-						</Typography>
-					</Grid>
-				</Paper>
+		<Paper className={classes.root}>
+			<Paper className={classes.top} elevation={3}>
+				<Grid className={classes.topName}>
+					<Avatar alt="top" src={bubbles} style={{ color: "white" }} />
+					<Typography
+						variant="h6"
+						style={{ paddingLeft: "10px", color: "#525252" }}
+					>
+						Mark Medes
+					</Typography>
+				</Grid>
+			</Paper>
 
-				{/* messages] */}
-				<Paper className={classes.convoBox} elevation={6}>
-					<Grid container direction="column">
-						{/* {messages.map(m => {
+			{/* messages] */}
+			<Paper className={classes.convoBox} elevation={6}>
+				<Grid container direction="column">
+					{/* {messages.map(m => {
               return ( */}
-						<Grid
-							style={{ display: "flex", alignItems: "center" }}
-							xl={12}
-							lg={12}
-							item
-						>
-							<Grid
-								container
-								alignItems="center"
-								justify="flex-end"
-								style={{ padding: 5, paddingRight: "10px" }}
-							>
-								<Grid
-									style={{
-										display: "flex",
-										justifyContent: "flex-end",
-										maxWidth: "300px",
-										wordBreak: " break-all"
-									}}
-									xl={5}
-									lg={5}
-									md={6}
-									sm={7}
-									xs={8}
-									item
-								>
-									<span
-										style={{
-											display: "flex",
-											justifyContent: "flex-end",
-											backgroundColor: "whitesmoke",
-											wordBreak: " break-all",
-											border: " 2px solid #ababfa",
-											padding: "10px",
-											borderRadius: "5px 20px"
-										}}
-									>
-										{
-											"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ipsum purus, bibendum sit amet vulputate eget, porta semper ligula. Donec bibendum"
-										}
-									</span>
-								</Grid>
-
-								<Grid
-									style={{
-										alignSelf: " flex-end",
-										display: "flex",
-										alignItems: "flex-end"
-									}}
-									item
-								>
-									<Avatar
-										className={classes.mentorAvatar}
-										alt="mentor"
-										src={mentor}
-									/>
-								</Grid>
-							</Grid>
-						</Grid>
-						{/* );
-            })} */}
+					<Grid
+						style={{ display: "flex", alignItems: "center" }}
+						xl={12}
+						lg={12}
+						item
+					>
 						<Grid
 							container
 							alignItems="center"
-							justify="flex-start"
-							// style={{ padding: 5 }}
+							justify="flex-end"
+							style={{ padding: 5, paddingRight: "10px" }}
 						>
 							<Grid
-								style={{
-									margin: 5,
-									alignSelf: " flex-end",
-									display: "flex",
-									justifyContent: "flex-start"
-								}}
 								item
-							>
-								<Avatar alt="student" src={student} />
-							</Grid>
-
-							<Grid
-								style={{
-									display: "flex",
-									alignItems: "flex-end",
-									maxWidth: "300px"
-								}}
 								xl={5}
 								lg={5}
 								md={6}
 								sm={7}
 								xs={8}
-								item
+								style={{
+									maxWidth: "300px"
+								}}
 							>
-								<span
-									style={{
-										display: "flex",
-										justifyContent: "flex-end",
-										backgroundColor: "whitesmoke",
-										wordBreak: " break-all",
-										border: " 2px solid #F7B732",
-										padding: "10px",
-										borderRadius: "20px 5px"
-									}}
-								>
-									{".ahjhdffjkadfjhfjhffjadfadfh "}
+								<span className={classes.spanStyle}>
+									{
+										"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ipsum purus, bibendum sit amet vulputate eget, porta semper ligula. Donec bibendum"
+									}
 								</span>
+							</Grid>
+
+							<Grid item>
+								<Avatar
+									className={classes.mentorAvatar}
+									alt="mentor"
+									src={mentor}
+								/>
 							</Grid>
 						</Grid>
 					</Grid>
+					{/* );
+            })} */}
+					<Grid container alignItems="center" justify="flex-start">
+						<Grid
+							item
+							style={{
+								margin: 5
+							}}
+						>
+							<Avatar alt="student" src={student} />
+						</Grid>
 
-					{/* endofmessages */}
-				</Paper>
-				<Paper className={classes.inputAreacontainer} elevation={6}>
-					<TextField
-						variant="outlined"
-						id="standard-basic"
-						label="Type your message..."
-						fullWidth
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Button endIcon={<SendIcon />}></Button>
-								</InputAdornment>
-							)
-						}}
-					/>
-					{/* </Grid>
-          </Grid> */}
-				</Paper>
+						<Grid xl={5} lg={5} md={6} sm={7} xs={8} item>
+							<span
+								className={classes.spanStyle}
+								style={{
+									border: " 2px solid #ff6f61",
+									borderRadius: "20px 5px",
+									maxWidth: "300px"
+								}}
+							>
+								{"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
+							</span>
+						</Grid>
+					</Grid>
+				</Grid>
+
+				{/* endofmessages */}
 			</Paper>
-		</React.Fragment>
+			<Paper className={classes.inputAreacontainer} elevation={6}>
+				<TextField
+					variant="outlined"
+					id="standard-basic"
+					label="Type your message..."
+					fullWidth
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Button endIcon={<SendIcon />}></Button>
+							</InputAdornment>
+						)
+					}}
+				/>
+			</Paper>
+		</Paper>
 	);
 }
