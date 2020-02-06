@@ -23,7 +23,7 @@ import Layout from "./reusables/Layout";
 // images
 import head from "../assets/images/bg.png";
 import student from "../assets/images/student.png";
-
+import nodata from "../assets/images/nodata.png";
 //Tabs
 const TabPanel = props => {
   const { children, value, index, ...other } = props;
@@ -75,8 +75,14 @@ export default function MentorsView() {
     {
       id: 5,
       name: "George Wells"
-    },
+    }
   ]);
+  const [history] = React.useState([
+    {
+      history: 0
+    }
+  ]);
+
   return (
     <Layout>
       <div
@@ -179,30 +185,49 @@ export default function MentorsView() {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Paper className={classes.needContainer} elevation={6}>
-              <Paper className={classes.needHelp} elevation={6}>
-                {" "}
-                <div className={classes.studentsNeed}>
-                  <Avatar
-                    className={classes.studentsAvatar}
-                    alt="Student"
-                    src={student}
-                  />
-                  <Typography className={classes.studentsBeingHelp}>
-                    Papa Rex Rojo
-                  </Typography>
-                </div>
-              </Paper>
-              <Paper className={classes.needHelp} elevation={6}>
-                {" "}
-                <Typography className={classes.studentsBeingHelp}>
-                  {/* <Avatar
-                    className={classes.studentsAvatar}
-                    alt="Student"
-                    src={student}
-                  /> */}
-                  No Data
-                </Typography>
-              </Paper>
+              {history === 1 ? (
+                <Paper className={classes.needHelp} elevation={6}>
+                  <div className={classes.studentsNeed}>
+                    <Avatar
+                      className={classes.studentsAvatar}
+                      alt="Student"
+                      src={student}
+                    />
+                    <Typography className={classes.studentsBeingHelp}>
+                      Papa Rex Rojo
+                    </Typography>
+                  </div>
+                </Paper>
+              ) : (
+                <Paper
+                  elevation={6}
+                  style={{
+                    margin: "40px",
+                    marginTop: "100px"
+                    // backgroundColor: "#ABABFA"
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "10px",
+                      display: "flex",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Typography variant="h6">No Data</Typography>
+                  </div>
+                  <div
+                    style={{
+                      padding: "10px",
+                      display: "flex",
+                      justifyContent: "center",
+                      flexWrap: "wrap"
+                    }}
+                  >
+                    <img src={nodata} width="50%" />
+                  </div>
+                </Paper>
+              )}
             </Paper>
 
             <div className={classes.modalButton}>
