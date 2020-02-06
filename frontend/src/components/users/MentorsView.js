@@ -19,6 +19,7 @@ import Button from "@material-ui/core/Button";
 // component/s
 import Layout from "../users/reusables/Layout";
 import Stats from "../users/reusables/Stats";
+import ClassroomModal from "../users/classroomModal";
 
 // images
 import student from "../assets/images/student.png";
@@ -231,12 +232,7 @@ export default function MentorsView() {
 								</Grid>
 							</Grid>
 							<Grid item>
-								<Tooltip title="Ask for help">
-									<HelpOutlineIcon
-										fontSize="large"
-										style={{ color: "#ff6f61", cursor: "pointer" }}
-									/>
-								</Tooltip>
+								<ClassroomModal />
 							</Grid>
 						</Grid>
 					</div>

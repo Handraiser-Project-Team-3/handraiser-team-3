@@ -24,7 +24,7 @@ export default function MentorsView() {
 							<Paper className={classes.paperStyle}>
 								<Grid container alignItems="center">
 									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
-										<img src={question} className={classes.help} />
+										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
 										<Grid container direction="column" align="center">
@@ -45,7 +45,7 @@ export default function MentorsView() {
 							<Paper className={classes.paperStyle}>
 								<Grid container alignItems="center">
 									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
-										<img src={question} className={classes.help} />
+										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
 										<Grid container direction="column" align="center">
@@ -66,7 +66,7 @@ export default function MentorsView() {
 							<Paper className={classes.paperStyle}>
 								<Grid container alignItems="center">
 									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
-										<img src={question} className={classes.help} />
+										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
 										<Grid container direction="column" align="center">

@@ -79,7 +79,7 @@ export default function ChatBox() {
 		<Paper className={classes.root}>
 			<Paper className={classes.top} elevation={3}>
 				<Grid className={classes.topName}>
-					<Avatar alt="top" src={bubbles} style={{ color: "white" }} />
+					<img src={bubbles} style={{ width: "45px" }} />
 					<Typography
 						variant="h6"
 						style={{ paddingLeft: "10px", color: "#525252" }}
