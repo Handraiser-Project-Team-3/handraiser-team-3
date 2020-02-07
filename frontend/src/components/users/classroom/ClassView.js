@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles,  } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -27,8 +27,6 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
-
-
 
 export const ClassView = props => {
   const classes = useStyles();
