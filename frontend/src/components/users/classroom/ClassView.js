@@ -20,13 +20,19 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
+<<<<<<< HEAD
 import { PageNotFound } from "../reusables/PageNotFound";
+=======
+
+>>>>>>> c7bc2825c470611e915730d61aa584d423647020
 // images
 import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+
+
 
 export const ClassView = props => {
   const classes = useStyles();
@@ -127,7 +133,6 @@ export const ClassView = props => {
                     <CardMedia
                       className={classes.media}
                       image={classroom}
-                      title="Contemplative Reptile"
                     ></CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -354,7 +359,15 @@ export const ClassView = props => {
                 </Card>
               </Grid>
             ))
-          : "No Data Result"}
+          :
+          (<div className={classes.margin}>
+            <span className={classes.noClasses}>No added classes yet</span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
+            </div>
+          </div>)}
       </Grid>
       <HandleClassModal
         open={open}
@@ -373,6 +386,17 @@ export const ClassView = props => {
 };
 
 const useStyles = makeStyles(theme => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "whitesmoke"
+    }
+  },
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
@@ -420,5 +444,15 @@ const useStyles = makeStyles(theme => ({
       width: "23px",
       borderRadius: "10%"
     }
+  },
+  noClasses: {
+    fontSize: "30px",
+    color: "gray"
+  },
+  margin: {
+    margin: "0 auto",
+    marginTop: "10%",
+    display: "flex",
+    alignItems: "baseline"
   }
 }));

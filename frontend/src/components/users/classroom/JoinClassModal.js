@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// import moment from "moment";
 
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
@@ -42,7 +44,14 @@ const alertToast = msg =>
 
 export const JoinClassModal = props => {
 	const classes = useStyles();
-	const { classroomUsers, classId, className, codeClass, user, headers } = props;
+	const {
+		classroomUsers,
+		classId,
+		className,
+		codeClass,
+		user,
+		headers
+	} = props;
 	const history = useHistory();
 	const [code, setCode] = useState("");
 	const [open, setOpen] = useState(false);
@@ -66,26 +75,26 @@ export const JoinClassModal = props => {
 				let data = {
 					user_id: user.id,
 					class_id: classId
-				}
+				};
 				axios
 					.post(`/api/classroom-users/`, data, headers)
 					.then(() => {
 						classEnter();
 					})
-					.catch(e => console.log(e))
+					.catch(e => console.log(e));
 			} else {
 				if (code === "") {
 					alertToast("Code required to enter class!");
 				} else {
-					alertToast('Invalid Class Code!');
+					alertToast("Invalid Class Code!");
 				}
 			}
 		}
 	};
 
 	const classEnter = () => {
-		history.push(`/classroom/${classId}`)
-	}
+		history.push(`/classroom/${classId}`);
+	};
 
 	const ButtonComponent = () => {
 		const [check, setCheck] = React.useState({});
@@ -95,7 +104,7 @@ export const JoinClassModal = props => {
 				return userClass;
 			}
 			return null;
-		})
+		});
 
 		React.useEffect(() => {
 			setCheck(filterClassUser.filter(x => x.class_id === classId)[0])
@@ -118,64 +127,76 @@ export const JoinClassModal = props => {
 				>
 					Join Class
 					</Button>
-		}</>
-	}
-
-	return (
-		<div>
-			<ToastContainer enableMulticontainer />
-			<ButtonComponent />
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-slide-title"
-				aria-describedby="alert-dialog-slide-description"
+				) : (
+					<Button
+				size="small"
+				style={{ color: "white" }}
+				onClick={() => {
+					handleClickOpen();
+				}}
 			>
-				<DialogTitle
-					id="alert-dialog-slide-title"
-					style={{ background: "#ababfa", color: "white" }}
+				Join Class
+					</Button>
+			)}
+			</>
+		);
+	};
+
+return (
+	<div>
+		<ToastContainer enableMulticontainer />
+		<ButtonComponent />
+		<Dialog
+			open={open}
+			TransitionComponent={Transition}
+			keepMounted
+			onClose={handleClose}
+			aria-labelledby="alert-dialog-slide-title"
+			aria-describedby="alert-dialog-slide-description"
+		>
+			<DialogTitle
+				id="alert-dialog-slide-title"
+				style={{ background: "#ababfa", color: "white" }}
+			>
+				{"Join Class"}
+			</DialogTitle>
+			<DialogContent>
+				<DialogContentText
+					id="alert-dialog-slide-description"
+					style={{ marginTop: "1vh" }}
 				>
-					{"Join Class"}
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText
-						id="alert-dialog-slide-description"
-						style={{ marginTop: "1vh" }}
-					>
-						Ask your teacher for the class code, then enter it here
+					Ask your teacher for the class code, then enter it here
 					</DialogContentText>
-				</DialogContent>
-				<DialogContent>
-					<form
-						id={classId}
-						noValidate
-						className={classes.root}
-						autoComplete="off"
-						onSubmit={handleSubmit}
-					>
-						<FormControl variant="outlined">
-							<InputLabel htmlFor="classcode">Class Code</InputLabel>
-							<OutlinedInput
-								required
-								id={`classid-${classId}`}
-								name={className}
-								onChange={handleChange}
-								labelWidth={85}
-							/>
-						</FormControl>
-					</form>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Cancel
+			</DialogContent>
+			<DialogContent>
+				<form
+					id={classId}
+					noValidate
+					className={classes.root}
+					autoComplete="off"
+					onSubmit={handleSubmit}
+				>
+					<FormControl variant="outlined">
+						<InputLabel htmlFor="classcode">Class Code</InputLabel>
+						<OutlinedInput
+							required
+							id={`classid-${classId}`}
+							name={className}
+							onChange={handleChange}
+							labelWidth={85}
+						/>
+					</FormControl>
+				</form>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={handleClose} color="primary">
+					Cancel
 					</Button>
-					<Button color="primary" form={classId} type="submit">
-						Join Class
+				<Button color="primary" form={classId} type="submit">
+					Join Class
 					</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
-	);
+			</DialogActions>
+		</Dialog>
+	</div>
+);
 };

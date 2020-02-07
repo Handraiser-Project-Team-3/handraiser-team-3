@@ -10,94 +10,88 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 // import Avatar from "@material-ui/core/Avatar";
 // import AddCircleIcon from "@material-ui/icons/AddCircle";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
 import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "1000"
-    }
-  },
-  icons: {
-    width: "20px",
-    cursor: "pointer",
-    "&:hover": {
-      width: "23px",
-      borderRadius: "10%"
-    }
-  },
-  formControl: {
-    margin: theme.spacing(3)
-  },
-  titleOfrequest: {
-    backgroundColor: "#AAAAF9"
-  },
-    // dialogMainContainer:{
-    //   width:'100%'
-    // }
+	icons: {
+		width: "20px",
+		cursor: "pointer",
+		"&:hover": {
+			width: "23px",
+			borderRadius: "10%"
+		}
+	},
+	formControl: {
+		margin: theme.spacing(3)
+	},
+	titleOfrequest: {
+		backgroundColor: "#AAAAF9",
+		color: "white"
+	},
+	requestIcon: {
+		color: "#ff6f61",
+		cursor: "pointer",
+		"&:hover": {
+			color: "brown"
+		}
+	}
 }));
 export default function() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+	const classes = useStyles();
+	const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const handleClose = () => {
+		setOpen(false);
+	};
 
-  return (
-    <div>
-      <Tooltip title="Add Request" placement="right-start">
-        <Fab onClick={handleClickOpen} style={{ backgroundColor: "#AAAAF9" }} size="small">
-          {/* <Avatar
-            alt="Modal"
-            src="https://image.flaticon.com/icons/svg/148/148764.svg"
-          /> */}
-          <AddCircleOutlineIcon style={{ color: "whitesmoke" }} />
-        </Fab>
-      </Tooltip>
+	return (
+		<div>
+			<Tooltip title="Add Request">
+				<HelpOutlineIcon
+					fontSize="large"
+					className={classes.requestIcon}
+					onClick={handleClickOpen}
+				/>
+			</Tooltip>
+			<Dialog
+				className={classes.dialogMainContainer}
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="form-dialog-title"
+			>
+				<DialogTitle id="form-dialog-title" className={classes.titleOfrequest}>
+					Title of Request{" "}
+				</DialogTitle>
+				<DialogContent>
+					<form className={classes.root} noValidate autoComplete="off">
+						<TextField
+							autoFocus
+							variant="outlined"
+							margin="normal"
+							id="name"
+							label="Request"
+							type="email"
+							fullWidth
+						/>
+					</form>
+				</DialogContent>
 
-      <Dialog
-      className={classes.dialogMainContainer}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title" className={classes.titleOfrequest} style={{color:'whitesmoke'}}>
-          Title of Request{" "}
-        </DialogTitle>
-        <DialogContent>
-          {/* <DialogContentText>Ace</DialogContentText> */}
-          <form className={classes.root} noValidate autoComplete="off">
-            <TextField
-              autoFocus
-              variant="outlined"  
-              margin="normal"
-              id="name"
-              label="Request"
-              type="email"
-              fullWidth
-
-            />
-          </form>
-        </DialogContent>
-
-        <DialogActions> 
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+				<DialogActions>
+					<Button onClick={handleClose} color="primary">
+						Cancel
+					</Button>
+					<Button onClick={handleClose} color="primary">
+						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+	);
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
-import { Admin } from "../users/Admin";
+import { Admin } from "../users/admin/Admin";
 import { ClassView } from "../users/classroom/ClassView";
 import MentorsView from "../users/MentorsView";
 
