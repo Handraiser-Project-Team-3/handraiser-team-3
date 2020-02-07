@@ -110,36 +110,19 @@ export const Admin = props => {
 				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
 					<TableContainer component={Paper}>
 						<Table className={classes.table} aria-label="customized table">
-							{/* <Button
-								variant="contained"
-								style={{ background: "#ababfa" }}
-								color="primary"
-								onClick={() => setUserType(3)}
-							>
-								<img src={teacher} className={classes.mentor} />
-								Student
-							</Button>
-							&nbsp;
-							<Button
-								variant="contained"
-								style={{ background: "#ababfa" }}
-								color="primary"
-								onClick={() => setUserType(2)}
-							>
-								<img src={teacher} className={classes.mentor} />
-								Mentor
-							</Button> */}
 							<TableHead>
 								<TableRow>
 									<StyledTableCell
 										style={{
-											display: "flex",
-											cursor: "pointer"
+											display: "flex"
 										}}
 									>
 										<span>Email Address</span>{" "}
 										<Tooltip title="Filter by">
-											<ArrowDropDownIcon onClick={handleClick} />
+											<ArrowDropDownIcon
+												onClick={handleClick}
+												style={{ cursor: "pointer" }}
+											/>
 										</Tooltip>
 									</StyledTableCell>
 									<StyledTableCell
