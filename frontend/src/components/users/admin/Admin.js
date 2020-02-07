@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import teacher from "../../assets/images/mentor2.png";
 import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
@@ -148,9 +148,9 @@ export const Admin = props => {
                                 <img src={teacher} className={classes.mentor} />
                                 Set as Mentor
                               </Button>
-                              <Button onClick={() => deleteClass(row.id)}>
+                              {/* <Button onClick={() => deleteClass(row.id)}>
                                 delete
-                              </Button>
+                              </Button> */}
                             </>
                           )}
                           {row.account_type_id === 2 && (
