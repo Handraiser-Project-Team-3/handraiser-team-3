@@ -45,7 +45,7 @@ export default function PageNotFound(props) {
 									color="primary"
 									style={{ marginTop: "30px" }}
 								>
-									Go Back to classroom
+									Go Back
 							</Button>
 							</Link>
 						</Grid>
