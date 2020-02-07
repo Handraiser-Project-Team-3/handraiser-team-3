@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -34,13 +35,19 @@ export default function PageNotFound(props) {
 							</Typography>
 						</Grid>
 						<Grid item xs={12}>
-							<Button
-								variant="outlined"
-								color="primary"
-								style={{ marginTop: "30px" }}
+							<Link
+								to="/"
+								color="inherit"
+								style={{ textDecoration: "none" }}
 							>
-								Back to Homepage
+								<Button
+									variant="outlined"
+									color="primary"
+									style={{ marginTop: "30px" }}
+								>
+									Go Back to classroom
 							</Button>
+							</Link>
 						</Grid>
 					</Grid>
 				</div>

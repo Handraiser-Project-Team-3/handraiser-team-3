@@ -27,7 +27,6 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
-import MentorsView from "../reusables/Stats";
 
 
 
@@ -48,8 +47,7 @@ export const ClassView = props => {
     class_description: ""
   });
   const location = useLocation()
-  const [classroomUsers, setClassroomUsers] = useState([]);
-  const [studentDetails, setStudentDetails] = React.useState({});
+  const [studentDetails, setStudentDetails] = React.useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -94,32 +92,26 @@ export const ClassView = props => {
         try {
           const res = await axios.get(`/api/classroom-users`, headers);
           setStudentDetails(res.data.filter(x => x.user_id === user.id));
-          setClassroomUsers(res.data);
         } catch (err) {
           console.log(err);
         }
       })();
+    }
+
+    if (studentDetails) {
+      if (location.pathname === `/classroom/${studentDetails.class_id}`) {
+        history.push(`/classroom/${studentDetails.class_id}`)
+      } else {
+        history.push('/')
+      }
+    } else {
+      console.log('Login component')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [account_type_id]);
 
   console.log(location)
   console.log(studentDetails)
-  if (studentDetails) {
-    if (location.pathname === `/classroom/${studentDetails.class_id}`) {
-      console.log(`/classroom/${studentDetails.class_id}`)
-      // history.push(`classroom/${studentDetails.class_id}`)
-    } else if (location.pathname !== `/classroom/${studentDetails.class_id}`) {
-      console.log('Page not found component')
-      // return (<PageNotFound />)
-    } else {
-      console.log('/')
-      // history.push('/')
-    }
-  } else {
-    console.log('Login component')
-  }
-
 
   return (
     <Layout
@@ -358,7 +350,7 @@ export const ClassView = props => {
                     ) : (
                         <Grid container direction="column" alignItems="center">
                           <JoinClassModal
-                            classroomUsers={classroomUsers}
+                            studentDetails={studentDetails}
                             classId={data.id}
                             className={data.class_name}
                             codeClass={data.class_code}
