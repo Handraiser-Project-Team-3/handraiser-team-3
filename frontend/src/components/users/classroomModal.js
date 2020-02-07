@@ -1,18 +1,12 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-// import Avatar from "@material-ui/core/Avatar";
-// import AddCircleIcon from "@material-ui/icons/AddCircle";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-
-import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
@@ -79,6 +73,9 @@ export default function() {
 							label="Request"
 							type="email"
 							fullWidth
+							inputProps={{
+								maxLength: 30
+							}}
 						/>
 					</form>
 				</DialogContent>

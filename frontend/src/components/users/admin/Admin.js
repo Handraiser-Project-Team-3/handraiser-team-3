@@ -8,19 +8,24 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import teacher from "../../assets/images/mentor2.png";
-import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
-import AddEmail from "./AddEmail";
-import Confirmation from "./HandleUsers";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Tooltip from "@material-ui/core/Tooltip";
-
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import Avatar from "@material-ui/core/Avatar";
+import Chip from "@material-ui/core/Chip";
+
+// images
+import Layout from "../reusables/Layout";
+
+// components
+import AddEmail from "./AddEmail";
+import Confirmation from "./HandleUsers";
+import MentorDetails from "./MentorDetails";
 
 const StyledTableCell = withStyles(theme => ({
 	head: {
@@ -38,10 +43,22 @@ const StyledTableRow = withStyles(theme => ({
 		}
 	}
 }))(TableRow);
+
 const useStyles = makeStyles({
+	"@global": {
+		"*::-webkit-scrollbar": {
+			width: "0.4em"
+		},
+		"*::-webkit-scrollbar-track": {
+			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+		},
+		"*::-webkit-scrollbar-thumb": {
+			backgroundColor: "whitesmoke"
+		}
+	},
 	table: {
 		minWidth: 700,
-		height: "74vh"
+		overflow: "auto"
 	},
 	mentor: {
 		width: "20px",
@@ -60,6 +77,16 @@ const useStyles = makeStyles({
 		height: "8vh",
 		background: "white",
 		marginBottom: "2vh"
+	},
+	tableHeight: {
+		height: "74vh"
+	},
+	filter: {
+		cursor: "pointer",
+		color: "#3f51b5",
+		"&:hover": {
+			color: "gray"
+		}
 	}
 });
 export const Admin = props => {
@@ -97,6 +124,12 @@ export const Admin = props => {
 		setAnchorEl(null);
 	};
 
+	const handleDelete = row => {
+		setDetails(row);
+		setOpen(true);
+		setHandle("remove");
+	};
+
 	return (
 		<Layout accountType={accountType} first_name={first_name}>
 			<ToastContainer enableMulticontainer />
@@ -105,32 +138,31 @@ export const Admin = props => {
 					<Paper className={classes.paperStyle}>
 						<AddEmail headers={headers} setUsers={setUsers} users={users} />
 					</Paper>
-					<PaperStat />
+					<PaperStat users={users} />
 				</Grid>
 				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
-					<TableContainer component={Paper}>
+					<TableContainer component={Paper} className={classes.tableHeight}>
 						<Table className={classes.table} aria-label="customized table">
 							<TableHead>
 								<TableRow>
-									<StyledTableCell
-										style={{
-											display: "flex"
-										}}
-									>
-										<span>Email Address</span>{" "}
-										<Tooltip title="Filter by">
-											<ArrowDropDownIcon
-												onClick={handleClick}
-												style={{ cursor: "pointer" }}
-											/>
-										</Tooltip>
+									<StyledTableCell>
+										<span>Email Address</span>
 									</StyledTableCell>
+									<StyledTableCell align="center">Role</StyledTableCell>
 									<StyledTableCell
 										align="right"
 										style={{ paddingRight: "80px" }}
 									>
 										Action
 									</StyledTableCell>
+									<TableCell align="right" style={{ background: "#e1e2f7" }}>
+										<Tooltip title="Filter List">
+											<FilterListIcon
+												onClick={handleClick}
+												className={classes.filter}
+											/>
+										</Tooltip>
+									</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -139,44 +171,70 @@ export const Admin = props => {
 										row.account_type_id === userType && (
 											<StyledTableRow key={row.id}>
 												<StyledTableCell component="th" scope="row">
-													{row.email}
+													<MentorDetails email={row.email} />
+												</StyledTableCell>
+												<StyledTableCell
+													component="th"
+													scope="row"
+													align="center"
+												>
+													<Chip
+														variant="outlined"
+														size="medium"
+														label={userType === 3 ? "Student" : "Mentor"}
+														style={
+															userType === 3
+																? { borderColor: "#aaaafa", color: "#616161" }
+																: { borderColor: "#f7b733", color: "#616161" }
+														}
+													/>
 												</StyledTableCell>
 												<StyledTableCell align="right">
 													{row.account_type_id === 3 && (
 														<>
-															<Button
-																variant="contained"
-																style={{ background: "#ababfa" }}
-																color="primary"
+															<Chip
+																variant="outlined"
+																size="medium"
+																avatar={
+																	<Avatar
+																		style={{
+																			background: "#aaaafa",
+																			color: "white"
+																		}}
+																	>
+																		<FaceIcon />
+																	</Avatar>
+																}
+																label="Set as Mentor"
 																onClick={() => {
 																	setDetails(row);
 																	setOpen(true);
 																	setHandle("set");
 																}}
-															>
-																<img src={teacher} className={classes.mentor} />
-																Set as Mentor
-															</Button>
+																style={{
+																	borderColor: "#aaaafa",
+																	color: "#616161"
+																}}
+															/>
 															{/* <Button onClick={() => deleteClass(row.id)}>
 																delete
 															</Button> */}
 														</>
 													)}
 													{row.account_type_id === 2 && (
-														<Button
-															variant="contained"
-															style={{ background: "#ff6f61ff" }}
-															color="primary"
-															onClick={() => {
-																setDetails(row);
-																setOpen(true);
-																setHandle("remove");
-															}}
-														>
-															Remove as Mentor
-														</Button>
+														<>
+															{/* <MentorDetails /> */}
+															<Chip
+																variant="outlined"
+																size="medium"
+																label="Remove as Mentor"
+																onDelete={() => handleDelete(row)}
+																color="primary"
+															/>
+														</>
 													)}
 												</StyledTableCell>
+												<TableCell style={{ width: "20px" }}></TableCell>
 											</StyledTableRow>
 										)
 								)}
