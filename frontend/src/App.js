@@ -4,14 +4,19 @@ import { Routes } from "./components/routes/Routes";
 import { BrowserRouter } from "react-router-dom";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
+import io from "socket.io-client";
+const socket = io(`localhost:3001`);
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
   const [user, setUser] = useState();
   React.useEffect(() => {
     if (accessToken) {
-      setUser(jwt_decode(accessToken));
+      const obj = { ...jwt_decode(accessToken), status: true };
+      socket.emit("online", obj);
+      setUser(obj);
     }
+    return () => socket.emit(`disconnect`);
   }, [accessToken]);
   const headers = {
     headers: {
@@ -26,6 +31,7 @@ function App() {
         user={user}
         setUser={setUser}
         headers={headers}
+        socket={socket}
       />
     </BrowserRouter>
   );

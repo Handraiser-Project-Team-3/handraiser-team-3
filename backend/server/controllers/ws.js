@@ -1,31 +1,23 @@
 module.exports = {
   requests: (socket, db, io) => {
-    let requests = [];
-    let user;
+    let classroom = "";
 
-    socket.on(`save_requests`, data => {
-      requests = data;
-    });
-
-    socket.on(`join_classroom`, obj => {
-      if (username !== undefined) {
-        user = obj;
-        console.log(`user ${user.username} is online${user.classId}`);
-        socket.join(`${user.classroom}`);
+    socket.on(`join_classroom`, ({ classId }) => {
+      if (classId) {
+        classroom = classId;
+        socket.join(`${classroom}`);
       }
     });
 
-    const emitData = data => {
-      io.to(`${user.classroom}`).emit(`update_request_list`, data);
-    };
-
     const newData = () =>
-      db.student_request.find().then(data => emitData(data));
+      db.student_request
+        .find()
+        .then(data => io.to(`${classroom}`).emit(`update_request_list`, data));
 
     socket.on(`add_request`, data => {
       db.student_request
         .insert(data, { deepInsert: true })
-        .then(inserted => emitData([...requests, inserted]));
+        .then(() => newData());
     });
 
     socket.on(`remove_request`, data => {
@@ -35,5 +27,6 @@ module.exports = {
     socket.on(`update_request`, () => {
       newData();
     });
-  }
+  },
+  chat: (socket, db, io) => {}
 };

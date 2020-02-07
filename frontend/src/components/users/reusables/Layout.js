@@ -63,7 +63,13 @@ export default function Layout(props) {
               aria-label="breadcrumb"
               className={classes.res}
             >
-              <Link color="inherit">{first_name}</Link>
+              <Link
+                to="/"
+                color="inherit"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                Home
+              </Link>
               <Typography color="textPrimary">Classrooms</Typography>
             </Breadcrumbs>
           </Grid>
