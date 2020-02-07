@@ -8,20 +8,24 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import teacher from "../../assets/images/mentor2.png";
-import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
-import AddEmail from "./AddEmail";
-import Confirmation from "./HandleUsers";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { Typography } from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Avatar from "@material-ui/core/Avatar";
+import Chip from "@material-ui/core/Chip";
+
+// images
+import Layout from "../reusables/Layout";
+
+// components
+import AddEmail from "./AddEmail";
+import Confirmation from "./HandleUsers";
+import MentorDetails from "./MentorDetails";
 
 const StyledTableCell = withStyles(theme => ({
 	head: {
@@ -120,6 +124,12 @@ export const Admin = props => {
 		setAnchorEl(null);
 	};
 
+	const handleDelete = row => {
+		setDetails(row);
+		setOpen(true);
+		setHandle("remove");
+	};
+
 	return (
 		<Layout accountType={accountType} first_name={first_name}>
 			<ToastContainer enableMulticontainer />
@@ -161,49 +171,67 @@ export const Admin = props => {
 										row.account_type_id === userType && (
 											<StyledTableRow key={row.id}>
 												<StyledTableCell component="th" scope="row">
-													{row.email}
+													<MentorDetails email={row.email} />
 												</StyledTableCell>
 												<StyledTableCell
 													component="th"
 													scope="row"
 													align="center"
 												>
-													{userType === 3 ? "Student" : "Mentor"}
+													<Chip
+														variant="outlined"
+														size="medium"
+														label={userType === 3 ? "Student" : "Mentor"}
+														style={
+															userType === 3
+																? { borderColor: "#aaaafa", color: "#616161" }
+																: { borderColor: "#f7b733", color: "#616161" }
+														}
+													/>
 												</StyledTableCell>
 												<StyledTableCell align="right">
 													{row.account_type_id === 3 && (
 														<>
-															<Button
-																variant="contained"
-																style={{ background: "#ababfa" }}
-																color="primary"
+															<Chip
+																variant="outlined"
+																size="medium"
+																avatar={
+																	<Avatar
+																		style={{
+																			background: "#aaaafa",
+																			color: "white"
+																		}}
+																	>
+																		<FaceIcon />
+																	</Avatar>
+																}
+																label="Set as Mentor"
 																onClick={() => {
 																	setDetails(row);
 																	setOpen(true);
 																	setHandle("set");
 																}}
-															>
-																<img src={teacher} className={classes.mentor} />
-																Set as Mentor
-															</Button>
+																style={{
+																	borderColor: "#aaaafa",
+																	color: "#616161"
+																}}
+															/>
 															{/* <Button onClick={() => deleteClass(row.id)}>
 																delete
 															</Button> */}
 														</>
 													)}
 													{row.account_type_id === 2 && (
-														<Button
-															variant="contained"
-															style={{ background: "#ff6f61ff" }}
-															color="primary"
-															onClick={() => {
-																setDetails(row);
-																setOpen(true);
-																setHandle("remove");
-															}}
-														>
-															Remove as Mentor
-														</Button>
+														<>
+															{/* <MentorDetails /> */}
+															<Chip
+																variant="outlined"
+																size="medium"
+																label="Remove as Mentor"
+																onDelete={() => handleDelete(row)}
+																color="primary"
+															/>
+														</>
 													)}
 												</StyledTableCell>
 												<TableCell style={{ width: "20px" }}></TableCell>
