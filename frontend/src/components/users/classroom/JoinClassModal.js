@@ -97,7 +97,7 @@ export const JoinClassModal = props => {
 	};
 
 	const ButtonComponent = () => {
-		const [check, setCheck] = React.useState({});
+		const [check, setCheck] = useState({});
 
 		let filterClassUser = classroomUsers.filter(userClass => {
 			if (userClass.user_id === user.id) {
@@ -108,7 +108,7 @@ export const JoinClassModal = props => {
 
 		React.useEffect(() => {
 			setCheck(filterClassUser.filter(x => x.class_id === classId)[0]);
-		}, []);
+		}, [filterClassUser]);
 		return (
 			<>
 				{check ? (
@@ -130,7 +130,7 @@ export const JoinClassModal = props => {
 							}}
 						>
 							Join Class
-					</Button>
+						</Button>
 					)}
 			</>
 		);

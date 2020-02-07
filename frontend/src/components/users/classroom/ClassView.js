@@ -10,7 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
 
@@ -47,6 +47,7 @@ export const ClassView = props => {
     class_description: ""
   });
   const [classroomUsers, setClassroomUsers] = useState([]);
+  const [studentDetails, setStudentDetails] = React.useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -86,23 +87,35 @@ export const ClassView = props => {
         }
       })();
 
-    axios
-      .get(`/api/classroom-users/`, headers)
-      .then(classUsers => {
-        setClassroomUsers(classUsers.data)
-      })
-      .catch(e => console.log(e))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (user) {
+      (async () => {
+        try {
+          const res = await axios.get(`/api/classroom-users`, headers);
+          setStudentDetails(res.data.filter(x => x.user_id === user.id));
+          setClassroomUsers(res.data)
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [account_type_id]);
 
-
-  let filterClassUser = classroomUsers.filter(userClass => {
-    if (userClass.user_id === user.id) {
-      return userClass;
+  console.log(studentDetails)
+  let location = useLocation()
+  console.log(location)
+  if (studentDetails) {
+    if (location.pathname === `/classroom/${studentDetails.class_id}`) {
+      console.log(`/classroom/${studentDetails.class_id}`)
+      // history.push(`/classroom/${studentDetails.class_id}`)
+    } else if (location.pathname !== `/classroom/${classList.id}`) {
+      console.log('Page not found component')
+      // return <PageNotFound />
+    } else {
+      // console.log('/')
+      history.push('/')
     }
-    return null;
-  })
-  console.log(filterClassUser)
+  }
 
 
   return (
