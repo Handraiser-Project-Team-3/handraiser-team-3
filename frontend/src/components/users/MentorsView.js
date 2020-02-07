@@ -1,7 +1,7 @@
 import React from "react";
 
 // Material-ui
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -15,6 +15,7 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import Badge from "@material-ui/core/Badge";
 
 // component/s
 import Layout from "../users/reusables/Layout";
@@ -54,6 +55,37 @@ const a11yProps = index => {
 		"aria-controls": `full-width-tabpanel-${index}`
 	};
 };
+
+//Badge
+
+const StyledBadge = withStyles(theme => ({
+	badge: {
+		backgroundColor: "#44b700",
+		color: "#44b700",
+		boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+		"&::after": {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%",
+			height: "100%",
+			borderRadius: "50%",
+			animation: "$ripple 1.2s infinite ease-in-out",
+			border: "1px solid currentColor",
+			content: '""'
+		}
+	},
+	"@keyframes ripple": {
+		"0%": {
+			transform: "scale(.8)",
+			opacity: 1
+		},
+		"100%": {
+			transform: "scale(2.4)",
+			opacity: 0
+		}
+	}
+}))(Badge);
 
 export default function MentorsView() {
 	const classes = useStyles();
@@ -130,11 +162,16 @@ export default function MentorsView() {
 													variant="inherit"
 													className={classes.studentsNeed}
 												>
-													<Avatar
-														className={classes.studentsAvatar}
-														alt="Student"
-														src={student}
-													/>
+													<StyledBadge
+														overlap="circle"
+														anchorOrigin={{
+															vertical: "bottom",
+															horizontal: "right"
+														}}
+														variant="dot"
+													>
+														<Avatar alt="Remy Sharp" src={student} />
+													</StyledBadge>
 													{e.name}
 												</Typography>
 											</Grid>
@@ -173,11 +210,17 @@ export default function MentorsView() {
 													variant="inherit"
 													className={classes.studentsNeed}
 												>
-													<Avatar
-														className={classes.studentsAvatar}
-														alt="Student"
-														src={student}
-													/>
+													<StyledBadge
+														overlap="circle"
+														anchorOrigin={{
+															vertical: "bottom",
+															horizontal: "right"
+														}}
+														variant="dot"
+													>
+														<Avatar alt="Remy Sharp" src={student} />
+													</StyledBadge>
+
 													{e.name}
 												</Typography>
 											</Grid>
