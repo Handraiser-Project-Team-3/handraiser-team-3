@@ -20,11 +20,7 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
-<<<<<<< HEAD
 import { PageNotFound } from "../reusables/PageNotFound";
-=======
-
->>>>>>> c7bc2825c470611e915730d61aa584d423647020
 // images
 import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";

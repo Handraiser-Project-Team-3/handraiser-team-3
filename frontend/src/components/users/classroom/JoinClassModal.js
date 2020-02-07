@@ -107,96 +107,90 @@ export const JoinClassModal = props => {
 		});
 
 		React.useEffect(() => {
-			setCheck(filterClassUser.filter(x => x.class_id === classId)[0])
-		}, [filterClassUser])
-		return <>{
-			check ? <Button
-				size="small"
-				style={{ color: "white" }}
-				onClick={() => {
-					classEnter();
-				}}
-			>
-				Enter Class
-			</Button> : <Button
-					size="small"
-					style={{ color: "white" }}
-					onClick={() => {
-						handleClickOpen();
-					}}
-				>
-					Join Class
+			setCheck(filterClassUser.filter(x => x.class_id === classId)[0]);
+		}, []);
+		return (
+			<>
+				{check ? (
+					<Button
+						size="small"
+						style={{ color: "white" }}
+						onClick={() => {
+							classEnter();
+						}}
+					>
+						Enter Class
 					</Button>
 				) : (
-					<Button
-				size="small"
-				style={{ color: "white" }}
-				onClick={() => {
-					handleClickOpen();
-				}}
-			>
-				Join Class
+						<Button
+							size="small"
+							style={{ color: "white" }}
+							onClick={() => {
+								handleClickOpen();
+							}}
+						>
+							Join Class
 					</Button>
-			)}
+					)}
 			</>
 		);
 	};
 
-return (
-	<div>
-		<ToastContainer enableMulticontainer />
-		<ButtonComponent />
-		<Dialog
-			open={open}
-			TransitionComponent={Transition}
-			keepMounted
-			onClose={handleClose}
-			aria-labelledby="alert-dialog-slide-title"
-			aria-describedby="alert-dialog-slide-description"
-		>
-			<DialogTitle
-				id="alert-dialog-slide-title"
-				style={{ background: "#ababfa", color: "white" }}
+	return (
+		<div>
+			<ToastContainer enableMulticontainer />
+			<ButtonComponent />
+			<Dialog
+				open={open}
+				TransitionComponent={Transition}
+				keepMounted
+				onClose={handleClose}
+				aria-labelledby="alert-dialog-slide-title"
+				aria-describedby="alert-dialog-slide-description"
 			>
-				{"Join Class"}
-			</DialogTitle>
-			<DialogContent>
-				<DialogContentText
-					id="alert-dialog-slide-description"
-					style={{ marginTop: "1vh" }}
+				<DialogTitle
+					id="alert-dialog-slide-title"
+					style={{ background: "#ababfa", color: "white" }}
 				>
-					Ask your teacher for the class code, then enter it here
+					{"Join Class"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText
+						id="alert-dialog-slide-description"
+						style={{ marginTop: "1vh" }}
+					>
+						Ask your teacher for the class code, then enter it here
 					</DialogContentText>
-			</DialogContent>
-			<DialogContent>
-				<form
-					id={classId}
-					noValidate
-					className={classes.root}
-					autoComplete="off"
-					onSubmit={handleSubmit}
-				>
-					<FormControl variant="outlined">
-						<InputLabel htmlFor="classcode">Class Code</InputLabel>
-						<OutlinedInput
-							required
-							id={`classid-${classId}`}
-							name={className}
-							onChange={handleChange}
-							labelWidth={85}
-						/>
-					</FormControl>
-				</form>
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleClose} color="primary">
-					Cancel
+				</DialogContent>
+				<DialogContent>
+					<form
+						id={classId}
+						noValidate
+						className={classes.root}
+						autoComplete="off"
+						onSubmit={handleSubmit}
+					>
+						<FormControl variant="outlined">
+							<InputLabel htmlFor="classcode">Class Code</InputLabel>
+							<OutlinedInput
+								required
+								id={`classid-${classId}`}
+								name={className}
+								onChange={handleChange}
+								labelWidth={85}
+							/>
+						</FormControl>
+					</form>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} color="primary">
+						Cancel
 					</Button>
-				<Button color="primary" form={classId} type="submit">
-					Join Class
+					<Button color="primary" form={classId} type="submit">
+						Join Class
 					</Button>
-			</DialogActions>
-		</Dialog>
-	</div>
-);
+				</DialogActions>
+			</Dialog>
+		</div>
+	);
 };
