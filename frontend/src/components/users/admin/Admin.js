@@ -18,9 +18,10 @@ import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Tooltip from "@material-ui/core/Tooltip";
-
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Typography } from "@material-ui/core";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const StyledTableCell = withStyles(theme => ({
 	head: {
@@ -38,10 +39,22 @@ const StyledTableRow = withStyles(theme => ({
 		}
 	}
 }))(TableRow);
+
 const useStyles = makeStyles({
+	"@global": {
+		"*::-webkit-scrollbar": {
+			width: "0.4em"
+		},
+		"*::-webkit-scrollbar-track": {
+			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+		},
+		"*::-webkit-scrollbar-thumb": {
+			backgroundColor: "whitesmoke"
+		}
+	},
 	table: {
 		minWidth: 700,
-		height: "74vh"
+		overflow: "auto"
 	},
 	mentor: {
 		width: "20px",
@@ -60,6 +73,16 @@ const useStyles = makeStyles({
 		height: "8vh",
 		background: "white",
 		marginBottom: "2vh"
+	},
+	tableHeight: {
+		height: "74vh"
+	},
+	filter: {
+		cursor: "pointer",
+		color: "#3f51b5",
+		"&:hover": {
+			color: "gray"
+		}
 	}
 });
 export const Admin = props => {
@@ -105,32 +128,31 @@ export const Admin = props => {
 					<Paper className={classes.paperStyle}>
 						<AddEmail headers={headers} setUsers={setUsers} users={users} />
 					</Paper>
-					<PaperStat />
+					<PaperStat users={users} />
 				</Grid>
 				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
-					<TableContainer component={Paper}>
+					<TableContainer component={Paper} className={classes.tableHeight}>
 						<Table className={classes.table} aria-label="customized table">
 							<TableHead>
 								<TableRow>
-									<StyledTableCell
-										style={{
-											display: "flex"
-										}}
-									>
-										<span>Email Address</span>{" "}
-										<Tooltip title="Filter by">
-											<ArrowDropDownIcon
-												onClick={handleClick}
-												style={{ cursor: "pointer" }}
-											/>
-										</Tooltip>
+									<StyledTableCell>
+										<span>Email Address</span>
 									</StyledTableCell>
+									<StyledTableCell align="center">Role</StyledTableCell>
 									<StyledTableCell
 										align="right"
 										style={{ paddingRight: "80px" }}
 									>
 										Action
 									</StyledTableCell>
+									<TableCell align="right" style={{ background: "#e1e2f7" }}>
+										<Tooltip title="Filter List">
+											<FilterListIcon
+												onClick={handleClick}
+												className={classes.filter}
+											/>
+										</Tooltip>
+									</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>
@@ -140,6 +162,13 @@ export const Admin = props => {
 											<StyledTableRow key={row.id}>
 												<StyledTableCell component="th" scope="row">
 													{row.email}
+												</StyledTableCell>
+												<StyledTableCell
+													component="th"
+													scope="row"
+													align="center"
+												>
+													{userType === 3 ? "Student" : "Mentor"}
 												</StyledTableCell>
 												<StyledTableCell align="right">
 													{row.account_type_id === 3 && (
@@ -177,6 +206,7 @@ export const Admin = props => {
 														</Button>
 													)}
 												</StyledTableCell>
+												<TableCell style={{ width: "20px" }}></TableCell>
 											</StyledTableRow>
 										)
 								)}
