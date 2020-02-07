@@ -2,7 +2,6 @@ import React from "react";
 
 // Material-ui
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
@@ -11,16 +10,13 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
 import Badge from "@material-ui/core/Badge";
 
 // component/s
 import Layout from "../users/reusables/Layout";
 import Stats from "../users/reusables/Stats";
 import ClassroomModal from "../users/classroomModal";
+import Requests from "./Requests";
 
 // images
 import student from "../assets/images/student.png";
@@ -56,40 +52,12 @@ const a11yProps = index => {
 	};
 };
 
-//Badge
-
-const StyledBadge = withStyles(theme => ({
-	badge: {
-		backgroundColor: "#44b700",
-		color: "#44b700",
-		boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-		"&::after": {
-			position: "absolute",
-			top: 0,
-			left: 0,
-			width: "100%",
-			height: "100%",
-			borderRadius: "50%",
-			animation: "$ripple 1.2s infinite ease-in-out",
-			border: "1px solid currentColor",
-			content: '""'
-		}
-	},
-	"@keyframes ripple": {
-		"0%": {
-			transform: "scale(.8)",
-			opacity: 1
-		},
-		"100%": {
-			transform: "scale(2.4)",
-			opacity: 0
-		}
-	}
-}))(Badge);
-
 export default function MentorsView() {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
+	const [need, setNeed] = React.useState(true);
+	const [being, setBeing] = React.useState(true);
+	const [done, setDone] = React.useState(true);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -99,28 +67,7 @@ export default function MentorsView() {
 			name: "Stephen Dunn"
 		},
 		{
-			name: "Nathan Young "
-		},
-		{
-			name: "Crystal Watson"
-		},
-		{
-			name: "Nathan Young "
-		},
-		{
-			name: "Crystal Watson"
-		},
-		{
-			name: "Nathan Young "
-		},
-		{
-			name: "Crystal Watson"
-		},
-		{
-			name: "Crystal Watson"
-		},
-		{
-			name: "Crystal Watson"
+			name: "Stephen Dunn"
 		}
 	]);
 	return (
@@ -143,114 +90,13 @@ export default function MentorsView() {
 					</AppBar>
 					<div className={classes.root}>
 						<TabPanel value={value} index={0}>
-							{val.map((e, i) => {
-								return (
-									<Paper
-										key={i}
-										id={e.name}
-										className={classes.needHelp}
-										elevation={6}
-									>
-										<Grid
-											container
-											justify="space-between"
-											spacing={3}
-											alignItems="center"
-										>
-											<Grid item xs={7}>
-												<Typography
-													variant="inherit"
-													className={classes.studentsNeed}
-												>
-													<StyledBadge
-														overlap="circle"
-														anchorOrigin={{
-															vertical: "bottom",
-															horizontal: "right"
-														}}
-														variant="dot"
-													>
-														<Avatar alt="Remy Sharp" src={student} />
-													</StyledBadge>
-													{e.name}
-												</Typography>
-											</Grid>
-											<Grid item xs={5}>
-												<Grid container justify="flex-end" spacing={3}>
-													<Grid item>
-														<Tooltip title="Remove">
-															<RemoveCircleOutlineIcon
-																fontSize="small"
-																style={{ color: "gray", cursor: "pointer" }}
-															/>
-														</Tooltip>
-													</Grid>
-													<Grid item>
-														<Tooltip title="Help">
-															<HelpOutlineIcon
-																fontSize="small"
-																style={{ color: "#ff6f61", cursor: "pointer" }}
-															/>
-														</Tooltip>
-													</Grid>
-												</Grid>
-											</Grid>
-										</Grid>
-									</Paper>
-								);
-							})}
+							<Requests val={val} value={value} need={need} />
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							{val.map((e, v) => {
-								return (
-									<Paper key={v} className={classes.needHelp} elevation={6}>
-										<Grid container justify="space-between">
-											<Grid item xs={9} sm={11} md={9} lg={10} xl={10}>
-												<Typography
-													variant="inherit"
-													className={classes.studentsNeed}
-												>
-													<StyledBadge
-														overlap="circle"
-														anchorOrigin={{
-															vertical: "bottom",
-															horizontal: "right"
-														}}
-														variant="dot"
-													>
-														<Avatar alt="Remy Sharp" src={student} />
-													</StyledBadge>
-
-													{e.name}
-												</Typography>
-											</Grid>
-											<Grid item xs={3} sm={1} md={3} lg={2} xl={2}>
-												<Tooltip title="Remove">
-													<Button>
-														<RemoveCircleOutlineIcon
-															fontSize="small"
-															style={{ color: "gray" }}
-														/>
-													</Button>
-												</Tooltip>
-											</Grid>
-										</Grid>
-									</Paper>
-								);
-							})}
+							<Requests val={val} value={value} being={being} />
 						</TabPanel>
 						<TabPanel value={value} index={2}>
-							<Paper className={classes.needHelp} elevation={6}>
-								{" "}
-								<Typography variant="inherit" className={classes.studentsNeed}>
-									<Avatar
-										className={classes.studentsAvatar}
-										alt="Student"
-										src={student}
-									/>
-									Eric Atento
-								</Typography>
-							</Paper>
+							<Requests val={val} value={value} done={done} />
 						</TabPanel>
 					</div>
 					<div className={classes.divStyle}>
