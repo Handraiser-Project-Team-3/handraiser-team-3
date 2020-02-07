@@ -1,7 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import bubbles from "../../assets/images/chat-box.png";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
@@ -11,6 +10,36 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
+import Badge from "@material-ui/core/Badge";
+
+const StyledBadge = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -79,7 +108,20 @@ export default function ChatBox() {
     <Paper className={classes.root}>
       <Paper className={classes.top} elevation={3}>
         <Grid className={classes.topName}>
-          <img src={bubbles} style={{ width: "45px" }} />
+          <StyledBadge
+            overlap="circle"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            variant="dot"
+          >
+            <Avatar
+              alt="Remy Sharp"
+              src={student}
+              style={{ background: "white", padding: "3px" }}
+            />
+          </StyledBadge>
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
@@ -117,7 +159,10 @@ export default function ChatBox() {
                   maxWidth: "300px"
                 }}
               >
-                <span className={classes.spanStyle}>
+                <span
+                  className={classes.spanStyle}
+                  style={{ marginRight: "10px" }}
+                >
                   {
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ipsum purus, bibendum sit amet vulputate eget, porta semper ligula. Donec bibendum"
                   }
@@ -149,7 +194,7 @@ export default function ChatBox() {
               <span
                 className={classes.spanStyle}
                 style={{
-                  border: " 2px solid #ff6f61",
+                  border: "2px solid #ff6f61",
                   borderRadius: "20px 5px",
                   maxWidth: "300px"
                 }}

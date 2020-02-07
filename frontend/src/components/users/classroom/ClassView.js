@@ -114,9 +114,9 @@ export const ClassView = props => {
       );
 
     Promise.all(promise).then(response => setStudentDetails(response));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentId]);
 
-  console.log(studentDetails);
   return (
     <Layout first_name={first_name}>
       <ClassHead
