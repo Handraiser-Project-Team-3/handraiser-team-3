@@ -70,7 +70,6 @@ export const Admin = props => {
   const [details, setDetails] = useState({});
 
   useEffect(() => {
-    // DISPLAY LIST
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
@@ -90,7 +89,7 @@ export const Admin = props => {
           <Paper className={classes.paperStyle}>
             <AddEmail headers={headers} setUsers={setUsers} users={users} />
           </Paper>
-          <PaperStat />
+          <PaperStat headers={headers} users={users} setUsers={setUsers} />
         </Grid>
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
           <TableContainer component={Paper}>
