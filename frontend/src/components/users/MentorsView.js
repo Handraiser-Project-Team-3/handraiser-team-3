@@ -1,7 +1,7 @@
 import React from "react";
 
 // Material-ui
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
@@ -10,7 +10,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
-import Badge from "@material-ui/core/Badge";
+// import Badge from "@material-ui/core/Badge";
 
 // component/s
 import Layout from "../users/reusables/Layout";
@@ -55,9 +55,9 @@ const a11yProps = index => {
 export default function MentorsView() {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(0);
-	const [need, setNeed] = React.useState(true);
-	const [being, setBeing] = React.useState(true);
-	const [done, setDone] = React.useState(true);
+	const [need] = React.useState(true);
+	const [being] = React.useState(true);
+	const [done] = React.useState(true);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);

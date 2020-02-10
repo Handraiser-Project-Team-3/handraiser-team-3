@@ -6,9 +6,6 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
@@ -16,11 +13,6 @@ import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Badge from "@material-ui/core/Badge";
-
-// component/s
-import Layout from "../users/reusables/Layout";
-import Stats from "../users/reusables/Stats";
-import ClassroomModal from "../users/classroomModal";
 
 // images
 import student from "../assets/images/student.png";
@@ -47,13 +39,6 @@ TabPanel.propTypes = {
 	children: PropTypes.node,
 	index: PropTypes.any.isRequired,
 	value: PropTypes.any.isRequired
-};
-
-const a11yProps = index => {
-	return {
-		id: `full-width-tab-${index}`,
-		"aria-controls": `full-width-tabpanel-${index}`
-	};
 };
 
 //Badge
@@ -128,10 +113,10 @@ export default function Requests(props) {
 								</Typography>
 							</Grid>
 							{need ? (
-								<Grid item xs={3}>
+								<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 									<Grid container justify="flex-end" spacing={3}>
 										<Grid item>
-											<Tooltip title="Remove">
+											<Tooltip title="Remove" arrow>
 												<RemoveCircleOutlineIcon
 													fontSize="small"
 													style={{ color: "gray", cursor: "pointer" }}
@@ -139,7 +124,7 @@ export default function Requests(props) {
 											</Tooltip>
 										</Grid>
 										<Grid item>
-											<Tooltip title="Help">
+											<Tooltip title="Help" arrow>
 												<HelpOutlineIcon
 													fontSize="small"
 													style={{ color: "#ff6f61", cursor: "pointer" }}
@@ -152,8 +137,8 @@ export default function Requests(props) {
 								""
 							)}
 							{being && !need ? (
-								<Grid item xs={3} sm={1} md={3} lg={2} xl={2}>
-									<Tooltip title="Remove">
+								<Grid item xs={3} sm={2} md={1} lg={3} xl={2}>
+									<Tooltip title="Remove" arrow>
 										<Button>
 											<RemoveCircleOutlineIcon
 												fontSize="small"
@@ -205,8 +190,6 @@ const useStyles = makeStyles(theme => ({
 		color: "gray"
 	},
 	appBar: {
-		// background:
-		// 	"linear-gradient(207deg, rgba(171,171,250,1) 15%, rgba(255,255,255,1) 15%, rgba(255,255,255,1) 86%, rgba(171,171,250,1) 86%)"
 		background: "#f1f0fa"
 	},
 	studentsAvatar: {

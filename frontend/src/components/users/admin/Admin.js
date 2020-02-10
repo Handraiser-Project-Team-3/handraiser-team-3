@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { PaperStat } from "../reusables/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
@@ -18,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
+// import Button from "@material-ui/core/Button";
 
 // images
 import Layout from "../reusables/Layout";
@@ -108,11 +109,11 @@ export const Admin = props => {
 		});
 	}, []);
 
-	const deleteClass = classid => {
-		axios
-			.delete(`/api/user/${classid}`, headers)
-			.then(() => setUsers(users.filter(data => data.id !== classid)));
-	};
+	// const deleteClass = classid => {
+	// 	axios
+	// 		.delete(`/api/user/${classid}`, headers)
+	// 		.then(() => setUsers(users.filter(data => data.id !== classid)));
+	// };
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -155,8 +156,11 @@ export const Admin = props => {
 									>
 										Action
 									</StyledTableCell>
-									<TableCell align="right" style={{ background: "#e1e2f7" }}>
-										<Tooltip title="Filter List">
+									<TableCell
+										align="right"
+										style={{ background: "#e1e2f7", width: "20px" }}
+									>
+										<Tooltip title="Filter List" arrow>
 											<FilterListIcon
 												onClick={handleClick}
 												className={classes.filter}
@@ -171,7 +175,10 @@ export const Admin = props => {
 										row.account_type_id === userType && (
 											<StyledTableRow key={row.id}>
 												<StyledTableCell component="th" scope="row">
-													<MentorDetails email={row.email} />
+													<MentorDetails
+														email={row.email}
+														account_type_id={row.account_type_id}
+													/>
 												</StyledTableCell>
 												<StyledTableCell
 													component="th"
@@ -229,7 +236,10 @@ export const Admin = props => {
 																size="medium"
 																label="Remove as Mentor"
 																onDelete={() => handleDelete(row)}
-																color="primary"
+																style={{
+																	borderColor: "#ff6f61ff",
+																	color: "#ff6f61ff"
+																}}
 															/>
 														</>
 													)}

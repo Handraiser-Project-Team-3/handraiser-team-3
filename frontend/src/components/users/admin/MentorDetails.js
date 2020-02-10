@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsIcon from "@material-ui/icons/Details";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -48,9 +47,24 @@ function generate(element) {
 	);
 }
 
+const useStylesBootstrap = makeStyles(theme => ({
+	arrow: {
+		color: theme.palette.common.black
+	},
+	tooltip: {
+		backgroundColor: theme.palette.common.black
+	}
+}));
+
+function BootstrapTooltip(props) {
+	const classes = useStylesBootstrap();
+
+	return <Tooltip arrow classes={classes} {...props} />;
+}
+
 export default function MentorDetails(props) {
 	const classes = useStyles();
-	const { email } = props;
+	const { email, account_type_id } = props;
 	const [dense, setDense] = React.useState(false);
 	const [secondary, setSecondary] = React.useState(false);
 
@@ -73,52 +87,55 @@ export default function MentorDetails(props) {
 				onClick={handleClickOpen}
 				style={{ color: "#616161" }}
 			/>
-
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle
-					id="form-dialog-title"
-					style={{ background: "#aaaafa", color: "white" }}
+			{account_type_id === 2 ? (
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="form-dialog-title"
 				>
-					Mentor Details
-				</DialogTitle>
-				<DialogContent>
-					<div className={classes.root}>
-						<Typography variant="h6" className={classes.title}>
-							Classes
-						</Typography>
-						<List dense={dense}>
-							{generate(
-								<ListItem>
-									<ListItemAvatar>
-										<Avatar src={blackboard}></Avatar>
-									</ListItemAvatar>
-									<ListItemText
-										primary="BoomCamp Frontend"
-										secondary={secondary ? "Secondary text" : null}
-									/>
+					<DialogTitle
+						id="form-dialog-title"
+						style={{ background: "#aaaafa", color: "white" }}
+					>
+						Mentor Details
+					</DialogTitle>
+					<DialogContent>
+						<div className={classes.root}>
+							<Typography variant="h6" className={classes.title}>
+								Classes
+							</Typography>
+							<List dense={dense}>
+								{generate(
+									<ListItem>
+										<ListItemAvatar>
+											<Avatar src={blackboard}></Avatar>
+										</ListItemAvatar>
+										<ListItemText
+											primary="BoomCamp Frontend"
+											secondary={secondary ? "Secondary text" : null}
+										/>
 
-									<ListItemSecondaryAction>
-										<IconButton edge="end" aria-label="delete">
-											<Tooltip title="Number of Students">
-												<Typography>10</Typography>
-											</Tooltip>
-										</IconButton>
-									</ListItemSecondaryAction>
-								</ListItem>
-							)}
-						</List>
-					</div>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Close
-					</Button>
-				</DialogActions>
-			</Dialog>
+										<ListItemSecondaryAction>
+											<IconButton edge="end" aria-label="delete">
+												<BootstrapTooltip title="Number of Students">
+													<Typography>10</Typography>
+												</BootstrapTooltip>
+											</IconButton>
+										</ListItemSecondaryAction>
+									</ListItem>
+								)}
+							</List>
+						</div>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							Close
+						</Button>
+					</DialogActions>
+				</Dialog>
+			) : (
+				""
+			)}
 		</>
 	);
 }

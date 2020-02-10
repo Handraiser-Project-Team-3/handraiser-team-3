@@ -58,7 +58,7 @@ export default function AddEmail(props) {
 					</form>
 				</Grid>
 				<Grid item xs={2}>
-					<Tooltip title="Add User">
+					<Tooltip title="Add User" arrow>
 						<AddCircleIcon
 							value={email}
 							fontSize="large"

@@ -59,9 +59,7 @@ export const Login = props => {
 								</Grid>
 								<Grid container direction="row" className={classes.handRaiser}>
 									<Grid item xs={12} sm={12} md={12} lg={12}>
-										<Typography className={classes.signin}>
-											HandRaiser
-										</Typography>
+										<Typography className={classes.signin}>Lalalala</Typography>
 									</Grid>
 									<Grid item xs={12} sm={9} md={8} lg={5}>
 										<Typography className={classes.subtitle}>
