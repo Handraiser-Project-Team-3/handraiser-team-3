@@ -43,5 +43,5 @@
 			"last 1 safari version"
 		]
 	},
-	"proxy": "http://172.60.62.43:3001"
+	"proxy": "http://172.60.62.166:3001"
 }

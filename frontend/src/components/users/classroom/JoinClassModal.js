@@ -82,7 +82,7 @@ export const JoinClassModal = props => {
 			}
 		}
 	};
-
+	
 	const classEnter = () => {
 		history.push(`/classroom/${classId}`)
 	}

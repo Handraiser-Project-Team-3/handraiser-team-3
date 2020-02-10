@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -25,8 +25,6 @@ import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
-
-import { UserDetails } from "../users/reusables/UserDetails";
 import axios from "axios";
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,44 +47,34 @@ const useStyles = makeStyles(theme => ({
     width: 250
   }
 }));
-
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
   const userDetails = user ? user : {};
-  const { user_image, id, account_type_id } = userDetails;
+  const { user_image, id } = userDetails;
   const history = useHistory();
-  // console.log(id);
-
-  // console.log(props.data);
   const MyComponent = props.component;
   const classes = useStyles();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [show, setShow] = React.useState(true);
-  const [promise, setPromise] = React.useState([]);
-  const [classRoom, setClassRoom] = React.useState([]);
-  const [userID, setUserID] = React.useState([]);
+  const [show, setShow] = useState(true);
+  const [classRoom, setClassRoom] = useState([]);
 
-  const handleClickOpen = e => {
-    console.log(e);
+  const handleClickRoom = classID => {
+    history.push(`/classroom/${classID}`);
   };
   const handleClick = () => {
     setShow(!show);
   };
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
+    setClassRoom([]);
   };
-
   const [state, setState] = React.useState({
     left: false
   });
-
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -94,39 +82,22 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
-    setState({ ...state, [side]: open });
-  };
-  // {
-  //   console.log(userID);
-  // }
-  useEffect(() => {
     axios.get(`api/classroom-users`, headers).then(e => {
-      // console.log("Users",e)
-      setUserID(
+      Promise.all(
         e.data
           .filter(userdata => {
             return userdata.user_id === id;
           })
-          .map(res => {
-            return res.class_id;
-          })
-        // console.log("Classes", userid))
-      );
+          .map(res =>
+            axios(`/api/class/${res.class_id}`, headers).then(res => {
+              return res.data;
+            })
+          )
+      ).then(response => setClassRoom(response));
     });
-  }, [id]);
-  useEffect(() => {
-    userID &&
-      setPromise(
-        userID.map(res =>
-          axios(`/api/class/${res}`, headers).then(res => {
-            return res.data;
-          })
-        )
-      );
-      Promise.all(promise).then(response => setClassRoom(response));
-  }, [userID]);
- 
-  
+    setState({ ...state, [side]: open });
+  };
+
   const sideList = side => (
     <div
       className={classes.list}
@@ -134,7 +105,6 @@ export default function ButtonAppBar(props) {
       onClick={toggleDrawer(side, true)}
       onKeyDown={toggleDrawer(side, true)}
     >
-      {}
       <List
         component="nav"
         aria-labelledby="nested-list-subheader"
@@ -160,28 +130,31 @@ export default function ButtonAppBar(props) {
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem
-              id={2}
-              button
-              className={classes.nested}
-              onClick={e => {
-                handleClickOpen(e.target.value);
-              }}
-            >
-              <ListItemIcon>
-                <StarBorder />
-               {
-                 console.log("classRoom",classRoom )
-               }
-              </ListItemIcon>
-              <ListItemText primary={"classRoom.id"} />
-            </ListItem>
+            {classRoom &&
+              classRoom.map(rooms => (
+                <ListItem
+                  id={2}
+                  key={rooms.id}
+                  button
+                  className={classes.nested}
+                >
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText
+                    onClick={() => {
+                      handleClickRoom(rooms.id);
+                    }}
+                  >
+                    {rooms.class_name}
+                  </ListItemText>
+                </ListItem>
+              ))}
           </List>
         </Collapse>
       </List>
     </div>
   );
-
   return (
     <div>
       <div className={classes.root}>
@@ -210,7 +183,6 @@ export default function ButtonAppBar(props) {
                 <img src={logo} className={classes.logo} alt="logo" />
               </Link>
             </Typography>
-
             <div>
               <IconButton
                 aria-label="account of current user"
