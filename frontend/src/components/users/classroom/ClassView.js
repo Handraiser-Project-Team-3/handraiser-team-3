@@ -125,7 +125,7 @@ export const ClassView = props => {
                             color="textSecondary"
                             component="p"
                           >
-                            {data.class_description.length > 50
+                            {data.class_description.length > 48
                               ? data.class_description.substring(0, 42) + "..."
                               : data.class_description}
                           </Typography>
