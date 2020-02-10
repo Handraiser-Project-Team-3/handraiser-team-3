@@ -70,7 +70,7 @@ export default function AddEmail(props) {
               fontSize="large"
               onClick={() => handleClickAdd(email)}
               style={{
-                color: "#4abdac",
+                color: "#ababfa",
                 cursor: "pointer"
               }}
             />

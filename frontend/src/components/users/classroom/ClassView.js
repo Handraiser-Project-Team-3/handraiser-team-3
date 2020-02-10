@@ -34,30 +34,31 @@ export const ClassView = props => {
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
   const [headTitle, setHeadTitle] = useState("");
-  const [accountType] = useState("Mentor");
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState("");
   const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
+  const [studentId, setStudentId] = useState([]);
+  const [studentDetails, setStudentDetails] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
     class_name: "",
     class_description: ""
   });
   const [classroomUsers, setClassroomUsers] = useState([]);
-
   const handleClickOpen = () => {
     setOpen(true);
     setAction("Save");
     setHeadTitle("Edit");
-    setClassRoom({});
   };
 
-  // const deleteClass = classid => {
-  //   axios
-  //     .delete(`/api/class/${classid}`, headers)
-  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  // };
+  const [promise, setPromise] = useState([]);
+
+  const deleteClass = classid => {
+    axios
+      .delete(`/api/class/${classid}`, headers)
+      .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  };
 
   useEffect(() => {
     account_type_id &&
@@ -88,25 +89,37 @@ export const ClassView = props => {
       .get(`/api/classroom-users/`, headers)
       .then(classUsers => {
         setClassroomUsers(classUsers.data);
+        setStudentId(
+          classUsers.data
+            .filter(res => {
+              return res.class_id === 21;
+            })
+            .map(data => {
+              return data.user_id;
+            })
+        );
       })
       .catch(e => console.log(e));
 
-    //   if () {
-    //     history.push(`/classroom/${classList.id}`)
-    //   } else if (user.id !== userClass.user_id) {
-    //     return <JoinClassModal />
-    //   } else {
-    //     history.push('/')
-    //   }
-    // })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
 
+  useEffect(() => {
+    studentId &&
+      setPromise(
+        studentId.map(res =>
+          axios(`/api/user/${res}`, headers).then(res => {
+            return res.data;
+          })
+        )
+      );
+
+    Promise.all(promise).then(response => setStudentDetails(response));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentId]);
+
   return (
-    <Layout
-      accountType={account_type_id === 2 ? accountType : null}
-      first_name={first_name}
-    >
+    <Layout first_name={first_name}>
       <ClassHead
         account_type_id={account_type_id}
         setOpen={setOpen}
@@ -126,6 +139,7 @@ export const ClassView = props => {
                     <CardMedia
                       className={classes.media}
                       image={classroom}
+                      title="Contemplative Reptile"
                     ></CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -133,9 +147,13 @@ export const ClassView = props => {
                       </Typography>
                       <Tooltip
                         title={
-                          data.class_description.length > 30
-                            ? data.class_description.substring(0)
-                            : ""
+                          data.class_description.length > 45 ? (
+                            <Typography>
+                              {data.class_description.substring(0)}
+                            </Typography>
+                          ) : (
+                            ""
+                          )
                         }
                       >
                         <Typography
@@ -143,8 +161,8 @@ export const ClassView = props => {
                           color="textSecondary"
                           component="p"
                         >
-                          {data.class_description.length > 30
-                            ? data.class_description.substring(0, 35) + "..."
+                          {data.class_description.length > 45
+                            ? data.class_description.substring(0, 42) + "..."
                             : data.class_description}
                         </Typography>
                       </Tooltip>
@@ -177,28 +195,41 @@ export const ClassView = props => {
                                     style={{ width: "30px" }}
                                   />
                                 </Grid>
-
-                                <Grid item lg={10} xs={10}>
-                                  <Grid
-                                    container
-                                    direction="column"
-                                    alignItems="flex-start"
-                                    justify="space-between"
-                                  >
-                                    <Grid item lg={12} xs={12}>
-                                      <Typography
-                                        gutterBottom
-                                        component="div"
-                                        variant="caption"
-                                      >
-                                        Students:
-                                      </Typography>
-                                    </Grid>
-                                    <Grid item lg={12} xs={12}>
-                                      <b>10</b>
+                                <Tooltip
+                                  title={
+                                    studentDetails &&
+                                    studentDetails.map(res => (
+                                      <Typography>{res.first_name}</Typography>
+                                    ))
+                                  }
+                                >
+                                  <Grid item lg={10} xs={10}>
+                                    <Grid
+                                      container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justify="space-between"
+                                    >
+                                      <Grid item lg={12} xs={12}>
+                                        <Typography
+                                          gutterBottom
+                                          component="div"
+                                          variant="caption"
+                                        >
+                                          Students:
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item lg={12} xs={12}>
+                                        <b>
+                                          {classroomUsers &&
+                                            classroomUsers.filter(res => {
+                                              return res.class_id === data.id;
+                                            }).length}
+                                        </b>
+                                      </Grid>
                                     </Grid>
                                   </Grid>
-                                </Grid>
+                                </Tooltip>
                               </Grid>
                             </Grid>
                             <Grid item xs={6}>
@@ -309,9 +340,9 @@ export const ClassView = props => {
                           >
                             Enter Class
                           </Button>
-                          {/* <Button onClick={() => deleteClass(data.id)}>
+                          <Button onClick={() => deleteClass(data.id)}>
                             delete
-                          </Button> */}
+                          </Button>
                         </Grid>
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">

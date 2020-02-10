@@ -42,7 +42,7 @@ export const PaperStat = props => {
   }, []);
 
   return (
-    <div>
+    <>
       <Paper className={classes.total}>
         <Grid container justify="center" align="center" alignItems="center">
           <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
@@ -67,7 +67,6 @@ export const PaperStat = props => {
           </Grid>
         </Grid>
       </Paper>
-
       <Paper className={classes.total}>
         <Grid container justify="center" align="center" alignItems="center">
           <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
@@ -116,6 +115,6 @@ export const PaperStat = props => {
           </Grid>
         </Grid>
       </Paper>
-    </div>
+    </>
   );
 };

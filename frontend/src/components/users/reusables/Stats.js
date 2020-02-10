@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 
 // component/s
-import Chatbox from "../Chatbox";
+import Chatbox from "../classroom/Chatbox";
 
 // images
 import question from "../../assets/images/question.png";

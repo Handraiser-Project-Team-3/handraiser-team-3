@@ -127,49 +127,51 @@ export const HandleClassModal = props => {
 		<div>
 			<ToastContainer enableMulticontainer />
 
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-slide-title"
-				aria-describedby="alert-dialog-slide-description"
-			>
-				<DialogTitle
-					id="responsive-dialog-title"
-					style={{
-						background: "#ababfa",
-						color: "white"
-					}}
-				>
-					{headTitle} {" Class"}
-				</DialogTitle>
-				<DialogContent>
-					<form
-						onSubmit={handleClass}
-						className={classes.root}
-						noValidate
-						autoComplete="off"
-					>
-						<TextField
-							label="Class Name"
-							variant="outlined"
-							name="class_name"
-							value={classRoom.class_name}
-							style={{ width: "100%", marginBottom: "1vh" }}
-							onChange={handleInput}
-						/>
-						<TextField
-							id="outlined-multiline-flexible"
-							label="Description"
-							name="class_description"
-							multiline
-							rowsMax="4"
-							value={classRoom.class_description}
-							variant="outlined"
-							style={{ width: "100%" }}
-							onChange={handleInput}
-						/>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => {
+          !classRoom && handleClose();
+        }}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle
+          id="responsive-dialog-title"
+          style={{
+            background: "#ababfa",
+            color: "white"
+          }}
+        >
+          {headTitle} {" Class"}
+        </DialogTitle>
+        <DialogContent>
+          <form
+            onSubmit={handleClass}
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              label="Class Name"
+              variant="outlined"
+              name="class_name"
+              value={classRoom.class_name}
+              style={{ width: "100%", marginBottom: "1vh" }}
+              onChange={handleInput}
+            />
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Description"
+              name="class_description"
+              multiline
+              rowsMax="4"
+              value={classRoom.class_description}
+              variant="outlined"
+              style={{ width: "100%" }}
+              onChange={handleInput}
+            />
 
 						<DialogActions>
 							<Button autoFocus onClick={handleClose} color="primary">
