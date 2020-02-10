@@ -206,10 +206,8 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
-      <MyComponent
-        data={props.data}
-        classId={props.match && props.match.params.id}
-      />
+
+      <MyComponent data={props.data} match={props.match} />
     </div>
   );
 }

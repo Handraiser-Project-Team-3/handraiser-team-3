@@ -321,7 +321,7 @@ export const ClassView = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#97a4f7" }}>
+                  <CardActions style={{ background: "#ff6f61" }}>
                     {account_type_id === 2 ? (
                       <Grid
                         container

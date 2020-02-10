@@ -18,18 +18,21 @@ exports.up = pgm => {
       notNull: true,
       references: '"classroom_users"'
     },
+    mentor_id: {
+      type: "integer",
+      references: '"classroom_users"'
+    },
     title: {
       type: "text",
       notNull: true
     },
     status: {
-      type: "boolean",
-      notNull: true
+      type: "boolean"
     },
     date_posted: {
-      type: "timestamp",
+      type: "date",
       notNull: true,
-      default: pgm.func("current_timestamp")
+      default: pgm.func("current_date")
     }
   });
 };
