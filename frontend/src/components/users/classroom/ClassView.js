@@ -38,9 +38,7 @@ export const ClassView = props => {
   const [action, setAction] = useState("");
   const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
-  const [studentId, setStudentId] = useState([]);
   const [studentDetails, setStudentDetails] = useState([]);
-  const [promise, setPromise] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
     class_name: "",
@@ -54,23 +52,26 @@ export const ClassView = props => {
   };
 
   const onOpenTip = id => {
-    setStudentId(
-      classroomUsers &&
-        classroomUsers
-          .filter(res => {
-            return res.class_id === id;
+    Promise.all(
+      classroomUsers
+        .filter(res => {
+          return res.class_id === id;
+        })
+        .map(res =>
+          axios(`/api/user/${res.user_id}`, headers).then(res => {
+            return res.data.first_name + " " + res.data.last_name;
           })
-          .map(data => {
-            return data.user_id;
-          })
-    );
+        )
+    ).then(response => {
+      setStudentDetails(response);
+    });
   };
   // const deleteClass = classid => {
   //   axios
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
-
+  console.log(studentDetails);
   useEffect(() => {
     account_type_id &&
       (async () => {
@@ -103,24 +104,8 @@ export const ClassView = props => {
       })
       .catch(e => console.log(e));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [account_type_id]);
-
-  useEffect(() => {
-    studentId &&
-      setPromise(
-        studentId.map(res =>
-          axios(`/api/user/${res}`, headers).then(res => {
-            return res.data;
-          })
-        )
-      );
-
-    Promise.all(promise).then(response => {
-      setStudentDetails(response);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentId]);
 
   return (
     <Layout first_name={first_name}>
@@ -152,7 +137,7 @@ export const ClassView = props => {
                       <Tooltip
                         title={
                           data.class_description.length > 45 ? (
-                            <Typography>
+                            <Typography style={{ fontSize: 12 }}>
                               {data.class_description.substring(0)}
                             </Typography>
                           ) : (
@@ -201,12 +186,14 @@ export const ClassView = props => {
                                 </Grid>
                                 <Tooltip
                                   onOpen={() => onOpenTip(data.id)}
-                                  onClose={() => setPromise([])}
                                   title={
                                     studentDetails.length !== 0
                                       ? studentDetails.map(res => (
-                                          <Typography key={res.id}>
-                                            {res.first_name}
+                                          <Typography
+                                            style={{ fontSize: 12 }}
+                                            key={res.id}
+                                          >
+                                            {res}
                                           </Typography>
                                         ))
                                       : ""
