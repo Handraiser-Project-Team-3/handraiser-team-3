@@ -13,7 +13,7 @@ export const UserDetails = ({ id, headers, action }) => {
     })();
   }, [id, headers]);
   return action === "name" ? (
-    <b>{user.first_name + " " + user.last_name}</b>
+    <>{user.first_name + " " + user.last_name}</>
   ) : action === "img" ? (
     <img
       src={user.user_image}

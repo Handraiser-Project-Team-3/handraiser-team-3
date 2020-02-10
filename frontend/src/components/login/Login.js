@@ -59,7 +59,9 @@ export const Login = props => {
 								</Grid>
 								<Grid container direction="row" className={classes.handRaiser}>
 									<Grid item xs={12} sm={12} md={12} lg={12}>
-										<Typography className={classes.signin}>Lalalala</Typography>
+										<Typography className={classes.signin}>
+											HandRaiser
+										</Typography>
 									</Grid>
 									<Grid item xs={12} sm={9} md={8} lg={5}>
 										<Typography className={classes.subtitle}>
@@ -106,7 +108,6 @@ export const Login = props => {
 const alertToast = msg =>
 	toast.info(msg, {
 		position: "top-right",
-		hideProgressBar: true,
 		autoClose: 6000,
 		closeOnClick: true,
 		pauseOnHover: true,
@@ -215,7 +216,7 @@ const Button = styled.button`
 	border-radius: 30px;
 	padding: 10px 40px 10px 40px;
 	font-size: 20px;
-	background: #ffc7c982;
+	background: #ffdf78d9;
 	color: gray;
 	margin-top: 50px;
 	outline: none;

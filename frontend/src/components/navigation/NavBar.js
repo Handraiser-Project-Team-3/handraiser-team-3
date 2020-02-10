@@ -129,7 +129,6 @@ export default function ButtonAppBar(props) {
 			</List>
 		</div>
 	);
-
 	return (
 		<div>
 			<div className={classes.root}>
@@ -207,7 +206,8 @@ export default function ButtonAppBar(props) {
 					</Toolbar>
 				</AppBar>
 			</div>
-			<MyComponent data={props.data} />
+
+			<MyComponent data={props.data} match={props.match} />
 		</div>
 	);
 }
