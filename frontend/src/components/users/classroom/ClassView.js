@@ -54,11 +54,11 @@ export const ClassView = props => {
 
   const [promise, setPromise] = useState([]);
 
-  const deleteClass = classid => {
-    axios
-      .delete(`/api/class/${classid}`, headers)
-      .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  };
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/class/${classid}`, headers)
+  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
+  // };
 
   useEffect(() => {
     account_type_id &&
@@ -340,9 +340,9 @@ export const ClassView = props => {
                           >
                             Enter Class
                           </Button>
-                          <Button onClick={() => deleteClass(data.id)}>
+                          {/* <Button onClick={() => deleteClass(data.id)}>
                             delete
-                          </Button>
+                          </Button> */}
                         </Grid>
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">
