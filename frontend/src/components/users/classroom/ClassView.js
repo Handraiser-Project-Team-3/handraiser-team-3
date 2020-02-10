@@ -38,7 +38,6 @@ export const ClassView = props => {
   const [action, setAction] = useState("");
   const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
-  const [studentId, setStudentId] = useState([]);
   const [studentDetails, setStudentDetails] = useState([]);
   const [classroomUsers, setClassroomUsers] = useState([]);
   const history = useHistory();
@@ -53,13 +52,26 @@ export const ClassView = props => {
     setAction("Save");
     setHeadTitle("Edit");
   };
-
+  const onOpenTip = id => {
+    Promise.all(
+      classroomUsers
+        .filter(res => {
+          return res.class_id === id;
+        })
+        .map(res =>
+          axios(`/api/user/${res.user_id}`, headers).then(res => {
+            return res.data.first_name + " " + res.data.last_name;
+          })
+        )
+    ).then(response => {
+      setStudentDetails(response);
+    });
+  };
   // const deleteClass = classid => {
   //   axios
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
-
   useEffect(() => {
     account_type_id &&
       (async () => {
@@ -89,35 +101,11 @@ export const ClassView = props => {
       .get(`/api/classroom-users/`, headers)
       .then(classUsers => {
         setClassroomUsers(classUsers.data);
-        setStudentId(
-          classUsers.data
-            .filter(res => {
-              return res.class_id === 21;
-            })
-            .map(data => {
-              return data.user_id;
-            })
-        );
       })
       .catch(e => console.log(e));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [account_type_id]);
-
-  useEffect(() => {
-    studentId &&
-      setPromise(
-        studentId.map(res =>
-          axios(`/api/user/${res}`, headers).then(res => {
-            return res.data;
-          })
-        )
-      );
-
-    Promise.all(promise).then(response => setStudentDetails(response));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentId]);
 
   return (
     <Layout first_name={first_name}>
@@ -149,7 +137,7 @@ export const ClassView = props => {
                       <Tooltip
                         title={
                           data.class_description.length > 45 ? (
-                            <Typography>
+                            <Typography style={{ fontSize: 12 }}>
                               {data.class_description.substring(0)}
                             </Typography>
                           ) : (
@@ -197,11 +185,18 @@ export const ClassView = props => {
                                   />
                                 </Grid>
                                 <Tooltip
+                                  onOpen={() => onOpenTip(data.id)}
                                   title={
-                                    studentDetails &&
-                                    studentDetails.map(res => (
-                                      <Typography>{res.first_name}</Typography>
-                                    ))
+                                    studentDetails.length !== 0
+                                      ? studentDetails.map(res => (
+                                        <Typography
+                                          style={{ fontSize: 12 }}
+                                          key={res.id}
+                                        >
+                                          {res}
+                                        </Typography>
+                                      ))
+                                      : ""
                                   }
                                 >
                                   <Grid item lg={10} xs={10}>
@@ -323,7 +318,7 @@ export const ClassView = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#97a4f7" }}>
+                  <CardActions style={{ background: "#ff6f61" }}>
                     {account_type_id === 2 ? (
                       <Grid
                         container
