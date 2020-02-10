@@ -18,7 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-// import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 
 // images
 import Layout from "../reusables/Layout";
@@ -109,11 +109,11 @@ export const Admin = props => {
 		});
 	}, []);
 
-	// const deleteClass = classid => {
-	// 	axios
-	// 		.delete(`/api/user/${classid}`, headers)
-	// 		.then(() => setUsers(users.filter(data => data.id !== classid)));
-	// };
+	const deleteClass = classid => {
+		axios
+			.delete(`/api/user/${classid}`, headers)
+			.then(() => setUsers(users.filter(data => data.id !== classid)));
+	};
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -223,9 +223,9 @@ export const Admin = props => {
 																	color: "#616161"
 																}}
 															/>
-															{/* <Button onClick={() => deleteClass(row.id)}>
+															<Button onClick={() => deleteClass(row.id)}>
 																delete
-															</Button> */}
+															</Button>
 														</>
 													)}
 													{row.account_type_id === 2 && (

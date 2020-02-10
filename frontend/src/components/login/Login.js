@@ -77,6 +77,7 @@ export const Login = props => {
 												<Button
 													onClick={renderProps.onClick}
 													disabled={renderProps.disabled}
+													style={{ background: "#fdddffd9" }}
 												>
 													<Img src={googleIcon} />
 													<span className={classes.googleSignin}>
