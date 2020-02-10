@@ -20,8 +20,13 @@ module.exports = {
   },
   deleteClass: (req, res) => {
     const db = req.app.get("db");
-    db.class.destroy(req.params.id).then(() => {
-      res.status(200).send({ message: "success" });
-    });
+    db.class
+      .destroy(req.params.id)
+      .then(() => {
+        res.status(200).send({ message: "success" });
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 };

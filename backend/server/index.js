@@ -49,7 +49,6 @@ massive({
   app.patch("/api/chats/messages/edit/id", chats.editMessages);
 
   //other pages that need headers
-
   const port = 3001;
   server.listen(port, () => {
     console.clear();
