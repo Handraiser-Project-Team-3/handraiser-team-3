@@ -37,7 +37,7 @@ import { toast } from "react-toastify";
 //WS
 import io from "socket.io-client";
 import { UserDetails } from "../reusables/UserDetails";
-const socket = io(`localhost:3001`);
+const socket = io(`172.60.62.166:3001`);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
