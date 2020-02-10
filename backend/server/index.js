@@ -41,8 +41,10 @@ massive({
         "\x1b[0m"
       );
     });
+
     ws.requests(socket, db, io);
     ws.chat(socket, db, io);
+
     socket.on(`disconnect`, () => {
       if (userDetails !== undefined) {
         console.log(

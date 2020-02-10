@@ -7,8 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import styled from "styled-components";
 
 //tabs
@@ -28,9 +26,13 @@ import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 import Layout from "../reusables/Layout";
 import Stats from "../reusables/Stats";
 import ClassroomModal from "./RequestModal";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
+import { useStyles } from "./classroomStyle";
+import { toast } from "react-toastify";
 
 //WS
 import io from "socket.io-client";
@@ -91,10 +93,13 @@ export default function MentorsView(props) {
     socket.emit(`join_classroom`, {
       classId: props.match.params.id
     });
-    socket.on(`update_request_list`, data => {
+    socket.on(`update_request_list`, (data, notify) => {
       setRequests(data);
+      if (!!notify) {
+        alertToast(notify);
+      }
     });
-  }, [user]);
+  }, []);
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -127,7 +132,7 @@ export default function MentorsView(props) {
       student_id: classroomUser.id,
       title: newRequest
     };
-    socket.emit("add_request", obj);
+    socket.emit("add_request", obj, userDetails);
   };
   return (
     <Layout accountType={account_type_id} first_name={first_name}>
@@ -159,9 +164,9 @@ export default function MentorsView(props) {
                       classes={classes}
                       action={"need"}
                       account_type_id={account_type_id}
-                      user_id={id}
                       headers={headers}
                       classroomUser={classroomUser}
+                      user={userDetails}
                     />
                   )
               )}
@@ -177,9 +182,9 @@ export default function MentorsView(props) {
                       classes={classes}
                       action={"help"}
                       account_type_id={account_type_id}
-                      user_id={id}
                       headers={headers}
                       classroomUser={classroomUser}
+                      user={userDetails}
                     />
                   )
               )}
@@ -195,9 +200,9 @@ export default function MentorsView(props) {
                       classes={classes}
                       action={"done"}
                       account_type_id={account_type_id}
-                      user_id={id}
                       headers={headers}
                       classroomUser={classroomUser}
+                      user={userDetails}
                     />
                   )
               )}
@@ -247,61 +252,15 @@ export default function MentorsView(props) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em"
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "whitesmoke"
-    }
-  },
-  root: {
-    background:
-      "linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-    border: "1px solid lightgray",
-    height: "65vh",
-    overflow: "auto",
-    padding: "0"
-  },
-  needHelp: {
-    padding: "15px",
-    margin: "20px",
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  studentsNeed: {
-    display: "flex",
-    alignItems: "center",
-    color: "gray"
-  },
-  appBar: {
-    background: "#f1f0fa"
-  },
-  studentsAvatar: {
-    marginRight: "10px"
-  },
-  divStyle: {
-    width: "100%",
-    height: "auto",
-    background: "#eff1fa",
-    marginTop: "0.5vh",
-    border: "1px solid lightgray",
-    borderRadius: "5px"
-  }
-}));
 const RequestComponent = ({
   data,
   updateRequest,
   classes,
   action,
   account_type_id,
-  user_id,
   headers,
-  classroomUser
+  classroomUser,
+  user
 }) => {
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
@@ -311,6 +270,21 @@ const RequestComponent = ({
       });
     }
   }, [data]);
+  const handleSubmitAction = (title, submit) =>
+    confirmAlert({
+      title: title,
+      message: "Are you sure?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: submit
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
   return (
     <Paper
       id={data.id}
@@ -318,12 +292,12 @@ const RequestComponent = ({
       className={classes.needHelp}
       elevation={6}
     >
-      {" "}
       <Typography variant="h7" className={classes.studentsNeed}>
         <Avatar
           className={classes.studentsAvatar}
           alt="Student"
           src={student}
+          onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
         />
         <Div>
           <span style={{ fontSize: 16 }}>{data.title}</span>
@@ -345,9 +319,11 @@ const RequestComponent = ({
           {classroomUser.id === data.student_id || account_type_id === 2 ? (
             <Tooltip title="Remove">
               <Button
-                onClick={() => {
-                  socket.emit("remove_request", data);
-                }}
+                onClick={() =>
+                  handleSubmitAction("Removing request ...", () =>
+                    socket.emit("remove_request", data, user)
+                  )
+                }
               >
                 <RemoveCircleIcon
                   style={{ color: "#9da1f0" }}
@@ -360,7 +336,13 @@ const RequestComponent = ({
           )}
           {account_type_id === 2 ? (
             <Tooltip title="Help">
-              <Button onClick={() => updateRequest(data.id, false)}>
+              <Button
+                onClick={() =>
+                  handleSubmitAction("Accepting request . . .", () =>
+                    updateRequest(data.id, false)
+                  )
+                }
+              >
                 <Help style={{ color: "#9da1f0" }} />
               </Button>
             </Tooltip>
@@ -373,7 +355,13 @@ const RequestComponent = ({
           {account_type_id === 2 ? (
             <>
               <Tooltip title="Move back to 'Need Help'">
-                <Button onClick={() => updateRequest(data.id, null)}>
+                <Button
+                  onClick={() =>
+                    handleSubmitAction("Moving back request . . .", () =>
+                      updateRequest(data.id, null)
+                    )
+                  }
+                >
                   <AssignmentReturnIcon
                     style={{ color: "#9da1f0" }}
                     className={classes.removeIcon}
@@ -381,7 +369,13 @@ const RequestComponent = ({
                 </Button>
               </Tooltip>
               <Tooltip title="Help">
-                <Button onClick={() => updateRequest(data.id, true)}>
+                <Button
+                  onClick={() =>
+                    handleSubmitAction("Ending request . . .", () =>
+                      updateRequest(data.id, true)
+                    )
+                  }
+                >
                   <CheckCircleIcon style={{ color: "#9da1f0" }} />
                 </Button>
               </Tooltip>
@@ -394,7 +388,13 @@ const RequestComponent = ({
         <div className={classes.Icons}>
           {account_type_id === 2 ? (
             <Tooltip title="Move back to 'Being Help'">
-              <Button onClick={() => updateRequest(data.id, false)}>
+              <Button
+                onClick={() =>
+                  handleSubmitAction("Moving back request . . .", () =>
+                    updateRequest(data.id, false)
+                  )
+                }
+              >
                 <AssignmentReturnIcon
                   style={{ color: "#9da1f0" }}
                   className={classes.removeIcon}
@@ -429,3 +429,8 @@ const getClassroomUser = async headers => {
     console.log(err);
   }
 };
+const alertToast = msg =>
+  toast(msg, {
+    position: "bottom-left",
+    autoClose: 6000
+  });

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
+import { ToastContainer } from "react-toastify";
 const socket = io(`localhost:3001`);
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
   };
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes
         accessToken={accessToken}
         setAccessToken={setAccessToken}
