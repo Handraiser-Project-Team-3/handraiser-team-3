@@ -10,7 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
 
@@ -20,7 +20,7 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
-import { PageNotFound } from "../reusables/PageNotFound";
+
 // images
 import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
@@ -40,13 +40,13 @@ export const ClassView = props => {
   const [classList, setClassList] = useState([]);
   const [studentId, setStudentId] = useState([]);
   const [studentDetails, setStudentDetails] = useState([]);
+  const [classroomUsers, setClassroomUsers] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
     class_name: "",
     class_description: ""
   });
-  const location = useLocation()
-  const [studentDetails, setStudentDetails] = React.useState([]);
+  const [promise, setPromise] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,7 +54,6 @@ export const ClassView = props => {
     setHeadTitle("Edit");
   };
 
-  const [promise, setPromise] = useState([]);
   // const deleteClass = classid => {
   //   axios
   //     .delete(`/api/class/${classid}`, headers)
@@ -117,20 +116,6 @@ export const ClassView = props => {
 
     Promise.all(promise).then(response => setStudentDetails(response));
 
-    //   if (studentDetails) {
-    //     if (location.pathname === `/classroom/${studentDetails.class_id}`) {
-    //       history.push(`/classroom/${studentDetails.class_id}`)
-    //     } else {
-    //       history.push('/')
-    //     }
-    //   } else {
-    //     console.log('Login component')
-    //   }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps 
-    // }, [account_type_id]);
-
-    // console.log(location)
-    // console.log(studentDetails)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentId]);
 
@@ -384,7 +369,7 @@ export const ClassView = props => {
                     ) : (
                         <Grid container direction="column" alignItems="center">
                           <JoinClassModal
-                            studentDetails={studentDetails}
+                            classroomUsers={classroomUsers}
                             classId={data.id}
                             className={data.class_name}
                             codeClass={data.class_code}

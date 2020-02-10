@@ -45,7 +45,7 @@ const alertToast = msg =>
 export const JoinClassModal = props => {
   const classes = useStyles();
   const {
-    studentDetails,
+    classroomUsers,
     classId,
     className,
     codeClass,
@@ -99,9 +99,11 @@ export const JoinClassModal = props => {
   const ButtonComponent = () => {
     const [check, setCheck] = useState({});
 
-    React.useEffect(() => {
-      setCheck(studentDetails.filter(x => x.class_id === classId)[0]);
-    }, []);
+    useEffect(() => {
+      setCheck(classroomUsers
+        .filter(x => x.user_id === user.id)
+        .filter(x => x.class_id === classId)[0]);
+    }, [check]);
 
     return (
       <>

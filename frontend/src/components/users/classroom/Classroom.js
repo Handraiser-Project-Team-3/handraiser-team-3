@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import axios from 'axios';
 
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
@@ -57,12 +59,15 @@ export default function Classroom(props) {
   const [need, setNeed] = React.useState(true);
   const [being, setBeing] = React.useState(true);
   const [done, setDone] = React.useState(true);
-  const { user } = props.data;
+  const { user, headers } = props.data;
   const userDetails = user ? user : {};
   const { first_name } = userDetails;
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [studentDetails, setStudentDetails] = useState([]);
+  const history = useHistory();
+  const match = useRouteMatch();
   const [val, setVal] = React.useState([
     {
       name: "Stephen Dunn"
@@ -71,8 +76,32 @@ export default function Classroom(props) {
       name: "Stephen Dunn"
     }
   ]);
+
+  useEffect(() => {
+    if (user) {
+      (async () => {
+        try {
+          const res = await axios.get(`/api/classroom-users`, headers);
+          setStudentDetails(res.data.filter(x => x.user_id === user.id));
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+  }, [user]);
+
+  console.log(match.url)
+  console.log(match.params.id)
+  studentDetails.map(res => {
+    if (res.class_id === match.params.id) {
+      history.push(match.url)
+    } else {
+      history.replace('/')
+    }
+  })
+
   return (
-    <Layout>
+    <Layout first_name={first_name}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>

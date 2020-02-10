@@ -5,12 +5,12 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
-import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
 import Badge from "@material-ui/core/Badge";
+import IconButton from '@material-ui/core/IconButton';
 
 const StyledBadge = withStyles(theme => ({
   badge: {
@@ -211,12 +211,14 @@ export default function ChatBox() {
         <TextField
           variant="outlined"
           id="standard-basic"
-          label="Type your message..."
+          placeholder="Type your message..."
           fullWidth
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button endIcon={<SendIcon />}></Button>
+                <IconButton>
+                  <SendIcon />
+                </IconButton>
               </InputAdornment>
             )
           }}
