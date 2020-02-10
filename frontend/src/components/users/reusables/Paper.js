@@ -32,6 +32,7 @@ const useStyles = makeStyles({
 
 export const PaperStat = props => {
 	const classes = useStyles();
+	const { users } = props;
 
 	return (
 		<>
@@ -52,7 +53,7 @@ export const PaperStat = props => {
 									variant="h3"
 									style={{ fontWeight: "bold", color: "#fadc60" }}
 								>
-									20
+									{users.length}
 								</Typography>
 							</Grid>
 						</Grid>
@@ -76,7 +77,7 @@ export const PaperStat = props => {
 									variant="h3"
 									style={{ fontWeight: "bold", color: "#fadc60" }}
 								>
-									5
+									2
 								</Typography>
 							</Grid>
 						</Grid>
@@ -100,7 +101,7 @@ export const PaperStat = props => {
 									variant="h3"
 									style={{ fontWeight: "bold", color: "#fadc60" }}
 								>
-									15
+									8
 								</Typography>
 							</Grid>
 						</Grid>
