@@ -50,7 +50,7 @@ export const ClassView = props => {
     setAction("Save");
     setHeadTitle("Edit");
   };
-
+  console.log(props.classId);
   const onOpenTip = id => {
     Promise.all(
       classroomUsers
@@ -71,7 +71,6 @@ export const ClassView = props => {
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
-  console.log(studentDetails);
   useEffect(() => {
     account_type_id &&
       (async () => {
@@ -318,7 +317,7 @@ export const ClassView = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#97a4f7" }}>
+                  <CardActions style={{ background: "#ff6f61" }}>
                     {account_type_id === 2 ? (
                       <Grid
                         container

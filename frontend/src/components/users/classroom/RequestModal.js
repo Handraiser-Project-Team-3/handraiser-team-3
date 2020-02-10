@@ -5,8 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+// import Avatar from "@material-ui/core/Avatar";
+// import AddCircleIcon from "@material-ui/icons/AddCircle";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+
+import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
@@ -33,9 +38,10 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-export default function() {
+export default function(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,11 +66,22 @@ export default function() {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title" className={classes.titleOfrequest}>
-          Title of Request{" "}
-        </DialogTitle>
-        <DialogContent>
-          <form className={classes.root} noValidate autoComplete="off">
+        <form
+          className={classes.root}
+          noValidate
+          autoComplete="off"
+          onSubmit={e => {
+            handleSubmitNewRquest(e);
+            handleClose();
+          }}
+        >
+          <DialogTitle
+            id="form-dialog-title"
+            className={classes.titleOfrequest}
+          >
+            Title of Request{" "}
+          </DialogTitle>
+          <DialogContent>
             <TextField
               autoFocus
               variant="outlined"
@@ -73,21 +90,21 @@ export default function() {
               label="Request"
               type="email"
               fullWidth
-              inputProps={{
-                maxLength: 30
+              onChange={e => {
+                addNewRequest(e.target.value);
               }}
             />
-          </form>
-        </DialogContent>
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
