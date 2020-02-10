@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -106,8 +106,9 @@ export const JoinClassModal = props => {
       return null;
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
       setCheck(filterClassUser.filter(x => x.class_id === classId)[0]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
       <>

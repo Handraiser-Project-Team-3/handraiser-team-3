@@ -3,9 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-// import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
@@ -35,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Layout(props) {
   const classes = useStyles();
-  const { first_name, account_type_id } = props;
+  const { first_name, classId } = props;
 
   return (
     <div>
@@ -48,13 +47,7 @@ export default function Layout(props) {
         >
           <Grid item xs={12} sm={9} md={10} lg={10}>
             <Typography variant="h5" className={classes.color}>
-              Welcome{" "}
-              {account_type_id === 1
-                ? "Admin"
-                : account_type_id === 2
-                ? "Mentor"
-                : ""}
-              {first_name ? " " + first_name : ""}!
+              Welcome {first_name}!
             </Typography>
           </Grid>
           <Grid item sm={3} md={2} lg={2}>
@@ -63,14 +56,20 @@ export default function Layout(props) {
               aria-label="breadcrumb"
               className={classes.res}
             >
-              <Link
-                to="/"
-                color="inherit"
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                Home
-              </Link>
-              <Typography color="textPrimary">Classrooms</Typography>
+              {classId ? (
+                <Link
+                  to="/"
+                  color="inherit"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  Home
+                </Link>
+              ) : (
+                <Typography color="textPrimary">Home</Typography>
+              )}
+              {classId && (
+                <Typography color="textPrimary">Classrooms</Typography>
+              )}
             </Breadcrumbs>
           </Grid>
         </Grid>

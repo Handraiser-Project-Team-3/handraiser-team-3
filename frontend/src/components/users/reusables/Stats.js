@@ -12,7 +12,7 @@ import Chatbox from "../classroom/Chatbox";
 // images
 import question from "../../assets/images/question.png";
 
-export default function MentorsView(props) {
+export default function MentorsView() {
   const classes = useStyles();
 
   return (
