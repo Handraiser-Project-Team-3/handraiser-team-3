@@ -91,7 +91,7 @@ export default function MentorsView(props) {
   }, [user, headers]);
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
-      classId: props.match.params.id
+      classId: props.classId
     });
     socket.on(`update_request_list`, (data, notify) => {
       setRequests(data);
@@ -105,7 +105,7 @@ export default function MentorsView(props) {
       (async () => {
         try {
           const res = await Axios.get(
-            `/api/request/list/${props.match.params.id}`,
+            `/api/request/list/${props.classId}`,
             headers
           );
           setRequests(res.data);
@@ -135,7 +135,7 @@ export default function MentorsView(props) {
     socket.emit("add_request", obj, userDetails);
   };
   return (
-    <Layout accountType={account_type_id} first_name={first_name}>
+    <Layout classId={props.classId} first_name={first_name}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
