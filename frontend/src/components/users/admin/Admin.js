@@ -16,6 +16,12 @@ import Layout from "../reusables/Layout";
 import { PaperStat } from "../reusables/Paper";
 import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import Tooltip from "@material-ui/core/Tooltip";
+
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { func } from "prop-types";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -70,6 +76,7 @@ export const Admin = props => {
   const [details, setDetails] = useState({});
 
   useEffect(() => {
+    // DISPLAY LIST
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
@@ -79,6 +86,16 @@ export const Admin = props => {
     axios
       .delete(`/api/user/${classid}`, headers)
       .then(() => setUsers(users.filter(data => data.id !== classid)));
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -94,28 +111,21 @@ export const Admin = props => {
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
-              <Button
-                variant="contained"
-                style={{ background: "#7dcec3" }}
-                color="primary"
-                onClick={() => setUserType(3)}
-              >
-                <img src={teacher} className={classes.mentor} />
-                Student
-              </Button>
-              &nbsp;
-              <Button
-                variant="contained"
-                style={{ background: "#7dcec3" }}
-                color="primary"
-                onClick={() => setUserType(2)}
-              >
-                <img src={teacher} className={classes.mentor} />
-                Mentor
-              </Button>
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Email Address</StyledTableCell>
+                  <StyledTableCell
+                    style={{
+                      display: "flex"
+                    }}
+                  >
+                    <span>Email Address</span>{" "}
+                    <Tooltip title="Filter by">
+                      <ArrowDropDownIcon
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </Tooltip>
+                  </StyledTableCell>
                   <StyledTableCell
                     align="right"
                     style={{ paddingRight: "80px" }}
@@ -137,7 +147,7 @@ export const Admin = props => {
                             <>
                               <Button
                                 variant="contained"
-                                style={{ background: "#7dcec3" }}
+                                style={{ background: "#ababfa" }}
                                 color="primary"
                                 onClick={() => {
                                   setDetails(row);
@@ -148,15 +158,15 @@ export const Admin = props => {
                                 <img src={teacher} className={classes.mentor} />
                                 Set as Mentor
                               </Button>
-                              {/* <Button onClick={() => deleteClass(row.id)}>
+                              <Button onClick={() => deleteClass(row.id)}>
                                 delete
-                              </Button> */}
+                              </Button>
                             </>
                           )}
                           {row.account_type_id === 2 && (
                             <Button
                               variant="contained"
-                              style={{ background: "#fe8d8c" }}
+                              style={{ background: "#ff6f61ff" }}
                               color="primary"
                               onClick={() => {
                                 setDetails(row);
@@ -184,6 +194,16 @@ export const Admin = props => {
         handle={handle}
         setUsers={setUsers}
       />
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={() => setUserType(3)}>Student</MenuItem>
+        <MenuItem onClick={() => setUserType(2)}>Mentor</MenuItem>
+      </Menu>
     </Layout>
   );
 };

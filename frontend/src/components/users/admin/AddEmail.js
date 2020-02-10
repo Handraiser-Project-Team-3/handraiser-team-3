@@ -15,6 +15,7 @@ export default function AddEmail(props) {
   function handleChange(e) {
     setEmail(e.target.value);
   }
+
   function handleClickAdd(email) {
     const EmailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
 
@@ -32,10 +33,19 @@ export default function AddEmail(props) {
         .then(res => {
           setUsers([...users, res.data]);
           toast.info("Email Address has been Added!");
+          setTimeout(() => {
+            setEmail("");
+          }, 3000);
         })
         .catch(() => toast.error("Email already taken!"));
+      setTimeout(() => {
+        setEmail("");
+      }, 3000);
     } else {
       toast.error("Please Enter Valid Email Address");
+      setTimeout(() => {
+        setEmail("");
+      }, 3000);
     }
   }
   return (
@@ -85,7 +95,7 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#d2efeb",
+    background: "#ababfa70",
     borderTopLeftRadius: "5px",
     borderBottomLeftRadius: "5px"
   },

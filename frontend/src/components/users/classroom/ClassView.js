@@ -20,6 +20,7 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
+
 // images
 import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
@@ -86,9 +87,9 @@ export const ClassView = props => {
     axios
       .get(`/api/classroom-users/`, headers)
       .then(classUsers => {
-        setClassroomUsers(classUsers.data)
+        setClassroomUsers(classUsers.data);
       })
-      .catch(e => console.log(e))
+      .catch(e => console.log(e));
 
     //   if () {
     //     history.push(`/classroom/${classList.id}`)
@@ -100,6 +101,7 @@ export const ClassView = props => {
     // })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account_type_id]);
+
   return (
     <Layout
       accountType={account_type_id === 2 ? accountType : null}
@@ -114,8 +116,8 @@ export const ClassView = props => {
         setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
-        {classList.length !== 0
-          ? classList
+        {classList.length !== 0 ? (
+          classList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -124,7 +126,6 @@ export const ClassView = props => {
                     <CardMedia
                       className={classes.media}
                       image={classroom}
-                      title="Contemplative Reptile"
                     ></CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -154,7 +155,7 @@ export const ClassView = props => {
                         component="div"
                         variant="inherit"
                       >
-                        {account_type_id === 2 ? (
+                        {account_type_id === 2 ? ( // if mentor
                           <Grid
                             container
                             direction="row"
@@ -191,7 +192,7 @@ export const ClassView = props => {
                                         variant="caption"
                                       >
                                         Students:
-                                        </Typography>
+                                      </Typography>
                                     </Grid>
                                     <Grid item lg={12} xs={12}>
                                       <b>10</b>
@@ -229,14 +230,12 @@ export const ClassView = props => {
                                         variant="caption"
                                       >
                                         Class Code:
-                                        </Typography>
+                                      </Typography>
                                     </Grid>
                                     <Grid item lg={12} xs={12}>
                                       <Tooltip title="Click to copy code">
                                         <b
-                                          onClick={() =>
-                                            copy(data.class_code)
-                                          }
+                                          onClick={() => copy(data.class_code)}
                                         >
                                           {data.class_code}
                                         </b>
@@ -248,47 +247,47 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                            <Grid
-                              container
-                              direction="row"
-                              alignItems="center"
-                              justify="space-between"
-                            >
-                              <Grid item lg={2} xs={2}>
-                                <UserDetails
-                                  id={data.user_id}
-                                  headers={headers}
-                                  action="img"
-                                />
-                              </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item lg={2} xs={2}>
+                              <UserDetails
+                                id={data.user_id}
+                                headers={headers}
+                                action="img"
+                              />
+                            </Grid>
 
-                              <Grid item lg={10} xs={10}>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="flex-start"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={12} xs={12}>
-                                    <Typography
-                                      gutterBottom
-                                      component="div"
-                                      variant="caption"
-                                    >
-                                      Mentor's Name:
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item lg={12} xs={12}>
-                                    <UserDetails
-                                      id={data.user_id}
-                                      headers={headers}
-                                      action="name"
-                                    />
-                                  </Grid>
+                            <Grid item lg={10} xs={10}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Mentor's Name:
+                                  </Typography>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <UserDetails
+                                    id={data.user_id}
+                                    headers={headers}
+                                    action="name"
+                                  />
                                 </Grid>
                               </Grid>
                             </Grid>
-                          )}
+                          </Grid>
+                        )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -309,7 +308,7 @@ export const ClassView = props => {
                             style={{ color: "white" }}
                           >
                             Enter Class
-                            </Button>
+                          </Button>
                           {/* <Button onClick={() => deleteClass(data.id)}>
                             delete
                           </Button> */}
@@ -336,22 +335,31 @@ export const ClassView = props => {
                         </Grid>
                       </Grid>
                     ) : (
-                        <Grid container direction="column" alignItems="center">
-                          <JoinClassModal
-                            classroomUsers={classroomUsers}
-                            classId={data.id}
-                            className={data.class_name}
-                            codeClass={data.class_code}
-                            user={user}
-                            headers={headers}
-                          />
-                        </Grid>
-                      )}
+                      <Grid container direction="column" alignItems="center">
+                        <JoinClassModal
+                          classroomUsers={classroomUsers}
+                          classId={data.id}
+                          className={data.class_name}
+                          codeClass={data.class_code}
+                          user={user}
+                          headers={headers}
+                        />
+                      </Grid>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>
             ))
-          : "No Data Result"}
+        ) : (
+          <div className={classes.margin}>
+            <span className={classes.noClasses}>No added classes yet</span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
+            </div>
+          </div>
+        )}
       </Grid>
       <HandleClassModal
         open={open}
@@ -370,6 +378,17 @@ export const ClassView = props => {
 };
 
 const useStyles = makeStyles(theme => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "whitesmoke"
+    }
+  },
   header: {
     height: "auto",
     backgroundImage: `url(${head})`,
@@ -417,5 +436,15 @@ const useStyles = makeStyles(theme => ({
       width: "23px",
       borderRadius: "10%"
     }
+  },
+  noClasses: {
+    fontSize: "30px",
+    color: "gray"
+  },
+  margin: {
+    margin: "0 auto",
+    marginTop: "10%",
+    display: "flex",
+    alignItems: "baseline"
   }
 }));
