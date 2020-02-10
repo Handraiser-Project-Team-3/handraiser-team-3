@@ -4,7 +4,7 @@ import { Login } from "../login/Login";
 import Navigation from "../navigation/NavBar";
 import { Admin } from "../users/admin/Admin";
 import { ClassView } from "../users/classroom/ClassView";
-import MentorsView from "../users/MentorsView";
+import Classroom from "../users/classroom/Classroom";
 import PageNotFound from "../users/reusables/PageNotFound";
 
 export const Routes = props => {
@@ -30,7 +30,7 @@ export const Routes = props => {
       <Route
         path={`/classroom/:id`}
         render={history => (
-          <Navigation {...history} data={props} component={MentorsView} />
+          <Navigation {...history} data={props} component={Classroom} />
         )}
       />
       <Route path={`*`} component={PageNotFound} />
