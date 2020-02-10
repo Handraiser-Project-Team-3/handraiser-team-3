@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -25,7 +25,7 @@ import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
-
+import axios from "axios";
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -47,31 +47,28 @@ const useStyles = makeStyles(theme => ({
     width: 250
   }
 }));
-export default function ButtonAppBar(props) {
-  const { user, setUser, setAccessToken } = props.data;
-  const userDetails = user ? user : {};
-  const { user_image } = userDetails;
-  const history = useHistory();
 
+export default function ButtonAppBar(props) {
+  const { user, setUser, setAccessToken, headers } = props.data;
+  const userDetails = user ? user : {};
+  const { user_image, id } = userDetails;
+  const history = useHistory();
   const MyComponent = props.component;
   const classes = useStyles();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [show, setShow] = React.useState(true);
+  const [show, setShow] = useState(true);
+  const [classRoom, setClassRoom] = useState([]);
 
   const handleClick = () => {
     setShow(!show);
   };
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const [state, setState] = React.useState({
     left: false
   });
@@ -85,6 +82,23 @@ export default function ButtonAppBar(props) {
     }
     setState({ ...state, [side]: open });
   };
+
+  useEffect(() => {
+    axios.get(`api/classroom-users`, headers).then(e => {
+      Promise.all(
+        e.data
+          .filter(userdata => {
+            return userdata.user_id === id;
+          })
+          .map(res =>
+            axios(`/api/class/${res.class_id}`, headers).then(res => {
+              return res.data;
+            })
+          )
+      ).then(response => setClassRoom(response));
+    });
+    // eslint-disable-next-line
+  }, [id]);
 
   const sideList = side => (
     <div
@@ -118,12 +132,20 @@ export default function ButtonAppBar(props) {
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary="BoomCamp Frontend" />
-            </ListItem>
+            {classRoom &&
+              classRoom.map(rooms => (
+                <ListItem
+                  id={2}
+                  key={rooms.id}
+                  button
+                  className={classes.nested}
+                >
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText>{rooms.class_name}</ListItemText>
+                </ListItem>
+              ))}
           </List>
         </Collapse>
       </List>
@@ -157,7 +179,6 @@ export default function ButtonAppBar(props) {
                 <img src={logo} className={classes.logo} alt="logo" />
               </Link>
             </Typography>
-
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -206,10 +227,8 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
-      <MyComponent
-        data={props.data}
-        classId={props.match && props.match.params.id}
-      />
+
+      <MyComponent data={props.data} classId={props.match && props.match.params.id} />
     </div>
   );
 }
