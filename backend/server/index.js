@@ -41,7 +41,7 @@ massive({
   app.post("/api/class", classroom.addClass);
   app.patch("/api/class", classroom.editClass);
   app.delete("/api/class/:id", classroom.deleteClass);
-
+  
   //chats
   app.post("/api/chats/message/create/:id", chats.createMessage);
   app.get("/api/chats/messages/list/:id", chats.messageList);
