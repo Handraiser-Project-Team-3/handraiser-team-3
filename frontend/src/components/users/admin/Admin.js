@@ -101,6 +101,7 @@ export const Admin = props => {
 	const [open, setOpen] = useState(false);
 	const [handle, setHandle] = useState("");
 	const [details, setDetails] = useState({});
+	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	useEffect(() => {
 		// DISPLAY LIST
@@ -114,8 +115,6 @@ export const Admin = props => {
 	// 		.delete(`/api/user/${classid}`, headers)
 	// 		.then(() => setUsers(users.filter(data => data.id !== classid)));
 	// };
-
-	const [anchorEl, setAnchorEl] = React.useState(null);
 
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);

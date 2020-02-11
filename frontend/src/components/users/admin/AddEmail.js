@@ -17,7 +17,7 @@ export default function AddEmail(props) {
 	}
 	function handleClickAdd(email) {
 		console.log(email);
-		const EmailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+		const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
 
 		// if email is already registered!
 
@@ -58,7 +58,7 @@ export default function AddEmail(props) {
 					</form>
 				</Grid>
 				<Grid item xs={2}>
-					<Tooltip title="Add User" arrow>
+					<Tooltip title="Add User">
 						<AddCircleIcon
 							value={email}
 							fontSize="large"
