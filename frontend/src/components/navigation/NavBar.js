@@ -27,25 +27,25 @@ import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
-  },
-  logo: {
-    width: "140px",
-    marginTop: "0.5vh"
-  },
-  pad: {
-    paddingLeft: "3px"
-  },
-  list: {
-    width: 250
-  }
+	root: {
+		flexGrow: 1
+	},
+	menuButton: {
+		marginRight: theme.spacing(2)
+	},
+	title: {
+		flexGrow: 1
+	},
+	logo: {
+		width: "140px",
+		marginTop: "0.5vh"
+	},
+	pad: {
+		paddingLeft: "3px"
+	},
+	list: {
+		width: 250
+	}
 }));
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
@@ -250,19 +250,19 @@ export default function ButtonAppBar(props) {
   );
 }
 const Btn = styled.span`
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 `;
 const alertToast = msg =>
-  toast.info(msg, {
-    position: "top-right",
-    hideProgressBar: true,
-    autoClose: 2000,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true
-  });
+	toast.info(msg, {
+		position: "top-right",
+		hideProgressBar: true,
+		autoClose: 2000,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true
+	});
 const User = styled.img`
-  border-radius: 50%;
-  width: 35px;
+	border-radius: 50%;
+	width: 35px;
 `;

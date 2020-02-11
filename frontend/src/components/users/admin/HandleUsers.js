@@ -65,7 +65,7 @@ export default function HandleUsers(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Confirmation Message:"}
+          {"Confirmation Message"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

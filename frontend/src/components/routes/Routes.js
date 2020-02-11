@@ -5,7 +5,6 @@ import Navigation from "../navigation/NavBar";
 import { Admin } from "../users/admin/Admin";
 import { ClassView } from "../users/classroom/ClassView";
 import Classroom from "../users/classroom/Classroom";
-
 export const Routes = props => {
   
   const { accessToken, user } = props;

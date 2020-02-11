@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsIcon from "@material-ui/icons/Details";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,108 +16,117 @@ import IconButton from "@material-ui/core/IconButton";
 import blackboard from "../../assets/images/blackboard.png";
 import { Typography } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
+import axios from "axios";
 
 const useStyles = makeStyles({
-	"@global": {
-		"*::-webkit-scrollbar": {
-			width: "0.4em"
-		},
-		"*::-webkit-scrollbar-track": {
-			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-		},
-		"*::-webkit-scrollbar-thumb": {
-			backgroundColor: "whitesmoke"
-		}
-	},
-	details: {
-		cursor: "pointer",
-		color: "#aaaafa"
-	},
-	root: {
-		flexGrow: 1,
-		width: 400
-	}
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em"
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "whitesmoke"
+    }
+  },
+  details: {
+    cursor: "pointer",
+    color: "#aaaafa"
+  },
+  root: {
+    flexGrow: 1,
+    width: 400
+  }
 });
 
-function generate(element) {
-	return [0, 1, 2].map(value =>
-		React.cloneElement(element, {
-			key: value
-		})
-	);
-}
-
 export default function MentorDetails(props) {
-	const classes = useStyles();
-	const { email } = props;
-	const [dense, setDense] = React.useState(false);
-	const [secondary, setSecondary] = React.useState(false);
+  const classes = useStyles();
+  const { email, mentorId, headers } = props;
+  const [dense, setDense] = useState(false);
+  const [classUsers, setClassUsers] = useState([]);
+  const [classList, setClassList] = useState([]);
 
-	const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
+  const handleClickOpen = () => {
+    setOpen(true);
+    axios
+      .get(`/api/class?id=${mentorId}`, headers)
+      .then(res => setClassList(res.data))
+      .catch(err => console.error(err));
 
-	const handleClose = () => {
-		setOpen(false);
-	};
+    axios
+      .get(`/api/classroom-users/`, headers)
+      .then(res => {
+        setClassUsers(res.data);
+      })
+      .catch(err => console.error(err));
+  };
 
-	return (
-		<>
-			<Chip
-				variant="outlined"
-				size="medium"
-				label={email}
-				onClick={handleClickOpen}
-				style={{ color: "#616161" }}
-			/>
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle
-					id="form-dialog-title"
-					style={{ background: "#aaaafa", color: "white" }}
-				>
-					Mentor Details
-				</DialogTitle>
-				<DialogContent>
-					<div className={classes.root}>
-						<Typography variant="h6" className={classes.title}>
-							Classes
-						</Typography>
-						<List dense={dense}>
-							{generate(
-								<ListItem>
-									<ListItemAvatar>
-										<Avatar src={blackboard}></Avatar>
-									</ListItemAvatar>
-									<ListItemText
-										primary="BoomCamp Frontend"
-										secondary={secondary ? "Secondary text" : null}
-									/>
+  return (
+    <>
+      <Chip
+        variant="outlined"
+        size="medium"
+        label={email}
+        onClick={handleClickOpen}
+        style={{ color: "#616161" }}
+      />
 
-									<ListItemSecondaryAction>
-										<IconButton edge="end" aria-label="delete">
-											<Tooltip title="Number of Students">
-												<Typography>10</Typography>
-											</Tooltip>
-										</IconButton>
-									</ListItemSecondaryAction>
-								</ListItem>
-							)}
-						</List>
-					</div>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Close
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</>
-	);
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle
+          id="form-dialog-title"
+          style={{ background: "#aaaafa", color: "white" }}
+        >
+          Mentor Details
+        </DialogTitle>
+        <DialogContent>
+          <div className={classes.root}>
+            <Typography variant="h6" className={classes.title}>
+              Classes
+            </Typography>
+            <List dense={dense}>
+              {classList.map(row => (
+                <>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar src={blackboard}></Avatar>
+                    </ListItemAvatar>
+
+                    <ListItemText>{row.class_name}</ListItemText>
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete">
+                        <Tooltip title="Number of Students">
+                          <Typography>
+                            {classUsers &&
+                              classUsers.filter(res => {
+                                return res.class_id === row.id;
+                              }).length}
+                          </Typography>
+                        </Tooltip>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </>
+              ))}
+            </List>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
 }
