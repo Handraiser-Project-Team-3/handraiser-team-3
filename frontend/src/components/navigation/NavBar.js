@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -50,7 +50,8 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
   const userDetails = user ? user : {};
-  const { user_image, id } = userDetails;
+  const { user_image, id, account_type_id } = userDetails;
+
   const history = useHistory();
   const MyComponent = props.component;
   const classes = useStyles();
@@ -59,8 +60,14 @@ export default function ButtonAppBar(props) {
   const [show, setShow] = useState(true);
   const [classRoom, setClassRoom] = useState([]);
 
+  
+  const handleClass = () => {
+    history.push("/");
+  };
   const handleClickRoom = classID => {
-    history.push(`/classroom/${classID}`);
+    history.replace(`/classroom/${classID}`);
+
+    window.location.reload();
   };
   const handleClick = () => {
     setShow(!show);
@@ -82,7 +89,7 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
-    axios.get(`api/classroom-users`, headers).then(e => {
+    axios.get(`/api/classroom-users`, headers).then(e => {
       Promise.all(
         e.data
           .filter(userdata => {
@@ -110,7 +117,7 @@ export default function ButtonAppBar(props) {
         aria-labelledby="nested-list-subheader"
         subheader={
           <ListSubheader component="div" id="nested-list-subheader">
-            Hand Raiser{" "}
+            Hand Raiser
           </ListSubheader>
         }
         className={classes.root}
@@ -119,9 +126,13 @@ export default function ButtonAppBar(props) {
           <ListItemIcon>
             <ClassIcon />
           </ListItemIcon>
-          <ListItemText primary="Classes" />
+          <ListItemText primary="Classes" onClick={handleClass} />
         </ListItem>
-        <ListItem button onClick={handleClick}>
+        <ListItem
+          button
+          onClick={handleClick}
+          style={{ display: account_type_id === 3 ? "flex" : "none" }}
+        >
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
@@ -231,7 +242,10 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
-      <MyComponent data={props.data} />
+      <MyComponent
+        data={props.data}
+        classId={props.match && props.match.params.id}
+      />
     </div>
   );
 }
