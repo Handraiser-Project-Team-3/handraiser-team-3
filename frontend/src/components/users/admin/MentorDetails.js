@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsIcon from "@material-ui/icons/Details";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -18,6 +17,7 @@ import blackboard from "../../assets/images/blackboard.png";
 import { Typography } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
 import axios from "axios";
+
 const useStyles = makeStyles({
   "@global": {
     "*::-webkit-scrollbar": {

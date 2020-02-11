@@ -161,7 +161,7 @@ export const ClassView = props => {
                         component="div"
                         variant="inherit"
                       >
-                        {account_type_id === 2 ? (
+                        {account_type_id === 2 ? ( // if mentor
                           <Grid
                             container
                             direction="row"

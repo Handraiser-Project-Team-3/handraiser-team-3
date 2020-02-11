@@ -25,6 +25,16 @@ module.exports = {
   },
   deleteClass: (req, res) => {
     const db = req.app.get("db");
+<<<<<<< HEAD
+    db.class
+      .destroy(req.params.id)
+      .then(() => {
+        res.status(200).send({ message: "success" });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+=======
     db.class.destroy(req.params.id).then(classData => {
       res.status(200).send(classData);
     });
@@ -35,5 +45,6 @@ module.exports = {
     db.class
       .findOne({ id: req.params.id })
       .then(details => res.status(200).send(details));
+>>>>>>> 7b73032f63dd3ce039203af5665ff945900119e3
   }
 };
