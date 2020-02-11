@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsIcon from "@material-ui/icons/Details";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -43,10 +42,9 @@ const useStyles = makeStyles({
 export default function MentorDetails(props) {
   const classes = useStyles();
   const { email, mentorId, headers } = props;
-  const [dense, setDense] = useState(false);
+  const dense = false;
   const [classUsers, setClassUsers] = useState([]);
   const [classList, setClassList] = useState([]);
-
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -96,7 +94,7 @@ export default function MentorDetails(props) {
             </Typography>
             <List dense={dense}>
               {classList.map(row => (
-                <>
+                <div key={row.id}>
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar src={blackboard}></Avatar>
@@ -106,7 +104,7 @@ export default function MentorDetails(props) {
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="delete">
                         <Tooltip title="Number of Students">
-                          <Typography>
+                          <Typography key={row.id}>
                             {classUsers &&
                               classUsers.filter(res => {
                                 return res.class_id === row.id;
@@ -116,7 +114,7 @@ export default function MentorDetails(props) {
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                </>
+                </div>
               ))}
             </List>
           </div>

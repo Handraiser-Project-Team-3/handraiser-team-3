@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { PaperStat } from "../reusables/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
@@ -103,10 +103,11 @@ export const Admin = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   useEffect(() => {
-    // DISPLAY LIST
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
+
+    // eslint-disable-next-line
   }, []);
 
   //   const deleteClass = classid => {

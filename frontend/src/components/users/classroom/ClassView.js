@@ -50,7 +50,7 @@ export const ClassView = props => {
     setAction("Save");
     setHeadTitle("Edit");
   };
-  console.log(props.classId);
+
   const onOpenTip = id => {
     Promise.all(
       classroomUsers

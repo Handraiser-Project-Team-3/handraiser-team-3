@@ -59,7 +59,14 @@ export default function ButtonAppBar(props) {
   const open = Boolean(anchorEl);
   const [show, setShow] = useState(true);
   const [classRoom, setClassRoom] = useState([]);
+  const [state, setState] = React.useState({
+    left: false
+  });
 
+  const changeClass = classId => {
+    console.log(classId);
+    history.push(`/classroom/${classId}`);
+  };
   const handleClick = () => {
     setShow(!show);
   };
@@ -69,9 +76,6 @@ export default function ButtonAppBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [state, setState] = React.useState({
-    left: false
-  });
 
   const toggleDrawer = (side, open) => event => {
     if (
@@ -112,7 +116,7 @@ export default function ButtonAppBar(props) {
         aria-labelledby="nested-list-subheader"
         subheader={
           <ListSubheader component="div" id="nested-list-subheader">
-            Hand Raiser{" "}
+            Hand Raiser
           </ListSubheader>
         }
         className={classes.root}
@@ -139,6 +143,7 @@ export default function ButtonAppBar(props) {
                   key={rooms.id}
                   button
                   className={classes.nested}
+                  onClick={() => changeClass(rooms.id)}
                 >
                   <ListItemIcon>
                     <StarBorder />
@@ -228,7 +233,10 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
 
-      <MyComponent data={props.data} classId={props.match && props.match.params.id} />
+      <MyComponent
+        data={props.data}
+        classId={props.match && props.match.params.id}
+      />
     </div>
   );
 }
