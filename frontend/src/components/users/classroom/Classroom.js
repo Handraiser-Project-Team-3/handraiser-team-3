@@ -1,7 +1,6 @@
 import React from "react";
 
 // Material-ui
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -67,11 +66,11 @@ const a11yProps = index => {
   };
 };
 
-export default function MentorsView(props) {
+export default function Classroom(props) {
   const classes = useStyles();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
+  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
