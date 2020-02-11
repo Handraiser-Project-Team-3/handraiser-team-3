@@ -6,7 +6,6 @@ import { Admin } from "../users/admin/Admin";
 import { ClassView } from "../users/classroom/ClassView";
 import Classroom from "../users/classroom/Classroom";
 export const Routes = props => {
-  
   const { accessToken, user } = props;
   const userDetails = user ? user : {};
   const { account_type_id } = userDetails;
@@ -29,7 +28,11 @@ export const Routes = props => {
       <Route
         path={`/classroom/:id`}
         render={history => (
-          <Navigation {...history} data={props} component={Classroom} />
+          <Navigation
+            {...history}
+            data={props}
+            component={account_type_id !== 1 && Classroom}
+          />
         )}
       />
     </Switch>

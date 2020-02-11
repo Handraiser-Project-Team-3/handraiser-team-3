@@ -104,16 +104,17 @@ export const Admin = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   useEffect(() => {
-    // DISPLAY LIST
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
+
+    // eslint-disable-next-line
   }, []);
 
   // const deleteClass = classid => {
-  // 	axios
-  // 		.delete(`/api/user/${classid}`, headers)
-  // 		.then(() => setUsers(users.filter(data => data.id !== classid)));
+  //   axios
+  //     .delete(`/api/user/${classid}`, headers)
+  //     .then(() => setUsers(users.filter(data => data.id !== classid)));
   // };
 
   const handleClick = event => {
@@ -175,13 +176,12 @@ export const Admin = props => {
                       <StyledTableRow key={row.id}>
                         <StyledTableCell component="th" scope="row">
                           <Profile
-                            headers={headers}
                             email={row.email}
                             account_type_id={row.account_type_id}
                             first_name={row.first_name}
                             last_name={row.last_name}
-                            id={row.id}
-                            users={users}
+                            userId={row.id}
+                            headers={headers}
                           />
                         </StyledTableCell>
                         <StyledTableCell
@@ -227,9 +227,9 @@ export const Admin = props => {
                                   color: "#616161"
                                 }}
                               />
-                              {/* <Button onClick={() => deleteClass(row.id)}>
-																delete
-															</Button> */}
+                              {/* <div onClick={() => deleteClass(row.id)}>
+                                delete
+                              </div> */}
                             </>
                           )}
                           {row.account_type_id === 2 && (
