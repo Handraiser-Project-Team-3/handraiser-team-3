@@ -16,8 +16,7 @@ export default function AddEmail(props) {
     setEmail(e.target.value);
   }
   function handleClickAdd(email) {
-    console.log(email);
-    const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/; // eslint-disable-line
+    const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
 
     // if email is already registered!
 
