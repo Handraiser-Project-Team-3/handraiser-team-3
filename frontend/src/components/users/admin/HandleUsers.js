@@ -26,7 +26,7 @@ export default function HandleUsers(props) {
           },
           headers
         )
-        .then(res => {
+        .then(() => {
           toast.info("Mentor has been Added!");
           setOpen(false);
         })
@@ -44,7 +44,7 @@ export default function HandleUsers(props) {
           },
           headers
         )
-        .then(res => {
+        .then(() => {
           toast.info("Mentor has been Removed!");
           setOpen(false);
         })

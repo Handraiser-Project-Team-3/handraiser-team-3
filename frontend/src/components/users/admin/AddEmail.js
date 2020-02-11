@@ -15,6 +15,7 @@ export default function AddEmail(props) {
   function handleChange(e) {
     setEmail(e.target.value);
   }
+
   function handleClickAdd(email) {
     const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
     if (email.match(EmailVal)) {
@@ -32,7 +33,7 @@ export default function AddEmail(props) {
           setUsers([...users, res.data]);
           toast.info("Email Address has been Added!");
         })
-        .catch(err => toast.error("Email already taken!"));
+        .catch(() => toast.error("Email already taken!"));
     } else {
       toast.error("Please Enter Valid Email Address");
     }
