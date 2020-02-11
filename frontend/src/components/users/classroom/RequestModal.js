@@ -51,7 +51,7 @@ export default function(props) {
 		<div>
 			<Tooltip title="Add Request">
 				<HelpOutlineIcon
-					fontSize="large"
+					fontSize="default"
 					className={classes.requestIcon}
 					onClick={handleClickOpen}
 				/>
