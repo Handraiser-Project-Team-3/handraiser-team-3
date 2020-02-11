@@ -12,7 +12,7 @@ import Chatbox from "../classroom/Chatbox";
 // images
 import question from "../../assets/images/question.png";
 
-export default function MentorsView() {
+export default function MentorsView(props) {
   const classes = useStyles();
 
   return (
@@ -87,7 +87,7 @@ export default function MentorsView() {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Chatbox />
+        <Chatbox data={props} />
       </Grid>
     </Grid>
   );

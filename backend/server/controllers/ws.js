@@ -11,7 +11,7 @@ module.exports = {
 
     const newData = notify =>
       db.student_request
-        .find()
+        .find({ class_id: classroom })
         .then(data =>
           io.to(`${classroom}`).emit(`update_request_list`, data, notify)
         );
@@ -30,19 +30,17 @@ module.exports = {
         );
     });
 
-    socket.on(`update_request`, () => {
-      newData();
-    });
+    socket.on(`update_request`, notify =>
+      notify ? newData(notify) : newData()
+    );
   },
   chat: (socket, db, io) => {
     let chatroom = "";
-    socket.on(`join_chatroom`, ({ requestId }) => {
+    socket.on(`join_chatroom`, ({ requestId, user }) => {
       if (requestId) {
         chatroom = requestId;
         socket.join(`${chatroom}`);
       }
     });
-
-    socket.on(``, () => {});
   }
 };

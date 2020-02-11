@@ -36,7 +36,8 @@ export const useStyles = makeStyles(theme => ({
     maxHeight: 500,
     height: "50vh",
     overflow: "auto",
-    margin: "10px 0 10px 0 "
+    margin: "10px 0 10px 0",
+    padding: "20px 10px 10px 10px"
   },
   inputArea: {
     paddingTop: "5px",
@@ -44,18 +45,15 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: "center"
   },
   inputAreacontainer: {
-    display: "flex",
-    mentorAvatar: {
-      position: "fixed"
-    }
+    display: "flex"
   },
   spanStyle: {
     display: "flex",
-    justifyContent: "flex-end",
     backgroundColor: "whitesmoke",
-    wordBreak: " break-all",
+    wordBreak: "break-all",
     border: " 2px solid #ababfa",
-    padding: "10px",
+    padding: "10px 15px 10px 17px",
+    margin: "0 5px 0 56px",
     borderRadius: "5px 20px"
   }
 }));

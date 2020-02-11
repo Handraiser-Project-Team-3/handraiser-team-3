@@ -35,9 +35,7 @@ import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
 
 //WS
-import io from "socket.io-client";
-import { UserDetails } from "../reusables/UserDetails";
-const socket = io(`localhost:3001`);
+import { UserDetails, user_details } from "../reusables/UserDetails";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,12 +69,13 @@ const a11yProps = index => {
 
 export default function MentorsView(props) {
   const classes = useStyles();
-  const { headers, user } = props.data;
+  const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
+  const [room, setRoom] = React.useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -91,7 +90,7 @@ export default function MentorsView(props) {
   }, [user, headers]);
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
-      classId: props.match.params.id
+      classId: props.classId
     });
     socket.on(`update_request_list`, (data, notify) => {
       setRequests(data);
@@ -105,7 +104,7 @@ export default function MentorsView(props) {
       (async () => {
         try {
           const res = await Axios.get(
-            `/api/request/list/${props.match.params.id}`,
+            `/api/request/list/${props.classId}`,
             headers
           );
           setRequests(res.data);
@@ -116,10 +115,10 @@ export default function MentorsView(props) {
     }
   }, [user, headers]);
 
-  const updateRequest = async (id, data) => {
+  const updateRequest = async (id, data, notify) => {
     try {
       await Axios.patch(`/api/request/${id}`, { status: data }, headers);
-      socket.emit("update_request");
+      socket.emit("update_request", notify && notify);
     } catch (err) {
       console.error(err);
     }
@@ -128,7 +127,7 @@ export default function MentorsView(props) {
   const handleSubmitNewRquest = e => {
     e.preventDefault();
     const obj = {
-      class_id: props.match.params.id,
+      class_id: props.classId,
       student_id: classroomUser.id,
       title: newRequest
     };
@@ -142,6 +141,7 @@ export default function MentorsView(props) {
             <Tabs
               value={value}
               onChange={handleChange}
+              ma
               indicatorColor="primary"
               textColor="primary"
               variant="fullWidth"
@@ -167,6 +167,8 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
+                      setRoom={setRoom}
                     />
                   )
               )}
@@ -185,6 +187,8 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
+                      setRoom={setRoom}
                     />
                   )
               )}
@@ -192,7 +196,9 @@ export default function MentorsView(props) {
             <TabPanel value={value} index={2}>
               {requests.map(
                 x =>
-                  x.status === true && (
+                  x.status === true &&
+                  (classroomUser.id === x.student_id ||
+                    account_type_id === 2) && (
                     <RequestComponent
                       key={x.id}
                       data={x}
@@ -203,6 +209,8 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
+                      setRoom={setRoom}
                     />
                   )
               )}
@@ -217,16 +225,13 @@ export default function MentorsView(props) {
             >
               <Grid item>
                 <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={4}>
-                    <Avatar
-                      className={classes.studentsAvatar}
-                      alt="Student"
-                      src={student}
-                    />
+                  <Grid item xs={3}>
+                      <UserDetails id={id} headers={headers} action="img" />
                   </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="h6">
-                      {account_type_id === 2 ? "Mentor" : ""} <UserDetails />
+                  <Grid item xs={9}>
+                    <Typography variant="h8">
+                      {account_type_id === 2 ? "Mentor" : ""}{" "}
+                      <UserDetails id={id} headers={headers} action="name" />
                     </Typography>
                   </Grid>
                 </Grid>
@@ -239,6 +244,7 @@ export default function MentorsView(props) {
                     <ClassroomModal
                       addNewRequest={addNewRequest}
                       handleSubmitNewRquest={handleSubmitNewRquest}
+                      newRequest={newRequest}
                     />
                   </>
                 )}
@@ -246,7 +252,7 @@ export default function MentorsView(props) {
             </Grid>
           </div>
         </Grid>
-        <Stats />
+        <Stats room={room} user={userDetails} headers={headers} />
       </Grid>
     </Layout>
   );
@@ -260,13 +266,17 @@ const RequestComponent = ({
   account_type_id,
   headers,
   classroomUser,
-  user
+  user,
+  socket,
+  setRoom
 }) => {
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
     if (data) {
       getStudentDetails(headers, data.student_id).then(res => {
-        setSender(res.data);
+        user_details(res.data.user_id, headers).then(user =>
+          setSender(user.data)
+        );
       });
     }
   }, [data]);
@@ -293,24 +303,29 @@ const RequestComponent = ({
       elevation={6}
     >
       <Typography variant="h7" className={classes.studentsNeed}>
-        <Avatar
-          className={classes.studentsAvatar}
-          alt="Student"
-          src={student}
-          onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
-        />
+        <div
+          style={{ padding: "8px 10px 0 0" }}
+          onClick={() => {
+            if (classroomUser.id === data.student_id || account_type_id === 2) {
+              socket.emit(`join_chatroom`, { requestId: data.id, user: user });
+              setRoom(data);
+            }
+          }}
+        >
+          {sender ? (
+            <img
+              src={sender.user_image}
+              alt="man"
+              style={{ width: "30px", borderRadius: "50%" }}
+            />
+          ) : (
+            ""
+          )}
+        </div>
         <Div>
           <span style={{ fontSize: 16 }}>{data.title}</span>
           <span style={{ fontSize: 12 }}>
-            {sender ? (
-              <UserDetails
-                id={sender.user_id}
-                headers={headers}
-                action="name"
-              />
-            ) : (
-              ""
-            )}
+            {sender ? `${sender.first_name} ${sender.last_name}` : ""}
           </span>
         </Div>
       </Typography>
@@ -338,9 +353,13 @@ const RequestComponent = ({
             <Tooltip title="Help">
               <Button
                 onClick={() =>
-                  handleSubmitAction("Accepting request . . .", () =>
-                    updateRequest(data.id, false)
-                  )
+                  handleSubmitAction("Accepting request . . .", () => {
+                    updateRequest(
+                      data.id,
+                      false,
+                      `Mentor ${user.first_name} accepted ${sender.first_name}'s request`
+                    );
+                  })
                 }
               >
                 <Help style={{ color: "#9da1f0" }} />

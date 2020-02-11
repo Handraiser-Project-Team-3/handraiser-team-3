@@ -84,15 +84,20 @@ export default function(props) {
           <DialogContent>
             <TextField
               autoFocus
+              error={newRequest.length === 30 ? true : false}
               variant="outlined"
               margin="normal"
-              id="name"
               label="Request"
-              type="email"
               fullWidth
+              value={newRequest}
               onChange={e => {
-                addNewRequest(e.target.value);
+                if (e.target.value.length <= 30) {
+                  addNewRequest(e.target.value);
+                }
               }}
+              helperText={
+                newRequest.length === 30 ? "max character reached" : ""
+              }
             />
           </DialogContent>
 

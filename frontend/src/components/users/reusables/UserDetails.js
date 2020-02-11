@@ -3,14 +3,16 @@ import Axios from "axios";
 export const UserDetails = ({ id, headers, action }) => {
   const [user, setUser] = React.useState("");
   React.useEffect(() => {
-    (async () => {
-      try {
-        const res = await Axios.get(`/api/user/${id}`, headers);
-        setUser(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
+    if (id) {
+      (async () => {
+        try {
+          const res = await Axios.get(`/api/user/${id}`, headers);
+          setUser(res.data);
+        } catch (err) {
+          console.error(err);
+        }
+      })();
+    }
   }, [id, headers]);
   return action === "name" ? (
     <>{user.first_name + " " + user.last_name}</>
@@ -23,4 +25,12 @@ export const UserDetails = ({ id, headers, action }) => {
   ) : (
     ""
   );
+};
+
+export const user_details = async (id, headers) => {
+  try {
+    return await Axios.get(`/api/user/${id}`, headers);
+  } catch (err) {
+    console.error(err);
+  }
 };
