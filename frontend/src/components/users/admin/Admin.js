@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FaceIcon from "@material-ui/icons/Face";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { PaperStat } from "../reusables/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
@@ -18,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
+// import Button from "@material-ui/core/Button";
 
 // images
 import Layout from "../reusables/Layout";
@@ -25,7 +26,7 @@ import Layout from "../reusables/Layout";
 // components
 import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
-import MentorDetails from "./MentorDetails";
+import Profile from "../reusables/Profile";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -109,11 +110,11 @@ export const Admin = props => {
     });
   }, []);
 
-  //   const deleteClass = classid => {
-  //     axios
-  //       .delete(`/api/user/${classid}`, headers)
-  //       .then(() => setUsers(users.filter(data => data.id !== classid)));
-  //   };
+  // const deleteClass = classid => {
+  // 	axios
+  // 		.delete(`/api/user/${classid}`, headers)
+  // 		.then(() => setUsers(users.filter(data => data.id !== classid)));
+  // };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -156,9 +157,9 @@ export const Admin = props => {
                   </StyledTableCell>
                   <TableCell
                     align="right"
-                    style={{ background: "#e1e2f7", width: 20 }}
+                    style={{ background: "#e1e2f7", width: "20px" }}
                   >
-                    <Tooltip title="Filter List">
+                    <Tooltip title="Filter List" arrow>
                       <FilterListIcon
                         onClick={handleClick}
                         className={classes.filter}
@@ -172,23 +173,17 @@ export const Admin = props => {
                   row =>
                     row.account_type_id === userType && (
                       <StyledTableRow key={row.id}>
-                        {userType === 2 ? (
-                          <StyledTableCell component="th" scope="row">
-                            <MentorDetails
-                              email={row.email}
-                              mentorId={row.id}
-                              headers={headers}
-                            />
-                          </StyledTableCell>
-                        ) : (
-                          <StyledTableCell component="th" scope="row">
-                            <Chip
-                              variant="outlined"
-                              size="medium"
-                              label={row.email}
-                            />
-                          </StyledTableCell>
-                        )}
+                        <StyledTableCell component="th" scope="row">
+                          <Profile
+                            headers={headers}
+                            email={row.email}
+                            account_type_id={row.account_type_id}
+                            first_name={row.first_name}
+                            last_name={row.last_name}
+                            id={row.id}
+                            users={users}
+                          />
+                        </StyledTableCell>
                         <StyledTableCell
                           component="th"
                           scope="row"
@@ -232,24 +227,28 @@ export const Admin = props => {
                                   color: "#616161"
                                 }}
                               />
-                              {/* <div onClick={() => deleteClass(row.id)}>
-                                delete
-                              </div> */}
+                              {/* <Button onClick={() => deleteClass(row.id)}>
+																delete
+															</Button> */}
                             </>
                           )}
                           {row.account_type_id === 2 && (
                             <>
+                              {/* <MentorDetails /> */}
                               <Chip
                                 variant="outlined"
                                 size="medium"
                                 label="Remove as Mentor"
                                 onDelete={() => handleDelete(row)}
-                                color="primary"
+                                style={{
+                                  borderColor: "#ff6f61ff",
+                                  color: "#ff6f61ff"
+                                }}
                               />
                             </>
                           )}
                         </StyledTableCell>
-                        <TableCell style={{ width: 20 }}></TableCell>
+                        <TableCell style={{ width: "20px" }}></TableCell>
                       </StyledTableRow>
                     )
                 )}
