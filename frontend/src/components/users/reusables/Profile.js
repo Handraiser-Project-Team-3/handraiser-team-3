@@ -183,7 +183,9 @@ export default function Profile(props) {
                         : "Classes Attented/Attending"}
                     </Typography>
                   </ExpansionPanelSummary>
-                  <ExpansionPanelDetails>
+                  <ExpansionPanelDetails
+                    style={{ maxHeight: "30vh", overflow: "auto" }}
+                  >
                     <div className={classes.root1}>
                       <List>
                         {(account_type_id === 2 ? classList : studentClass)
