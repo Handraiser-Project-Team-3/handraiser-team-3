@@ -26,7 +26,7 @@ export default function HandleUsers(props) {
           },
           headers
         )
-        .then(() => {
+        .then(res => {
           toast.info("Mentor has been Added!");
           setOpen(false);
         })
@@ -44,7 +44,7 @@ export default function HandleUsers(props) {
           },
           headers
         )
-        .then(() => {
+        .then(res => {
           toast.info("Mentor has been Removed!");
           setOpen(false);
         })
@@ -65,7 +65,7 @@ export default function HandleUsers(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Confirmation Message:"}
+          {"Confirmation Message"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

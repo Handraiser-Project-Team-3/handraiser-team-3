@@ -1,7 +1,6 @@
 import React from "react";
 
 // Material-ui
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -35,9 +34,7 @@ import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
 
 //WS
-import io from "socket.io-client";
 import { UserDetails } from "../reusables/UserDetails";
-const socket = io(`172.60.62.166:3001`);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,9 +68,9 @@ const a11yProps = index => {
 
 export default function MentorsView(props) {
   const classes = useStyles();
-  const { headers, user } = props.data;
+  const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
+  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
@@ -128,20 +125,21 @@ export default function MentorsView(props) {
   const handleSubmitNewRquest = e => {
     e.preventDefault();
     const obj = {
-      class_id: props.match.params.id,
+      class_id: props.classId,
       student_id: classroomUser.id,
       title: newRequest
     };
     socket.emit("add_request", obj, userDetails);
   };
   return (
-    <Layout classId={props.classId} first_name={first_name}>
+    <Layout accountType={account_type_id} first_name={first_name}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
             <Tabs
               value={value}
               onChange={handleChange}
+              ma
               indicatorColor="primary"
               textColor="primary"
               variant="fullWidth"
@@ -167,6 +165,7 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
                     />
                   )
               )}
@@ -185,6 +184,7 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
                     />
                   )
               )}
@@ -192,7 +192,9 @@ export default function MentorsView(props) {
             <TabPanel value={value} index={2}>
               {requests.map(
                 x =>
-                  x.status === true && (
+                  x.status === true &&
+                  (classroomUser.id === x.student_id ||
+                    account_type_id === 2) && (
                     <RequestComponent
                       key={x.id}
                       data={x}
@@ -203,6 +205,7 @@ export default function MentorsView(props) {
                       headers={headers}
                       classroomUser={classroomUser}
                       user={userDetails}
+                      socket={socket}
                     />
                   )
               )}
@@ -260,7 +263,8 @@ const RequestComponent = ({
   account_type_id,
   headers,
   classroomUser,
-  user
+  user,
+  socket
 }) => {
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
