@@ -105,6 +105,7 @@ export const ClassView = props => {
 
     // eslint-disable-next-line
   }, [account_type_id]);
+  
 
   return (
     <Layout first_name={first_name}>
@@ -380,7 +381,7 @@ export const ClassView = props => {
             ))
         ) : (
           <div className={classes.margin}>
-            <span className={classes.noClasses}>No added classes yet</span>
+            <span className={classes.noClasses}>No results found</span>
             <div className="spinner">
               <div className="bounce1"></div>
               <div className="bounce2"></div>

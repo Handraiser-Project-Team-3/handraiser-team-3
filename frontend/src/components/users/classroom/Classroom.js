@@ -9,6 +9,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import Fade from "@material-ui/core/Fade";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -33,9 +34,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
-import mentor from "../../assets/images/mentor2.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
+import blackboard from "../../assets/images/blackboard.png";
 
 //WS
 import { UserDetails } from "../reusables/UserDetails";
@@ -161,31 +162,38 @@ export default function MentorsView(props) {
 								<Tab label="Done" {...a11yProps(2)} />
 							</Tabs>
 						) : (
-							<Grid
-								container
-								justify="space-between"
-								alignItems="center"
-								style={{ borderBottom: "2px solid #3f51b5" }}
-							>
-								<Grid item xs={11}>
-									<Typography
-										variant="h6"
-										style={{ padding: "7px", paddingLeft: "20px" }}
-									>
-										List of Students
-									</Typography>
+							<Fade in>
+								<Grid
+									container
+									justify="space-between"
+									alignItems="center"
+									style={{ borderBottom: "2px solid #3f51b5" }}
+								>
+									<Grid item xs={11}>
+										<Typography
+											style={{
+												padding: "13px",
+												paddingLeft: "20px",
+												color: "#616161",
+												fontSize: "14px",
+												fontWeight: "bold",
+												letterSpacing: "1px"
+											}}
+										>
+											LIST OF STUDENTS
+										</Typography>
+									</Grid>
+									<Grid item xs={1}>
+										<CloseIcon
+											fontSize="small"
+											style={{ cursor: "pointer" }}
+											onClick={() => {
+												setList(false);
+											}}
+										/>
+									</Grid>
 								</Grid>
-								<Grid item xs={1}>
-									<CloseIcon
-										fontSize="small"
-										style={{ cursor: "pointer" }}
-										onClick={() => {
-											setList(false);
-										}}
-									/>
-								</Grid>
-							</Grid>
-							// </Tabs>
+							</Fade>
 						)}
 					</AppBar>
 					<div className={classes.root}>
@@ -284,18 +292,22 @@ export default function MentorsView(props) {
 						>
 							<Grid item>
 								<Grid container spacing={5} alignItems="center">
-									<Grid item xs={4}>
+									<Grid item xs={2}>
 										<Avatar
 											className={classes.studentsAvatar}
 											alt="Student"
-											src={account_type_id === 2 ? mentor : student}
+											src={blackboard}
 										/>
 									</Grid>
-									<Grid item xs={8}>
+									<Grid item xs={10}>
 										<Typography variant="h6">
-											{account_type_id === 2
-												? "Mentor"
-												: first_name + " " + last_name}
+											<Chip
+												variant="outlined"
+												size="medium"
+												label="BoomCamp Frontend"
+												style={{ color: "#616161", fontSize: "22px" }}
+											/>
+
 											<UserDetails />
 										</Typography>
 									</Grid>
