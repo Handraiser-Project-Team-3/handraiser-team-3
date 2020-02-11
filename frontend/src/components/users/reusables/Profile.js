@@ -84,9 +84,7 @@ export default function Profile(props) {
         setGetClass(res.data);
       })
       .then(() => {
-        axios.get(`/api/classroom-users/${id}`, headers).then(resp => {
-          console.log(resp.data);
-        });
+        axios.get(`/api/classroom-users/${id}`, headers).then(resp => {});
       });
   }, []);
 
@@ -170,38 +168,37 @@ export default function Profile(props) {
                         : "Classes Attented/Attending"}
                     </Typography>
                   </ExpansionPanelSummary>
-                  <ExpansionPanelDetails>
+                  <ExpansionPanelDetails
+                    style={{ maxHeight: "30vh", overflow: "auto" }}
+                  >
                     <div className={classes.root1}>
-                      {getClass.map(elm => (
-                        <List>
-                          <ListItem>
-                            <ListItemText primary={elm.class_name} />
-
-                            <ListItemSecondaryAction>
-                              <Typography
-                                variant="caption"
-                                style={{ color: "#ff6f61ff" }}
-                              >
-                                {account_type_id === 3 ? (
-                                  <Grid container direction="column">
-                                    <Grid item>Mentor:</Grid>{" "}
-                                    <Grid item style={{ fontWeight: "bold" }}>
-                                      {"Lyza Mirabete"}
-                                    </Grid>
+                      <List>
+                        <ListItem>
+                          <ListItemText primary="BoomCamp Frontend" />
+                          <ListItemSecondaryAction>
+                            <Typography
+                              variant="caption"
+                              style={{ color: "#ff6f61ff" }}
+                            >
+                              {account_type_id === 3 ? (
+                                <Grid container direction="column">
+                                  <Grid item>Mentor:</Grid>{" "}
+                                  <Grid item style={{ fontWeight: "bold" }}>
+                                    Lyza Mirabete
                                   </Grid>
-                                ) : (
-                                  <Grid container direction="column">
-                                    <Grid item>Student/s:</Grid>{" "}
-                                    <Grid item style={{ fontWeight: "bold" }}>
-                                      {}
-                                    </Grid>
+                                </Grid>
+                              ) : (
+                                <Grid container direction="column">
+                                  <Grid item>Student/s:</Grid>{" "}
+                                  <Grid item style={{ fontWeight: "bold" }}>
+                                    10
                                   </Grid>
-                                )}
-                              </Typography>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        </List>
-                      ))}
+                                </Grid>
+                              )}
+                            </Typography>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </List>
                     </div>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>

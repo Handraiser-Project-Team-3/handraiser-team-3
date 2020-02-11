@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Material-ui
 import Paper from "@material-ui/core/Paper";
@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
+import ListIcon from "@material-ui/icons/List";
+import CloseIcon from "@material-ui/icons/Close";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -20,6 +22,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
+import Chip from "@material-ui/core/Chip";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -30,6 +33,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
+import mentor from "../../assets/images/mentor2.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
 
@@ -70,10 +74,11 @@ export default function MentorsView(props) {
   const classes = useStyles();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id } = userDetails;
+  const { first_name, last_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
+  const [list, setList] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -131,85 +136,144 @@ export default function MentorsView(props) {
     };
     socket.emit("add_request", obj, userDetails);
   };
+
+  const handleClickList = () => {
+    setList(true);
+  };
+
   return (
     <Layout accountType={account_type_id} first_name={first_name}>
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              ma
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Need Help" {...a11yProps(0)} />
-              <Tab label="Being Helped" {...a11yProps(1)} />
-              <Tab label="Done" {...a11yProps(2)} />
-            </Tabs>
+            {!list ? (
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                ma
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+              >
+                <Tab label="Need Help" {...a11yProps(0)} />
+                <Tab label="Being Helped" {...a11yProps(1)} />
+                <Tab label="Done" {...a11yProps(2)} />
+              </Tabs>
+            ) : (
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+                style={{ borderBottom: "2px solid #3f51b5" }}
+              >
+                <Grid item xs={11}>
+                  <Typography
+                    variant="h6"
+                    style={{ padding: "7px", paddingLeft: "20px" }}
+                  >
+                    List of Students
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <CloseIcon
+                    fontSize="small"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setList(false);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              // </Tabs>
+            )}
           </AppBar>
           <div className={classes.root}>
-            <TabPanel value={value} index={0}>
-              {requests.map(
-                x =>
-                  x.status === null && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"need"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                    />
-                  )
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              {requests.map(
-                x =>
-                  x.status === false && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"help"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                    />
-                  )
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              {requests.map(
-                x =>
-                  x.status === true &&
-                  (classroomUser.id === x.student_id ||
-                    account_type_id === 2) && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"done"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                    />
-                  )
-              )}
-            </TabPanel>
+            {list ? (
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                justify="space-between"
+                style={{ padding: "40px" }}
+              >
+                <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
+                  <Tooltip title="View Profile">
+                    <Avatar alt="Student" src={student} />
+                  </Tooltip>
+                </Grid>
+                <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
+                  <Chip
+                    variant="outlined"
+                    size="medium"
+                    label="Lyza Mae Mirabete"
+                    style={{ color: "#616161", fontSize: "16px" }}
+                  />
+                </Grid>
+              </Grid>
+            ) : (
+              <>
+                <TabPanel value={value} index={0}>
+                  {requests.map(
+                    x =>
+                      x.status === null && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"need"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                        />
+                      )
+                  )}
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  {requests.map(
+                    x =>
+                      x.status === false && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"help"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                        />
+                      )
+                  )}
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  {requests.map(
+                    x =>
+                      x.status === true &&
+                      (classroomUser.id === x.student_id ||
+                        account_type_id === 2) && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"done"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                        />
+                      )
+                  )}
+                </TabPanel>
+              </>
+            )}
           </div>
           <div className={classes.divStyle}>
             <Grid
@@ -219,30 +283,55 @@ export default function MentorsView(props) {
               style={{ padding: "15px" }}
             >
               <Grid item>
-                <Grid container spacing={3} alignItems="center">
+                <Grid container spacing={5} alignItems="center">
                   <Grid item xs={4}>
                     <Avatar
                       className={classes.studentsAvatar}
                       alt="Student"
-                      src={student}
+                      src={account_type_id === 2 ? mentor : student}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography variant="h6">
-                      {account_type_id === 2 ? "Mentor" : ""} <UserDetails />
+                      {account_type_id === 2
+                        ? "Mentor"
+                        : first_name + " " + last_name}
+                      <UserDetails />
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item>
                 {account_type_id === 2 ? (
-                  <></>
+                  <Tooltip title="Click to view list of Students">
+                    <ListIcon
+                      style={{ color: "gray", cursor: "pointer" }}
+                      onClick={() => {
+                        handleClickList();
+                      }}
+                    />
+                  </Tooltip>
                 ) : (
                   <>
-                    <ClassroomModal
-                      addNewRequest={addNewRequest}
-                      handleSubmitNewRquest={handleSubmitNewRquest}
-                    />
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <Tooltip title="Click to view list of Students">
+                          <ListIcon
+                            style={{ color: "gray", cursor: "pointer" }}
+                            onClick={() => {
+                              handleClickList();
+                            }}
+                          />
+                        </Tooltip>
+                      </Grid>
+
+                      <Grid item>
+                        <ClassroomModal
+                          addNewRequest={addNewRequest}
+                          handleSubmitNewRquest={handleSubmitNewRquest}
+                        />
+                      </Grid>
+                    </Grid>
                   </>
                 )}
               </Grid>

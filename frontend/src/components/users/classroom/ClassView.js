@@ -304,11 +304,13 @@ export const ClassView = props => {
                                   </Typography>
                                 </Grid>
                                 <Grid item lg={12} xs={12}>
-                                  <UserDetails
+                                  <b>
+                                    <UserDetails
                                     id={data.user_id}
                                     headers={headers}
                                     action="name"
                                   />
+                                  </b>
                                 </Grid>
                               </Grid>
                             </Grid>
