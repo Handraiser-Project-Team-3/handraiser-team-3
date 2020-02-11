@@ -18,7 +18,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
 
 // images
 import Layout from "../reusables/Layout";
@@ -101,6 +100,7 @@ export const Admin = props => {
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState("");
   const [details, setDetails] = useState({});
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   useEffect(() => {
     // DISPLAY LIST
@@ -109,13 +109,11 @@ export const Admin = props => {
     });
   }, []);
 
-  const deleteClass = classid => {
-    axios
-      .delete(`/api/user/${classid}`, headers)
-      .then(() => setUsers(users.filter(data => data.id !== classid)));
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const deleteClass = classid => {
+  //   axios
+  //     .delete(`/api/user/${classid}`, headers)
+  //     .then(() => setUsers(users.filter(data => data.id !== classid)));
+  // };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -156,7 +154,10 @@ export const Admin = props => {
                   >
                     Action
                   </StyledTableCell>
-                  <TableCell align="right" style={{ background: "#e1e2f7" }}>
+                  <TableCell
+                    align="right"
+                    style={{ background: "#e1e2f7", width: 20 }}
+                  >
                     <Tooltip title="Filter List">
                       <FilterListIcon
                         onClick={handleClick}
@@ -175,7 +176,7 @@ export const Admin = props => {
                           <StyledTableCell component="th" scope="row">
                             <MentorDetails
                               email={row.email}
-                              id={row.id}
+                              mentorId={row.id}
                               headers={headers}
                             />
                           </StyledTableCell>
@@ -185,11 +186,9 @@ export const Admin = props => {
                               variant="outlined"
                               size="medium"
                               label={row.email}
-                              style={{ color: "#616161" }}
                             />
                           </StyledTableCell>
                         )}
-
                         <StyledTableCell
                           component="th"
                           scope="row"
@@ -206,7 +205,6 @@ export const Admin = props => {
                             }
                           />
                         </StyledTableCell>
-
                         <StyledTableCell align="right">
                           {row.account_type_id === 3 && (
                             <>
@@ -234,14 +232,13 @@ export const Admin = props => {
                                   color: "#616161"
                                 }}
                               />
-                              <Button onClick={() => deleteClass(row.id)}>
+                              {/* <div onClick={() => deleteClass(row.id)}>
                                 delete
-                              </Button>
+                              </div> */}
                             </>
                           )}
                           {row.account_type_id === 2 && (
                             <>
-                              {/* <MentorDetails /> */}
                               <Chip
                                 variant="outlined"
                                 size="medium"
@@ -252,7 +249,7 @@ export const Admin = props => {
                             </>
                           )}
                         </StyledTableCell>
-                        <TableCell style={{ width: "20px" }}></TableCell>
+                        <TableCell style={{ width: 20 }}></TableCell>
                       </StyledTableRow>
                     )
                 )}

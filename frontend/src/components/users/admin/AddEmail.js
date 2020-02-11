@@ -15,10 +15,8 @@ export default function AddEmail(props) {
   function handleChange(e) {
     setEmail(e.target.value);
   }
-
   function handleClickAdd(email) {
-    const EmailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
-
+    const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
     if (email.match(EmailVal)) {
       axios
         .post(
@@ -33,21 +31,13 @@ export default function AddEmail(props) {
         .then(res => {
           setUsers([...users, res.data]);
           toast.info("Email Address has been Added!");
-          setTimeout(() => {
-            setEmail("");
-          }, 3000);
         })
-        .catch(() => toast.error("Email already taken!"));
-      setTimeout(() => {
-        setEmail("");
-      }, 3000);
+        .catch(err => toast.error("Email already taken!"));
     } else {
       toast.error("Please Enter Valid Email Address");
-      setTimeout(() => {
-        setEmail("");
-      }, 3000);
     }
   }
+
   return (
     <div>
       <Grid container align="center" alignItems="center">

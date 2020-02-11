@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsIcon from "@material-ui/icons/Details";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -17,7 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import blackboard from "../../assets/images/blackboard.png";
 import { Typography } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
-import Axios from "axios";
+import axios from "axios";
 
 const useStyles = makeStyles({
   "@global": {
@@ -41,36 +40,33 @@ const useStyles = makeStyles({
   }
 });
 
-function generate(element) {
-  return [0, 1, 2].map(value =>
-    React.cloneElement(element, {
-      key: value
-    })
-  );
-}
-
 export default function MentorDetails(props) {
   const classes = useStyles();
-  const { email, id, headers } = props;
-  const [dense, setDense] = React.useState(false);
-  const [secondary, setSecondary] = React.useState(false);
-  const [getclass, setGetClass] = useState([]);
+  const { email, mentorId, headers } = props;
+  const [dense, setDense] = useState(false);
+  const [classUsers, setClassUsers] = useState([]);
+  const [classList, setClassList] = useState([]);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
+    axios
+      .get(`/api/class?id=${mentorId}`, headers)
+      .then(res => setClassList(res.data))
+      .catch(err => console.error(err));
+
+    axios
+      .get(`/api/classroom-users/`, headers)
+      .then(res => {
+        setClassUsers(res.data);
+      })
+      .catch(err => console.error(err));
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    Axios.get(`/api/class?id=${id}`, headers).then(res => {
-      setGetClass(res.data);
-    });
-  });
 
   return (
     <>
@@ -99,24 +95,28 @@ export default function MentorDetails(props) {
               Classes
             </Typography>
             <List dense={dense}>
-              {getclass.map(elm => (
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar src={blackboard}></Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={elm.class_name}
-                    secondary={secondary ? "Secondary text" : null}
-                  />
+              {classList.map(row => (
+                <>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar src={blackboard}></Avatar>
+                    </ListItemAvatar>
 
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <Tooltip title="Number of Students">
-                        <Typography>10</Typography>
-                      </Tooltip>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                    <ListItemText>{row.class_name}</ListItemText>
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete">
+                        <Tooltip title="Number of Students">
+                          <Typography>
+                            {classUsers &&
+                              classUsers.filter(res => {
+                                return res.class_id === row.id;
+                              }).length}
+                          </Typography>
+                        </Tooltip>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </>
               ))}
             </List>
           </div>
