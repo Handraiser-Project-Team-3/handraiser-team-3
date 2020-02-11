@@ -18,7 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 
 // images
 import Layout from "../reusables/Layout";
@@ -26,7 +26,7 @@ import Layout from "../reusables/Layout";
 // components
 import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
-import MentorDetails from "./MentorDetails";
+import Profile from "../reusables/Profile";
 
 const StyledTableCell = withStyles(theme => ({
 	head: {
@@ -109,11 +109,11 @@ export const Admin = props => {
 		});
 	}, []);
 
-	const deleteClass = classid => {
-		axios
-			.delete(`/api/user/${classid}`, headers)
-			.then(() => setUsers(users.filter(data => data.id !== classid)));
-	};
+	// const deleteClass = classid => {
+	// 	axios
+	// 		.delete(`/api/user/${classid}`, headers)
+	// 		.then(() => setUsers(users.filter(data => data.id !== classid)));
+	// };
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -175,9 +175,11 @@ export const Admin = props => {
 										row.account_type_id === userType && (
 											<StyledTableRow key={row.id}>
 												<StyledTableCell component="th" scope="row">
-													<MentorDetails
+													<Profile
 														email={row.email}
 														account_type_id={row.account_type_id}
+														first_name={row.first_name}
+														last_name={row.last_name}
 													/>
 												</StyledTableCell>
 												<StyledTableCell
@@ -223,9 +225,9 @@ export const Admin = props => {
 																	color: "#616161"
 																}}
 															/>
-															<Button onClick={() => deleteClass(row.id)}>
+															{/* <Button onClick={() => deleteClass(row.id)}>
 																delete
-															</Button>
+															</Button> */}
 														</>
 													)}
 													{row.account_type_id === 2 && (

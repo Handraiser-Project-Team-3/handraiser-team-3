@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
 export default function Layout(props) {
   const classes = useStyles();
   const { first_name, classId } = props;
-
   return (
     <div>
       <Paper elevation={0} className={classes.header}>
