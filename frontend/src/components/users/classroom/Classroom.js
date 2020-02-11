@@ -87,7 +87,10 @@ export default function MentorsView(props) {
    React.useEffect(() => {
       if (user) {
          getClassroomUser(headers).then(res => {
-            setVerify(res.data.filter(x => x.user_id === user.id).filter(x => x.class_id === Number(props.classId)))
+            setVerify(res.data
+               .filter(x => x.user_id === user.id)
+               .map(x => x.class_id)
+            )
             setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
          });
       }
@@ -104,16 +107,21 @@ export default function MentorsView(props) {
       });
    }, []);
 
-   React.useEffect(() => {
-      if (verify.length) {
-         if (match.params.id === verify.map(x => x.class_id)) {
-            history.push(`/classroom/` + toString(`${verify[0].class_id}`))
-         } else {
-            console.log('NaN')
-         }
-      }
-   }, [verify])
-   console.log(verify)
+   // React.useEffect(() => {
+   //    let param = match.params.id
+   //    let arr = verify.map(String)
+   //    console.log(props.classId == arr.find(x => x == props.classId))
+   //    setTimeout(() => {
+   //       if (props.classId !== arr.find(x => x == props.classId)) {
+   //          history.replace('/')
+   //       }
+   //    }, 1000)
+   //    console.log((param))
+   //    console.log(typeof param)
+   //    console.log(arr)
+   //    console.log(typeof arr[0])
+   // }, [verify, match.params.id])
+   // console.log(props)
 
    React.useEffect(() => {
       if (user) {
