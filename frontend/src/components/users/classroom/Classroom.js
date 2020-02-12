@@ -10,6 +10,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import Fade from "@material-ui/core/Fade";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -34,9 +35,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
-import mentor from "../../assets/images/mentor2.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
+import blackboard from "../../assets/images/blackboard.png";
 
 //WS
 import { UserDetails } from "../reusables/UserDetails";
@@ -325,7 +326,7 @@ export default function MentorsView(props) {
                               <Avatar
                                  className={classes.studentsAvatar}
                                  alt="Student"
-                                 src={account_type_id === 2 ? mentor : student}
+                                 src={account_type_id === 2 ? "" : student}
                               />
                            </Grid>
                            <Grid item xs={8}>
