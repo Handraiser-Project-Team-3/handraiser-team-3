@@ -39,12 +39,13 @@ export const ClassView = props => {
   const [filter, setFilter] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentDetails, setStudentDetails] = useState([]);
+  const [classroomUsers, setClassroomUsers] = useState([]);
   const history = useHistory();
   const [classRoom, setClassRoom] = useState({
     class_name: "",
     class_description: ""
   });
-  const [classroomUsers, setClassroomUsers] = useState([]);
+
   const handleClickOpen = () => {
     setOpen(true);
     setAction("Save");
@@ -70,6 +71,7 @@ export const ClassView = props => {
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
+
   useEffect(() => {
     account_type_id &&
       (async () => {
@@ -87,8 +89,16 @@ export const ClassView = props => {
               })
             );
           } else {
-            setClassList(res.data);
-            setFilter(res.data);
+            setClassList(
+              res.data.filter(data => {
+                return data.class_status === true;
+              })
+            );
+            setFilter(
+              res.data.filter(data => {
+                return data.class_status === true;
+              })
+            );
           }
         } catch (err) {
           console.error(err);

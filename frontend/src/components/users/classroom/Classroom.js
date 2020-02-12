@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 // Material-ui
 import Paper from "@material-ui/core/Paper";
@@ -9,6 +10,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import Fade from "@material-ui/core/Fade";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -36,9 +38,10 @@ import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
 import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
+import blackboard from "../../assets/images/blackboard.png";
 
 //WS
-import { UserDetails } from "../reusables/UserDetails";
+import { UserDetails, class_details } from "../reusables/UserDetails";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,7 +73,7 @@ const a11yProps = index => {
   };
 };
 
-export default function MentorsView(props) {
+export default function Classroom(props) {
   const classes = ClassroomStyle();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
@@ -79,16 +82,21 @@ export default function MentorsView(props) {
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
   const [list, setList] = useState(false);
-
+  const [verify, setVerify] = React.useState([]);
+  const history = useHistory();
+  const [className, setClassName] = React.useState("");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     if (user) {
-      getClassroomUser(headers).then(res =>
-        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
-      );
+      getClassroomUser(headers).then(res => {
+        setVerify(
+          res.data.filter(x => x.user_id === user.id).map(x => x.class_id)
+        );
+        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
+      });
     }
   }, [user, headers]);
   React.useEffect(() => {
@@ -101,7 +109,20 @@ export default function MentorsView(props) {
         alertToast(notify);
       }
     });
+  }, [user, headers]);
+
+  React.useEffect(() => {
+    socket.emit(`join_classroom`, {
+      classId: props.classId
+    });
+    socket.on(`update_request_list`, (data, notify) => {
+      setRequests(data);
+      if (!!notify) {
+        alertToast(notify);
+      }
+    });
   }, []);
+
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -116,6 +137,10 @@ export default function MentorsView(props) {
         }
       })();
     }
+
+    Axios.get(`/api/class/${props.classId}`, headers).then(res =>
+      setClassName(res.data.class_name)
+    );
   }, [user, headers]);
 
   const updateRequest = async (id, data) => {
@@ -154,7 +179,6 @@ export default function MentorsView(props) {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                ma
                 indicatorColor="primary"
                 textColor="primary"
                 variant="fullWidth"
@@ -291,15 +315,13 @@ export default function MentorsView(props) {
                   <Grid item xs={4}>
                     <Avatar
                       className={classes.studentsAvatar}
-                      alt="Student"
-                      src={account_type_id === 2 ? mentor : student}
+                      alt="Board"
+                      src={account_type_id === 2 ? "" : blackboard}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography variant="h6">
-                      {account_type_id === 2
-                        ? "Mentor"
-                        : first_name + " " + last_name}
+                      {className}
                       <UserDetails />
                     </Typography>
                   </Grid>

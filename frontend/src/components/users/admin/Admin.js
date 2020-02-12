@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+
+// material ui
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,9 +13,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import FaceIcon from "@material-ui/icons/Face";
-import axios from "axios";
-import { ToastContainer } from "react-toastify";
-import { PaperStat } from "../reusables/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -27,6 +28,7 @@ import Layout from "../reusables/Layout";
 import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
 import Profile from "../reusables/Profile";
+import { PaperStat } from "../reusables/Paper";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -107,6 +109,7 @@ export const Admin = props => {
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
+    // eslint-disable-next-line
   }, []);
 
   // const deleteClass = classid => {

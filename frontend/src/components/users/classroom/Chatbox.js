@@ -5,16 +5,22 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
-import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-// import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
   const { messages } = props;
+  const [show, setShow] = React.useState(false);
+
+  const handleClose = () => {
+    setShow(true);
+  };
 
   return (
     <Paper className={classes.root}>
@@ -25,12 +31,60 @@ export default function ChatBox(props) {
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
           >
-            Mark Medes
+            Marcial Norte
           </Typography>
         </Grid>
       </Paper>
 
       <Paper className={classes.convoBox} elevation={6}>
+        {!show ? (
+          <div
+            style={{
+              width: "100%",
+              height: "auto",
+              background: "antiquewhite"
+            }}
+          >
+            <Grid container alignItems="center" justify="space-between">
+              <Grid item xs={11}>
+                <Grid container spacing={1} style={{ padding: "10px" }}>
+                  <Grid item>
+                    <Typography variant="caption" style={{ color: "gray" }}>
+                      Request:
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ color: "#484fb9" }}
+                    >
+                      “If you set your goals ridiculously high and it's a
+                      failure”
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Tooltip title="Close">
+                  <CloseIcon
+                    fontSize="small"
+                    style={{
+                      color: "red",
+                      cursor: "pointer",
+                      marginRight: "10px"
+                    }}
+                    onClick={() => {
+                      handleClose();
+                    }}
+                  />
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </div>
+        ) : (
+          ""
+        )}
+
         <Grid container direction="column" justify="center" align="center">
           <Grid item xs={12}>
             <Typography
@@ -38,7 +92,7 @@ export default function ChatBox(props) {
               style={{ marginTop: "20%", color: "gray" }}
             >
               {!messages
-                ? "Request Help to start a conversation with your mentor"
+                ? "Request for Help to start a conversation with your mentor"
                 : "try"}
             </Typography>
           </Grid>
@@ -48,16 +102,14 @@ export default function ChatBox(props) {
         <TextField
           variant="outlined"
           id="standard-basic"
-          label="Type your message..."
+          placeholder="Type your message..."
           fullWidth
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button
-                  endIcon={
-                    <SendIcon style={{ color: "#5ec8d5", cursor: "pointer" }} />
-                  }
-                ></Button>
+                <IconButton>
+                  <SendIcon style={{ color: "#5ec8d5", cursor: "pointer" }} />
+                </IconButton>
               </InputAdornment>
             )
           }}

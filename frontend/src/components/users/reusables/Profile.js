@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+// material ui
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -12,12 +15,12 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
+import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import axios from "axios";
+import Paper from "@material-ui/core/Paper";
 
 // images
 import { UserDetails, class_details } from "./UserDetails";
@@ -68,6 +71,8 @@ export default function Profile(props) {
   const [classUsers, setClassUsers] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentClass, setStudentClass] = useState([]);
+  const [profile, setProfile] = useState(true);
+
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -76,6 +81,9 @@ export default function Profile(props) {
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  useEffect(() => {
     axios
       .get(`/api/class?id=${userId}`, headers)
       .then(res => setClassList(res.data))
@@ -97,16 +105,15 @@ export default function Profile(props) {
             )
         ).then(response => {
           setStudentClass(response);
-          console.log(response);
         });
       })
       .catch(err => console.error(err));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <>
       <Chip
@@ -138,7 +145,12 @@ export default function Profile(props) {
               spacing={2}
             >
               <Grid item>
-                <UserDetails id={userId} headers={headers} action="img" />
+                <UserDetails
+                  id={userId}
+                  headers={headers}
+                  action="img"
+                  profile={profile}
+                />
               </Grid>
               <Grid item>
                 <Typography variant="h5" style={{ fontWeight: "bold" }}>
@@ -163,6 +175,69 @@ export default function Profile(props) {
                   ({account_type_id === 2 ? "Mentor" : "Student"})
                 </Typography>
               </Grid>
+
+              <Grid item>
+                {account_type_id === 3 ? (
+                  <Grid container spacing={1} align="center">
+                    <Grid item xs={6}>
+                      <Paper
+                        elevation={3}
+                        style={{ width: "100%", height: "auto" }}
+                      >
+                        <Typography variant="subtitle2">Attending:</Typography>
+                        <Typography
+                          variant="h4"
+                          style={{ background: "antiquewhite" }}
+                        >
+                          {
+                            studentClass.filter(res => {
+                              return res.class_status === true;
+                            }).length
+                          }
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Paper
+                        elevation={3}
+                        style={{ width: "100%", height: "auto" }}
+                      >
+                        <Typography variant="subtitle2">Attended:</Typography>
+                        <Typography
+                          variant="h4"
+                          style={{ background: "antiquewhite" }}
+                        >
+                          {
+                            studentClass.filter(res => {
+                              return res.class_status === false;
+                            }).length
+                          }
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Paper
+                    elevation={3}
+                    style={{ width: "100%", height: "auto" }}
+                  >
+                    <Grid container alignItems="center">
+                      <Grid item xs={4}>
+                        <Typography variant="subtitle2">Classes:</Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <Typography
+                          variant="h4"
+                          style={{ background: "antiquewhite" }}
+                        >
+                          {classList.length}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                )}
+              </Grid>
+
               <Grid item>
                 <ExpansionPanel
                   expanded={expanded === "panel1"}
@@ -202,41 +277,50 @@ export default function Profile(props) {
                                     variant="caption"
                                     style={{ color: "#ff6f61ff" }}
                                   >
-                                    {account_type_id === 3 ? (
-                                      <Grid container direction="column">
-                                        <Grid item>Mentor:</Grid>
-                                        <Grid
-                                          item
-                                          style={{ fontWeight: "bold" }}
-                                        >
-                                          <UserDetails
-                                            id={row.user_id}
-                                            headers={headers}
-                                            action="name"
-                                          />
-                                        </Grid>
-                                      </Grid>
+                                    {account_type_id === 2 ? (
+                                      <Grid item>Student/s:</Grid>
                                     ) : (
-                                      <Grid container direction="column">
-                                        <Grid item>Student/s:</Grid>{" "}
-                                        <Grid
-                                          item
-                                          style={{ fontWeight: "bold" }}
-                                        >
-                                          {classUsers &&
+                                      ""
+                                    )}
+                                    <Grid item style={{ fontWeight: "bold" }}>
+                                      <Chip
+                                        style={{ color: "gray" }}
+                                        variant="outlined"
+                                        size="small"
+                                        avatar={
+                                          <Avatar
+                                            style={{
+                                              background: "#ff6f61",
+                                              color: "white"
+                                            }}
+                                          >
+                                            {account_type_id === 3 ? "M" : "#"}
+                                          </Avatar>
+                                        }
+                                        label={
+                                          account_type_id === 3 ? (
+                                            <UserDetails
+                                              id={row.user_id}
+                                              headers={headers}
+                                              action="name"
+                                            />
+                                          ) : (
+                                            classUsers &&
                                             classUsers.filter(res => {
                                               return res.class_id === row.id;
-                                            }).length}
-                                        </Grid>
-                                      </Grid>
-                                    )}
+                                            }).length
+                                          )
+                                        }
+                                        clickable
+                                      />
+                                    </Grid>
                                   </Typography>
                                 </ListItemSecondaryAction>
                               </ListItem>
                             </div>
                           ))
                         ) : (
-                          <Typography>Empty class</Typography>
+                          <Typography variant="body2">Empty class</Typography>
                         )}
                       </List>
                     </div>
