@@ -35,6 +35,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
+import mentor from "../../assets/images/mentor2.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
 import blackboard from "../../assets/images/blackboard.png";
@@ -326,7 +327,7 @@ export default function Classroom(props) {
                               <Avatar
                                  className={classes.studentsAvatar}
                                  alt="Student"
-                                 src={account_type_id === 2 ? "" : student}
+                                 src={account_type_id === 2 ? mentor : student}
                               />
                            </Grid>
                            <Grid item xs={8}>
