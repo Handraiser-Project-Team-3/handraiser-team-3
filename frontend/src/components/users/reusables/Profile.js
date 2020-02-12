@@ -20,7 +20,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import axios from "axios";
 
 // images
-import { UserDetails } from "./UserDetails";
+import { UserDetails, class_details } from "./UserDetails";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -91,12 +91,13 @@ export default function Profile(props) {
               return res.user_id === userId;
             })
             .map(res =>
-              axios.get(`/api/class/${res.class_id}`, headers).then(res => {
+              class_details(res.class_id, headers).then(res => {
                 return res.data;
               })
             )
         ).then(response => {
           setStudentClass(response);
+          console.log(response);
         });
       })
       .catch(err => console.error(err));

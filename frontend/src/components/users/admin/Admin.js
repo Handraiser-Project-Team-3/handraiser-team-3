@@ -107,7 +107,6 @@ export const Admin = props => {
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
-    // eslint-disable-next-line
   }, []);
 
   // const deleteClass = classid => {

@@ -34,7 +34,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 // images
 import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
-import { useStyles } from "./classroomStyle";
+import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
 
 //WS
@@ -71,7 +71,7 @@ const a11yProps = index => {
 };
 
 export default function MentorsView(props) {
-  const classes = useStyles();
+  const classes = ClassroomStyle();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, last_name, account_type_id } = userDetails;
@@ -86,7 +86,7 @@ export default function MentorsView(props) {
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     if (user) {
-       getClassroomUser(headers).then(res =>
+      getClassroomUser(headers).then(res =>
         setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
       );
     }
