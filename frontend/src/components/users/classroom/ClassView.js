@@ -50,7 +50,6 @@ export const ClassView = props => {
     setAction("Save");
     setHeadTitle("Edit");
   };
-
   const onOpenTip = id => {
     Promise.all(
       classroomUsers
@@ -306,10 +305,10 @@ export const ClassView = props => {
                                 <Grid item lg={12} xs={12}>
                                   <b>
                                     <UserDetails
-                                    id={data.user_id}
-                                    headers={headers}
-                                    action="name"
-                                  />
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
                                   </b>
                                 </Grid>
                               </Grid>
