@@ -142,7 +142,11 @@ export default function MentorsView(props) {
   };
 
   return (
-    <Layout accountType={account_type_id} first_name={first_name}>
+    <Layout
+      accountType={account_type_id}
+      first_name={first_name}
+      classId={props.classId}
+    >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>

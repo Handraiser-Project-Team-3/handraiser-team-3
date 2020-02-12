@@ -59,6 +59,7 @@ export default function ButtonAppBar(props) {
   const open = Boolean(anchorEl);
   const [show, setShow] = useState(true);
   const [classRoom, setClassRoom] = useState([]);
+  const classId = props.match && props.match.params.id;
   const [state, setState] = React.useState({
     left: false
   });
@@ -76,7 +77,6 @@ export default function ButtonAppBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -233,10 +233,7 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
 
-      <MyComponent
-        data={props.data}
-        classId={props.match && props.match.params.id}
-      />
+      <MyComponent data={props.data} classId={classId} />
     </div>
   );
 }
