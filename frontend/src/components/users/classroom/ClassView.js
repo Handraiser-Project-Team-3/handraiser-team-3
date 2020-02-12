@@ -381,7 +381,7 @@ export const ClassView = props => {
             ))
         ) : (
           <div className={classes.margin}>
-            <span className={classes.noClasses}>No results found</span>
+            <span className={classes.noClasses}>No result found</span>
             <div className="spinner">
               <div className="bounce1"></div>
               <div className="bounce2"></div>
