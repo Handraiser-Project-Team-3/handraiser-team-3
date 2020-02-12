@@ -188,7 +188,6 @@ export default function MentorsView(props) {
                      <Tabs
                         value={value}
                         onChange={handleChange}
-                        ma
                         indicatorColor="primary"
                         textColor="primary"
                         variant="fullWidth"
