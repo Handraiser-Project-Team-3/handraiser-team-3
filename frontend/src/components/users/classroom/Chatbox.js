@@ -127,6 +127,7 @@ export default function ChatBox(props) {
                   key={x.id}
                   index={i}
                   messages={messages}
+                  isTyping={isTyping}
                 />
               ))
             : "start conversation"}
@@ -191,7 +192,7 @@ export default function ChatBox(props) {
   );
 }
 const MessageBox = props => {
-  const { data, headers, user, index, messages } = props;
+  const { data, headers, user, index, messages, isTyping } = props;
   const [sender, setSender] = React.useState({});
   React.useEffect(() => {
     user_details(data.user_id, headers).then(res => {
@@ -211,14 +212,24 @@ const MessageBox = props => {
       }
     >
       {user.id !== data.user_id ? (
-        messages[index + 1] ? (
+        isTyping === null ? (
+          messages[index + 1] ? (
+            messages[index + 1].user_id === data.user_id ? (
+              <span style={{ width: 40 }} />
+            ) : (
+              <Avatar src={sender ? sender.user_image : ""} />
+            )
+          ) : (
+            <Avatar src={sender ? sender.user_image : ""} />
+          )
+        ) : messages[index + 1] ? (
           messages[index + 1].user_id === data.user_id ? (
             <span style={{ width: 40 }} />
           ) : (
             <Avatar src={sender ? sender.user_image : ""} />
           )
         ) : (
-          <Avatar src={sender ? sender.user_image : ""} />
+          <span style={{ width: 40 }} />
         )
       ) : (
         ""
