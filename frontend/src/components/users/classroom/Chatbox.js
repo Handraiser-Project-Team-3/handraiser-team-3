@@ -5,11 +5,11 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
-import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 // import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
+import IconButton from '@material-ui/core/IconButton';
 import { useStyles } from "./chatboxStyle";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
@@ -103,16 +103,14 @@ export default function ChatBox(props) {
 				<TextField
 					variant="outlined"
 					id="standard-basic"
-					label="Type your message..."
+					placeholder="Type your message..."
 					fullWidth
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
-								<Button
-									endIcon={
-										<SendIcon style={{ color: "#5ec8d5", cursor: "pointer" }} />
-									}
-								></Button>
+								<IconButton>
+									<SendIcon style={{ color: "#5ec8d5", cursor: "pointer" }} />
+								</IconButton>
 							</InputAdornment>
 						)
 					}}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -26,7 +27,7 @@ export default function PageNotFound(props) {
 						alignItems="center"
 					>
 						<Grid item xs={12} sm={12} md={12} lg={12} xl={6}>
-							<img src={NotFound} className={classes.imgStyle} />
+							<img src={NotFound} className={classes.imgStyle} alt='Not Found' />
 						</Grid>
 						<Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 							<Typography variant="h4" style={{ color: "#717171" }}>
@@ -34,13 +35,19 @@ export default function PageNotFound(props) {
 							</Typography>
 						</Grid>
 						<Grid item xs={12}>
-							<Button
-								variant="outlined"
-								color="primary"
-								style={{ marginTop: "30px" }}
+							<Link
+								to="/"
+								color="inherit"
+								style={{ textDecoration: "none" }}
 							>
-								Back to Homepage
+								<Button
+									variant="outlined"
+									color="primary"
+									style={{ marginTop: "30px" }}
+								>
+									Go Back
 							</Button>
+							</Link>
 						</Grid>
 					</Grid>
 				</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -47,11 +47,11 @@ const useStyles = makeStyles(theme => ({
     width: 250
   }
 }));
-
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
   const userDetails = user ? user : {};
-  const { user_image, id } = userDetails;
+  const { user_image, id, account_type_id } = userDetails;
+
   const history = useHistory();
   const MyComponent = props.component;
   const classes = useStyles();
@@ -59,13 +59,18 @@ export default function ButtonAppBar(props) {
   const open = Boolean(anchorEl);
   const [show, setShow] = useState(true);
   const [classRoom, setClassRoom] = useState([]);
+  const classId = props.match && props.match.params.id;
   const [state, setState] = React.useState({
     left: false
   });
 
-  const changeClass = classId => {
-    console.log(classId);
-    history.push(`/classroom/${classId}`);
+  const handleClass = () => {
+    history.push("/");
+  };
+  const handleClickRoom = classID => {
+    history.replace(`/classroom/${classID}`);
+
+    window.location.reload();
   };
   const handleClick = () => {
     setShow(!show);
@@ -75,8 +80,8 @@ export default function ButtonAppBar(props) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setClassRoom([]);
   };
-
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -84,11 +89,7 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
-    setState({ ...state, [side]: open });
-  };
-
-  useEffect(() => {
-    axios.get(`api/classroom-users`, headers).then(e => {
+    axios.get(`/api/classroom-users`, headers).then(e => {
       Promise.all(
         e.data
           .filter(userdata => {
@@ -101,8 +102,8 @@ export default function ButtonAppBar(props) {
           )
       ).then(response => setClassRoom(response));
     });
-    // eslint-disable-next-line
-  }, [id]);
+    setState({ ...state, [side]: open });
+  };
 
   const sideList = side => (
     <div
@@ -125,9 +126,13 @@ export default function ButtonAppBar(props) {
           <ListItemIcon>
             <ClassIcon />
           </ListItemIcon>
-          <ListItemText primary="Classes" />
+          <ListItemText primary="Classes" onClick={handleClass} />
         </ListItem>
-        <ListItem button onClick={handleClick}>
+        <ListItem
+          button
+          onClick={handleClick}
+          style={{ display: account_type_id === 3 ? "flex" : "none" }}
+        >
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
@@ -143,12 +148,17 @@ export default function ButtonAppBar(props) {
                   key={rooms.id}
                   button
                   className={classes.nested}
-                  onClick={() => changeClass(rooms.id)}
                 >
                   <ListItemIcon>
                     <StarBorder />
                   </ListItemIcon>
-                  <ListItemText>{rooms.class_name}</ListItemText>
+                  <ListItemText
+                    onClick={() => {
+                      handleClickRoom(rooms.id);
+                    }}
+                  >
+                    {rooms.class_name}
+                  </ListItemText>
                 </ListItem>
               ))}
           </List>
@@ -233,10 +243,7 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
 
-      <MyComponent
-        data={props.data}
-        classId={props.match && props.match.params.id}
-      />
+      <MyComponent data={props.data} classId={classId} />
     </div>
   );
 }

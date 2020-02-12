@@ -97,7 +97,7 @@ export const Admin = props => {
 	const [accountType] = useState("Admin");
 	const { user, headers } = props.data;
 	const userDetails = user ? user : {};
-	const { first_name } = userDetails;
+	const { first_name, account_type_id } = userDetails;
 	const [users, setUsers] = useState([]);
 	const [userType, setUserType] = useState(3);
 	const [open, setOpen] = useState(false);
@@ -109,7 +109,6 @@ export const Admin = props => {
 		axios.get("/api/user/list", headers).then(res => {
 			setUsers(res.data);
 		});
-
 		// eslint-disable-next-line
 	}, []);
 
@@ -134,7 +133,11 @@ export const Admin = props => {
 	};
 
 	return (
-		<Layout accountType={accountType} first_name={first_name}>
+		<Layout
+			accountType={accountType}
+			first_name={first_name}
+			typeId={account_type_id}
+		>
 			<ToastContainer enableMulticontainer />
 			<Grid container direction="row" spacing={2}>
 				<Grid item xs={12} sm={12} md={4} lg={3} xl={3}>

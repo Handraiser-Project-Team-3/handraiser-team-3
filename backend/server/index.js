@@ -74,17 +74,7 @@ massive({
   app.post("/api/class", classroom.addClass);
   app.patch("/api/class/:id", classroom.editClass);
   app.delete("/api/class/:id", classroom.deleteClass);
-  app.get("/api/class/:id", classroom.classDetails);
-
-  //classroom_users
-  app.post("/api/classroom-users/", classroomUsers.addClassroomUser);
-  app.get("/api/classroom-users/", classroomUsers.list);
-  app.get("/api/classroom-users/:id", classroomUsers.classroomUserDetails);
-
-  //student_requests
-  app.get("/api/request/list/:id", requests.list);
-  app.patch("/api/request/:id", requests.editRequest);
-
+  
   //chats
   app.post("/api/chats/message/create/:id", chats.createMessage);
   app.get("/api/chats/messages/list/:id", chats.messageList);
