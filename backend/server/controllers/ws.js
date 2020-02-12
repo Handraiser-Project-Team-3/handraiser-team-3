@@ -33,6 +33,14 @@ module.exports = {
     socket.on(`update_request`, notify =>
       notify ? newData(notify) : newData()
     );
+    socket.on(`joined_class`, ({ user }) => {
+      socket
+        .to(`${classroom}`)
+        .emit(
+          `new_student`,
+          `${user.first_name} ${user.last_name} joined to class`
+        );
+    });
   },
   chat: (socket, db, io) => {
     let chatroom = "";
@@ -41,6 +49,16 @@ module.exports = {
         chatroom = requestId;
         socket.join(`${chatroom}`);
       }
+    });
+
+    socket.on(`add_message`, ({ message }) => {
+      db.messages
+        .insert(message, { deepInsert: true })
+        .then(() => console.log("success"));
+      io.to(`${chatroom}`).emit(`new_message`, message);
+    });
+    socket.on(`is_typing`, user => {
+      socket.to(`${chatroom}`).emit(`typing`, user);
     });
   }
 };

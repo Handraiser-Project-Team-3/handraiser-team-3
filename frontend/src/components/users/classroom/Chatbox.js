@@ -9,38 +9,54 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import { useStyles } from "./chatboxStyle";
-import { user_details } from "../reusables/UserDetails";
+import { user_details, getStudentDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
 
 export default function ChatBox(props) {
   const classes = useStyles();
   const [messages, setMessages] = React.useState([]);
-  const [roomMsg, setRoomMsg] = React.useState([]);
   const [msg, setMsg] = React.useState("");
-  const [student, setStudent] = React.useState(null)
-  const [mentor, setMentor] = React.useState(null)
-  const { room, user, headers } = props.data;
+  const [student, setStudent] = React.useState(null);
+  const [mentor, setMentor] = React.useState(null);
+  const { room, user, headers, socket } = props.data;
+  const [isTyping, setIsTyping] = React.useState(null);
   React.useEffect(() => {
-    if (room) {
-      setRoomMsg(messages.filter(x => x.student_request_id === room.id));
+    if (headers && room) {
+      (async () => {
+        try {
+          const res = await Axios.get(`/api/messages/${room.id}`, headers);
+          setMessages(res.data);
+        } catch (err) {
+          console.error(err);
+        }
+      })();
     }
-  }, [room, messages]);
+  }, [headers, room]);
   const handleSubmit = e => {
     e.preventDefault();
-    setMessages([
-      ...messages,
-      {
+    socket.emit(`add_message`, {
+      message: {
         user_id: user.id,
         student_request_id: room.id,
         content: msg
       }
-    ]);
+    });
+    socket.emit(`is_typing`, null);
     setMsg("");
   };
   React.useEffect(() => {
+    socket.on(`typing`, user => {
+      setIsTyping(user);
+    });
+    socket.on(`new_message`, message => {
+      setMessages([...messages, message]);
+    });
+    return () => socket.off();
+  }, [messages]);
+  React.useEffect(() => {
     if (room) {
-      getStudentDetails(headers, room.student_id).then(res => {
+      getStudentDetails(room.student_id, headers).then(res => {
         user_details(res.data.user_id, headers).then(res =>
           setStudent(res.data)
         );
@@ -61,48 +77,80 @@ export default function ChatBox(props) {
     <Paper className={classes.root}>
       <Paper className={classes.top} elevation={3}>
         <Grid className={classes.topName}>
-            {user
-              ? user.account_type_id === 2
-                ? student !== null
-                      ? <Avatar src={student.user_image} />
-                      : <img src={bubbles} style={{width: 45}}/>
-                : mentor !== null
-                      ? <Avatar src={mentor.user_image} />
-                      : <img src={bubbles} style={{width: 45}}/>
-              :  <img src={bubbles} style={{width: 45}}/>}
+          {user ? (
+            user.account_type_id === 2 ? (
+              student !== null ? (
+                <Avatar src={student.user_image} />
+              ) : (
+                <img src={bubbles} style={{ width: 45 }} />
+              )
+            ) : mentor !== null ? (
+              <Avatar src={mentor.user_image} />
+            ) : (
+              <img src={bubbles} style={{ width: 45 }} />
+            )
+          ) : (
+            <img src={bubbles} style={{ width: 45 }} />
+          )}
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
           >
             {user
               ? user.account_type_id === 2
-                ? student  !== null
-                      ? `${student.first_name} ${student.last_name}`
-                      : ""
-                : mentor  !== null
-                      ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-                      : ""
+                ? student !== null
+                  ? `${student.first_name} ${student.last_name}`
+                  : ""
+                : mentor !== null
+                ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
+                : ""
               : ""}
           </Typography>
         </Grid>
       </Paper>
 
       <Paper className={classes.convoBox} elevation={6}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column"
+          }}
+        >
           {room === null
             ? "request help to start a conversation with your mentor"
-            : roomMsg.length !== 0
-            ? roomMsg.map((x, i) => (
+            : messages.length !== 0
+            ? messages.map((x, i) => (
                 <MessageBox
                   data={x}
                   headers={headers}
                   user={user}
                   key={x.id}
                   index={i}
-                  roomMsg={roomMsg}
+                  messages={messages}
                 />
               ))
             : "start conversation"}
+
+          {isTyping !== null ? (
+            <Div style={{ flexDirection: "row" }}>
+              <Avatar src={isTyping.user_image} />
+
+              <Msg
+                style={{
+                  borderRadius: "20px 20px 20px 0",
+                  border: "2px solid #ff6f61"
+                }}
+              >
+                <TypingIndicator>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </TypingIndicator>
+              </Msg>
+            </Div>
+          ) : (
+            ""
+          )}
         </div>
       </Paper>
       <form onSubmit={handleSubmit}>
@@ -115,6 +163,11 @@ export default function ChatBox(props) {
             fullWidth
             onChange={e => {
               e.preventDefault();
+              if (e.target.value.length !== 0) {
+                socket.emit(`is_typing`, user);
+              } else {
+                socket.emit(`is_typing`, null);
+              }
               setMsg(e.target.value);
             }}
             InputProps={{
@@ -138,8 +191,7 @@ export default function ChatBox(props) {
   );
 }
 const MessageBox = props => {
-  const classes = useStyles();
-  const { data, headers, user, index, roomMsg } = props;
+  const { data, headers, user, index, messages } = props;
   const [sender, setSender] = React.useState({});
   React.useEffect(() => {
     user_details(data.user_id, headers).then(res => {
@@ -149,18 +201,18 @@ const MessageBox = props => {
   return (
     <Div
       style={
-        user.id !== data.user_id
+        user.id === data.user_id
           ? {
-              "flex-direction": "row-reverse"
+              flexDirection: "row-reverse"
             }
           : {
-              "flex-direction": "row"
+              flexDirection: "row"
             }
       }
     >
-      {user.id === data.user_id ? (
-        roomMsg[index + 1] ? (
-          roomMsg[index + 1].user_id === data.user_id ? (
+      {user.id !== data.user_id ? (
+        messages[index + 1] ? (
+          messages[index + 1].user_id === data.user_id ? (
             <span style={{ width: 40 }} />
           ) : (
             <Avatar src={sender ? sender.user_image : ""} />
@@ -173,13 +225,13 @@ const MessageBox = props => {
       )}
       <Msg
         style={
-          user.id !== data.user_id
+          user.id === data.user_id
             ? {
-                "border-radius": "20px 20px 0 20px",
+                borderRadius: "20px 20px 0 20px",
                 background: "#ababfa"
               }
             : {
-                "border-radius": "20px 20px 20px 0",
+                borderRadius: "20px 20px 20px 0",
                 border: "2px solid #ff6f61"
               }
         }
@@ -199,13 +251,37 @@ const Msg = styled.span`
   background-color: whitesmoke;
   border: 2px solid #ababfa;
   padding: 10px 15px 10px 17px;
-  margin: 0 5px 0 5px;
+  margin: 0 10px 0 5px;
   max-width: 400px;
 `;
-const getStudentDetails = async (headers, id) => {
-  try {
-    return await Axios.get(`/api/classroom-users/${id}`, headers);
-  } catch (err) {
-    console.log(err);
+const TypingIndicator = styled.span`
+  span {
+    display: inline-block;
+    background-color: black;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: bob 2s infinite;
   }
-};
+  span:nth-child(1) {
+    animation-delay: -1s;
+  }
+  span:nth-child(2) {
+    animation-delay: -0.85s;
+  }
+  span:nth-child(3) {
+    animation-delay: -0.7s;
+    margin-right: 0;
+  }
+  @keyframes bob {
+    10% {
+      transform: translateY(-10px);
+      background-color: lightgray;
+    }
+    50% {
+      transform: translateY(0);
+      background-color: lightgray;
+    }
+  }
+`;

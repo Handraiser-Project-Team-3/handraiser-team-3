@@ -13,9 +13,9 @@ const io = socketio(server);
 const auth = require("./controllers/auth");
 const user = require("./controllers/users");
 const classroom = require("./controllers/classroom");
-const chats = require("./controllers/chats");
 const classroomUsers = require("./controllers/classroomUsers");
 const requests = require("./controllers/requests");
+const message = require("./controllers/messages");
 const ws = require("./controllers/ws");
 
 massive({
@@ -85,17 +85,12 @@ massive({
   app.get("/api/request/list/:id", requests.list);
   app.patch("/api/request/:id", requests.editRequest);
 
-  //chats
-  app.post("/api/chats/message/create/:id", chats.createMessage);
-  app.get("/api/chats/messages/list/:id", chats.messageList);
-  app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
-  app.patch("/api/chats/messages/edit/id", chats.editMessages);
+  //messages
 
-  //other pages that need headers
+  app.get("/api/messages/:id", message.list);
 
-  const port = 3001;
-  server.listen(port, () => {
+  server.listen(process.env.SERVER_PORT, () => {
     console.clear();
-    console.log(`Server is running at port ${port}`);
+    console.log(`Server is running at port ${process.env.SERVER_PORT}`);
   });
 });

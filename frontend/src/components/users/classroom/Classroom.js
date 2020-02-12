@@ -1,7 +1,6 @@
 import React from "react";
 
 // Material-ui
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -14,7 +13,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
 import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -30,12 +28,14 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
-import student from "../../assets/images/student.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
 
-//WS
-import { UserDetails, user_details } from "../reusables/UserDetails";
+import {
+  UserDetails,
+  user_details,
+  getStudentDetails
+} from "../reusables/UserDetails";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -92,12 +92,14 @@ export default function MentorsView(props) {
     socket.emit(`join_classroom`, {
       classId: props.classId
     });
+    socket.on(`new_student`, notify => alertToast(notify));
     socket.on(`update_request_list`, (data, notify) => {
       setRequests(data);
       if (!!notify) {
         alertToast(notify);
       }
     });
+    return () => socket.off();
   }, []);
   React.useEffect(() => {
     if (user) {
@@ -226,7 +228,7 @@ export default function MentorsView(props) {
               <Grid item>
                 <Grid container spacing={3} alignItems="center">
                   <Grid item xs={3}>
-                      <UserDetails id={id} headers={headers} action="img" />
+                    <UserDetails id={id} headers={headers} action="img" />
                   </Grid>
                   <Grid item xs={9}>
                     <Typography variant="h8">
@@ -252,7 +254,12 @@ export default function MentorsView(props) {
             </Grid>
           </div>
         </Grid>
-        <Stats room={room} user={userDetails} headers={headers} />
+        <Stats
+          room={room}
+          user={userDetails}
+          headers={headers}
+          socket={socket}
+        />
       </Grid>
     </Layout>
   );
@@ -273,7 +280,7 @@ const RequestComponent = ({
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
     if (data) {
-      getStudentDetails(headers, data.student_id).then(res => {
+      getStudentDetails(data.student_id, headers).then(res => {
         user_details(res.data.user_id, headers).then(user =>
           setSender(user.data)
         );
@@ -434,13 +441,6 @@ const Div = styled.div`
   flex-direction: column;
 `;
 
-const getStudentDetails = async (headers, id) => {
-  try {
-    return await Axios.get(`/api/classroom-users/${id}`, headers);
-  } catch (err) {
-    console.log(err);
-  }
-};
 const getClassroomUser = async headers => {
   try {
     return await Axios.get(`/api/classroom-users`, headers);

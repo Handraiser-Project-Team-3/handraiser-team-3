@@ -18,6 +18,7 @@ import Slide from "@material-ui/core/Slide";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import { user_details } from "../reusables/UserDetails";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -50,7 +51,8 @@ export const JoinClassModal = props => {
     className,
     codeClass,
     user,
-    headers
+    headers,
+    socket
   } = props;
   const history = useHistory();
   const [code, setCode] = useState("");
@@ -80,6 +82,9 @@ export const JoinClassModal = props => {
           .post(`/api/classroom-users/`, data, headers)
           .then(() => {
             classEnter();
+            user_details(user.id, headers).then(res =>
+              socket.emit(`joined_class`, { user: res.data })
+            );
           })
           .catch(e => console.log(e));
       } else {

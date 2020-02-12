@@ -30,7 +30,7 @@ import key from "../../assets/images/key.png";
 
 export const ClassView = props => {
   const classes = useStyles();
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
   const [headTitle, setHeadTitle] = useState("");
@@ -373,6 +373,7 @@ export const ClassView = props => {
                           codeClass={data.class_code}
                           user={user}
                           headers={headers}
+                          socket={socket}
                         />
                       </Grid>
                     )}

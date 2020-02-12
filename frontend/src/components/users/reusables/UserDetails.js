@@ -1,5 +1,6 @@
 import React from "react";
 import Axios from "axios";
+
 export const UserDetails = ({ id, headers, action }) => {
   const [user, setUser] = React.useState("");
   React.useEffect(() => {
@@ -30,6 +31,22 @@ export const UserDetails = ({ id, headers, action }) => {
 export const user_details = async (id, headers) => {
   try {
     return await Axios.get(`/api/user/${id}`, headers);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getStudentDetails = async (id, headers) => {
+  try {
+    return await Axios.get(`/api/classroom-users/${id}`, headers);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const class_details = async (id, headers) => {
+  try {
+    return await Axios.get(`/api/class/${id}`, headers);
   } catch (err) {
     console.error(err);
   }
