@@ -1,7 +1,10 @@
 import React from "react";
 import Axios from "axios";
 
+// material ui
 import Avatar from "@material-ui/core/Avatar";
+
+// images
 import student from "../../assets/images/student.png";
 
 export const UserDetails = ({ id, headers, action, profile }) => {
@@ -24,34 +27,31 @@ export const UserDetails = ({ id, headers, action, profile }) => {
 		user.user_image !== null ? (
 			<img
 				src={user.user_image}
-				alt="man"
-				style={{
-					width: "30px",
-					borderRadius: "50%",
-					border: "2px solid #ff6f61",
-					padding: "3px"
-				}}
-			/> ? (
-				user.user_image !== null && profile
-			) : (
-				<img
-					src={user.user_image}
-					alt="man"
-					style={{
-						width: "80px",
-						borderRadius: "50%",
-						border: "2px solid #ff6f61",
-						padding: "3px"
-					}}
-				/>
-			)
+				alt="profile"
+				style={
+					profile
+						? {
+								width: "100px",
+								borderRadius: "50%",
+								marginTop: "20px",
+								border: "5px solid #aaaafa",
+								padding: "5px"
+						  }
+						: {
+								width: "30px",
+								borderRadius: "50%",
+								border: "2px solid #ff6f61",
+								padding: "3px"
+						  }
+				}
+			/>
 		) : (
 			<Avatar
 				alt="avatar"
 				src={student}
 				style={{
-					width: "80px",
-					height: "80px",
+					width: "100px",
+					height: "100px",
 					marginTop: "20px",
 					border: "5px solid #aaaafa",
 					padding: "5px"
