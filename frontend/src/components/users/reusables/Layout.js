@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Layout(props) {
   const classes = useStyles();
-  const { first_name, classId } = props;
+  const { first_name, classId, typeId } = props;
   return (
     <div>
       <Paper elevation={0} className={classes.header}>
@@ -64,7 +64,9 @@ export default function Layout(props) {
                   Home
                 </Link>
               ) : (
-                <Typography color="textPrimary">Home</Typography>
+                <Typography color="textPrimary">
+                  {typeId ? "Admin" : "Home"}
+                </Typography>
               )}
               {classId && (
                 <Typography color="textPrimary">Classrooms</Typography>
