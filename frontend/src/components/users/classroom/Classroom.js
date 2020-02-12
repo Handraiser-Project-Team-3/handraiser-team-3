@@ -86,7 +86,7 @@ export default function MentorsView(props) {
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     if (user) {
-      getClassroomUser(headers).then(res =>
+       getClassroomUser(headers).then(res =>
         setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
       );
     }
@@ -397,7 +397,9 @@ const RequestComponent = ({
           onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
         />
         <Div>
-          <span style={{ fontSize: 16 }}>{data.title}</span>
+          <span style={{ fontSize: 16, wordBreak: "break-all" }}>
+            {data.title}
+          </span>
           <span style={{ fontSize: 12 }}>
             {sender ? (
               <UserDetails
