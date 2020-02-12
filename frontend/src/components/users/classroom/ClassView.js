@@ -303,6 +303,7 @@ export const ClassView = props => {
                                     >
                                       Mentor's Name:
                                   </Typography>
+<<<<<<< HEAD
                                   </Grid>
                                   <Grid item lg={12} xs={12}>
                                     <b>
@@ -313,6 +314,17 @@ export const ClassView = props => {
                                       />
                                     </b>
                                   </Grid>
+=======
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>
+                                    <UserDetails
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
+                                  </b>
+>>>>>>> e6abb57b3bfd6f66eb20eefddf425485fec49114
                                 </Grid>
                               </Grid>
                             </Grid>

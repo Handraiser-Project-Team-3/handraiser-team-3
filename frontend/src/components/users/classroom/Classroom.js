@@ -179,6 +179,7 @@ export default function MentorsView(props) {
       setList(true);
    };
 
+<<<<<<< HEAD
    return (
       <Layout accountType={account_type_id} first_name={first_name}>
          <Grid container justify="flex-start" spacing={2}>
@@ -318,6 +319,42 @@ export default function MentorsView(props) {
                      justify="space-between"
                      alignItems="center"
                      style={{ padding: "15px" }}
+=======
+  return (
+    <Layout
+      accountType={account_type_id}
+      first_name={first_name}
+      classId={props.classId}
+    >
+      <Grid container justify="flex-start" spacing={2}>
+        <Grid item xs={12} sm={12} md={12} lg={4}>
+          <AppBar position="static" color="default" className={classes.appBar}>
+            {!list ? (
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                ma
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+              >
+                <Tab label="Need Help" {...a11yProps(0)} />
+                <Tab label="Being Helped" {...a11yProps(1)} />
+                <Tab label="Done" {...a11yProps(2)} />
+              </Tabs>
+            ) : (
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+                style={{ borderBottom: "2px solid #3f51b5" }}
+              >
+                <Grid item xs={11}>
+                  <Typography
+                    variant="h6"
+                    style={{ padding: "7px", paddingLeft: "20px" }}
+>>>>>>> e6abb57b3bfd6f66eb20eefddf425485fec49114
                   >
                      <Grid item>
                         <Grid container spacing={5} alignItems="center">
