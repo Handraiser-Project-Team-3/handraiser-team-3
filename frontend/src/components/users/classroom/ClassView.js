@@ -106,6 +106,7 @@ export const ClassView = props => {
 
     // eslint-disable-next-line
   }, [account_type_id]);
+  
 
   return (
     <Layout first_name={first_name}>
@@ -128,7 +129,7 @@ export const ClassView = props => {
                     <CardMedia
                       className={classes.media}
                       image={classroom}
-                      title="Contemplative Reptile"
+                      title={data.class_name}
                     ></CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">

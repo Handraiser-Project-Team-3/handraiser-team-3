@@ -45,8 +45,16 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     width: 250
+  },
+
+  nested: {
+    "&:hover": {
+      background: "#8691DD",
+      color: "whitesmoke"
+    }
   }
 }));
+
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
   const userDetails = user ? user : {};
@@ -150,7 +158,7 @@ export default function ButtonAppBar(props) {
                   className={classes.nested}
                 >
                   <ListItemIcon>
-                    <StarBorder />
+                    <StarBorder style={{ color: "FF6F61" }} />
                   </ListItemIcon>
                   <ListItemText
                     onClick={() => {

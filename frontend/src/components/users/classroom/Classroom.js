@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 // Material-ui
 import Paper from "@material-ui/core/Paper";
@@ -9,6 +10,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import Fade from "@material-ui/core/Fade";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -33,9 +35,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import student from "../../assets/images/student.png";
-import mentor from "../../assets/images/mentor2.png";
 import { useStyles } from "./classroomStyle";
 import { toast } from "react-toastify";
+import blackboard from "../../assets/images/blackboard.png";
 
 //WS
 import { UserDetails } from "../reusables/UserDetails";
@@ -70,7 +72,7 @@ const a11yProps = index => {
   };
 };
 
-export default function MentorsView(props) {
+export default function Classroom(props) {
   const classes = useStyles();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
@@ -79,17 +81,41 @@ export default function MentorsView(props) {
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
   const [list, setList] = useState(false);
+  const [requests, setRequests] = React.useState([]);
+  const [verify, setVerify] = React.useState([]);
+  const history = useHistory();
+  const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [requests, setRequests] = React.useState([]);
+
+  // get classroom users
   React.useEffect(() => {
     if (user) {
-       getClassroomUser(headers).then(res =>
-        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
-      );
+      getClassroomUser(headers).then(res => {
+        setVerify(
+          res.data
+            .filter(x => x.user_id === user.id)
+            .map(x => x.class_id)
+            .map(String)
+        );
+        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
+      });
     }
+  }, [user, headers]);
+
+  // socketio
+  React.useEffect(() => {
+    socket.emit(`join_classroom`, {
+      classId: props.classId
+    });
+    socket.on(`update_request_list`, (data, notify) => {
+      setRequests(data);
+      if (!!notify) {
+        alertToast(notify);
+      }
+    });
   }, [user, headers]);
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
@@ -102,6 +128,20 @@ export default function MentorsView(props) {
       }
     });
   }, []);
+
+  // routes restriction
+  React.useEffect(() => {
+    if (verify.length) {
+      if (props.classId === verify.find(x => x === props.classId)) {
+        history.push(`/classroom/${props.classId}`);
+      } else {
+        alertToast("You are not Authorize to enter this room!");
+        history.replace("/");
+      }
+    }
+  }, [verify, match.params.id]);
+
+  // get requests
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -142,7 +182,11 @@ export default function MentorsView(props) {
   };
 
   return (
-    <Layout accountType={account_type_id} first_name={first_name}>
+    <Layout
+      accountType={account_type_id}
+      first_name={first_name}
+      classId={props.classId}
+    >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
@@ -150,7 +194,6 @@ export default function MentorsView(props) {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                ma
                 indicatorColor="primary"
                 textColor="primary"
                 variant="fullWidth"
@@ -288,7 +331,7 @@ export default function MentorsView(props) {
                     <Avatar
                       className={classes.studentsAvatar}
                       alt="Student"
-                      src={account_type_id === 2 ? mentor : student}
+                      src={account_type_id === 2 ? "" : student}
                     />
                   </Grid>
                   <Grid item xs={8}>
@@ -385,14 +428,14 @@ const RequestComponent = ({
       className={classes.needHelp}
       elevation={6}
     >
-      <Typography variant="h6" className={classes.studentsNeed}>
-        <Avatar
-          className={classes.studentsAvatar}
-          alt="Student"
-          src={student}
-          onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
-        />
-        <Div>
+      <Avatar
+        className={classes.studentsAvatar}
+        alt="Student"
+        src={student}
+        onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
+      />
+      <Div>
+        <Typography variant="body2" className={classes.studentsNeed}>
           <span style={{ fontSize: 16, wordBreak: "break-all" }}>
             {data.title}
           </span>
@@ -407,8 +450,8 @@ const RequestComponent = ({
               ""
             )}
           </span>
-        </Div>
-      </Typography>
+        </Typography>
+      </Div>
       {action === "need" ? (
         <div className={classes.Icons}>
           {classroomUser.id === data.student_id || account_type_id === 2 ? (
@@ -525,7 +568,11 @@ const getClassroomUser = async headers => {
   }
 };
 const alertToast = msg =>
-  toast(msg, {
+  toast.info(msg, {
     position: "bottom-left",
-    autoClose: 6000
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
   });
