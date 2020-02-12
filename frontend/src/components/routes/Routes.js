@@ -33,7 +33,7 @@ export const Routes = props => {
           <Navigation
             {...history}
             data={props}
-            component={account_type_id !== 1 && Classroom}
+            component={account_type_id !== 1 ? Classroom : PageNotFound}
           />
         )}
       />
