@@ -57,7 +57,7 @@ export default function ChatBox(props) {
 									endIcon={
 										<SendIcon style={{ color: "#5ec8d5", cursor: "pointer" }} />
 									}
-								></Button>
+								><p style={{display:'none'}}>SEND</p></Button>
 							</InputAdornment>
 						)
 					}}

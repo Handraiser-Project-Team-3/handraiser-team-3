@@ -167,7 +167,7 @@ export default function ButtonAppBar(props) {
     </div>
   );
   return (
-    <div>
+    <>
       <div className={classes.root}>
         <AppBar
           position="fixed"
@@ -246,7 +246,7 @@ export default function ButtonAppBar(props) {
         data={props.data}
         classId={props.match && props.match.params.id}
       />
-    </div>
+    </>
   );
 }
 const Btn = styled.span`

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React  from "react";
 
 // Material-ui
 import Paper from "@material-ui/core/Paper";
@@ -78,7 +78,7 @@ export default function MentorsView(props) {
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
-  const [list, setList] = useState(false);
+  const [list, setList] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -150,7 +150,6 @@ export default function MentorsView(props) {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                ma
                 indicatorColor="primary"
                 textColor="primary"
                 variant="fullWidth"
@@ -385,7 +384,7 @@ const RequestComponent = ({
       className={classes.needHelp}
       elevation={6}
     >
-      <Typography variant="h7" className={classes.studentsNeed}>
+      <Typography variant="h6" className={classes.studentsNeed}>
         <Avatar
           className={classes.studentsAvatar}
           alt="Student"

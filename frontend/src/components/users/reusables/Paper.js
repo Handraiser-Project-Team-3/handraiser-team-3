@@ -34,12 +34,12 @@ const useStyles = makeStyles({
 export const PaperStat = props => {
   const classes = useStyles();
   const { headers, users, setUsers } = props;
-
+  
   useEffect(() => {
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
     });
-  }, []);
+  }, [headers]);
 
   return (
     <>
@@ -60,7 +60,7 @@ export const PaperStat = props => {
                   variant="h3"
                   style={{ fontWeight: "bold", color: "#fadc60" }}
                 >
-                  {users.length}
+                  {users.filter(user => user.account_type_id !== 1).length}
                 </Typography>
               </Grid>
             </Grid>
