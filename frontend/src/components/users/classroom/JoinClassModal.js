@@ -97,19 +97,14 @@ export const JoinClassModal = props => {
   };
 
   const ButtonComponent = () => {
-    const [check, setCheck] = React.useState({});
-
-    let filterClassUser = classroomUsers.filter(userClass => {
-      if (userClass.user_id === user.id) {
-        return userClass;
-      }
-      return null;
-    });
+    const [check, setCheck] = useState({});
 
     useEffect(() => {
-      setCheck(filterClassUser.filter(x => x.class_id === classId)[0]);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+      setCheck(classroomUsers
+        .filter(x => x.user_id === user.id)
+        .filter(x => x.class_id === classId)[0]);
+    }, [check]);
+
     return (
       <>
         {check ? (
@@ -121,18 +116,18 @@ export const JoinClassModal = props => {
             }}
           >
             Enter Class
-          </Button>
+					</Button>
         ) : (
-          <Button
-            size="small"
-            style={{ color: "white" }}
-            onClick={() => {
-              handleClickOpen();
-            }}
-          >
-            Join Class
-          </Button>
-        )}
+            <Button
+              size="small"
+              style={{ color: "white" }}
+              onClick={() => {
+                handleClickOpen();
+              }}
+            >
+              Join Class
+						</Button>
+          )}
       </>
     );
   };
@@ -161,7 +156,7 @@ export const JoinClassModal = props => {
             style={{ marginTop: "1vh" }}
           >
             Ask your teacher for the class code, then enter it here
-          </DialogContentText>
+					</DialogContentText>
         </DialogContent>
         <DialogContent>
           <form
@@ -175,7 +170,7 @@ export const JoinClassModal = props => {
               <InputLabel htmlFor="classcode">Class Code</InputLabel>
               <OutlinedInput
                 required
-                id="classId"
+                id={`classid-${classId}`}
                 name={className}
                 onChange={handleChange}
                 labelWidth={85}
@@ -186,10 +181,10 @@ export const JoinClassModal = props => {
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
-          </Button>
+					</Button>
           <Button color="primary" form={classId} type="submit">
             Join Class
-          </Button>
+					</Button>
         </DialogActions>
       </Dialog>
     </div>
