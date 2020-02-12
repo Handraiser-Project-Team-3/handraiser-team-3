@@ -109,7 +109,8 @@ export default function MentorsView(props) {
          if (!!notify) {
             alertToast(notify);
          }
-      }}, [user, headers]);
+      })
+   }, [user, headers]);
 
    React.useEffect(() => {
       socket.emit(`join_classroom`, {
@@ -379,7 +380,7 @@ export default function MentorsView(props) {
          </Grid>
       </Layout>
    );
-})
+}
 
 const RequestComponent = ({
    data,
