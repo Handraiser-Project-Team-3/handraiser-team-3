@@ -30,7 +30,11 @@ export const Routes = props => {
       <Route
         path={`/classroom/:id`}
         render={history => (
-          <Navigation {...history} data={props} component={Classroom} />
+          <Navigation
+            {...history}
+            data={props}
+            component={account_type_id !== 1 && Classroom}
+          />
         )}
       />
       <Route path={`*`} component={PageNotFound} />
