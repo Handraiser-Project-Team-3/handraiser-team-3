@@ -106,6 +106,7 @@ export const ClassView = props => {
 
     // eslint-disable-next-line
   }, [account_type_id]);
+  
 
   return (
     <Layout first_name={first_name}>
