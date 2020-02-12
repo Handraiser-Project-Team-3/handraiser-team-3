@@ -94,19 +94,20 @@ export const HandleClassModal = props => {
         .then(res => {
           setOpen(false);
           setClassList([...classList, res.data]);
-          let data = {
-            user_id: userId,
-            class_id: res.data.id
-          };
-          axios
-            .post(`/api/classroom-users/`, data, headers)
-            .catch(err => console.error(err));
           setClassRoom({
             class_name: "",
             class_description: ""
           });
 
-          alertToast("Successfully Added a New Class!");
+          let data = {
+            user_id: userId,
+            class_id: res.data.id
+          };
+
+          axios
+            .post(`/api/classroom-users/`, data, headers)
+            .then(() => alertToast("Successfully Added a New Class!"))
+            .catch(err => console.error(err));
         });
     } else {
       axios

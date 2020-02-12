@@ -41,7 +41,7 @@ import { toast } from "react-toastify";
 import blackboard from "../../assets/images/blackboard.png";
 
 //WS
-import { UserDetails, class_details } from "../reusables/UserDetails";
+import { UserDetails } from "../reusables/UserDetails";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,24 +81,33 @@ export default function Classroom(props) {
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
+  const [className, setClassName] = React.useState("");
   const [list, setList] = useState(false);
+  const [requests, setRequests] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
   const history = useHistory();
-  const [className, setClassName] = React.useState("");
+  const match = useRouteMatch();
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [requests, setRequests] = React.useState([]);
+
+  // get classroom users
   React.useEffect(() => {
     if (user) {
       getClassroomUser(headers).then(res => {
         setVerify(
-          res.data.filter(x => x.user_id === user.id).map(x => x.class_id)
+          res.data
+            .filter(x => x.user_id === user.id)
+            .map(x => x.class_id)
+            .map(String)
         );
         setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
       });
     }
   }, [user, headers]);
+
+  // socketio
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
       classId: props.classId
@@ -110,7 +119,6 @@ export default function Classroom(props) {
       }
     });
   }, [user, headers]);
-
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
       classId: props.classId
@@ -121,8 +129,25 @@ export default function Classroom(props) {
         alertToast(notify);
       }
     });
+
+    Axios.get(`/api/class/${props.classId}`, headers).then(res =>
+      setClassName(res.data.class_name)
+    );
   }, []);
 
+  // routes restriction
+  React.useEffect(() => {
+    if (verify.length) {
+      if (props.classId === verify.find(x => x === props.classId)) {
+        history.push(`/classroom/${props.classId}`);
+      } else {
+        alertToast("You are not Authorize to enter this room!");
+        history.replace("/");
+      }
+    }
+  }, [verify, match.params.id]);
+
+  // get requests
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -137,10 +162,6 @@ export default function Classroom(props) {
         }
       })();
     }
-
-    Axios.get(`/api/class/${props.classId}`, headers).then(res =>
-      setClassName(res.data.class_name)
-    );
   }, [user, headers]);
 
   const updateRequest = async (id, data) => {
@@ -315,8 +336,8 @@ export default function Classroom(props) {
                   <Grid item xs={4}>
                     <Avatar
                       className={classes.studentsAvatar}
-                      alt="Board"
-                      src={account_type_id === 2 ? "" : blackboard}
+                      alt="Student"
+                      src={account_type_id === 2 ? mentor : blackboard}
                     />
                   </Grid>
                   <Grid item xs={8}>
@@ -411,14 +432,14 @@ const RequestComponent = ({
       className={classes.needHelp}
       elevation={6}
     >
-      <Typography variant="h7" className={classes.studentsNeed}>
-        <Avatar
-          className={classes.studentsAvatar}
-          alt="Student"
-          src={student}
-          onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
-        />
-        <Div>
+      <Avatar
+        className={classes.studentsAvatar}
+        alt="Student"
+        src={student}
+        onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
+      />
+      <Div>
+        <Typography variant="body2" className={classes.studentsNeed}>
           <span style={{ fontSize: 16, wordBreak: "break-all" }}>
             {data.title}
           </span>
@@ -433,8 +454,8 @@ const RequestComponent = ({
               ""
             )}
           </span>
-        </Div>
-      </Typography>
+        </Typography>
+      </Div>
       {action === "need" ? (
         <div className={classes.Icons}>
           {classroomUser.id === data.student_id || account_type_id === 2 ? (
@@ -551,7 +572,11 @@ const getClassroomUser = async headers => {
   }
 };
 const alertToast = msg =>
-  toast(msg, {
+  toast.info(msg, {
     position: "bottom-left",
-    autoClose: 6000
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
   });

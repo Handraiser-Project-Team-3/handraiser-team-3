@@ -19,6 +19,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
+import TablePagination from "@material-ui/core/TablePagination";
+import { TableFooter, Typography } from "@material-ui/core";
+
 // import Button from "@material-ui/core/Button";
 
 // images
@@ -29,6 +32,7 @@ import AddEmail from "./AddEmail";
 import Confirmation from "./HandleUsers";
 import Profile from "../reusables/Profile";
 import { PaperStat } from "../reusables/Paper";
+import Search from "../reusables/Search";
 
 const StyledTableCell = withStyles(theme => ({
   head: {
@@ -82,7 +86,7 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   },
   tableHeight: {
-    height: "74vh"
+    height: "68vh"
   },
   filter: {
     cursor: "pointer",
@@ -104,6 +108,17 @@ export const Admin = props => {
   const [handle, setHandle] = useState("");
   const [details, setDetails] = useState({});
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   useEffect(() => {
     axios.get("/api/user/list", headers).then(res => {
@@ -146,120 +161,161 @@ export const Admin = props => {
           </Paper>
           <PaperStat users={users} />
         </Grid>
+
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
-          <TableContainer component={Paper} className={classes.tableHeight}>
-            <Table className={classes.table} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>
-                    <span>Email Address</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Role</StyledTableCell>
-                  <StyledTableCell
-                    align="right"
-                    style={{ paddingRight: "80px" }}
-                  >
-                    Action
-                  </StyledTableCell>
-                  <TableCell
-                    align="right"
-                    style={{ background: "#e1e2f7", width: "20px" }}
-                  >
-                    <Tooltip title="Filter List" arrow>
-                      <FilterListIcon
-                        onClick={handleClick}
-                        className={classes.filter}
-                      />
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map(
-                  row =>
-                    row.account_type_id === userType && (
-                      <StyledTableRow key={row.id}>
-                        <StyledTableCell component="th" scope="row">
-                          <Profile
-                            email={row.email}
-                            account_type_id={row.account_type_id}
-                            first_name={row.first_name}
-                            last_name={row.last_name}
-                            userId={row.id}
-                            headers={headers}
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Paper elevation={0} style={{ height: "auto" }}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+                    <Typography
+                      variant="h5"
+                      style={{
+                        fontWeight: "bold",
+                        color: "#aaaafa",
+                        textShadow: "1px 1px purple"
+                      }}
+                    >
+                      Users List
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={11} md={4} lg={3} xl={3}>
+                    <Search />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <TableContainer component={Paper} className={classes.tableHeight}>
+                <Table className={classes.table} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell>
+                        <span>Email Address</span>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Role</StyledTableCell>
+                      <StyledTableCell
+                        align="right"
+                        style={{ paddingRight: "80px" }}
+                      >
+                        Action
+                      </StyledTableCell>
+                      <TableCell
+                        align="right"
+                        style={{ background: "#e1e2f7", width: "20px" }}
+                      >
+                        <Tooltip title="Filter List" arrow>
+                          <FilterListIcon
+                            onClick={handleClick}
+                            className={classes.filter}
                           />
-                        </StyledTableCell>
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                        >
-                          <Chip
-                            variant="outlined"
-                            size="medium"
-                            label={userType === 3 ? "Student" : "Mentor"}
-                            style={
-                              userType === 3
-                                ? { borderColor: "#aaaafa", color: "#616161" }
-                                : { borderColor: "#f7b733", color: "#616161" }
-                            }
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          {row.account_type_id === 3 && (
-                            <>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {users.map(
+                      row =>
+                        row.account_type_id === userType && (
+                          <StyledTableRow key={row.id}>
+                            <StyledTableCell component="th" scope="row">
+                              <Profile
+                                email={row.email}
+                                account_type_id={row.account_type_id}
+                                first_name={row.first_name}
+                                last_name={row.last_name}
+                                userId={row.id}
+                                headers={headers}
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell
+                              component="th"
+                              scope="row"
+                              align="center"
+                            >
                               <Chip
                                 variant="outlined"
                                 size="medium"
-                                avatar={
-                                  <Avatar
-                                    style={{
-                                      background: "#aaaafa",
-                                      color: "white"
-                                    }}
-                                  >
-                                    <FaceIcon />
-                                  </Avatar>
+                                label={userType === 3 ? "Student" : "Mentor"}
+                                style={
+                                  userType === 3
+                                    ? {
+                                        borderColor: "#aaaafa",
+                                        color: "#616161"
+                                      }
+                                    : {
+                                        borderColor: "#f7b733",
+                                        color: "#616161"
+                                      }
                                 }
-                                label="Set as Mentor"
-                                onClick={() => {
-                                  setDetails(row);
-                                  setOpen(true);
-                                  setHandle("set");
-                                }}
-                                style={{
-                                  borderColor: "#aaaafa",
-                                  color: "#616161"
-                                }}
                               />
-                              {/* <div onClick={() => deleteClass(row.id)}>
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              {row.account_type_id === 3 && (
+                                <>
+                                  <Chip
+                                    variant="outlined"
+                                    size="medium"
+                                    avatar={
+                                      <Avatar
+                                        style={{
+                                          background: "#aaaafa",
+                                          color: "white"
+                                        }}
+                                      >
+                                        <FaceIcon />
+                                      </Avatar>
+                                    }
+                                    label="Set as Mentor"
+                                    onClick={() => {
+                                      setDetails(row);
+                                      setOpen(true);
+                                      setHandle("set");
+                                    }}
+                                    style={{
+                                      borderColor: "#aaaafa",
+                                      color: "#616161"
+                                    }}
+                                  />
+                                  {/* <div onClick={() => deleteClass(row.id)}>
                                 delete
                               </div> */}
-                            </>
-                          )}
-                          {row.account_type_id === 2 && (
-                            <>
-                              {/* <MentorDetails /> */}
-                              <Chip
-                                variant="outlined"
-                                size="medium"
-                                label="Remove as Mentor"
-                                onDelete={() => handleDelete(row)}
-                                style={{
-                                  borderColor: "#ff6f61ff",
-                                  color: "#ff6f61ff"
-                                }}
-                              />
-                            </>
-                          )}
-                        </StyledTableCell>
-                        <TableCell style={{ width: "20px" }}></TableCell>
-                      </StyledTableRow>
-                    )
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                                </>
+                              )}
+                              {row.account_type_id === 2 && (
+                                <>
+                                  {/* <MentorDetails /> */}
+                                  <Chip
+                                    variant="outlined"
+                                    size="medium"
+                                    label="Remove as Mentor"
+                                    onDelete={() => handleDelete(row)}
+                                    style={{
+                                      borderColor: "#ff6f61ff",
+                                      color: "#ff6f61ff"
+                                    }}
+                                  />
+                                </>
+                              )}
+                            </StyledTableCell>
+                            <TableCell style={{ width: "20px" }}></TableCell>
+                          </StyledTableRow>
+                        )
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10]}
+                component="div"
+                count={users.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Confirmation

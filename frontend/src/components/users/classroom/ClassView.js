@@ -136,7 +136,7 @@ export const ClassView = props => {
                     <CardMedia
                       className={classes.media}
                       image={classroom}
-                      title="Contemplative Reptile"
+                      title={data.class_name}
                     ></CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
