@@ -29,13 +29,16 @@ export const Routes = props => {
       />
       <Route
         path={`/classroom/:id`}
-        render={history => (
-          <Navigation
-            {...history}
-            data={props}
-            component={account_type_id !== 1 ? Classroom : PageNotFound}
-          />
-        )}
+        render={history =>
+          accessToken === "" ? (
+            <Login data={props} />
+          ) : (
+              <Navigation
+                {...history}
+                data={props}
+                component={account_type_id !== 1 ? Classroom : PageNotFound}
+              />
+            )}
       />
       <Route path={`*`} component={PageNotFound} />
     </Switch>

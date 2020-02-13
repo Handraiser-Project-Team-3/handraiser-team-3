@@ -49,7 +49,8 @@ export const JoinClassModal = props => {
     className,
     codeClass,
     user,
-    headers
+    headers,
+    initialIdList
   } = props;
   const history = useHistory();
   const [code, setCode] = useState("");
@@ -100,6 +101,7 @@ export const JoinClassModal = props => {
         classroomUsers={classroomUsers}
         user={user}
         classId={classId}
+        initialIdList={initialIdList}
       />
       <Dialog
         open={open}

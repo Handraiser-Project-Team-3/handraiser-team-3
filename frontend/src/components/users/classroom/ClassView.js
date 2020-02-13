@@ -121,6 +121,7 @@ export const ClassView = props => {
   const indexOfLastList = currentPage * postPerPage;
   const indexOfFirstList = indexOfLastList - postPerPage;
   const currentList = classList.slice(indexOfFirstList, indexOfLastList);
+  const initialIdList = currentList.map(x => x.id)
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -383,8 +384,9 @@ export const ClassView = props => {
                     ) : (
                         <Grid container direction="column" alignItems="center">
                           <JoinClassModal
+                            initialIdList={initialIdList}
+                            currentList={currentList}
                             classroomUsers={classroomUsers}
-                            classId={data.id}
                             className={data.class_name}
                             codeClass={data.class_code}
                             user={user}
