@@ -7,15 +7,14 @@ import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-// import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
-import IconButton from '@material-ui/core/IconButton';
-import { useStyles } from "./chatboxStyle";
+import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
+import { ChatBoxStyle } from "../style/Styles";
 
 export default function ChatBox(props) {
-	const classes = useStyles();
+	const classes = ChatBoxStyle();
 	const { messages } = props;
 	const [show, setShow] = React.useState(false);
 
@@ -24,7 +23,7 @@ export default function ChatBox(props) {
 	};
 
 	return (
-		<Paper className={classes.root}>
+		<Paper elevation={5} className={classes.root}>
 			<Paper className={classes.top} elevation={3}>
 				<Grid className={classes.topName}>
 					<img src={bubbles} style={{ width: "45px" }} alt="chat" />
@@ -120,7 +119,7 @@ export default function ChatBox(props) {
 	);
 }
 const MsgRight = props => {
-	const classes = useStyles();
+	const classes = ChatBoxStyle();
 	const { message, sender } = props;
 	return (
 		<Grid
@@ -158,7 +157,7 @@ const MsgRight = props => {
 };
 
 const MsgLeft = props => {
-	const classes = useStyles();
+	const classes = ChatBoxStyle();
 	const { message, sender } = props;
 	return (
 		<Grid container alignItems="center" justify="flex-start">

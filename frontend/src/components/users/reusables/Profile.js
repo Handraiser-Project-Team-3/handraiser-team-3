@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 // material ui
@@ -23,7 +23,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 
 // images
-import { UserDetails } from "./UserDetails";
+import { UserDetails, class_details } from "./UserDetails";
 
 const useStyles = makeStyles(theme => ({
 	"@global": {
@@ -81,6 +81,9 @@ export default function Profile(props) {
 
 	const handleClickOpen = () => {
 		setOpen(true);
+	};
+
+	useEffect(() => {
 		axios
 			.get(`/api/class?id=${userId}`, headers)
 			.then(res => setClassList(res.data))
@@ -96,7 +99,7 @@ export default function Profile(props) {
 							return res.user_id === userId;
 						})
 						.map(res =>
-							axios.get(`/api/class/${res.class_id}`, headers).then(res => {
+							class_details(res.class_id, headers).then(res => {
 								return res.data;
 							})
 						)
@@ -105,12 +108,12 @@ export default function Profile(props) {
 				});
 			})
 			.catch(err => console.error(err));
-	};
+		// eslint-disable-next-line
+	}, []);
 
 	const handleClose = () => {
 		setOpen(false);
 	};
-
 	return (
 		<>
 			<Chip
@@ -186,7 +189,11 @@ export default function Profile(props) {
 													variant="h4"
 													style={{ background: "antiquewhite" }}
 												>
-													10
+													{
+														studentClass.filter(res => {
+															return res.class_status === true;
+														}).length
+													}
 												</Typography>
 											</Paper>
 										</Grid>
@@ -200,7 +207,11 @@ export default function Profile(props) {
 													variant="h4"
 													style={{ background: "antiquewhite" }}
 												>
-													10
+													{
+														studentClass.filter(res => {
+															return res.class_status === false;
+														}).length
+													}
 												</Typography>
 											</Paper>
 										</Grid>
@@ -216,7 +227,7 @@ export default function Profile(props) {
 													variant="h4"
 													style={{ background: "antiquewhite" }}
 												>
-													10
+													{classList.length}
 												</Typography>
 											</Grid>
 										</Grid>

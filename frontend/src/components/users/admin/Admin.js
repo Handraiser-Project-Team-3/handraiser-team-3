@@ -64,8 +64,7 @@ const useStyles = makeStyles({
 		}
 	},
 	table: {
-		minWidth: 700,
-		overflow: "auto"
+		minWidth: 700
 	},
 	mentor: {
 		width: "20px",
@@ -187,7 +186,7 @@ export const Admin = props => {
 						</Grid>
 						<Grid item xs={12}>
 							<TableContainer component={Paper} className={classes.tableHeight}>
-								<Table className={classes.table} aria-label="customized table">
+								<Table aria-label="customized table">
 									<TableHead>
 										<TableRow>
 											<StyledTableCell>
@@ -213,7 +212,7 @@ export const Admin = props => {
 											</TableCell>
 										</TableRow>
 									</TableHead>
-									<TableBody>
+									<TableBody style={{ overflow: "auto" }}>
 										{users.map(
 											row =>
 												row.account_type_id === userType && (
