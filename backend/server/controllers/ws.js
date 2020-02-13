@@ -23,11 +23,13 @@ module.exports = {
     });
 
     socket.on(`remove_request`, (data, user) => {
-      db.student_request
-        .destroy({ id: data.id })
-        .then(() =>
-          newData(`${user.first_name} ${user.last_name} removed a request`)
-        );
+      db.messages.destroy({ student_request_id: data.id }).then(() => {
+        db.student_request
+          .destroy({ id: data.id })
+          .then(() =>
+            newData(`${user.first_name} ${user.last_name} removed a request`)
+          );
+      });
     });
 
     socket.on(`update_request`, notify =>

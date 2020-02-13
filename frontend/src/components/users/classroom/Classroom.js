@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 // Material-ui
 import Paper from "@material-ui/core/Paper";
@@ -19,6 +20,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
+import Chip from "@material-ui/core/Chip";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -76,10 +78,29 @@ export default function Classroom(props) {
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
   const [room, setRoom] = React.useState(null);
+  const [verify, setVerify] = React.useState([]);
+  const history = useHistory();
+  const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // get classroom users
+  React.useEffect(() => {
+    if (user) {
+      getClassroomUser(headers).then(res => {
+        setVerify(
+          res.data
+            .filter(x => x.user_id === user.id)
+            .map(x => x.class_id)
+            .map(String)
+        );
+        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
+      });
+    }
+  }, [user, headers]);
+
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     if (user) {
@@ -100,7 +121,7 @@ export default function Classroom(props) {
       }
     });
     return () => socket.off();
-  }, []);
+  }, [requests]);
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -120,11 +141,22 @@ export default function Classroom(props) {
   const updateRequest = async (id, data, notify) => {
     try {
       await Axios.patch(`/api/request/${id}`, { status: data }, headers);
-      socket.emit("update_request", notify && notify);
+      socket.emit("update_request", notify);
     } catch (err) {
       console.error(err);
     }
   };
+  // routes restriction
+  React.useEffect(() => {
+    if (verify.length) {
+      if (props.classId === verify.find(x => x === props.classId)) {
+        history.push(`/classroom/${props.classId}`);
+      } else {
+        alertToast("You are not Authorize to enter this room!");
+        history.replace("/");
+      }
+    }
+  }, [verify, match.params.id]);
 
   const handleSubmitNewRquest = e => {
     e.preventDefault();
@@ -141,6 +173,7 @@ export default function Classroom(props) {
       first_name={first_name}
       classId={props.classId}
     >
+      {console.log(requests)}
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
@@ -175,6 +208,8 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
+                      requests={requests}
+                      setRequests={setRequests}
                     />
                   )
               )}
@@ -195,6 +230,8 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
+                      requests={requests}
+                      setRequests={setRequests}
                     />
                   )
               )}
@@ -217,6 +254,8 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
+                      requests={requests}
+                      setRequests={setRequests}
                     />
                   )
               )}
@@ -279,7 +318,9 @@ const RequestComponent = ({
   classroomUser,
   user,
   socket,
-  setRoom
+  setRoom,
+  requests,
+  setRequests
 }) => {
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
@@ -346,9 +387,10 @@ const RequestComponent = ({
             <Tooltip title="Remove">
               <Button
                 onClick={() =>
-                  handleSubmitAction("Removing request ...", () =>
-                    socket.emit("remove_request", data, user)
-                  )
+                  handleSubmitAction("Removing request ...", () => {
+                    socket.emit("remove_request", data, user);
+                    setRoom(null);
+                  })
                 }
               >
                 <RemoveCircleIcon
@@ -453,7 +495,11 @@ const getClassroomUser = async headers => {
   }
 };
 const alertToast = msg =>
-  toast(msg, {
+  toast.info(msg, {
     position: "bottom-left",
-    autoClose: 6000
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
   });

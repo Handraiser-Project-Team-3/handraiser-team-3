@@ -36,8 +36,7 @@ export const useStyles = makeStyles(theme => ({
     maxHeight: 500,
     height: "50vh",
     overflow: "auto",
-    margin: "10px 0 10px 0",
-    padding: "20px 10px 10px 10px"
+    margin: "10px 0 10px 0"
   },
   inputArea: {
     paddingTop: "5px",

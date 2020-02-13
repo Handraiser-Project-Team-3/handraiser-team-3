@@ -5,13 +5,15 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
-import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import { useStyles } from "./chatboxStyle";
 import { user_details, getStudentDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
+import Button from "@material-ui/core/Button";
+import CloseIcon from "@material-ui/icons/Close";
+import { Tooltip } from "@material-ui/core";
 
 export default function ChatBox(props) {
   const classes = useStyles();
@@ -21,6 +23,12 @@ export default function ChatBox(props) {
   const [mentor, setMentor] = React.useState(null);
   const { room, user, headers, socket } = props.data;
   const [isTyping, setIsTyping] = React.useState(null);
+
+  const [show, setShow] = React.useState(false);
+
+  const handleClose = () => {
+    setShow(true);
+  };
   React.useEffect(() => {
     if (headers && room) {
       (async () => {
@@ -77,7 +85,7 @@ export default function ChatBox(props) {
     <Paper className={classes.root}>
       <Paper className={classes.top} elevation={3}>
         <Grid className={classes.topName}>
-          {user ? (
+          {user && room !== null ? (
             user.account_type_id === 2 ? (
               student !== null ? (
                 <Avatar src={student.user_image} />
@@ -96,7 +104,7 @@ export default function ChatBox(props) {
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
           >
-            {user
+            {user && room !== null
               ? user.account_type_id === 2
                 ? student !== null
                   ? `${student.first_name} ${student.last_name}`
@@ -110,27 +118,85 @@ export default function ChatBox(props) {
       </Paper>
 
       <Paper className={classes.convoBox} elevation={6}>
+        {!show && room ? (
+          <div
+            style={{
+              width: "100%",
+              height: "auto",
+              background: "antiquewhite"
+            }}
+          >
+            <Grid container alignItems="center" justify="space-between">
+              <Grid item xs={11}>
+                <Grid container spacing={1} style={{ padding: "10px" }}>
+                  <Grid item>
+                    <Typography variant="caption" style={{ color: "gray" }}>
+                      Request:
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ color: "#484fb9" }}
+                    >
+                      “{room.title}”
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Tooltip title="Close">
+                  <CloseIcon
+                    fontSize="small"
+                    style={{
+                      color: "red",
+                      cursor: "pointer",
+                      marginRight: "10px"
+                    }}
+                    onClick={() => {
+                      handleClose();
+                    }}
+                  />
+                </Tooltip>
+              </Grid>
+            </Grid>
+          </div>
+        ) : (
+          ""
+        )}
         <div
           style={{
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            padding: "20px 10px 10px 10px"
           }}
         >
-          {room === null
-            ? "request help to start a conversation with your mentor"
-            : messages.length !== 0
-            ? messages.map((x, i) => (
-                <MessageBox
-                  data={x}
-                  headers={headers}
-                  user={user}
-                  key={x.id}
-                  index={i}
-                  messages={messages}
-                  isTyping={isTyping}
-                />
-              ))
-            : "start conversation"}
+          {room === null ? (
+            <Grid container direction="column" justify="center" align="center">
+              <Grid item xs={12}>
+                <Typography
+                  variant="h6"
+                  style={{ marginTop: "20%", color: "gray" }}
+                >
+                  Request for Help to start a conversation with your mentor
+                </Typography>
+              </Grid>
+            </Grid>
+          ) : messages.length !== 0 ? (
+            messages.map((x, i) => (
+              <MessageBox
+                data={x}
+                headers={headers}
+                user={user}
+                key={x.id}
+                index={i}
+                messages={messages}
+                isTyping={isTyping}
+              />
+            ))
+          ) : (
+            ""
+          )}
 
           {isTyping !== null ? (
             <Div style={{ flexDirection: "row" }}>
@@ -268,7 +334,7 @@ const Msg = styled.span`
 const TypingIndicator = styled.span`
   span {
     display: inline-block;
-    background-color: black;
+    background-color: #ff6f61;
     width: 5px;
     height: 5px;
     border-radius: 50%;
