@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 export default function Search(props) {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
-  const { filter, setClassList } = props;
+  const { filter, setClassList, setUsers, typeId } = props;
 
   const handleChange = e => {
     setSearchTerm(e.target.value);
@@ -70,11 +70,19 @@ export default function Search(props) {
 
   useEffect(() => {
     filter &&
-      setClassList(
-        filter.filter(row => row.class_name.toLowerCase().includes(searchTerm))
-      );
+      (typeId === 1
+        ? setUsers(
+            filter.filter(row =>
+              row.email.toLowerCase().startsWith(searchTerm.toLowerCase())
+            )
+          )
+        : setClassList(
+            filter.filter(row =>
+              row.class_name.toLowerCase().startsWith(searchTerm.toLowerCase())
+            )
+          ));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [searchTerm]);
 
   return (
