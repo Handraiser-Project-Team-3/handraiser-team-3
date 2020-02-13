@@ -7,6 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import { useForm } from "react-hook-form";
 
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -38,6 +39,8 @@ export default function(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
+
+  const { register, errors, setError } = useForm();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -80,20 +83,25 @@ export default function(props) {
           <DialogContent>
             <TextField
               autoFocus
-              error={newRequest.length === 30 ? true : false}
+              error={!errors.username}
               variant="outlined"
               margin="normal"
               label="Request"
+              name="request"
               fullWidth
               value={newRequest}
               onChange={e => {
-                if (e.target.value.length <= 30) {
-                  addNewRequest(e.target.value);
+                if (e.target.value.length === 30) {
+                  return setError(
+                    e.target.name,
+                    "notMatch",
+                    "Character limit reached!"
+                  );
                 }
+                addNewRequest(e.target.value);
               }}
-              helperText={
-                newRequest.length === 30 ? "max character reached" : ""
-              }
+              inputRef={register({ required: true })}
+              helperText={errors.username && errors.username.message}
             />
           </DialogContent>
 

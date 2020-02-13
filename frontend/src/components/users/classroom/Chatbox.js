@@ -23,7 +23,6 @@ export default function ChatBox(props) {
   const [mentor, setMentor] = React.useState(null);
   const { room, user, headers, socket } = props.data;
   const [isTyping, setIsTyping] = React.useState(null);
-
   const [show, setShow] = React.useState(false);
 
   const handleClose = () => {
@@ -50,18 +49,20 @@ export default function ChatBox(props) {
         content: msg
       }
     });
-    socket.emit(`is_typing`, null);
+    socket.emit(`is_typing`, null, room);
     setMsg("");
   };
   React.useEffect(() => {
-    socket.on(`typing`, user => {
-      setIsTyping(user);
-    });
+    if (room) {
+      socket.on(`typing`, (user, { data }) => {
+        console.log(data.id === room.id);
+        data.id === room.id && setIsTyping(user);
+      });
+    }
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
-    return () => socket.off();
-  }, [messages]);
+  }, [messages, room]);
   React.useEffect(() => {
     if (room) {
       getStudentDetails(room.student_id, headers).then(res => {
@@ -121,18 +122,16 @@ export default function ChatBox(props) {
         {!show && room ? (
           <div
             style={{
-              width: "100%",
               height: "auto",
-              background: "antiquewhite"
+              background: "antiquewhite",
+              position: "relative"
             }}
           >
             <Grid container alignItems="center" justify="space-between">
               <Grid item xs={11}>
                 <Grid container spacing={1} style={{ padding: "10px" }}>
                   <Grid item>
-                    <Typography variant="caption" style={{ color: "gray" }}>
-                      Request:
-                    </Typography>
+                    <Typography style={{ color: "gray" }}>Request:</Typography>
                   </Grid>
                   <Grid item>
                     <Typography
@@ -183,17 +182,19 @@ export default function ChatBox(props) {
               </Grid>
             </Grid>
           ) : messages.length !== 0 ? (
-            messages.map((x, i) => (
-              <MessageBox
-                data={x}
-                headers={headers}
-                user={user}
-                key={x.id}
-                index={i}
-                messages={messages}
-                isTyping={isTyping}
-              />
-            ))
+            messages
+              .filter(x => x.student_request_id === room.id)
+              .map((x, i) => (
+                <MessageBox
+                  data={x}
+                  headers={headers}
+                  user={user}
+                  key={x.id}
+                  index={i}
+                  messages={messages}
+                  isTyping={isTyping}
+                />
+              ))
           ) : (
             ""
           )}
@@ -231,9 +232,9 @@ export default function ChatBox(props) {
             onChange={e => {
               e.preventDefault();
               if (e.target.value.length !== 0) {
-                socket.emit(`is_typing`, user);
+                socket.emit(`is_typing`, user, room);
               } else {
-                socket.emit(`is_typing`, null);
+                socket.emit(`is_typing`, null, room);
               }
               setMsg(e.target.value);
             }}
@@ -247,7 +248,9 @@ export default function ChatBox(props) {
                         style={{ color: "#5ec8d5", cursor: "pointer" }}
                       />
                     }
-                  ></Button>
+                  >
+                    {" "}
+                  </Button>
                 </InputAdornment>
               )
             }}

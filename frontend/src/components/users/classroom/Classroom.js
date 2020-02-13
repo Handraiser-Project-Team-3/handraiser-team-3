@@ -71,6 +71,7 @@ const a11yProps = index => {
 
 export default function Classroom(props) {
   const classes = useStyles();
+  const { classId } = props;
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
@@ -88,7 +89,7 @@ export default function Classroom(props) {
 
   // get classroom users
   React.useEffect(() => {
-    if (user) {
+    if (user && headers) {
       getClassroomUser(headers).then(res => {
         setVerify(
           res.data
@@ -103,25 +104,31 @@ export default function Classroom(props) {
 
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
-    if (user) {
-      getClassroomUser(headers).then(res =>
-        setClassroomUser(res.data.filter(x => x.user_id === user.id)[0])
-      );
+    if (user && headers) {
+      console.log(user);
+      getClassroomUser(headers).then(res => {
+        res.data &&
+          setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
+      });
     }
   }, [user, headers]);
   React.useEffect(() => {
-    socket.emit(`join_classroom`, {
-      classId: props.classId
-    });
-    socket.on(`new_student`, notify => alertToast(notify));
-    socket.on(`update_request_list`, (data, notify) => {
+    if (!!classId) {
+      socket.emit(`join_classroom`, {
+        classId: classId
+      });
+    }
+    socket.on(`update_request_list`, data => {
       setRequests(data);
-      if (!!notify) {
-        alertToast(notify);
-      }
+      setRoom(null);
     });
-    return () => socket.off();
-  }, [requests]);
+  }, [requests, classId]);
+
+  React.useEffect(() => {
+    socket.on(`notify`, notify => {
+      alertToast(notify);
+    });
+  }, []);
   React.useEffect(() => {
     if (user) {
       (async () => {
@@ -138,9 +145,13 @@ export default function Classroom(props) {
     }
   }, [user, headers]);
 
-  const updateRequest = async (id, data, notify) => {
+  const updateRequest = async (id, data, notify, mentor) => {
     try {
-      await Axios.patch(`/api/request/${id}`, { status: data }, headers);
+      await Axios.patch(
+        `/api/request/${id}`,
+        { status: data, mentor_id: mentor },
+        headers
+      );
       socket.emit("update_request", notify);
     } catch (err) {
       console.error(err);
@@ -173,14 +184,12 @@ export default function Classroom(props) {
       first_name={first_name}
       classId={props.classId}
     >
-      {console.log(requests)}
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
             <Tabs
               value={value}
               onChange={handleChange}
-              ma
               indicatorColor="primary"
               textColor="primary"
               variant="fullWidth"
@@ -208,8 +217,6 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
-                      requests={requests}
-                      setRequests={setRequests}
                     />
                   )
               )}
@@ -230,8 +237,6 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
-                      requests={requests}
-                      setRequests={setRequests}
                     />
                   )
               )}
@@ -254,8 +259,6 @@ export default function Classroom(props) {
                       user={userDetails}
                       socket={socket}
                       setRoom={setRoom}
-                      requests={requests}
-                      setRequests={setRequests}
                     />
                   )
               )}
@@ -274,7 +277,7 @@ export default function Classroom(props) {
                     <UserDetails id={id} headers={headers} action="img" />
                   </Grid>
                   <Grid item xs={9}>
-                    <Typography variant="h8">
+                    <Typography variant="h6">
                       {account_type_id === 2 ? "Mentor" : ""}{" "}
                       <UserDetails id={id} headers={headers} action="name" />
                     </Typography>
@@ -302,6 +305,7 @@ export default function Classroom(props) {
           user={userDetails}
           headers={headers}
           socket={socket}
+          requests={requests}
         />
       </Grid>
     </Layout>
@@ -318,9 +322,7 @@ const RequestComponent = ({
   classroomUser,
   user,
   socket,
-  setRoom,
-  requests,
-  setRequests
+  setRoom
 }) => {
   const [sender, setSender] = React.useState();
   React.useEffect(() => {
@@ -354,12 +356,14 @@ const RequestComponent = ({
       className={classes.needHelp}
       elevation={6}
     >
-      <Typography variant="h7" className={classes.studentsNeed}>
+      <Typography variant="h6" className={classes.studentsNeed}>
         <div
           style={{ padding: "8px 10px 0 0" }}
           onClick={() => {
-            if (classroomUser.id === data.student_id || account_type_id === 2) {
-              socket.emit(`join_chatroom`, { requestId: data.id, user: user });
+            if (
+              (classroomUser.id === data.student_id || account_type_id === 2) &&
+              data.status === null
+            ) {
               setRoom(data);
             }
           }}
@@ -410,7 +414,8 @@ const RequestComponent = ({
                     updateRequest(
                       data.id,
                       false,
-                      `Mentor ${user.first_name} accepted ${sender.first_name}'s request`
+                      `Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
+                      user.id
                     );
                   })
                 }

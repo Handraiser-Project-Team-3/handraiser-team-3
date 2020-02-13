@@ -227,6 +227,7 @@ export default function ButtonAppBar(props) {
                       setAccessToken("");
                       setUser({});
                       history.push("/");
+                      window.location.reload();
                       alertToast("Successfully logged out!");
                     }}
                     render={renderProps => (

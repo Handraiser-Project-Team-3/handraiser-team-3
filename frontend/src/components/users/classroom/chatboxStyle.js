@@ -33,8 +33,7 @@ export const useStyles = makeStyles(theme => ({
   },
   convoBox: {
     backgroundColor: "whitesmoke",
-    maxHeight: 500,
-    height: "50vh",
+    height: 500,
     overflow: "auto",
     margin: "10px 0 10px 0"
   },

@@ -1,5 +1,5 @@
 module.exports = {
-  requests: (socket, db, io) => {
+  websockets: (socket, db, io) => {
     let classroom = "";
 
     socket.on(`join_classroom`, ({ classId }) => {
@@ -10,11 +10,10 @@ module.exports = {
     });
 
     const newData = notify =>
-      db.student_request
-        .find({ class_id: classroom })
-        .then(data =>
-          io.to(`${classroom}`).emit(`update_request_list`, data, notify)
-        );
+      db.student_request.find({ class_id: classroom }).then(data => {
+        io.to(`${classroom}`).emit(`update_request_list`, data, notify);
+        socket.to(`${classroom}`).emit(`notify`, notify);
+      });
 
     socket.on(`add_request`, (data, user) => {
       db.student_request.insert(data, { deepInsert: true }).then(() => {
@@ -35,32 +34,24 @@ module.exports = {
     socket.on(`update_request`, notify =>
       notify ? newData(notify) : newData()
     );
-    socket.on(`joined_class`, ({ user }) => {
+
+    socket.on(`joined_class`, ({ user, className }) => {
       socket
         .to(`${classroom}`)
         .emit(
-          `new_student`,
-          `${user.first_name} ${user.last_name} joined to class`
+          `notify`,
+          `${user.first_name} ${user.last_name} joined to class ${className}`
         );
-    });
-  },
-  chat: (socket, db, io) => {
-    let chatroom = "";
-    socket.on(`join_chatroom`, ({ requestId, user }) => {
-      if (requestId) {
-        chatroom = requestId;
-        socket.join(`${chatroom}`);
-      }
     });
 
     socket.on(`add_message`, ({ message }) => {
       db.messages
         .insert(message, { deepInsert: true })
-        .then(() => console.log("success"));
-      io.to(`${chatroom}`).emit(`new_message`, message);
+        .then(() => io.to(`${classroom}`).emit(`new_message`, message));
     });
-    socket.on(`is_typing`, user => {
-      socket.to(`${chatroom}`).emit(`typing`, user);
+
+    socket.on(`is_typing`, (user, room) => {
+      socket.to(`${classroom}`).emit(`typing`, user, { data: room });
     });
   }
 };

@@ -83,7 +83,10 @@ export const JoinClassModal = props => {
           .then(() => {
             classEnter();
             user_details(user.id, headers).then(res =>
-              socket.emit(`joined_class`, { user: res.data })
+              socket.emit(`joined_class`, {
+                user: res.data,
+                className: className
+              })
             );
           })
           .catch(e => console.log(e));
@@ -105,9 +108,11 @@ export const JoinClassModal = props => {
     const [check, setCheck] = useState({});
 
     useEffect(() => {
-      setCheck(classroomUsers
-        .filter(x => x.user_id === user.id)
-        .filter(x => x.class_id === classId)[0]);
+      setCheck(
+        classroomUsers
+          .filter(x => x.user_id === user.id)
+          .filter(x => x.class_id === classId)[0]
+      );
     }, [check]);
 
     return (
@@ -121,18 +126,18 @@ export const JoinClassModal = props => {
             }}
           >
             Enter Class
-					</Button>
+          </Button>
         ) : (
-            <Button
-              size="small"
-              style={{ color: "white" }}
-              onClick={() => {
-                handleClickOpen();
-              }}
-            >
-              Join Class
-						</Button>
-          )}
+          <Button
+            size="small"
+            style={{ color: "white" }}
+            onClick={() => {
+              handleClickOpen();
+            }}
+          >
+            Join Class
+          </Button>
+        )}
       </>
     );
   };
@@ -161,7 +166,7 @@ export const JoinClassModal = props => {
             style={{ marginTop: "1vh" }}
           >
             Ask your teacher for the class code, then enter it here
-					</DialogContentText>
+          </DialogContentText>
         </DialogContent>
         <DialogContent>
           <form
@@ -186,10 +191,10 @@ export const JoinClassModal = props => {
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
-					</Button>
+          </Button>
           <Button color="primary" form={classId} type="submit">
             Join Class
-					</Button>
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

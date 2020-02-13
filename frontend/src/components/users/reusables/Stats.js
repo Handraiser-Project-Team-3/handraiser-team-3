@@ -33,7 +33,7 @@ export default function MentorsView(props) {
                       </Grid>
                       <Grid item>
                         <Typography variant="h3" style={{ color: "#ff6f61" }}>
-                          10
+                          {props.requests.filter(x => x.status === null).length}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -54,7 +54,10 @@ export default function MentorsView(props) {
                       </Grid>
                       <Grid item>
                         <Typography variant="h3" style={{ color: "#ff6f61" }}>
-                          10
+                          {
+                            props.requests.filter(x => x.status === false)
+                              .length
+                          }
                         </Typography>
                       </Grid>
                     </Grid>
@@ -75,7 +78,7 @@ export default function MentorsView(props) {
                       </Grid>
                       <Grid item>
                         <Typography variant="h3" style={{ color: "#ff6f61" }}>
-                          10
+                          {props.requests.filter(x => x.status === true).length}
                         </Typography>
                       </Grid>
                     </Grid>

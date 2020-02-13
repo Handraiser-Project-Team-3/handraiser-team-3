@@ -33,26 +33,31 @@ massive({
   io.on("connection", socket => {
     let userDetails = undefined;
     socket.on(`online`, user => {
-      userDetails = user;
-      console.log(
-        `${userDetails.first_name} is`,
-        "\x1b[32m",
-        `online`,
-        "\x1b[0m"
-      );
+      db.users.update({ id: user.id }, { user_status: true }).then(() => {
+        userDetails = user;
+        console.log(
+          `${userDetails.first_name} is`,
+          "\x1b[32m",
+          `online`,
+          "\x1b[0m"
+        );
+      });
     });
 
-    ws.requests(socket, db, io);
-    ws.chat(socket, db, io);
+    ws.websockets(socket, db, io);
 
     socket.on(`disconnect`, () => {
       if (userDetails !== undefined) {
-        console.log(
-          `${userDetails.first_name} is`,
-          "\x1b[31m",
-          `offline`,
-          "\x1b[0m"
-        );
+        db.users
+          .update({ id: userDetails.id }, { user_status: false })
+          .then(() => {
+            console.log(
+              `${userDetails.first_name} is`,
+              "\x1b[31m",
+              `offline`,
+              "\x1b[0m"
+            );
+          });
       }
     });
   });
