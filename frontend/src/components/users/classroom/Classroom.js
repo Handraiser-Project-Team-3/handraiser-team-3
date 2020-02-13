@@ -36,12 +36,12 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 // images
 import student from "../../assets/images/student.png";
 import mentor from "../../assets/images/mentor2.png";
-import { useStyles } from "./classroomStyle";
+import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
 import blackboard from "../../assets/images/blackboard.png";
 
 //WS
-import { UserDetails } from "../reusables/UserDetails";
+import { UserDetails, user_details } from "../reusables/UserDetails";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -74,16 +74,18 @@ const a11yProps = index => {
 };
 
 export default function Classroom(props) {
-  const classes = useStyles();
+  const classes = ClassroomStyle();
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, last_name, account_type_id } = userDetails;
+  const { first_name, last_name, account_type_id, id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [newRequest, addNewRequest] = React.useState("");
+  const [className, setClassName] = React.useState("");
   const [list, setList] = useState(false);
   const [requests, setRequests] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
+  const [name, setName] = React.useState([]);
   const history = useHistory();
   const match = useRouteMatch();
 
@@ -103,10 +105,14 @@ export default function Classroom(props) {
         );
         setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
       });
+
+      Axios.get(`/api/class/${props.classId}`, headers).then(res =>
+        setClassName(res.data.class_name)
+      );
     }
   }, [user, headers]);
 
-  // socketiod
+  // socketio
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
       classId: props.classId
@@ -333,14 +339,12 @@ export default function Classroom(props) {
                     <Avatar
                       className={classes.studentsAvatar}
                       alt="Student"
-                      src={account_type_id === 2 ? "" : student}
+                      src={account_type_id === 2 ? mentor : blackboard}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography variant="h6">
-                      {account_type_id === 2
-                        ? "Mentor"
-                        : first_name + " " + last_name}
+                      {className}
                       <UserDetails />
                     </Typography>
                   </Grid>

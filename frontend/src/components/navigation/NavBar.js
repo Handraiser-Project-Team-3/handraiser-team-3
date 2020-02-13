@@ -53,6 +53,13 @@ const useStyles = makeStyles(theme => ({
         "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
     }
+  },
+  enrolled: {
+    "&:hover": {
+      background:
+        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+      color: "whitesmoke"
+    }
   }
 }));
 
@@ -131,21 +138,28 @@ export default function ButtonAppBar(props) {
         }
         className={classes.root}
       >
-        <ListItem button>
-          <ListItemIcon>
-            <ClassIcon />
-          </ListItemIcon>
-          <ListItemText primary="Classes" onClick={handleClass} />
+        <ListItem button className={classes.nested}>
+          <ClassIcon />
+
+          <ListItemText
+            primary="Classes"
+            onClick={handleClass}
+            style={{ width: "20px", paddingLeft: "20px" }}
+          />
         </ListItem>
+
         <ListItem
           button
           onClick={handleClick}
           style={{ display: account_type_id === 3 ? "flex" : "none" }}
+          className={classes.enrolled}
         >
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Enrolled" />
+          <InboxIcon />
+
+          <ListItemText
+            primary="Enrolled"
+            style={{ width: "20px", paddingLeft: "20px" }}
+          />
           {show ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
@@ -234,6 +248,7 @@ export default function ButtonAppBar(props) {
                       setAccessToken("");
                       setUser({});
                       history.push("/");
+                      window.location.reload();
                       alertToast("Successfully logged out!");
                     }}
                     render={renderProps => (
@@ -249,7 +264,6 @@ export default function ButtonAppBar(props) {
           </Toolbar>
         </AppBar>
       </div>
-
       <MyComponent data={props.data} classId={classId} />
     </>
   );
