@@ -33,8 +33,8 @@ massive({
   io.on("connection", socket => {
     let userDetails = undefined;
     socket.on(`online`, user => {
-      db.users.update({ id: user.id }, { user_status: true }).then(() => {
-        userDetails = user;
+      db.users.update({ id: user.id }, { user_status: true }).then(user => {
+        userDetails = user[0];
         console.log(
           `${userDetails.first_name} is`,
           "\x1b[32m",
@@ -50,9 +50,9 @@ massive({
       if (userDetails !== undefined) {
         db.users
           .update({ id: userDetails.id }, { user_status: false })
-          .then(() => {
+          .then(signout => {
             console.log(
-              `${userDetails.first_name} is`,
+              `${signout[0].first_name} is`,
               "\x1b[31m",
               `offline`,
               "\x1b[0m"

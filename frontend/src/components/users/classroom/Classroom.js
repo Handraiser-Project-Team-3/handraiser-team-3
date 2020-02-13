@@ -7,7 +7,11 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import ListIcon from "@material-ui/icons/List";
+import CloseIcon from "@material-ui/icons/Close";
 import styled from "styled-components";
+import Avatar from "@material-ui/core/Avatar";
+import blackboard from "../../assets/images/blackboard.png";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -77,8 +81,10 @@ export default function Classroom(props) {
   const { first_name, account_type_id, id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
-  const [newRequest, addNewRequest] = React.useState("");
+  const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
+  const [newRequest, addNewRequest] = React.useState(null);
   const [room, setRoom] = React.useState(null);
+  const [list, setList] = useState(false);
   const [verify, setVerify] = React.useState([]);
   const history = useHistory();
   const match = useRouteMatch();
@@ -89,7 +95,7 @@ export default function Classroom(props) {
 
   // get classroom users
   React.useEffect(() => {
-    if (user && headers) {
+    if (user && headers && classId) {
       getClassroomUser(headers).then(res => {
         setVerify(
           res.data
@@ -98,14 +104,16 @@ export default function Classroom(props) {
             .map(String)
         );
         setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
+        setClassroomUsersArray(
+          res.data.filter(x => x.class_id === Number(classId))
+        );
       });
     }
-  }, [user, headers]);
+  }, [user, headers, classId]);
 
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
     if (user && headers) {
-      console.log(user);
       getClassroomUser(headers).then(res => {
         res.data &&
           setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
@@ -169,14 +177,14 @@ export default function Classroom(props) {
     }
   }, [verify, match.params.id]);
 
-  const handleSubmitNewRquest = e => {
-    e.preventDefault();
+  const handleSubmitNewRquest = () => {
     const obj = {
       class_id: props.classId,
       student_id: classroomUser.id,
       title: newRequest
     };
     socket.emit("add_request", obj, userDetails);
+    addNewRequest("");
   };
   return (
     <Layout
@@ -187,82 +195,148 @@ export default function Classroom(props) {
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <AppBar position="static" color="default" className={classes.appBar}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Need Help" {...a11yProps(0)} />
-              <Tab label="Being Helped" {...a11yProps(1)} />
-              <Tab label="Done" {...a11yProps(2)} />
-            </Tabs>
+            {!list ? (
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+              >
+                <Tab label="Need Help" {...a11yProps(0)} />
+                <Tab label="Being Helped" {...a11yProps(1)} />
+                <Tab label="Done" {...a11yProps(2)} />
+              </Tabs>
+            ) : (
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+                style={{ borderBottom: "2px solid #3f51b5" }}
+              >
+                <Grid item xs={11}>
+                  <Typography
+                    variant="h6"
+                    style={{ padding: "8px", paddingLeft: "20px" }}
+                  >
+                    List of Students
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <CloseIcon
+                    fontSize="small"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setList(false);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            )}
           </AppBar>
           <div className={classes.root}>
-            <TabPanel value={value} index={0}>
-              {requests.map(
-                x =>
-                  x.status === null && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"need"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                      setRoom={setRoom}
+            {list ? (
+              classroomUsersArray.map(x => (
+                <Grid
+                  key={x.id}
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justify="space-between"
+                  style={{ padding: "10px 40px 0px 40px" }}
+                >
+                  <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
+                    <Tooltip title="View Profile">
+                      <UserDetails
+                        id={x.user_id}
+                        headers={headers}
+                        action="img"
+                      />
+                    </Tooltip>
+                  </Grid>
+                  <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
+                    <Chip
+                      variant="outlined"
+                      size="medium"
+                      label={
+                        <UserDetails
+                          id={x.user_id}
+                          headers={headers}
+                          action="name"
+                        />
+                      }
+                      style={{ color: "#616161", fontSize: "16px" }}
                     />
-                  )
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              {requests.map(
-                x =>
-                  x.status === false && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"help"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                      setRoom={setRoom}
-                    />
-                  )
-              )}
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              {requests.map(
-                x =>
-                  x.status === true &&
-                  (classroomUser.id === x.student_id ||
-                    account_type_id === 2) && (
-                    <RequestComponent
-                      key={x.id}
-                      data={x}
-                      updateRequest={updateRequest}
-                      classes={classes}
-                      action={"done"}
-                      account_type_id={account_type_id}
-                      headers={headers}
-                      classroomUser={classroomUser}
-                      user={userDetails}
-                      socket={socket}
-                      setRoom={setRoom}
-                    />
-                  )
-              )}
-            </TabPanel>
+                  </Grid>
+                </Grid>
+              ))
+            ) : (
+              <>
+                <TabPanel value={value} index={0}>
+                  {requests.map(
+                    x =>
+                      x.status === null && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"need"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                          setRoom={setRoom}
+                        />
+                      )
+                  )}
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  {requests.map(
+                    x =>
+                      x.status === false && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"help"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                          setRoom={setRoom}
+                        />
+                      )
+                  )}
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  {requests.map(
+                    x =>
+                      x.status === true &&
+                      (classroomUser.id === x.student_id ||
+                        account_type_id === 2) && (
+                        <RequestComponent
+                          key={x.id}
+                          data={x}
+                          updateRequest={updateRequest}
+                          classes={classes}
+                          action={"done"}
+                          account_type_id={account_type_id}
+                          headers={headers}
+                          classroomUser={classroomUser}
+                          user={userDetails}
+                          socket={socket}
+                          setRoom={setRoom}
+                        />
+                      )
+                  )}
+                </TabPanel>
+              </>
+            )}
           </div>
           <div className={classes.divStyle}>
             <Grid
@@ -272,28 +346,45 @@ export default function Classroom(props) {
               style={{ padding: "15px" }}
             >
               <Grid item>
-                <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={3}>
-                    <UserDetails id={id} headers={headers} action="img" />
+                <Grid container spacing={5} alignItems="center">
+                  <Grid item xs={4}>
+                    <Avatar src={account_type_id === 2 ? "" : blackboard} />
                   </Grid>
-                  <Grid item xs={9}>
+                  <Grid item xs={8}>
                     <Typography variant="h6">
-                      {account_type_id === 2 ? "Mentor" : ""}{" "}
-                      <UserDetails id={id} headers={headers} action="name" />
+                      <UserDetails />
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item>
                 {account_type_id === 2 ? (
-                  <></>
+                  <Tooltip title="Click to view list of Students">
+                    <ListIcon
+                      style={{ color: "gray", cursor: "pointer" }}
+                      onClick={() => setList(!list)}
+                    />
+                  </Tooltip>
                 ) : (
                   <>
-                    <ClassroomModal
-                      addNewRequest={addNewRequest}
-                      handleSubmitNewRquest={handleSubmitNewRquest}
-                      newRequest={newRequest}
-                    />
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <Tooltip title="Click to view list of Students">
+                          <ListIcon
+                            style={{ color: "gray", cursor: "pointer" }}
+                            onClick={() => setList(!list)}
+                          />
+                        </Tooltip>
+                      </Grid>
+
+                      <Grid item>
+                        <ClassroomModal
+                          addNewRequest={addNewRequest}
+                          handleSubmitNewRquest={handleSubmitNewRquest}
+                          newRequest={newRequest}
+                        />
+                      </Grid>
+                    </Grid>
                   </>
                 )}
               </Grid>

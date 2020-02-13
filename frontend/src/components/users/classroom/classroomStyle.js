@@ -16,9 +16,9 @@ export const useStyles = makeStyles(theme => ({
     background:
       "linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
     border: "1px solid lightgray",
-    height: "65vh",
+    height: 642,
     overflow: "auto",
-    padding: "0"
+    padding: "10px 0 0 0"
   },
   needHelp: {
     padding: "15px",
@@ -41,7 +41,6 @@ export const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "auto",
     background: "#eff1fa",
-    marginTop: "0.5vh",
     border: "1px solid lightgray",
     borderRadius: "5px"
   }

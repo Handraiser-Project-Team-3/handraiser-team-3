@@ -40,7 +40,7 @@ export default function(props) {
   const [open, setOpen] = React.useState(false);
   const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
 
-  const { register, errors, setError } = useForm();
+  const { register, errors, setError, handleSubmit } = useForm();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,10 +69,7 @@ export default function(props) {
           className={classes.root}
           noValidate
           autoComplete="off"
-          onSubmit={e => {
-            handleSubmitNewRquest(e);
-            handleClose();
-          }}
+          onSubmit={handleSubmit(handleSubmitNewRquest)}
         >
           <DialogTitle
             id="form-dialog-title"
@@ -83,7 +80,7 @@ export default function(props) {
           <DialogContent>
             <TextField
               autoFocus
-              error={!errors.username}
+              error={!!errors.request}
               variant="outlined"
               margin="normal"
               label="Request"
@@ -91,7 +88,7 @@ export default function(props) {
               fullWidth
               value={newRequest}
               onChange={e => {
-                if (e.target.value.length === 30) {
+                if (e.target.value.length >= 30) {
                   return setError(
                     e.target.name,
                     "notMatch",
@@ -100,8 +97,8 @@ export default function(props) {
                 }
                 addNewRequest(e.target.value);
               }}
-              inputRef={register({ required: true })}
-              helperText={errors.username && errors.username.message}
+              inputRef={register({ required: "Title is required" })}
+              helperText={errors.request && errors.request.message}
             />
           </DialogContent>
 
