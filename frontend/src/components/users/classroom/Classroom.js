@@ -40,7 +40,7 @@ import { toast } from "react-toastify";
 import blackboard from "../../assets/images/blackboard.png";
 
 //WS
-import { UserDetails } from "../reusables/UserDetails";
+import { UserDetails, user_details } from "../reusables/UserDetails";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -76,7 +76,7 @@ export default function Classroom(props) {
 	const classes = ClassroomStyle();
 	const { headers, user, socket } = props.data;
 	const userDetails = user ? user : {};
-	const { first_name, last_name, account_type_id } = userDetails;
+	const { first_name, last_name, account_type_id, id } = userDetails;
 	const [value, setValue] = React.useState(0);
 	const [classroomUser, setClassroomUser] = React.useState({});
 	const [newRequest, addNewRequest] = React.useState("");
@@ -84,6 +84,7 @@ export default function Classroom(props) {
 	const [list, setList] = useState(false);
 	const [requests, setRequests] = React.useState([]);
 	const [verify, setVerify] = React.useState([]);
+	const [name, setName] = React.useState([]);
 	const history = useHistory();
 	const match = useRouteMatch();
 
@@ -103,6 +104,10 @@ export default function Classroom(props) {
 				);
 				setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
 			});
+
+			Axios.get(`/api/class/${props.classId}`, headers).then(res =>
+				setClassName(res.data.class_name)
+			);
 		}
 	}, [user, headers]);
 
@@ -128,10 +133,6 @@ export default function Classroom(props) {
 				alertToast(notify);
 			}
 		});
-
-		Axios.get(`/api/class/${props.classId}`, headers).then(res =>
-			setClassName(res.data.class_name)
-		);
 	}, []);
 
 	// routes restriction
@@ -330,21 +331,12 @@ export default function Classroom(props) {
 							style={{ padding: "15px" }}
 						>
 							<Grid item>
-								<Grid container spacing={5} alignItems="center">
-									<Grid item xs={4}>
-										<Avatar
-											className={classes.studentsAvatar}
-											alt="Student"
-											src={account_type_id === 2 ? mentor : blackboard}
-										/>
-									</Grid>
-									<Grid item xs={8}>
-										<Typography variant="h6">
-											{className}
-											<UserDetails />
-										</Typography>
-									</Grid>
-								</Grid>
+								<Tooltip title="sadfads">
+									<Typography variant="h5">
+										{className}
+										<UserDetails />
+									</Typography>
+								</Tooltip>
 							</Grid>
 							<Grid item>
 								{account_type_id === 2 ? (

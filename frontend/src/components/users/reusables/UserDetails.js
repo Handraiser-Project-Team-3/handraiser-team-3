@@ -43,7 +43,7 @@ export const UserDetails = ({ id, headers, action, profile }) => {
 				style={
 					profile
 						? {
-								width: "100px",
+								width: "150px",
 								borderRadius: "50%",
 								marginTop: "20px",
 								border: "5px solid #aaaafa",
@@ -62,8 +62,8 @@ export const UserDetails = ({ id, headers, action, profile }) => {
 				alt="avatar"
 				src={student}
 				style={{
-					width: "100px",
-					height: "100px",
+					width: "150px",
+					height: "150px",
 					marginTop: "20px",
 					border: "5px solid #aaaafa",
 					padding: "5px"

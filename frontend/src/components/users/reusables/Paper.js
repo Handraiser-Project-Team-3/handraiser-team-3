@@ -12,7 +12,7 @@ import axios from "axios";
 const useStyles = makeStyles({
 	total: {
 		width: "100%",
-		height: "20vh",
+		height: "20.5vh",
 		marginBottom: "2vh",
 		background:
 			"linear-gradient(207deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 63%, rgba(255,255,255,1) 63%)"
@@ -20,7 +20,15 @@ const useStyles = makeStyles({
 	imgStyle: {
 		width: "70%",
 		height: "auto",
-		marginTop: "3vh"
+		marginTop: "3vh",
+		borderRadius: "50%",
+		background: "white",
+		padding: "10px",
+		border: "solid 5px #aaaafa",
+		transition: "border-width 0.3s linear",
+		"&:hover": {
+			borderWidth: "10px"
+		}
 	},
 	label: {
 		marginTop: "1vh",
@@ -34,6 +42,8 @@ const useStyles = makeStyles({
 export const PaperStat = props => {
 	const classes = useStyles();
 	const { headers, users, setUsers } = props;
+	const [show, setShow] = React.useState(true);
+
 	useEffect(() => {
 		headers &&
 			axios.get("/api/user/list", headers).then(res => {
@@ -41,78 +51,148 @@ export const PaperStat = props => {
 			});
 	}, [headers]);
 
+	const handleCLick = () => {
+		setShow(false);
+	};
+
 	return (
 		<>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-						<img src={both} className={classes.imgStyle} alt="all" />
-					</Grid>
-					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-						<Grid container direction="column" justify="center">
-							<Grid item xs={12}>
-								<Typography variant="h6" className={classes.label}>
-									All
-								</Typography>
-							</Grid>
-							<Grid item xs={12}>
-								<Typography
-									variant="h3"
-									style={{ fontWeight: "bold", color: "#fadc60" }}
-								>
-									{users.filter(user => user.account_type_id !== 1).length}
-								</Typography>
-							</Grid>
+					{show ? (
+						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+							<img
+								src={both}
+								className={classes.imgStyle}
+								alt="all"
+								onClick={() => {
+									handleCLick();
+								}}
+							/>
 						</Grid>
-					</Grid>
+					) : (
+						<>
+							<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+								<img
+									src={teacher}
+									className={classes.imgStyle}
+									alt="mentor"
+									onClick={() => {
+										setShow(true);
+									}}
+								/>
+							</Grid>
+							<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+								<Grid container direction="column" justify="center">
+									<Grid item xs={12}>
+										<Typography variant="h6" className={classes.label}>
+											All
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography
+											variant="h3"
+											style={{ fontWeight: "bold", color: "#fadc60" }}
+										>
+											{users.filter(user => user.account_type_id !== 1).length}
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+						</>
+					)}
 				</Grid>
 			</Paper>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-						<img src={teacher} className={classes.imgStyle} alt="mentor" />
-					</Grid>
-					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-						<Grid container direction="column" justify="center">
-							<Grid item xs={12}>
-								<Typography variant="h6" className={classes.label}>
-									Mentors
-								</Typography>
-							</Grid>
-							<Grid item xs={12}>
-								<Typography
-									variant="h3"
-									style={{ fontWeight: "bold", color: "#fadc60" }}
-								>
-									{users.filter(user => user.account_type_id === 2).length}
-								</Typography>
-							</Grid>
+					{show ? (
+						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+							<img
+								src={teacher}
+								className={classes.imgStyle}
+								alt="all"
+								onClick={() => {
+									handleCLick();
+								}}
+							/>
 						</Grid>
-					</Grid>
+					) : (
+						<>
+							<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+								<img
+									src={teacher}
+									className={classes.imgStyle}
+									alt="mentor"
+									onClick={() => {
+										setShow(true);
+									}}
+								/>
+							</Grid>
+							<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+								<Grid container direction="column" justify="center">
+									<Grid item xs={12}>
+										<Typography variant="h6" className={classes.label}>
+											All
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography
+											variant="h3"
+											style={{ fontWeight: "bold", color: "#fadc60" }}
+										>
+											{users.filter(user => user.account_type_id === 2).length}
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+						</>
+					)}
 				</Grid>
 			</Paper>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-						<img src={student} className={classes.imgStyle} alt="student" />
-					</Grid>
-					<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-						<Grid container direction="column" justify="center">
-							<Grid item xs={12}>
-								<Typography variant="h6" className={classes.label}>
-									Students
-								</Typography>
-							</Grid>
-							<Grid item xs={12}>
-								<Typography
-									variant="h3"
-									style={{ fontWeight: "bold", color: "#fadc60" }}
-								>
-									{users.filter(user => user.account_type_id === 3).length}
-								</Typography>
-							</Grid>
+					{show ? (
+						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+							<img
+								src={student}
+								className={classes.imgStyle}
+								alt="all"
+								onClick={() => {
+									handleCLick();
+								}}
+							/>
 						</Grid>
-					</Grid>
+					) : (
+						<>
+							<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+								<img
+									src={student}
+									className={classes.imgStyle}
+									alt="student"
+									onClick={() => {
+										setShow(true);
+									}}
+								/>
+							</Grid>
+							<Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+								<Grid container direction="column" justify="center">
+									<Grid item xs={12}>
+										<Typography variant="h6" className={classes.label}>
+											All
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography
+											variant="h3"
+											style={{ fontWeight: "bold", color: "#fadc60" }}
+										>
+											{users.filter(user => user.account_type_id === 3).length}
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+						</>
+					)}
 				</Grid>
 			</Paper>
 		</>

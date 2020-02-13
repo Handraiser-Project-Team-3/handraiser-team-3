@@ -23,7 +23,7 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
-import Pagination from "./Pagination";
+import Pagination from "../reusables/Pagination";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
@@ -164,12 +164,12 @@ const [state, setState] = React.useState({
     // eslint-disable-next-line
   }, [account_type_id]);
 
-  // Get current Post
+  // Get current classlist
   const indexOfLastList = currentPage * postPerPage;
   const indexOfFirstList = indexOfLastList - postPerPage;
   const currentList = classList.slice(indexOfFirstList, indexOfLastList);
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Layout first_name={first_name}>
@@ -182,7 +182,7 @@ const [state, setState] = React.useState({
         setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
-        {classList.length !== 0 ? (
+        {classList.length ? (
           currentList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
@@ -371,7 +371,6 @@ const [state, setState] = React.useState({
                               direction="row"
                               alignItems="center"
                               justify="space-between"
-                              // spacing={5}
                             >
                               <Grid item xs={3}>
                                 <UserDetails
@@ -504,6 +503,6 @@ const [state, setState] = React.useState({
         totalPost={classList.length}
         paginate={paginate}
       />
-    </Layout >
+    </Layout>
   );
 };

@@ -17,6 +17,7 @@ export default function HandleUsers(props) {
 
   function handleMentor() {
     // SET MENTOR
+
     if (handle === "set") {
       axios
         .patch(
@@ -55,6 +56,7 @@ export default function HandleUsers(props) {
         );
     }
   }
+
   return (
     <div>
       <Dialog
