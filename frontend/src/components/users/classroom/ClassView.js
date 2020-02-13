@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -13,6 +13,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 // component/s
 import { HandleClassModal } from "./HandleClassModal";
@@ -27,6 +30,40 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+
+const AntSwitch = withStyles(theme => ({
+  root: {
+    width: 28,
+    height: 16,
+    padding: 0,
+    display: 'flex',
+  },
+  switchBase: {
+    padding: 2,
+    color: theme.palette.grey[500],
+    '&$checked': {
+      transform: 'translateX(12px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        opacity: 1,
+        backgroundColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  },
+  thumb: {
+    width: 12,
+    height: 12,
+    boxShadow: 'none',
+  },
+  track: {
+    border: `1px solid ${theme.palette.grey[500]}`,
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: theme.palette.common.white,
+  },
+  checked: {},
+}))(Switch);
 
 export const ClassView = props => {
   const classes = useStyles();
@@ -46,6 +83,16 @@ export const ClassView = props => {
     class_description: ""
   });
   const [promise, setPromise] = useState([]);
+
+const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+    checkedC: true,
+  });
+
+  const handleChange = name => event => {
+    setState({ ...state, [name]: event.target.checked });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -124,7 +171,7 @@ export const ClassView = props => {
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
-                <Card className={classes.card}>
+                <Card>
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
@@ -229,14 +276,16 @@ export const ClassView = props => {
                                 </Tooltip>
                               </Grid>
                             </Grid>
+                            
                             <Grid item xs={6}>
                               <Grid
                                 container
                                 direction="row"
                                 alignItems="center"
                                 justify="space-between"
+                                spacing={3}
                               >
-                                <Grid item lg={2} xs={2}>
+                                <Grid item xs={3}>
                                   <img
                                     src={key}
                                     alt="class-code"
@@ -244,7 +293,7 @@ export const ClassView = props => {
                                   />
                                 </Grid>
 
-                                <Grid item lg={10} xs={10}>
+                                <Grid item xs={9}>
                                   <Grid
                                     container
                                     direction="column"
@@ -329,7 +378,7 @@ export const ClassView = props => {
                         alignItems="center"
                         justify="space-between"
                       >
-                        <Grid item lg={10} md={10} sm={9} xs={9}>
+                        <Grid item lg={9} md={10} sm={9} xs={9}>
                           <Button
                             onClick={() =>
                               history.push(`/classroom/${data.id}`)
@@ -343,6 +392,13 @@ export const ClassView = props => {
                             delete
                           </Button> */}
                         </Grid>
+                        {/* <Grid item lg={2}>
+                          <AntSwitch
+                            checked={state.checkedC}
+                            onChange={handleChange('checkedC')}
+                            value="checkedC"
+                          />
+                         </Grid> */}
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">
                             <Tooltip title="Edit Class">
@@ -447,9 +503,6 @@ const useStyles = makeStyles(theme => ({
     textDecoration: "underline",
     textDecorationColor: "lightgray",
     textUnderlinePosition: "under"
-  },
-  card: {
-    maxWidth: 345
   },
   media: {
     height: 140,
