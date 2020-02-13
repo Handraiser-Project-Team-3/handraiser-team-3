@@ -9,7 +9,7 @@ const Pagination = ({ postPerPage, totalPost, paginate }) => {
 
     return (
         <nav>
-            <ul className="pagination justify-content-end mt-3">
+            <ul className="pagination justify-content-end">
                 {pageNumbers.map(num => (
                     <li key={num} className={"page-item"}>
                         <a onClick={() => paginate(num)} href="#" className="page-link">
