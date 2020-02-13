@@ -24,6 +24,7 @@ import Paper from "@material-ui/core/Paper";
 
 // images
 import { UserDetails, class_details } from "./UserDetails";
+import CountUsers from "./CountUsers";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -68,7 +69,7 @@ export default function Profile(props) {
     headers
   } = props;
   const [expanded, setExpanded] = useState(false);
-  const [classUsers, setClassUsers] = useState([]);
+  const [classroomUsers, setClassroomUsers] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentClass, setStudentClass] = useState([]);
   const [profile, setProfile] = useState(true);
@@ -92,7 +93,7 @@ export default function Profile(props) {
     axios
       .get(`/api/classroom-users/`, headers)
       .then(res => {
-        setClassUsers(res.data);
+        setClassroomUsers(res.data);
         Promise.all(
           res.data
             .filter(res => {
@@ -114,6 +115,8 @@ export default function Profile(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log(classList);
   return (
     <>
       <Chip
@@ -305,10 +308,11 @@ export default function Profile(props) {
                                               action="name"
                                             />
                                           ) : (
-                                            classUsers &&
-                                            classUsers.filter(res => {
-                                              return res.class_id === row.id;
-                                            }).length
+                                            <CountUsers
+                                              classId={row.id}
+                                              classroomUsers={classroomUsers}
+                                              headers={headers}
+                                            />
                                           )
                                         }
                                         clickable

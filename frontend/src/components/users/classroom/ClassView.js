@@ -21,6 +21,7 @@ import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
 import Pagination from "../reusables/Pagination";
+import CountUsers from "../reusables/CountUsers";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
@@ -61,11 +62,18 @@ export const ClassView = props => {
         })
         .map(res =>
           user_details(res.user_id, headers).then(res => {
-            return res.data.first_name + " " + res.data.last_name;
+            return (
+              res.data.account_type_id === 3 &&
+              res.data.first_name + " " + res.data.last_name
+            );
           })
         )
     ).then(response => {
-      setStudentDetails(response);
+      setStudentDetails(
+        response.filter(res => {
+          return res !== false;
+        })
+      );
     });
   };
   // const deleteClass = classid => {
@@ -122,7 +130,6 @@ export const ClassView = props => {
   const indexOfFirstList = indexOfLastList - postPerPage;
   const currentList = classList.slice(indexOfFirstList, indexOfLastList);
   // Change page
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Layout first_name={first_name}>
@@ -158,8 +165,8 @@ export const ClassView = props => {
                               {data.class_description.substring(0)}
                             </Typography>
                           ) : (
-                              ""
-                            )
+                            ""
+                          )
                         }
                       >
                         <Typography
@@ -204,15 +211,15 @@ export const ClassView = props => {
                                 <Tooltip
                                   onOpen={() => onOpenTip(data.id)}
                                   title={
-                                    studentDetails.length !== 0
-                                      ? studentDetails.map(res => (
-                                        <Typography
-                                          style={{ fontSize: 12 }}
-                                          key={res.id}
-                                        >
-                                          {res}
-                                        </Typography>
-                                      ))
+                                    studentDetails.length
+                                      ? studentDetails.map((res, i) => (
+                                          <Typography
+                                            style={{ fontSize: 12 }}
+                                            key={i}
+                                          >
+                                            {res}
+                                          </Typography>
+                                        ))
                                       : ""
                                   }
                                 >
@@ -234,10 +241,11 @@ export const ClassView = props => {
                                       </Grid>
                                       <Grid item lg={12} xs={12}>
                                         <b>
-                                          {classroomUsers &&
-                                            classroomUsers.filter(res => {
-                                              return res.class_id === data.id;
-                                            }).length}
+                                          <CountUsers
+                                            classId={data.id}
+                                            classroomUsers={classroomUsers}
+                                            headers={headers}
+                                          />
                                         </b>
                                       </Grid>
                                     </Grid>
@@ -291,49 +299,49 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                            <Grid
-                              container
-                              direction="row"
-                              alignItems="center"
-                              justify="space-between"
-                            >
-                              <Grid item lg={2} xs={2}>
-                                <UserDetails
-                                  id={data.user_id}
-                                  headers={headers}
-                                  action="img"
-                                />
-                              </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item lg={2} xs={2}>
+                              <UserDetails
+                                id={data.user_id}
+                                headers={headers}
+                                action="img"
+                              />
+                            </Grid>
 
-                              <Grid item lg={10} xs={10}>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="flex-start"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={12} xs={12}>
-                                    <Typography
-                                      gutterBottom
-                                      component="div"
-                                      variant="caption"
-                                    >
-                                      Mentor's Name:
+                            <Grid item lg={10} xs={10}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Mentor's Name:
                                   </Typography>
-                                  </Grid>
-                                  <Grid item lg={12} xs={12}>
-                                    <b>
-                                      <UserDetails
-                                        id={data.user_id}
-                                        headers={headers}
-                                        action="name"
-                                      />
-                                    </b>
-                                  </Grid>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>
+                                    <UserDetails
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
+                                  </b>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          )}
+                          </Grid>
+                        )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -381,39 +389,39 @@ export const ClassView = props => {
                         </Grid>
                       </Grid>
                     ) : (
-                        <Grid container direction="column" alignItems="center">
-                          <JoinClassModal
-                            classroomUsers={classroomUsers}
-                            classId={data.id}
-                            className={data.class_name}
-                            codeClass={data.class_code}
-                            user={user}
-                            headers={headers}
-                          />
-                        </Grid>
-                      )}
+                      <Grid container direction="column" alignItems="center">
+                        <JoinClassModal
+                          classroomUsers={classroomUsers}
+                          classId={data.id}
+                          className={data.class_name}
+                          codeClass={data.class_code}
+                          user={user}
+                          headers={headers}
+                        />
+                      </Grid>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>
             ))
         ) : (
-            <div className={classes.margin}>
-              <span className={classes.noClasses}>No added classes yet</span>
-              <div className="spinner">
-                <div className="bounce1"></div>
-                <div className="bounce2"></div>
-                <div className="bounce3"></div>
-              </div>
+          <div className={classes.margin}>
+            <span className={classes.noClasses}>No added classes yet</span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
             </div>
-          )}
-      </Grid >
+          </div>
+        )}
+      </Grid>
       <Pagination
         user={user}
         userDetails={userDetails}
         headers={headers}
         postPerPage={postPerPage}
         totalPost={classList.length}
-        paginate={paginate}
+        setCurrentPage={setCurrentPage}
       />
       <HandleClassModal
         open={open}

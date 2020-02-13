@@ -148,11 +148,7 @@ export const Admin = props => {
     setOpen(true);
     setHandle("remove");
   };
-  console.log(
-    userType === 3
-      ? users.filter(res => res.account_type_id === 3)
-      : users.filter(res => res.account_type_id === 2)
-  );
+
   return (
     <Layout
       accountType={accountType}
