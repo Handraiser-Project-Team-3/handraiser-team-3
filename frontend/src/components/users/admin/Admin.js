@@ -109,7 +109,8 @@ export const Admin = props => {
   const [details, setDetails] = useState({});
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(9);
+  const [filter, setFilter] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -123,6 +124,7 @@ export const Admin = props => {
   useEffect(() => {
     axios.get("/api/user/list", headers).then(res => {
       setUsers(res.data);
+      setFilter(res.data);
     });
     // eslint-disable-next-line
   }, []);
@@ -146,7 +148,11 @@ export const Admin = props => {
     setOpen(true);
     setHandle("remove");
   };
-
+  console.log(
+    userType === 3
+      ? users.filter(res => res.account_type_id === 3)
+      : users.filter(res => res.account_type_id === 2)
+  );
   return (
     <Layout
       accountType={accountType}
@@ -180,7 +186,11 @@ export const Admin = props => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sm={11} md={4} lg={3} xl={3}>
-                    <Search />
+                    <Search
+                      filter={filter}
+                      setUsers={setUsers}
+                      typeId={account_type_id}
+                    />
                   </Grid>
                 </Grid>
               </Paper>
@@ -214,101 +224,123 @@ export const Admin = props => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {users.map(
-                      row =>
-                        row.account_type_id === userType && (
-                          <StyledTableRow key={row.id}>
-                            <StyledTableCell component="th" scope="row">
-                              <Profile
-                                email={row.email}
-                                account_type_id={row.account_type_id}
-                                first_name={row.first_name}
-                                last_name={row.last_name}
-                                userId={row.id}
-                                headers={headers}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell
-                              component="th"
-                              scope="row"
-                              align="center"
-                            >
-                              <Chip
-                                variant="outlined"
-                                size="medium"
-                                label={userType === 3 ? "Student" : "Mentor"}
-                                style={
-                                  userType === 3
-                                    ? {
-                                        borderColor: "#aaaafa",
-                                        color: "#616161"
-                                      }
-                                    : {
-                                        borderColor: "#f7b733",
-                                        color: "#616161"
-                                      }
-                                }
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="right">
-                              {row.account_type_id === 3 && (
-                                <>
+                    {users.length ? (
+                      (userType === 3
+                        ? users.filter(res => res.account_type_id === 3)
+                        : users.filter(res => res.account_type_id === 2)
+                      )
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map(
+                          row =>
+                            row.account_type_id === userType && (
+                              <StyledTableRow key={row.id}>
+                                <StyledTableCell component="th" scope="row">
+                                  <Profile
+                                    email={row.email}
+                                    account_type_id={row.account_type_id}
+                                    first_name={row.first_name}
+                                    last_name={row.last_name}
+                                    userId={row.id}
+                                    headers={headers}
+                                  />
+                                </StyledTableCell>
+                                <StyledTableCell
+                                  component="th"
+                                  scope="row"
+                                  align="center"
+                                >
                                   <Chip
                                     variant="outlined"
                                     size="medium"
-                                    avatar={
-                                      <Avatar
-                                        style={{
-                                          background: "#aaaafa",
-                                          color: "white"
-                                        }}
-                                      >
-                                        <FaceIcon />
-                                      </Avatar>
+                                    label={
+                                      userType === 3 ? "Student" : "Mentor"
                                     }
-                                    label="Set as Mentor"
-                                    onClick={() => {
-                                      setDetails(row);
-                                      setOpen(true);
-                                      setHandle("set");
-                                    }}
-                                    style={{
-                                      borderColor: "#aaaafa",
-                                      color: "#616161"
-                                    }}
+                                    style={
+                                      userType === 3
+                                        ? {
+                                            borderColor: "#aaaafa",
+                                            color: "#616161"
+                                          }
+                                        : {
+                                            borderColor: "#f7b733",
+                                            color: "#616161"
+                                          }
+                                    }
                                   />
-                                  {/* <div onClick={() => deleteClass(row.id)}>
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  {row.account_type_id === 3 && (
+                                    <>
+                                      <Chip
+                                        variant="outlined"
+                                        size="medium"
+                                        avatar={
+                                          <Avatar
+                                            style={{
+                                              background: "#aaaafa",
+                                              color: "white"
+                                            }}
+                                          >
+                                            <FaceIcon />
+                                          </Avatar>
+                                        }
+                                        label="Set as Mentor"
+                                        onClick={() => {
+                                          setDetails(row);
+                                          setOpen(true);
+                                          setHandle("set");
+                                        }}
+                                        style={{
+                                          borderColor: "#aaaafa",
+                                          color: "#616161"
+                                        }}
+                                      />
+                                      {/* <div onClick={() => deleteClass(row.id)}>
                                 delete
                               </div> */}
-                                </>
-                              )}
-                              {row.account_type_id === 2 && (
-                                <>
-                                  {/* <MentorDetails /> */}
-                                  <Chip
-                                    variant="outlined"
-                                    size="medium"
-                                    label="Remove as Mentor"
-                                    onDelete={() => handleDelete(row)}
-                                    style={{
-                                      borderColor: "#ff6f61ff",
-                                      color: "#ff6f61ff"
-                                    }}
-                                  />
-                                </>
-                              )}
-                            </StyledTableCell>
-                            <TableCell style={{ width: "20px" }}></TableCell>
-                          </StyledTableRow>
+                                    </>
+                                  )}
+                                  {row.account_type_id === 2 && (
+                                    <>
+                                      {/* <MentorDetails /> */}
+                                      <Chip
+                                        variant="outlined"
+                                        size="medium"
+                                        label="Remove as Mentor"
+                                        onDelete={() => handleDelete(row)}
+                                        style={{
+                                          borderColor: "#ff6f61ff",
+                                          color: "#ff6f61ff"
+                                        }}
+                                      />
+                                    </>
+                                  )}
+                                </StyledTableCell>
+                                <TableCell
+                                  style={{ width: "20px" }}
+                                ></TableCell>
+                              </StyledTableRow>
+                            )
                         )
+                    ) : (
+                      <TableRow>
+                        <td>no results found</td>
+                      </TableRow>
                     )}
                   </TableBody>
                 </Table>
               </TableContainer>
               <TablePagination
-                rowsPerPageOptions={[10]}
+                rowsPerPageOptions={[0]}
                 component="div"
-                count={users.length}
+                count={
+                  userType === 3
+                    ? users.filter(res => res.account_type_id === 3).length
+                    : users.filter(res => res.account_type_id === 2).length
+                }
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}

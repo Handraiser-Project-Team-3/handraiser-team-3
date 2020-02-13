@@ -76,6 +76,7 @@ export const HandleClassModal = props => {
 
   const handleClass = e => {
     e.preventDefault();
+
     if (action === "Add") {
       axios
         .post(
@@ -98,16 +99,7 @@ export const HandleClassModal = props => {
             class_name: "",
             class_description: ""
           });
-
-          let data = {
-            user_id: userId,
-            class_id: res.data.id
-          };
-
-          axios
-            .post(`/api/classroom-users/`, data, headers)
-            .then(() => alertToast("Successfully Added a New Class!"))
-            .catch(err => console.error(err));
+          alertToast("Successfully Added a New Class!");
         });
     } else {
       axios

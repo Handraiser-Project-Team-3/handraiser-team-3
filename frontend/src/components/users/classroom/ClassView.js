@@ -122,7 +122,7 @@ export const ClassView = props => {
   const indexOfFirstList = indexOfLastList - postPerPage;
   const currentList = classList.slice(indexOfFirstList, indexOfLastList);
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Layout first_name={first_name}>
@@ -135,7 +135,7 @@ export const ClassView = props => {
         setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
-        {classList.length !== 0 ? (
+        {classList.length ? (
           currentList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
@@ -394,7 +394,7 @@ export const ClassView = props => {
                       )}
                   </CardActions>
                 </Card>
-              </Grid >
+              </Grid>
             ))
         ) : (
             <div className={classes.margin}>
@@ -427,6 +427,6 @@ export const ClassView = props => {
         setClassList={setClassList}
         classList={classList}
       />
-    </Layout >
+    </Layout>
   );
 };
