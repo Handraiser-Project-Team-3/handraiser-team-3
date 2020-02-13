@@ -20,6 +20,7 @@ import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails } from "../reusables/UserDetails";
+import Pagination from "./Pagination";
 
 // images
 import head from "../../assets/images/bg.jpg";
@@ -45,6 +46,8 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage] = useState(8);
   const [promise, setPromise] = useState([]);
 
   const handleClickOpen = () => {
@@ -106,7 +109,13 @@ export const ClassView = props => {
 
     // eslint-disable-next-line
   }, [account_type_id]);
-  
+
+  // Get current Post
+  const indexOfLastList = currentPage * postPerPage;
+  const indexOfFirstList = indexOfLastList - postPerPage;
+  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Layout first_name={first_name}>
@@ -118,9 +127,14 @@ export const ClassView = props => {
         filter={filter}
         setClassList={setClassList}
       />
+      <Pagination
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        paginate={paginate}
+      />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length !== 0 ? (
-          classList
+          currentList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -303,7 +317,7 @@ export const ClassView = props => {
                                       variant="caption"
                                     >
                                       Mentor's Name:
-                                  </Typography>
+                                      </Typography>
                                   </Grid>
                                   <Grid item lg={12} xs={12}>
                                     <b>
@@ -316,7 +330,7 @@ export const ClassView = props => {
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
+                            </Grid >
                           )}
                       </Typography>
                     </CardContent>
