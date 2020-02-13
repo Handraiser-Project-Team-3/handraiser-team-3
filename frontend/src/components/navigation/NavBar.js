@@ -49,7 +49,8 @@ const useStyles = makeStyles(theme => ({
 
   nested: {
     "&:hover": {
-      background: "#8691DD",
+      background:
+        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
     }
   }
@@ -156,15 +157,13 @@ export default function ButtonAppBar(props) {
                   key={rooms.id}
                   button
                   className={classes.nested}
+                  onClick={() => {
+                    handleClickRoom(rooms.id);
+                  }}
                 >
-                  <ListItemIcon>
-                    <StarBorder style={{ color: "FF6F61" }} />
-                  </ListItemIcon>
-                  <ListItemText
-                    onClick={() => {
-                      handleClickRoom(rooms.id);
-                    }}
-                  >
+                  <StarBorder />
+
+                  <ListItemText style={{ width: "20px", paddingLeft: "20px" }}>
                     {rooms.class_name}
                   </ListItemText>
                 </ListItem>

@@ -74,18 +74,18 @@ const a11yProps = index => {
 };
 
 export default function Classroom(props) {
-   const classes = useStyles();
-   const { headers, user, socket } = props.data;
-   const userDetails = user ? user : {};
-   const { first_name, last_name, account_type_id } = userDetails;
-   const [value, setValue] = React.useState(0);
-   const [classroomUser, setClassroomUser] = React.useState({});
-   const [newRequest, addNewRequest] = React.useState("");
-   const [list, setList] = useState(false);
-   const [requests, setRequests] = React.useState([]);
-   const [verify, setVerify] = React.useState([]);
-   const history = useHistory();
-   const match = useRouteMatch();
+  const classes = useStyles();
+  const { headers, user, socket } = props.data;
+  const userDetails = user ? user : {};
+  const { first_name, last_name, account_type_id } = userDetails;
+  const [value, setValue] = React.useState(0);
+  const [classroomUser, setClassroomUser] = React.useState({});
+  const [newRequest, addNewRequest] = React.useState("");
+  const [list, setList] = useState(false);
+  const [requests, setRequests] = React.useState([]);
+  const [verify, setVerify] = React.useState([]);
+  const history = useHistory();
+  const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,7 +106,7 @@ export default function Classroom(props) {
     }
   }, [user, headers]);
 
-  // socketio
+  // socketiod
   React.useEffect(() => {
     socket.emit(`join_classroom`, {
       classId: props.classId
@@ -187,6 +187,7 @@ export default function Classroom(props) {
       accountType={account_type_id}
       first_name={first_name}
       classId={props.classId}
+      headers={headers}
     >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
