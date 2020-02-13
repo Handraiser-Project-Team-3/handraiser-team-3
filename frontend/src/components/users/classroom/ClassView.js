@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -19,18 +18,18 @@ import { HandleClassModal } from "./HandleClassModal";
 import ClassHead from "../reusables/ClassHead";
 import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
-import { UserDetails } from "../reusables/UserDetails";
+import { UserDetails, user_details } from "../reusables/UserDetails";
+import { ClassViewStyle } from "../style/Styles";
 import Pagination from "./Pagination";
 
 // images
-import head from "../../assets/images/bg.jpg";
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
 
 export const ClassView = props => {
-  const classes = useStyles();
+  const classes = ClassViewStyle();
   const { user, headers } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
@@ -48,7 +47,6 @@ export const ClassView = props => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage] = useState(8);
-  const [promise, setPromise] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -62,7 +60,7 @@ export const ClassView = props => {
           return res.class_id === id;
         })
         .map(res =>
-          axios(`/api/user/${res.user_id}`, headers).then(res => {
+          user_details(res.user_id, headers).then(res => {
             return res.data.first_name + " " + res.data.last_name;
           })
         )
@@ -75,6 +73,7 @@ export const ClassView = props => {
   //     .delete(`/api/class/${classid}`, headers)
   //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
   // };
+
   useEffect(() => {
     account_type_id &&
       (async () => {
@@ -92,8 +91,16 @@ export const ClassView = props => {
               })
             );
           } else {
-            setClassList(res.data);
-            setFilter(res.data);
+            setClassList(
+              res.data.filter(data => {
+                return data.class_status === true;
+              })
+            );
+            setFilter(
+              res.data.filter(data => {
+                return data.class_status === true;
+              })
+            );
           }
         } catch (err) {
           console.error(err);
@@ -177,7 +184,7 @@ export const ClassView = props => {
                         component="div"
                         variant="inherit"
                       >
-                        {account_type_id === 2 ? ( // if mentor
+                        {account_type_id === 2 ? (
                           <Grid
                             container
                             direction="row"
@@ -317,7 +324,7 @@ export const ClassView = props => {
                                       variant="caption"
                                     >
                                       Mentor's Name:
-                                      </Typography>
+                                  </Typography>
                                   </Grid>
                                   <Grid item lg={12} xs={12}>
                                     <b>
@@ -330,7 +337,7 @@ export const ClassView = props => {
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid >
+                            </Grid>
                           )}
                       </Typography>
                     </CardContent>
@@ -392,7 +399,7 @@ export const ClassView = props => {
                       )}
                   </CardActions>
                 </Card>
-              </Grid>
+              </Grid >
             ))
         ) : (
             <div className={classes.margin}>
@@ -404,7 +411,7 @@ export const ClassView = props => {
               </div>
             </div>
           )}
-      </Grid>
+      </Grid >
       <HandleClassModal
         open={open}
         setOpen={setOpen}
@@ -417,78 +424,6 @@ export const ClassView = props => {
         setClassList={setClassList}
         classList={classList}
       />
-    </Layout>
+    </Layout >
   );
 };
-
-const useStyles = makeStyles(theme => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em"
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "whitesmoke"
-    }
-  },
-  header: {
-    height: "auto",
-    backgroundImage: `url(${head})`,
-    backgroundSize: "cover",
-    padding: "20px",
-    paddingTop: "85px"
-  },
-  color: {
-    color: "gray",
-    paddingLeft: "35px"
-  },
-  res: {
-    "@media (max-width: 415px)": {
-      display: "none"
-    }
-  },
-  blackboard: {
-    width: "35px",
-    padding: "0"
-  },
-  container: {
-    margin: "50px 8vw 10px 8vw"
-  },
-  classStyle: {
-    color: "#f7b733",
-    textDecoration: "underline",
-    textDecorationColor: "lightgray",
-    textUnderlinePosition: "under"
-  },
-  card: {
-    maxWidth: 345
-  },
-  media: {
-    height: 140,
-    backgroundPositionY: "-40px"
-  },
-  addClass: {
-    cursor: "pointer",
-    color: "#8e9493"
-  },
-  icons: {
-    width: "20px",
-    cursor: "pointer",
-    "&:hover": {
-      width: "23px",
-      borderRadius: "10%"
-    }
-  },
-  noClasses: {
-    fontSize: "30px",
-    color: "gray"
-  },
-  margin: {
-    margin: "0 auto",
-    marginTop: "10%",
-    display: "flex",
-    alignItems: "baseline"
-  }
-}));
