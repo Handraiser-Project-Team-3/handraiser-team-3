@@ -20,7 +20,7 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
-import Pagination from "./Pagination";
+import Pagination from "../reusables/Pagination";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
@@ -117,7 +117,7 @@ export const ClassView = props => {
     // eslint-disable-next-line
   }, [account_type_id]);
 
-  // Get current Post
+  // Get current classlist
   const indexOfLastList = currentPage * postPerPage;
   const indexOfFirstList = indexOfLastList - postPerPage;
   const currentList = classList.slice(indexOfFirstList, indexOfLastList);
@@ -133,11 +133,6 @@ export const ClassView = props => {
         setHeadTitle={setHeadTitle}
         filter={filter}
         setClassList={setClassList}
-      />
-      <Pagination
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length !== 0 ? (
@@ -412,6 +407,14 @@ export const ClassView = props => {
             </div>
           )}
       </Grid >
+      <Pagination
+        user={user}
+        userDetails={userDetails}
+        headers={headers}
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        paginate={paginate}
+      />
       <HandleClassModal
         open={open}
         setOpen={setOpen}
