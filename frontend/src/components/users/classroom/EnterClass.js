@@ -8,19 +8,16 @@ export default function EnterClass({
   user,
   classId
 }) {
-  const [check, setCheck] = useState({});
+  const [check, setCheck] = useState([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
   useEffect(() => {
-    setCheck(
-      classroomUsers &&
-        classroomUsers
-          .filter(x => x.user_id === user.id)
-          .filter(x => x.class_id === classId)[0]
-    );
-    // eslint-disable-next-line
-  }, [check]);
+    setCheck(classroomUsers &&
+      classroomUsers
+        .filter(x => x.user_id === user.id)
+        .map(x => x.class_id).find(x => x === classId))
+  }, []);
 
   return (
     <>
@@ -35,16 +32,16 @@ export default function EnterClass({
           Enter Class
         </Button>
       ) : (
-        <Button
-          size="small"
-          style={{ color: "white" }}
-          onClick={() => {
-            handleClickOpen();
-          }}
-        >
-          Join Class
-        </Button>
-      )}
+          <Button
+            size="small"
+            style={{ color: "white" }}
+            onClick={() => {
+              handleClickOpen();
+            }}
+          >
+            Join Class
+          </Button>
+        )}
     </>
   );
 }
