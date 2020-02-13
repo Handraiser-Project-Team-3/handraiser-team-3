@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// import moment from "moment";
-
+import EnterClass from "./EnterClass";
 // Material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -58,16 +57,16 @@ export const JoinClassModal = props => {
   const [code, setCode] = useState("");
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleChange = e => {
     setCode(e.target.value);
+  };
+
+  const classEnter = () => {
+    history.push(`/classroom/${classId}`);
   };
 
   const handleSubmit = e => {
@@ -100,52 +99,16 @@ export const JoinClassModal = props => {
     }
   };
 
-  const classEnter = () => {
-    history.push(`/classroom/${classId}`);
-  };
-
-  const ButtonComponent = () => {
-    const [check, setCheck] = useState({});
-
-    useEffect(() => {
-      setCheck(
-        classroomUsers
-          .filter(x => x.user_id === user.id)
-          .filter(x => x.class_id === classId)[0]
-      );
-    }, [check]);
-
-    return (
-      <>
-        {check ? (
-          <Button
-            size="small"
-            style={{ color: "white" }}
-            onClick={() => {
-              classEnter();
-            }}
-          >
-            Enter Class
-          </Button>
-        ) : (
-          <Button
-            size="small"
-            style={{ color: "white" }}
-            onClick={() => {
-              handleClickOpen();
-            }}
-          >
-            Join Class
-          </Button>
-        )}
-      </>
-    );
-  };
-
   return (
     <div>
       <ToastContainer enableMulticontainer />
-      <ButtonComponent />
+      <EnterClass
+        classEnter={classEnter}
+        setOpen={setOpen}
+        classroomUsers={classroomUsers}
+        user={user}
+        classId={classId}
+      />
       <Dialog
         open={open}
         TransitionComponent={Transition}

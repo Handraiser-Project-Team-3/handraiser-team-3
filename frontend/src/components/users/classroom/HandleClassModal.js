@@ -76,6 +76,7 @@ export const HandleClassModal = props => {
 
   const handleClass = e => {
     e.preventDefault();
+
     if (action === "Add") {
       axios
         .post(
