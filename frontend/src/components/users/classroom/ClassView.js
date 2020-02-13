@@ -126,7 +126,7 @@ export const ClassView = props => {
         setClassList={setClassList}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
-        {classList.length !== 0 ? (
+        {classList.length ? (
           classList
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
