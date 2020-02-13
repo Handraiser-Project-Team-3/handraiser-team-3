@@ -193,6 +193,7 @@ export default function Classroom(props) {
       accountType={account_type_id}
       first_name={first_name}
       classId={props.classId}
+      headers={headers}
     >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
