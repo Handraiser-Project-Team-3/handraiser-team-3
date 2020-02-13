@@ -20,9 +20,9 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
+import Pagination from "./Pagination";
 
 // images
-
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
@@ -45,6 +45,8 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage] = useState(8);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -115,6 +117,13 @@ export const ClassView = props => {
     // eslint-disable-next-line
   }, [account_type_id]);
 
+  // Get current Post
+  const indexOfLastList = currentPage * postPerPage;
+  const indexOfFirstList = indexOfLastList - postPerPage;
+  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
   return (
     <Layout first_name={first_name}>
       <ClassHead
@@ -124,6 +133,11 @@ export const ClassView = props => {
         setHeadTitle={setHeadTitle}
         filter={filter}
         setClassList={setClassList}
+      />
+      <Pagination
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        paginate={paginate}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
