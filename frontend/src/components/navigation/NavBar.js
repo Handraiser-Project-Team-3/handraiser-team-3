@@ -45,8 +45,24 @@ const useStyles = makeStyles(theme => ({
   },
   list: {
     width: 250
+  },
+
+  nested: {
+    "&:hover": {
+      background:
+        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+      color: "whitesmoke"
+    }
+  },
+  enrolled: {
+    "&:hover": {
+      background:
+        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+      color: "whitesmoke"
+    }
   }
 }));
+
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers } = props.data;
   const userDetails = user ? user : {};
@@ -122,21 +138,28 @@ export default function ButtonAppBar(props) {
         }
         className={classes.root}
       >
-        <ListItem button>
-          <ListItemIcon>
-            <ClassIcon />
-          </ListItemIcon>
-          <ListItemText primary="Classes" onClick={handleClass} />
+        <ListItem button className={classes.nested}>
+          <ClassIcon />
+
+          <ListItemText
+            primary="Classes"
+            onClick={handleClass}
+            style={{ width: "20px", paddingLeft: "20px" }}
+          />
         </ListItem>
+
         <ListItem
           button
           onClick={handleClick}
           style={{ display: account_type_id === 3 ? "flex" : "none" }}
+          className={classes.enrolled}
         >
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Enrolled" />
+          <InboxIcon />
+
+          <ListItemText
+            primary="Enrolled"
+            style={{ width: "20px", paddingLeft: "20px" }}
+          />
           {show ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
@@ -148,15 +171,13 @@ export default function ButtonAppBar(props) {
                   key={rooms.id}
                   button
                   className={classes.nested}
+                  onClick={() => {
+                    handleClickRoom(rooms.id);
+                  }}
                 >
-                  <ListItemIcon>
-                    <StarBorder />
-                  </ListItemIcon>
-                  <ListItemText
-                    onClick={() => {
-                      handleClickRoom(rooms.id);
-                    }}
-                  >
+                  <StarBorder />
+
+                  <ListItemText style={{ width: "20px", paddingLeft: "20px" }}>
                     {rooms.class_name}
                   </ListItemText>
                 </ListItem>
@@ -167,7 +188,7 @@ export default function ButtonAppBar(props) {
     </div>
   );
   return (
-    <div>
+    <>
       <div className={classes.root}>
         <AppBar
           position="fixed"
@@ -227,6 +248,7 @@ export default function ButtonAppBar(props) {
                       setAccessToken("");
                       setUser({});
                       history.push("/");
+                      window.location.reload();
                       alertToast("Successfully logged out!");
                     }}
                     render={renderProps => (
@@ -243,7 +265,7 @@ export default function ButtonAppBar(props) {
         </AppBar>
       </div>
       <MyComponent data={props.data} classId={classId} />
-    </div>
+    </>
   );
 }
 const Btn = styled.span`

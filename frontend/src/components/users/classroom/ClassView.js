@@ -219,8 +219,8 @@ const [state, setState] = React.useState({
                               {data.class_description.substring(0)}
                             </Typography>
                           ) : (
-                              ""
-                            )
+                            ""
+                          )
                         }
                       >
                         <Typography
@@ -267,13 +267,13 @@ const [state, setState] = React.useState({
                                   title={
                                     studentDetails.length !== 0
                                       ? studentDetails.map(res => (
-                                        <Typography
-                                          style={{ fontSize: 12 }}
-                                          key={res.id}
-                                        >
-                                          {res}
-                                        </Typography>
-                                      ))
+                                          <Typography
+                                            style={{ fontSize: 12 }}
+                                            key={res.id}
+                                          >
+                                            {res}
+                                          </Typography>
+                                        ))
                                       : ""
                                   }
                                 >
@@ -395,20 +395,20 @@ const [state, setState] = React.useState({
                                     >
                                       Mentor's Name:
                                   </Typography>
-                                  </Grid>
-                                  <Grid item lg={12} xs={12}>
-                                    <b>
-                                      <UserDetails
-                                        id={data.user_id}
-                                        headers={headers}
-                                        action="name"
-                                      />
-                                    </b>
-                                  </Grid>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>
+                                    <UserDetails
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
+                                  </b>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          )}
+                          </Grid>
+                        )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -457,34 +457,41 @@ const [state, setState] = React.useState({
                         </Grid>
                       </Grid>
                     ) : (
-                        <Grid container direction="column" alignItems="center">
-                          <JoinClassModal
-                            classroomUsers={classroomUsers}
-                            classId={data.id}
-                            className={data.class_name}
-                            codeClass={data.class_code}
-                            user={user}
-                            headers={headers}
-                          />
-                        </Grid>
-                      )}
+                      <Grid container direction="column" alignItems="center">
+                        <JoinClassModal
+                          classroomUsers={classroomUsers}
+                          classId={data.id}
+                          className={data.class_name}
+                          codeClass={data.class_code}
+                          user={user}
+                          headers={headers}
+                        />
+                      </Grid>
+                    )}
                   </CardActions>
                 </Card>
               </Grid >
               
             ))
         ) : (
-            <div className={classes.margin}>
-              <span className={classes.noClasses}>No data found</span>
-              <div className="spinner">
-                <div className="bounce1"></div>
-                <div className="bounce2"></div>
-                <div className="bounce3"></div>
-              </div>
+          <div className={classes.margin}>
+            <span className={classes.noClasses}>No added classes yet</span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
             </div>
-          )}
-      </Grid >
-      
+          </div>
+        )}
+      </Grid>
+      <Pagination
+        user={user}
+        userDetails={userDetails}
+        headers={headers}
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        paginate={paginate}
+      />
       <HandleClassModal
         open={open}
         setOpen={setOpen}
