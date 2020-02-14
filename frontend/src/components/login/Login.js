@@ -77,7 +77,7 @@ export const Login = props => {
 												<Button
 													onClick={renderProps.onClick}
 													disabled={renderProps.disabled}
-													style={{ background: "#fdddffd9" }}
+													style={{ background: "#fdddffd9", outline: "none" }}
 												>
 													<Img src={googleIcon} />
 													<span className={classes.googleSignin}>
@@ -94,7 +94,7 @@ export const Login = props => {
 										<hr className={classes.hr} />
 									</Grid>
 								</Grid>
-								<Grid item xs={12} sm={12} md={12} lg={12}>
+								<Grid item xs={12}>
 									<img src={Teacher} alt="teacher" className={classes.lady} />
 								</Grid>
 							</Grid>

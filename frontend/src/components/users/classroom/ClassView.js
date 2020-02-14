@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -12,6 +13,8 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
+import Switch from '@material-ui/core/Switch';
+import Chip from "@material-ui/core/Chip";
 
 // component/s
 import { HandleClassModal } from "./HandleClassModal";
@@ -27,6 +30,40 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+
+const AntSwitch = withStyles(theme => ({
+  root: {
+    width: 28,
+    height: 16,
+    padding: 0,
+    display: 'flex',
+  },
+  switchBase: {
+    padding: 2,
+    color: theme.palette.grey[500],
+    '&$checked': {
+      transform: 'translateX(12px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        opacity: 1,
+        backgroundColor: theme.palette.primary.main.dark,
+        borderColor: theme.palette.primary.main.dark,
+      },
+    },
+  },
+  thumb: {
+    width: 12,
+    height: 12,
+    boxShadow: 'none',
+  },
+  track: {
+    border: `1px solid ${theme.palette.grey[500]}`,
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: theme.palette.common.white,
+  },
+  checked: {},
+}))(Switch);
 
 export const ClassView = props => {
   const classes = ClassViewStyle();
@@ -47,6 +84,16 @@ export const ClassView = props => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage] = useState(8);
+
+const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+    checkedC: true,
+  });
+
+  const handleChange = name => event => {
+    setState({ ...state, [name]: event.target.checked });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,20 +187,29 @@ export const ClassView = props => {
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
-                <Card
-                  className={classes.card}
-                  // style={{
-                  //   boxShadow: " 5px 10px 10px -5px #3534B5"
-                  // }}
-                >
+                <Card elevation={7}>
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
                       image={classroom}
                       title={data.class_name}
-                    ></CardMedia>
+                    >{account_type_id === 2 ? 
+                      <Grid container
+                      direction="row"
+                      justify="flex-end"
+                      alignItems="flex-start">
+                    <Grid item style={{margin: "5px"}}>
+                      <AntSwitch
+                        checked={state.checkedC}
+                        onChange={handleChange('checkedC')}
+                        value="checkedC"
+                      />
+                    </Grid>
+                    </Grid>
+                    : ""}
+                   </CardMedia>
                     <CardContent>
-                      <Typography gutterBottom variant="h5">
+                      <Typography gutterBottom variant="h5" >
                         {data.class_name}
                       </Typography>
                       <Tooltip
@@ -239,10 +295,16 @@ export const ClassView = props => {
                                       </Grid>
                                       <Grid item lg={12} xs={12}>
                                         <b>
-                                          {classroomUsers &&
-                                            classroomUsers.filter(res => {
-                                              return res.class_id === data.id;
-                                            }).length}
+                                        <Chip
+				                                    variant="outlined"
+				                                    size="small"
+				                                    label={classroomUsers &&
+                                              classroomUsers.filter(res => {
+                                                return res.class_id === data.id;
+                                              }).length}
+				                                    style={{ fontSize: "14px" }}
+			                                    />
+                                          
                                         </b>
                                       </Grid>
                                     </Grid>
@@ -250,14 +312,16 @@ export const ClassView = props => {
                                 </Tooltip>
                               </Grid>
                             </Grid>
+                            
                             <Grid item xs={6}>
                               <Grid
                                 container
                                 direction="row"
                                 alignItems="center"
                                 justify="space-between"
+                                spacing={3}
                               >
-                                <Grid item lg={2} xs={2}>
+                                <Grid item xs={3}>
                                   <img
                                     src={key}
                                     alt="class-code"
@@ -265,7 +329,7 @@ export const ClassView = props => {
                                   />
                                 </Grid>
 
-                                <Grid item lg={10} xs={10}>
+                                <Grid item xs={9}>
                                   <Grid
                                     container
                                     direction="column"
@@ -286,7 +350,13 @@ export const ClassView = props => {
                                         <b
                                           onClick={() => copy(data.class_code)}
                                         >
-                                          {data.class_code}
+                                          <Chip
+				                                    variant="outlined"
+				                                    size="small"
+				                                    label={data.class_code}
+				                                    className={classes.codeStyle}
+			                                    />
+                                          
                                         </b>
                                       </Tooltip>
                                     </Grid>
@@ -296,34 +366,34 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                          <Grid
-                            container
-                            direction="row"
-                            alignItems="center"
-                            justify="space-between"
-                          >
-                            <Grid item lg={2} xs={2}>
-                              <UserDetails
-                                id={data.user_id}
-                                headers={headers}
-                                action="img"
-                              />
-                            </Grid>
+                            <Grid
+                              container
+                              direction="row"
+                              alignItems="center"
+                              justify="space-between"
+                            >
+                              <Grid item xs={3}>
+                                <UserDetails
+                                  id={data.user_id}
+                                  headers={headers}
+                                  action="img"
+                                />
+                              </Grid>
 
-                            <Grid item lg={10} xs={10}>
-                              <Grid
-                                container
-                                direction="column"
-                                alignItems="flex-start"
-                                justify="space-between"
-                              >
-                                <Grid item lg={12} xs={12}>
-                                  <Typography
-                                    gutterBottom
-                                    component="div"
-                                    variant="caption"
-                                  >
-                                    Mentor's Name:
+                              <Grid item xs={9}>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  alignItems="flex-start"
+                                  justify="space-between"
+                                >
+                                  <Grid item lg={12} xs={12}>
+                                    <Typography
+                                      gutterBottom
+                                      component="div"
+                                      variant="caption"
+                                    >
+                                      Mentor's Name:
                                   </Typography>
                                 </Grid>
                                 <Grid item lg={12} xs={12}>
@@ -342,7 +412,7 @@ export const ClassView = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={{ background: "#ff6f61" }}>
+                  <CardActions style={account_type_id === 2 ? { background: "#ff6f61" } : {background: "#ababfa"}}>
                     {account_type_id === 2 ? (
                       <Grid
                         container
@@ -350,13 +420,13 @@ export const ClassView = props => {
                         alignItems="center"
                         justify="space-between"
                       >
-                        <Grid item lg={10} md={10} sm={9} xs={9}>
+                        <Grid item lg={9} md={10} sm={9} xs={9}>
                           <Button
                             onClick={() =>
                               history.push(`/classroom/${data.id}`)
                             }
                             size="small"
-                            style={{ color: "white" }}
+                            style={{ color: "white", outline: "none" }}
                           >
                             Enter Class
                           </Button>
@@ -364,6 +434,7 @@ export const ClassView = props => {
                             delete
                           </Button> */}
                         </Grid>
+                        
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">
                             <Tooltip title="Edit Class">
@@ -399,7 +470,8 @@ export const ClassView = props => {
                     )}
                   </CardActions>
                 </Card>
-              </Grid>
+              </Grid >
+              
             ))
         ) : (
           <div className={classes.margin}>
@@ -431,6 +503,12 @@ export const ClassView = props => {
         userId={id}
         setClassList={setClassList}
         classList={classList}
+        account_type_id={account_type_id}
+      />
+      <Pagination
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        paginate={paginate}
       />
     </Layout>
   );

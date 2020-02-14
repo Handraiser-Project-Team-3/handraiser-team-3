@@ -21,9 +21,13 @@ export default function MentorsView() {
 				<Grid item xs={12}>
 					<Grid container spacing={1} className={classes.margin}>
 						<Grid item xs={12} md={4}>
-							<Paper className={classes.paperStyle}>
-								<Grid container alignItems="center">
-									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
+							<Paper elevation={3} className={classes.paperStyle}>
+								<Grid
+									container
+									alignItems="center"
+									style={{ background: "#e1e2f7" }}
+								>
+									<Grid item xs={3} style={{ background: "#aaaafa" }}>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
@@ -42,9 +46,13 @@ export default function MentorsView() {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={4}>
-							<Paper className={classes.paperStyle}>
-								<Grid container alignItems="center">
-									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
+							<Paper elevation={3} className={classes.paperStyle}>
+								<Grid
+									container
+									alignItems="center"
+									style={{ background: "#e1e2f7" }}
+								>
+									<Grid item xs={3} style={{ background: "#aaaafa" }}>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
@@ -63,9 +71,13 @@ export default function MentorsView() {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={4}>
-							<Paper className={classes.paperStyle}>
-								<Grid container alignItems="center">
-									<Grid item xs={3} style={{ paddingLeft: "5px" }}>
+							<Paper elevation={3} className={classes.paperStyle}>
+								<Grid
+									container
+									alignItems="center"
+									style={{ background: "#e1e2f7" }}
+								>
+									<Grid item xs={3} style={{ background: "#aaaafa" }}>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={9}>
@@ -117,8 +129,9 @@ const useStyles = makeStyles(theme => ({
 	paperStyle: {
 		width: "100%",
 		height: "auto",
-		background:
-			"linear-gradient(90deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 30%, rgb(224, 225, 245) 30%)",
+		// background:
+		// 	"linear-gradient(90deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 30%, rgb(224, 225, 245) 30%)",
+		// background: "gray",
 		opacity: "0.5",
 		"&:hover": {
 			opacity: "1"
