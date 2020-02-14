@@ -128,7 +128,6 @@ export const ClassView = props => {
   // Get current classlist
   const indexOfLastList = currentPage * postPerPage;
   const indexOfFirstList = indexOfLastList - postPerPage;
-  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
   // Change page
 
   return (
@@ -143,7 +142,8 @@ export const ClassView = props => {
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
-          currentList
+          classList
+            .slice(indexOfFirstList, indexOfLastList)
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -416,8 +416,7 @@ export const ClassView = props => {
         )}
       </Grid>
       <Pagination
-        user={user}
-        userDetails={userDetails}
+        account_type_id={account_type_id}
         headers={headers}
         postPerPage={postPerPage}
         totalPost={classList.length}

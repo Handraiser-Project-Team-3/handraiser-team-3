@@ -1,9 +1,7 @@
 import React from "react";
 
 const Pagination = props => {
-  const { user, postPerPage, totalPost, setCurrentPage } = props;
-  const userDetails = user ? user : {};
-  const { account_type_id } = userDetails;
+  const { account_type_id, postPerPage, totalPost, setCurrentPage } = props;
   const paginate = pageNumber => setCurrentPage(pageNumber);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(totalPost / postPerPage); i++) {
