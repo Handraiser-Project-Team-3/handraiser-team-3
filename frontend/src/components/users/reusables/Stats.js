@@ -12,7 +12,7 @@ import Chatbox from "../classroom/Chatbox";
 // images
 import question from "../../assets/images/question.png";
 
-export default function MentorsView() {
+export default function MentorsView(props) {
 	const classes = useStyles();
 
 	return (
@@ -21,23 +21,24 @@ export default function MentorsView() {
 				<Grid item xs={12}>
 					<Grid container spacing={1} className={classes.margin}>
 						<Grid item xs={12} md={4}>
-							<Paper elevation={3} className={classes.paperStyle}>
+							<Paper className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
-									style={{ background: "#e1e2f7" }}
+									align="center"
+									style={{ background: "#d9d9f4" }}
 								>
-									<Grid item xs={3} style={{ background: "#aaaafa" }}>
+									<Grid item xs={4} sm={3} style={{ background: "#aaaafa" }}>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
-									<Grid item xs={9}>
+									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
 												<Typography variant="inherit">Need Help:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
-													10
+													{props.requests.filter(x => x.status === null).length}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -46,23 +47,27 @@ export default function MentorsView() {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={4}>
-							<Paper elevation={3} className={classes.paperStyle}>
+							<Paper className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
-									style={{ background: "#e1e2f7" }}
+									align="center"
+									style={{ background: "#d9d9f4" }}
 								>
-									<Grid item xs={3} style={{ background: "#aaaafa" }}>
+									<Grid item xs={4} sm={3} style={{ background: "#aaaafa" }}>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
-									<Grid item xs={9}>
+									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
 												<Typography variant="inherit">Being Helped:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
-													10
+													{
+														props.requests.filter(x => x.status === false)
+															.length
+													}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -71,23 +76,29 @@ export default function MentorsView() {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} md={4}>
-							<Paper elevation={3} className={classes.paperStyle}>
+							<Paper className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
-									style={{ background: "#e1e2f7" }}
+									align="center"
+									style={{ background: "#d9d9f4" }}
 								>
-									<Grid item xs={3} style={{ background: "#aaaafa" }}>
+									<Grid
+										item
+										xs={4}
+										sm={3}
+										style={{ background: "#aaaafa", margin: "0 auto" }}
+									>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
-									<Grid item xs={9}>
+									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
 												<Typography variant="inherit">Done:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
-													10
+													{props.requests.filter(x => x.status === true).length}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -99,7 +110,7 @@ export default function MentorsView() {
 				</Grid>
 			</Grid>
 			<Grid item xs={12}>
-				<Chatbox />
+				<Chatbox data={props} />
 			</Grid>
 		</Grid>
 	);
@@ -130,8 +141,7 @@ const useStyles = makeStyles(theme => ({
 		width: "100%",
 		height: "auto",
 		// background:
-		// 	"linear-gradient(90deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 30%, rgb(224, 225, 245) 30%)",
-		// background: "gray",
+		//   "linear-gradient(90deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 30%, rgb(224, 225, 245) 30%)",
 		opacity: "0.5",
 		"&:hover": {
 			opacity: "1"

@@ -16,10 +16,11 @@ export const ClassroomStyle = makeStyles(theme => ({
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		border: "1px solid lightgray",
+		// border: "1px solid lightgray",
 		height: "65vh",
 		overflow: "auto",
-		padding: "0"
+		padding: "0",
+		position: "static"
 	},
 	needHelp: {
 		padding: "15px",
@@ -39,12 +40,17 @@ export const ClassroomStyle = makeStyles(theme => ({
 		marginRight: "10px"
 	},
 	divStyle: {
-		width: "100%",
 		height: "auto",
-		background: "#eff1fa",
-		marginTop: "0.5vh",
-		border: "1px solid lightgray",
-		borderRadius: "5px"
+		background: "#ececfe",
+		marginTop: "1vh"
+		// border: "1px solid lightgray",
+		// borderRadius: "5px"
+	},
+	hand: {
+		width: "80px",
+		position: "absolute",
+		bottom: theme.spacing(2),
+		right: theme.spacing(2)
 	}
 }));
 

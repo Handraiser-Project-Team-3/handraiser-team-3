@@ -7,6 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import { useForm } from "react-hook-form";
 
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 		color: "white"
 	},
 	requestIcon: {
-		color: "#ff6f61",
+		color: "#474cb9",
 		cursor: "pointer",
 		"&:hover": {
 			color: "brown"
@@ -38,6 +39,8 @@ export default function(props) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
+
+	const { register, errors, setError, handleSubmit } = useForm();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -51,7 +54,6 @@ export default function(props) {
 		<div>
 			<Tooltip title="Add Request">
 				<HelpOutlineIcon
-					fontSize="default"
 					className={classes.requestIcon}
 					onClick={handleClickOpen}
 				/>
@@ -66,10 +68,7 @@ export default function(props) {
 					className={classes.root}
 					noValidate
 					autoComplete="off"
-					onSubmit={e => {
-						handleSubmitNewRquest(e);
-						handleClose();
-					}}
+					onSubmit={handleSubmit(handleSubmitNewRquest)}
 				>
 					<DialogTitle
 						id="form-dialog-title"
@@ -80,15 +79,25 @@ export default function(props) {
 					<DialogContent>
 						<TextField
 							autoFocus
+							error={!!errors.request}
 							variant="outlined"
 							margin="normal"
-							id="name"
 							label="Request"
-							type="email"
+							name="request"
 							fullWidth
+							value={newRequest}
 							onChange={e => {
+								if (e.target.value.length >= 30) {
+									return setError(
+										e.target.name,
+										"notMatch",
+										"Character limit reached!"
+									);
+								}
 								addNewRequest(e.target.value);
 							}}
+							inputRef={register({ required: "Title is required" })}
+							helperText={errors.request && errors.request.message}
 						/>
 					</DialogContent>
 

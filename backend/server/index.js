@@ -13,9 +13,9 @@ const io = socketio(server);
 const auth = require("./controllers/auth");
 const user = require("./controllers/users");
 const classroom = require("./controllers/classroom");
-const chats = require("./controllers/chats");
 const classroomUsers = require("./controllers/classroomUsers");
 const requests = require("./controllers/requests");
+const message = require("./controllers/messages");
 const ws = require("./controllers/ws");
 
 massive({
@@ -33,26 +33,31 @@ massive({
   io.on("connection", socket => {
     let userDetails = undefined;
     socket.on(`online`, user => {
-      userDetails = user;
-      console.log(
-        `${userDetails.first_name} is`,
-        "\x1b[32m",
-        `online`,
-        "\x1b[0m"
-      );
+      db.users.update({ id: user.id }, { user_status: true }).then(user => {
+        userDetails = user[0];
+        console.log(
+          `${userDetails.first_name} is`,
+          "\x1b[32m",
+          `online`,
+          "\x1b[0m"
+        );
+      });
     });
 
-    ws.requests(socket, db, io);
-    ws.chat(socket, db, io);
+    ws.websockets(socket, db, io);
 
     socket.on(`disconnect`, () => {
       if (userDetails !== undefined) {
-        console.log(
-          `${userDetails.first_name} is`,
-          "\x1b[31m",
-          `offline`,
-          "\x1b[0m"
-        );
+        db.users
+          .update({ id: userDetails.id }, { user_status: false })
+          .then(signout => {
+            console.log(
+              `${signout[0].first_name} is`,
+              "\x1b[31m",
+              `offline`,
+              "\x1b[0m"
+            );
+          });
       }
     });
   });
@@ -74,17 +79,23 @@ massive({
   app.post("/api/class", classroom.addClass);
   app.patch("/api/class/:id", classroom.editClass);
   app.delete("/api/class/:id", classroom.deleteClass);
-  
-  //chats
-  app.post("/api/chats/message/create/:id", chats.createMessage);
-  app.get("/api/chats/messages/list/:id", chats.messageList);
-  app.delete("/api/chats/messages/delete/:id", chats.deleteMessages);
-  app.patch("/api/chats/messages/edit/id", chats.editMessages);
+  app.get("/api/class/:id", classroom.classDetails);
 
-  //other pages that need headers
-  const port = 3001;
-  server.listen(port, () => {
+  //classroom_users
+  app.post("/api/classroom-users/", classroomUsers.addClassroomUser);
+  app.get("/api/classroom-users/", classroomUsers.list);
+  app.get("/api/classroom-users/:id", classroomUsers.classroomUserDetails);
+
+  //student_requests
+  app.get("/api/request/list/:id", requests.list);
+  app.patch("/api/request/:id", requests.editRequest);
+
+  //messages
+
+  app.get("/api/messages/:id", message.list);
+
+  server.listen(process.env.SERVER_PORT, () => {
     console.clear();
-    console.log(`Server is running at port ${port}`);
+    console.log(`Server is running at port ${process.env.SERVER_PORT}`);
   });
 });
