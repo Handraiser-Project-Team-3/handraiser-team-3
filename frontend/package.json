@@ -19,7 +19,7 @@
     "react-google-login": "^5.0.7",
     "react-hook-form": "^4.9.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.3.1",
+    "react-scripts": "^3.3.0",
     "react-toastify": "^5.5.0",
     "socket.io-client": "^2.3.0",
     "styled-components": "^5.0.0"
@@ -45,7 +45,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "http://172.60.60.163:3000",
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3"
   }
