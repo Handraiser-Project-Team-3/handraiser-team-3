@@ -13,11 +13,14 @@ export default function EnterClass({
     setOpen(true);
   };
   useEffect(() => {
-    setCheck(classroomUsers &&
-      classroomUsers
-        .filter(x => x.user_id === user.id)
-        .map(x => x.class_id).find(x => x === classId))
-  }, []);
+    setCheck(
+      classroomUsers &&
+        classroomUsers
+          .filter(x => x.user_id === user.id)
+          .map(x => x.class_id)
+          .find(x => x === classId)
+    );
+  }, [classroomUsers]);
 
   return (
     <>
@@ -32,16 +35,16 @@ export default function EnterClass({
           Enter Class
         </Button>
       ) : (
-          <Button
-            size="small"
-            style={{ color: "white" }}
-            onClick={() => {
-              handleClickOpen();
-            }}
-          >
-            Join Class
-          </Button>
-        )}
+        <Button
+          size="small"
+          style={{ color: "white" }}
+          onClick={() => {
+            handleClickOpen();
+          }}
+        >
+          Join Class
+        </Button>
+      )}
     </>
   );
 }
