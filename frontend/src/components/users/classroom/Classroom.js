@@ -11,7 +11,6 @@ import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
 import styled from "styled-components";
 import Avatar from "@material-ui/core/Avatar";
-import blackboard from "../../assets/images/blackboard.png";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -95,7 +94,7 @@ export default function Classroom(props) {
 
   // get classroom users
   React.useEffect(() => {
-    if (user && headers && classId) {
+    if ((!!user && !!headers && !!classId) === true) {
       getClassroomUser(headers).then(res => {
         setVerify(
           res.data
@@ -113,7 +112,7 @@ export default function Classroom(props) {
 
   const [requests, setRequests] = React.useState([]);
   React.useEffect(() => {
-    if (user && headers) {
+    if ((!!user && !!headers) === true) {
       getClassroomUser(headers).then(res => {
         res.data &&
           setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
@@ -346,16 +345,12 @@ export default function Classroom(props) {
               style={{ padding: "15px" }}
             >
               <Grid item>
-                <Grid container spacing={5} alignItems="center">
-                  <Grid item xs={4}>
-                    <Avatar src={account_type_id === 2 ? "" : blackboard} />
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="h6">
-                      <UserDetails />
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <Tooltip title="description">
+                  <Typography variant="h5">
+                    Test
+                    <UserDetails />
+                  </Typography>
+                </Tooltip>
               </Grid>
               <Grid item>
                 {account_type_id === 2 ? (
