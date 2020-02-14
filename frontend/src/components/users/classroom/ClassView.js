@@ -172,7 +172,7 @@ export const ClassView = props => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <Layout first_name={first_name}>
+    <Layout id="layout" first_name={first_name}>
       <ClassHead
         account_type_id={account_type_id}
         setOpen={setOpen}

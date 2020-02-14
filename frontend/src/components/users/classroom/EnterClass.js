@@ -17,7 +17,7 @@ export default function EnterClass({
       classroomUsers
         .filter(x => x.user_id === user.id)
         .map(x => x.class_id));
-  }, [classroomUsers]);
+  }, [classroomUsers, user.id]);
 
   return (
     <>

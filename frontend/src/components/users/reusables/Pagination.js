@@ -16,15 +16,15 @@ const Pagination = props => {
         <ul className="pagination justify-content-center mt-3">
           {pageNumbers.map(num => (
             <li key={num} className={"page-item"}>
-              <a onClick={() => paginate(num)} href="#" className="page-link">
+              <a onClick={() => paginate(num)} href="#layout" className="page-link">
                 {num}
               </a>
             </li>
           ))}
         </ul>
       ) : (
-        {}
-      )}
+          {}
+        )}
     </nav>
   );
 };
