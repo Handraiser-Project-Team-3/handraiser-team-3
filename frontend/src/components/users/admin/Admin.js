@@ -361,8 +361,22 @@ export const Admin = props => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => setUserType(3)}>Student</MenuItem>
-        <MenuItem onClick={() => setUserType(2)}>Mentor</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setUserType(3);
+            setPage(0);
+          }}
+        >
+          Student
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setUserType(2);
+            setPage(0);
+          }}
+        >
+          Mentor
+        </MenuItem>
       </Menu>
     </Layout>
   );
