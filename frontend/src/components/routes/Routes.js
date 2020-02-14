@@ -31,7 +31,7 @@ export const Routes = props => {
         path={`/classroom/:id`}
         render={history =>
           accessToken === "" ? (
-            <Login data={props} />
+            <PageNotFound data={props} />
           ) : (
               <Navigation
                 {...history}
