@@ -13,7 +13,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
-import Switch from '@material-ui/core/Switch';
+import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
 
 // component/s
@@ -36,38 +36,38 @@ const AntSwitch = withStyles(theme => ({
     width: 28,
     height: 16,
     padding: 0,
-    display: 'flex',
+    display: "flex"
   },
   switchBase: {
     padding: 2,
     color: theme.palette.grey[500],
-    '&$checked': {
-      transform: 'translateX(12px)',
+    "&$checked": {
+      transform: "translateX(12px)",
       color: theme.palette.common.white,
-      '& + $track': {
+      "& + $track": {
         opacity: 1,
         backgroundColor: theme.palette.primary.main.dark,
-        borderColor: theme.palette.primary.main.dark,
-      },
-    },
+        borderColor: theme.palette.primary.main.dark
+      }
+    }
   },
   thumb: {
     width: 12,
     height: 12,
-    boxShadow: 'none',
+    boxShadow: "none"
   },
   track: {
     border: `1px solid ${theme.palette.grey[500]}`,
     borderRadius: 16 / 2,
     opacity: 1,
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.white
   },
-  checked: {},
+  checked: {}
 }))(Switch);
 
 export const ClassView = props => {
   const classes = ClassViewStyle();
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
   const [headTitle, setHeadTitle] = useState("");
@@ -88,7 +88,7 @@ export const ClassView = props => {
   const [state, setState] = React.useState({
     checkedA: true,
     checkedB: true,
-    checkedC: true,
+    checkedC: true
   });
 
   const handleChange = name => event => {
@@ -210,7 +210,7 @@ export const ClassView = props => {
                       : ""}
                     </CardMedia>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" >
+                      <Typography gutterBottom variant="h5">
                         {data.class_name}
                       </Typography>
                       <Tooltip
@@ -357,7 +357,6 @@ export const ClassView = props => {
                                             label={data.class_code}
                                             className={classes.codeStyle}
                                           />
-
                                         </b>
                                       </Tooltip>
                                     </Grid>
@@ -413,7 +412,13 @@ export const ClassView = props => {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={account_type_id === 2 ? { background: "#ff6f61" } : { background: "#ababfa" }}>
+                  <CardActions
+                    style={
+                      account_type_id === 2
+                        ? { background: "#ff6f61" }
+                        : { background: "#ababfa" }
+                    }
+                  >
                     {account_type_id === 2 ? (
                       <Grid
                         container
@@ -472,8 +477,7 @@ export const ClassView = props => {
                       )}
                   </CardActions>
                 </Card>
-              </Grid >
-
+              </Grid>
             ))
         ) : (
             <div className={classes.margin}>
