@@ -51,7 +51,6 @@ export const JoinClassModal = props => {
     codeClass,
     user,
     headers,
-    initialIdList,
     socket
   } = props;
   const history = useHistory();
@@ -109,7 +108,6 @@ export const JoinClassModal = props => {
         classroomUsers={classroomUsers}
         user={user}
         classId={classId}
-        initialIdList={initialIdList}
       />
       <Dialog
         open={open}

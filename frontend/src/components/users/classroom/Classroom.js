@@ -156,7 +156,7 @@ export default function Classroom(props) {
     try {
       await Axios.patch(
         `/api/request/${id}`,
-        { status: data, mentor_id: mentor },
+        { status: data },
         headers
       );
       socket.emit("update_request", notify);
@@ -208,31 +208,31 @@ export default function Classroom(props) {
                 <Tab label="Done" {...a11yProps(2)} />
               </Tabs>
             ) : (
-              <Grid
-                container
-                justify="space-between"
-                alignItems="center"
-                style={{ borderBottom: "2px solid #3f51b5" }}
-              >
-                <Grid item xs={11}>
-                  <Typography
-                    variant="h6"
-                    style={{ padding: "8px", paddingLeft: "20px" }}
-                  >
-                    List of Students
+                <Grid
+                  container
+                  justify="space-between"
+                  alignItems="center"
+                  style={{ borderBottom: "2px solid #3f51b5" }}
+                >
+                  <Grid item xs={11}>
+                    <Typography
+                      variant="h6"
+                      style={{ padding: "8px", paddingLeft: "20px" }}
+                    >
+                      List of Students
                   </Typography>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <CloseIcon
+                      fontSize="small"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setList(false);
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={1}>
-                  <CloseIcon
-                    fontSize="small"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setList(false);
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            )}
+              )}
           </AppBar>
           <div className={classes.root}>
             {list ? (
@@ -271,71 +271,71 @@ export default function Classroom(props) {
                 </Grid>
               ))
             ) : (
-              <>
-                <TabPanel value={value} index={0}>
-                  {requests.map(
-                    x =>
-                      x.status === null && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"need"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                        />
-                      )
-                  )}
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  {requests.map(
-                    x =>
-                      x.status === false && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"help"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                        />
-                      )
-                  )}
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  {requests.map(
-                    x =>
-                      x.status === true &&
-                      (classroomUser.id === x.student_id ||
-                        account_type_id === 2) && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"done"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                        />
-                      )
-                  )}
-                </TabPanel>
-              </>
-            )}
+                <>
+                  <TabPanel value={value} index={0}>
+                    {requests.map(
+                      x =>
+                        x.status === null && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"need"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    {requests.map(
+                      x =>
+                        x.status === false && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"help"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    {requests.map(
+                      x =>
+                        x.status === true &&
+                        (classroomUser.id === x.student_id ||
+                          account_type_id === 2) && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"done"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                </>
+              )}
           </div>
           <div className={classes.divStyle}>
             <Grid
@@ -361,27 +361,27 @@ export default function Classroom(props) {
                     />
                   </Tooltip>
                 ) : (
-                  <>
-                    <Grid container spacing={1}>
-                      <Grid item>
-                        <Tooltip title="Click to view list of Students">
-                          <ListIcon
-                            style={{ color: "gray", cursor: "pointer" }}
-                            onClick={() => setList(!list)}
-                          />
-                        </Tooltip>
-                      </Grid>
+                    <>
+                      <Grid container spacing={1}>
+                        <Grid item>
+                          <Tooltip title="Click to view list of Students">
+                            <ListIcon
+                              style={{ color: "gray", cursor: "pointer" }}
+                              onClick={() => setList(!list)}
+                            />
+                          </Tooltip>
+                        </Grid>
 
-                      <Grid item>
-                        <ClassroomModal
-                          addNewRequest={addNewRequest}
-                          handleSubmitNewRquest={handleSubmitNewRquest}
-                          newRequest={newRequest}
-                        />
+                        <Grid item>
+                          <ClassroomModal
+                            addNewRequest={addNewRequest}
+                            handleSubmitNewRquest={handleSubmitNewRquest}
+                            newRequest={newRequest}
+                          />
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </>
-                )}
+                    </>
+                  )}
               </Grid>
             </Grid>
           </div>
@@ -431,7 +431,7 @@ const RequestComponent = ({
         },
         {
           label: "No",
-          onClick: () => {}
+          onClick: () => { }
         }
       ]
     });
@@ -461,8 +461,8 @@ const RequestComponent = ({
               style={{ width: "30px", borderRadius: "50%" }}
             />
           ) : (
-            ""
-          )}
+              ""
+            )}
         </div>
         <Div>
           <span style={{ fontSize: 16 }}>{data.title}</span>
@@ -490,8 +490,8 @@ const RequestComponent = ({
               </Button>
             </Tooltip>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
           {account_type_id === 2 ? (
             <Tooltip title="Help">
               <Button
@@ -510,8 +510,8 @@ const RequestComponent = ({
               </Button>
             </Tooltip>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
       ) : action === "help" ? (
         <div className={classes.Icons}>
@@ -544,31 +544,31 @@ const RequestComponent = ({
               </Tooltip>
             </>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
       ) : (
-        <div className={classes.Icons}>
-          {account_type_id === 2 ? (
-            <Tooltip title="Move back to 'Being Help'">
-              <Button
-                onClick={() =>
-                  handleSubmitAction("Moving back request . . .", () =>
-                    updateRequest(data.id, false)
-                  )
-                }
-              >
-                <AssignmentReturnIcon
-                  style={{ color: "#9da1f0" }}
-                  className={classes.removeIcon}
-                />
-              </Button>
-            </Tooltip>
-          ) : (
-            <></>
+            <div className={classes.Icons}>
+              {account_type_id === 2 ? (
+                <Tooltip title="Move back to 'Being Help'">
+                  <Button
+                    onClick={() =>
+                      handleSubmitAction("Moving back request . . .", () =>
+                        updateRequest(data.id, false)
+                      )
+                    }
+                  >
+                    <AssignmentReturnIcon
+                      style={{ color: "#9da1f0" }}
+                      className={classes.removeIcon}
+                    />
+                  </Button>
+                </Tooltip>
+              ) : (
+                  <></>
+                )}
+            </div>
           )}
-        </div>
-      )}
     </Paper>
   );
 };
