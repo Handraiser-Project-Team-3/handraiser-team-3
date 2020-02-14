@@ -6,7 +6,7 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
+import axios from "axios";
 // images
 import head from "../../assets/images/bg.jpg";
 
@@ -34,7 +34,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function Layout(props) {
   const classes = useStyles();
-  const { first_name, classId, typeId } = props;
+  const { first_name, classId, typeId, headers } = props;
+  const [roomName, setroomName] = React.useState([]);
+
+  React.useEffect(() => {
+    if (classId) {
+      axios(`/api/class/${classId}`, headers).then(res => {
+        setroomName(res.data);
+      });
+    }
+  }, [headers, classId]);
   return (
     <div>
       <Paper elevation={0} className={classes.header}>
@@ -56,20 +65,38 @@ export default function Layout(props) {
               className={classes.res}
             >
               {classId ? (
-                <Link
-                  to="/"
-                  color="inherit"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  Home
+                <Link to="/" color="inherit" style={{ textDecoration: "none" }}>
+                  <Typography
+                    style={{
+                      color: "#3534B5",
+                      fontWeight: "500",
+                      fontSize: "1em"
+                    }}
+                  >
+                    Home
+                  </Typography>
                 </Link>
               ) : (
-                <Typography color="textPrimary">
+                <Typography
+                  style={{
+                    color: "#3534B5",
+                    fontWeight: "500",
+                    fontSize: "1em"
+                  }}
+                >
                   {typeId ? "Admin" : "Home"}
                 </Typography>
               )}
               {classId && (
-                <Typography color="textPrimary">Classrooms</Typography>
+                <Typography
+                  style={{
+                    color: "#3534B5",
+                    fontWeight: "500",
+                    fontSize: "1em"
+                  }}
+                >
+                  {roomName.class_name}
+                </Typography>
               )}
             </Breadcrumbs>
           </Grid>
