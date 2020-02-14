@@ -505,11 +505,7 @@ const [state, setState] = React.useState({
         classList={classList}
         account_type_id={account_type_id}
       />
-      <Pagination
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
-      />
+
     </Layout>
   );
 };

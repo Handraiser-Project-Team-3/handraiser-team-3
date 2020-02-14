@@ -10,6 +10,10 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import styled from "styled-components";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import Hidden from "@material-ui/core/Hidden";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -416,6 +420,15 @@ const RequestComponent = ({
 				}
 			]
 		});
+	const [anchorEl, setAnchorEl] = React.useState(null);
+
+	const handleClick = event => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 	return (
 		<Paper
 			id={data.id}
@@ -423,122 +436,202 @@ const RequestComponent = ({
 			className={classes.needHelp}
 			elevation={6}
 		>
-			<Avatar
-				className={classes.studentsAvatar}
-				alt="Student"
-				src={student}
-				onClick={() => socket.emit(`join_chatroom`, { requestId: data.id })}
-			/>
-			<Div>
-				<Typography variant="body2" className={classes.studentsNeed}>
-					<span style={{ fontSize: 16, wordBreak: "break-all" }}>
-						{data.title}
-					</span>
-					<span style={{ fontSize: 12 }}>
-						{sender ? (
-							<UserDetails
-								id={sender.user_id}
-								headers={headers}
-								action="name"
+			<Grid container justify="space-between">
+				<Grid item>
+					<Grid container spacing={2} alignItems="center">
+						<Grid item>
+							<Avatar
+								className={classes.studentsAvatar}
+								alt="Student"
+								src={student}
+								onClick={() =>
+									socket.emit(`join_chatroom`, { requestId: data.id })
+								}
 							/>
-						) : (
-							""
-						)}
-					</span>
-				</Typography>
-			</Div>
-			{action === "need" ? (
-				<div className={classes.Icons}>
-					{classroomUser.id === data.student_id || account_type_id === 2 ? (
-						<Tooltip title="Remove">
-							<Button
-								onClick={() =>
-									handleSubmitAction("Removing request ...", () =>
-										socket.emit("remove_request", data, user)
-									)
-								}
-							>
-								<RemoveCircleIcon
-									style={{ color: "#9da1f0" }}
-									className={classes.removeIcon}
-								/>
-							</Button>
-						</Tooltip>
+						</Grid>
+						<Grid item>
+							<Typography variant="body2" className={classes.studentsNeed}>
+								<Grid container direction="column">
+									<Grid item>
+										<Typography style={{ wordBreak: "break-all" }}>
+											{data.title}
+										</Typography>
+									</Grid>
+									<Grid item>
+										<Typography variant="caption">
+											{sender ? (
+												<UserDetails
+													id={sender.user_id}
+													headers={headers}
+													action="name"
+												/>
+											) : (
+												""
+											)}
+										</Typography>
+									</Grid>
+								</Grid>
+							</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
+				<Grid item>
+					{action === "need" ? (
+						<div className={classes.Icons}>
+							{classroomUser.id === data.student_id || account_type_id === 2 ? (
+								<Grid container>
+									<Hidden smDown>
+										<Grid item>
+											{" "}
+											<Tooltip title="Remove">
+												<Button
+													onClick={() =>
+														handleSubmitAction("Removing request ...", () =>
+															socket.emit("remove_request", data, user)
+														)
+													}
+												>
+													<RemoveCircleIcon
+														style={{ color: "#9da1f0" }}
+														className={classes.removeIcon}
+													/>
+												</Button>
+											</Tooltip>
+										</Grid>
+									</Hidden>
+									<Hidden mdUp>
+										<MoreVertIcon
+											size="small"
+											style={{ cursor: "pointer", color: "purple" }}
+											onClick={handleClick}
+										/>
+									</Hidden>
+								</Grid>
+							) : (
+								<></>
+							)}
+							{account_type_id === 2 ? (
+								<Hidden smDown>
+									<Tooltip title="Help">
+										<Button
+											onClick={() =>
+												handleSubmitAction("Accepting request . . .", () =>
+													updateRequest(data.id, false)
+												)
+											}
+										>
+											<Help style={{ color: "#9da1f0" }} />
+										</Button>
+									</Tooltip>
+								</Hidden>
+							) : (
+								<></>
+							)}
+						</div>
+					) : action === "help" ? (
+						<div className={classes.Icons}>
+							{account_type_id === 2 ? (
+								<Grid container>
+									<Grid item>
+										<Tooltip title="Move back to 'Need Help'">
+											<Button
+												onClick={() =>
+													handleSubmitAction("Moving back request . . .", () =>
+														updateRequest(data.id, null)
+													)
+												}
+											>
+												<AssignmentReturnIcon
+													style={{ color: "#9da1f0" }}
+													className={classes.removeIcon}
+												/>
+											</Button>
+										</Tooltip>
+									</Grid>
+									<Grid item>
+										<Tooltip title="Help">
+											<Button
+												onClick={() =>
+													handleSubmitAction("Ending request . . .", () =>
+														updateRequest(data.id, true)
+													)
+												}
+											>
+												<CheckCircleIcon style={{ color: "#9da1f0" }} />
+											</Button>
+										</Tooltip>
+									</Grid>
+								</Grid>
+							) : (
+								<></>
+							)}
+						</div>
 					) : (
-						<></>
+						<div className={classes.Icons}>
+							{account_type_id === 2 ? (
+								<Tooltip title="Move back to 'Being Help'">
+									<Button
+										onClick={() =>
+											handleSubmitAction("Moving back request . . .", () =>
+												updateRequest(data.id, false)
+											)
+										}
+									>
+										<AssignmentReturnIcon
+											style={{ color: "#9da1f0" }}
+											className={classes.removeIcon}
+										/>
+									</Button>
+								</Tooltip>
+							) : (
+								<></>
+							)}
+						</div>
 					)}
-					{account_type_id === 2 ? (
-						<Tooltip title="Help">
-							<Button
-								onClick={() =>
-									handleSubmitAction("Accepting request . . .", () =>
-										updateRequest(data.id, false)
-									)
-								}
-							>
-								<Help style={{ color: "#9da1f0" }} />
-							</Button>
-						</Tooltip>
-					) : (
-						<></>
-					)}
-				</div>
-			) : action === "help" ? (
-				<div className={classes.Icons}>
-					{account_type_id === 2 ? (
-						<>
-							<Tooltip title="Move back to 'Need Help'">
-								<Button
-									onClick={() =>
-										handleSubmitAction("Moving back request . . .", () =>
-											updateRequest(data.id, null)
-										)
-									}
-								>
-									<AssignmentReturnIcon
-										style={{ color: "#9da1f0" }}
-										className={classes.removeIcon}
-									/>
-								</Button>
-							</Tooltip>
-							<Tooltip title="Help">
-								<Button
-									onClick={() =>
-										handleSubmitAction("Ending request . . .", () =>
-											updateRequest(data.id, true)
-										)
-									}
-								>
-									<CheckCircleIcon style={{ color: "#9da1f0" }} />
-								</Button>
-							</Tooltip>
-						</>
-					) : (
-						<></>
-					)}
-				</div>
-			) : (
-				<div className={classes.Icons}>
-					{account_type_id === 2 ? (
-						<Tooltip title="Move back to 'Being Help'">
-							<Button
-								onClick={() =>
-									handleSubmitAction("Moving back request . . .", () =>
-										updateRequest(data.id, false)
-									)
-								}
-							>
-								<AssignmentReturnIcon
-									style={{ color: "#9da1f0" }}
-									className={classes.removeIcon}
-								/>
-							</Button>
-						</Tooltip>
-					) : (
-						<></>
-					)}
-				</div>
-			)}
+				</Grid>
+			</Grid>
+			<Menu
+				id="simple-menu"
+				anchorEl={anchorEl}
+				keepMounted
+				open={Boolean(anchorEl)}
+				onClose={handleClose}
+			>
+				{account_type_id === 3 ? (
+					<MenuItem
+						onClick={() =>
+							handleSubmitAction("Removing request ...", () =>
+								socket.emit("remove_request", data, user)
+							)
+						}
+					>
+						Remove
+					</MenuItem>
+				) : (
+					<>
+						<MenuItem
+							onClick={() =>
+								handleSubmitAction("Removing request ...", () =>
+									socket.emit("remove_request", data, user)
+								)
+							}
+						>
+							Remove
+						</MenuItem>
+						<MenuItem
+							onClick={() =>
+								handleSubmitAction("Accepting request . . .", () =>
+									updateRequest(data.id, false)
+								)
+							}
+						>
+							Help
+						</MenuItem>
+					</>
+				)}
+				{/* <MenuItem onClick={handleClose}>My account</MenuItem>
+				<MenuItem onClick={handleClose}>Logout</MenuItem> */}
+			</Menu>
 		</Paper>
 	);
 };

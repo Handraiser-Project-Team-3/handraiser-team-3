@@ -6,7 +6,7 @@ import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
 import { ToastContainer } from "react-toastify";
-const socket = io(`172.60.62.163:3001`);
+const socket = io(`172.60.60.163:3001`);
 
 function App() {
 	const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");

@@ -23,13 +23,13 @@ export const ClassroomStyle = makeStyles(theme => ({
 	},
 	needHelp: {
 		padding: "15px",
-		margin: "20px",
-		display: "flex",
-		justifyContent: "space-between"
+		margin: "20px"
+		// display: "flex",
+		// justifyContent: "space-between"
 	},
 	studentsNeed: {
-		display: "flex",
-		alignItems: "center",
+		// display: "flex",
+		// alignItems: "center",
 		color: "gray"
 	},
 	appBar: {
