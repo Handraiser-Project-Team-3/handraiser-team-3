@@ -486,14 +486,6 @@ export const ClassView = props => {
             </div>
           )}
       </Grid>
-      <Pagination
-        user={user}
-        userDetails={userDetails}
-        headers={headers}
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
-      />
       <HandleClassModal
         open={open}
         setOpen={setOpen}
@@ -508,6 +500,9 @@ export const ClassView = props => {
         account_type_id={account_type_id}
       />
       <Pagination
+        user={user}
+        userDetails={userDetails}
+        headers={headers}
         postPerPage={postPerPage}
         totalPost={classList.length}
         paginate={paginate}
