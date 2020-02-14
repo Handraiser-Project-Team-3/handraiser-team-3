@@ -13,7 +13,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
 import copy from "clipboard-copy";
 import axios from "axios";
-import Switch from '@material-ui/core/Switch';
+import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
 
 // component/s
@@ -36,38 +36,38 @@ const AntSwitch = withStyles(theme => ({
     width: 28,
     height: 16,
     padding: 0,
-    display: 'flex',
+    display: "flex"
   },
   switchBase: {
     padding: 2,
     color: theme.palette.grey[500],
-    '&$checked': {
-      transform: 'translateX(12px)',
+    "&$checked": {
+      transform: "translateX(12px)",
       color: theme.palette.common.white,
-      '& + $track': {
+      "& + $track": {
         opacity: 1,
         backgroundColor: theme.palette.primary.main.dark,
-        borderColor: theme.palette.primary.main.dark,
-      },
-    },
+        borderColor: theme.palette.primary.main.dark
+      }
+    }
   },
   thumb: {
     width: 12,
     height: 12,
-    boxShadow: 'none',
+    boxShadow: "none"
   },
   track: {
     border: `1px solid ${theme.palette.grey[500]}`,
     borderRadius: 16 / 2,
     opacity: 1,
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.white
   },
-  checked: {},
+  checked: {}
 }))(Switch);
 
 export const ClassView = props => {
   const classes = ClassViewStyle();
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id, id } = userDetails;
   const [headTitle, setHeadTitle] = useState("");
@@ -85,10 +85,10 @@ export const ClassView = props => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage] = useState(8);
 
-const [state, setState] = React.useState({
+  const [state, setState] = React.useState({
     checkedA: true,
     checkedB: true,
-    checkedC: true,
+    checkedC: true
   });
 
   const handleChange = name => event => {
@@ -193,23 +193,28 @@ const [state, setState] = React.useState({
                       className={classes.media}
                       image={classroom}
                       title={data.class_name}
-                    >{account_type_id === 2 ? 
-                      <Grid container
-                      direction="row"
-                      justify="flex-end"
-                      alignItems="flex-start">
-                    <Grid item style={{margin: "5px"}}>
-                      <AntSwitch
-                        checked={state.checkedC}
-                        onChange={handleChange('checkedC')}
-                        value="checkedC"
-                      />
-                    </Grid>
-                    </Grid>
-                    : ""}
-                   </CardMedia>
+                    >
+                      {account_type_id === 2 ? (
+                        <Grid
+                          container
+                          direction="row"
+                          justify="flex-end"
+                          alignItems="flex-start"
+                        >
+                          <Grid item style={{ margin: "5px" }}>
+                            <AntSwitch
+                              checked={state.checkedC}
+                              onChange={handleChange("checkedC")}
+                              value="checkedC"
+                            />
+                          </Grid>
+                        </Grid>
+                      ) : (
+                        ""
+                      )}
+                    </CardMedia>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" >
+                      <Typography gutterBottom variant="h5">
                         {data.class_name}
                       </Typography>
                       <Tooltip
@@ -295,16 +300,17 @@ const [state, setState] = React.useState({
                                       </Grid>
                                       <Grid item lg={12} xs={12}>
                                         <b>
-                                        <Chip
-				                                    variant="outlined"
-				                                    size="small"
-				                                    label={classroomUsers &&
+                                          <Chip
+                                            variant="outlined"
+                                            size="small"
+                                            label={
+                                              classroomUsers &&
                                               classroomUsers.filter(res => {
                                                 return res.class_id === data.id;
-                                              }).length}
-				                                    style={{ fontSize: "14px" }}
-			                                    />
-                                          
+                                              }).length
+                                            }
+                                            style={{ fontSize: "14px" }}
+                                          />
                                         </b>
                                       </Grid>
                                     </Grid>
@@ -312,7 +318,7 @@ const [state, setState] = React.useState({
                                 </Tooltip>
                               </Grid>
                             </Grid>
-                            
+
                             <Grid item xs={6}>
                               <Grid
                                 container
@@ -351,12 +357,11 @@ const [state, setState] = React.useState({
                                           onClick={() => copy(data.class_code)}
                                         >
                                           <Chip
-				                                    variant="outlined"
-				                                    size="small"
-				                                    label={data.class_code}
-				                                    className={classes.codeStyle}
-			                                    />
-                                          
+                                            variant="outlined"
+                                            size="small"
+                                            label={data.class_code}
+                                            className={classes.codeStyle}
+                                          />
                                         </b>
                                       </Tooltip>
                                     </Grid>
@@ -366,34 +371,34 @@ const [state, setState] = React.useState({
                             </Grid>
                           </Grid>
                         ) : (
-                            <Grid
-                              container
-                              direction="row"
-                              alignItems="center"
-                              justify="space-between"
-                            >
-                              <Grid item xs={3}>
-                                <UserDetails
-                                  id={data.user_id}
-                                  headers={headers}
-                                  action="img"
-                                />
-                              </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item xs={3}>
+                              <UserDetails
+                                id={data.user_id}
+                                headers={headers}
+                                action="img"
+                              />
+                            </Grid>
 
-                              <Grid item xs={9}>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="flex-start"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={12} xs={12}>
-                                    <Typography
-                                      gutterBottom
-                                      component="div"
-                                      variant="caption"
-                                    >
-                                      Mentor's Name:
+                            <Grid item xs={9}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Mentor's Name:
                                   </Typography>
                                 </Grid>
                                 <Grid item lg={12} xs={12}>
@@ -412,7 +417,13 @@ const [state, setState] = React.useState({
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions style={account_type_id === 2 ? { background: "#ff6f61" } : {background: "#ababfa"}}>
+                  <CardActions
+                    style={
+                      account_type_id === 2
+                        ? { background: "#ff6f61" }
+                        : { background: "#ababfa" }
+                    }
+                  >
                     {account_type_id === 2 ? (
                       <Grid
                         container
@@ -434,7 +445,7 @@ const [state, setState] = React.useState({
                             delete
                           </Button> */}
                         </Grid>
-                        
+
                         <Grid item lg={1}>
                           <Grid container direction="row" alignItems="center">
                             <Tooltip title="Edit Class">
@@ -470,8 +481,7 @@ const [state, setState] = React.useState({
                     )}
                   </CardActions>
                 </Card>
-              </Grid >
-              
+              </Grid>
             ))
         ) : (
           <div className={classes.margin}>
@@ -504,11 +514,6 @@ const [state, setState] = React.useState({
         setClassList={setClassList}
         classList={classList}
         account_type_id={account_type_id}
-      />
-      <Pagination
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
       />
     </Layout>
   );
