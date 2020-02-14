@@ -116,7 +116,6 @@ export default function Profile(props) {
     setOpen(false);
   };
 
-  console.log(classList);
   return (
     <>
       <Chip
@@ -220,15 +219,12 @@ export default function Profile(props) {
                     </Grid>
                   </Grid>
                 ) : (
-                  <Paper
-                    elevation={3}
-                    style={{ width: "100%", height: "auto" }}
-                  >
-                    <Grid container alignItems="center">
-                      <Grid item xs={4}>
+                  <Paper elevation={3} style={{ width: "80%", height: "auto" }}>
+                    <Grid container direction="column">
+                      <Grid item xs={12}>
                         <Typography variant="subtitle2">Classes:</Typography>
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={12}>
                         <Typography
                           variant="h4"
                           style={{ background: "antiquewhite" }}
