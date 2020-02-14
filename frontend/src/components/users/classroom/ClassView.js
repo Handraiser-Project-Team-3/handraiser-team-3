@@ -20,7 +20,6 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
-import Pagination from "../reusables/Pagination";
 import CountUsers from "../reusables/CountUsers";
 
 // images
@@ -28,6 +27,7 @@ import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+import Paginations from "../reusables/ComponentPagination";
 
 export const ClassView = props => {
   const classes = ClassViewStyle();
@@ -46,7 +46,7 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [activePage, setActivePage] = useState(1);
   const [postPerPage] = useState(8);
 
   const handleClickOpen = () => {
@@ -126,8 +126,9 @@ export const ClassView = props => {
   }, [account_type_id]);
 
   // Get current classlist
-  const indexOfLastList = currentPage * postPerPage;
+  const indexOfLastList = activePage * postPerPage;
   const indexOfFirstList = indexOfLastList - postPerPage;
+  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
   // Change page
 
   return (
@@ -143,7 +144,6 @@ export const ClassView = props => {
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
           classList
-            .slice(indexOfFirstList, indexOfLastList)
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -415,13 +415,21 @@ export const ClassView = props => {
           </div>
         )}
       </Grid>
-      <Pagination
+      <Paginations
         account_type_id={account_type_id}
+        postPerPage={postPerPage}
+        totalPost={classList.length}
+        setActivePage={setActivePage}
+        activePage={activePage}
+      />
+      {/* <Pagination
+        user={user}
+        userDetails={userDetails}
         headers={headers}
         postPerPage={postPerPage}
         totalPost={classList.length}
         setCurrentPage={setCurrentPage}
-      />
+      /> */}
       <HandleClassModal
         open={open}
         setOpen={setOpen}
