@@ -7,7 +7,6 @@ import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-import { useStyles } from "./chatboxStyle";
 import { user_details, getStudentDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
@@ -17,7 +16,7 @@ import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
 
 export default function ChatBox(props) {
-  const classes = useStyles();
+  const classes = ChatBoxStyle();
   const [messages, setMessages] = React.useState([]);
   const [msg, setMsg] = React.useState("");
   const [student, setStudent] = React.useState(null);
