@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import student from "../../assets/images/student.png";
+import stud from "../../assets/images/student.png";
 import teacher from "../../assets/images/mentor2.png";
 import both from "../../assets/images/output.png";
 import axios from "axios";
@@ -12,19 +12,20 @@ import axios from "axios";
 const useStyles = makeStyles({
 	total: {
 		width: "100%",
-		height: "20.5vh",
+		height: "auto",
 		marginBottom: "2vh",
 		background:
 			"linear-gradient(207deg, rgba(171,171,250,1) 0%, rgba(171,171,250,1) 63%, rgba(255,255,255,1) 63%)"
 	},
 	imgStyle: {
-		width: "70%",
+		width: "80%",
 		height: "auto",
-		marginTop: "3vh",
+		margin: "2.4vh 0 2.4vh 0",
 		borderRadius: "50%",
-		background: "white",
+		background: "#aaaafa",
 		padding: "10px",
-		border: "solid 5px #aaaafa",
+		cursor: "pointer",
+		border: "solid 10px white",
 		transition: "border-width 0.3s linear",
 		"&:hover": {
 			borderWidth: "10px"
@@ -42,7 +43,9 @@ const useStyles = makeStyles({
 export const PaperStat = props => {
 	const classes = useStyles();
 	const { headers, users, setUsers } = props;
-	const [show, setShow] = React.useState(true);
+	const [all, setAll] = React.useState(true);
+	const [mentor, setMentor] = React.useState(true);
+	const [student, setStudent] = React.useState(true);
 
 	useEffect(() => {
 		headers &&
@@ -51,22 +54,18 @@ export const PaperStat = props => {
 			});
 	}, [headers]);
 
-	const handleCLick = () => {
-		setShow(false);
-	};
-
 	return (
 		<>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					{show ? (
+					{all ? (
 						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 							<img
 								src={both}
 								className={classes.imgStyle}
 								alt="all"
 								onClick={() => {
-									handleCLick();
+									setAll(false);
 								}}
 							/>
 						</Grid>
@@ -74,11 +73,11 @@ export const PaperStat = props => {
 						<>
 							<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 								<img
-									src={teacher}
+									src={both}
 									className={classes.imgStyle}
-									alt="mentor"
+									alt="all"
 									onClick={() => {
-										setShow(true);
+										setAll(true);
 									}}
 								/>
 							</Grid>
@@ -86,7 +85,7 @@ export const PaperStat = props => {
 								<Grid container direction="column" justify="center">
 									<Grid item xs={12}>
 										<Typography variant="h6" className={classes.label}>
-											All
+											Mentors
 										</Typography>
 									</Grid>
 									<Grid item xs={12}>
@@ -105,14 +104,14 @@ export const PaperStat = props => {
 			</Paper>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					{show ? (
+					{mentor ? (
 						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 							<img
 								src={teacher}
 								className={classes.imgStyle}
 								alt="all"
 								onClick={() => {
-									handleCLick();
+									setMentor(false);
 								}}
 							/>
 						</Grid>
@@ -124,7 +123,7 @@ export const PaperStat = props => {
 									className={classes.imgStyle}
 									alt="mentor"
 									onClick={() => {
-										setShow(true);
+										setMentor(true);
 									}}
 								/>
 							</Grid>
@@ -151,14 +150,14 @@ export const PaperStat = props => {
 			</Paper>
 			<Paper elevation={5} className={classes.total}>
 				<Grid container justify="center" align="center" alignItems="center">
-					{show ? (
+					{student ? (
 						<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 							<img
-								src={student}
+								src={stud}
 								className={classes.imgStyle}
-								alt="all"
+								alt="student"
 								onClick={() => {
-									handleCLick();
+									setStudent(false);
 								}}
 							/>
 						</Grid>
@@ -166,11 +165,11 @@ export const PaperStat = props => {
 						<>
 							<Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
 								<img
-									src={student}
+									src={stud}
 									className={classes.imgStyle}
 									alt="student"
 									onClick={() => {
-										setShow(true);
+										setStudent(true);
 									}}
 								/>
 							</Grid>
@@ -178,7 +177,7 @@ export const PaperStat = props => {
 								<Grid container direction="column" justify="center">
 									<Grid item xs={12}>
 										<Typography variant="h6" className={classes.label}>
-											All
+											Students
 										</Typography>
 									</Grid>
 									<Grid item xs={12}>
