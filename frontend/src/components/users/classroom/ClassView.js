@@ -23,13 +23,14 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
-import Pagination from "../reusables/Pagination";
+import CountUsers from "../reusables/CountUsers";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
 import student from "../../assets/images/student.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+import Paginations from "../reusables/ComponentPagination";
 
 const AntSwitch = withStyles(theme => ({
   root: {
@@ -82,8 +83,8 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage] = useState(8);
+  const [activePage, setActivePage] = useState(1);
+  const [itemPerPage] = useState(8);
 
   const [state, setState] = React.useState({
     checkedA: true,
@@ -108,11 +109,18 @@ export const ClassView = props => {
         })
         .map(res =>
           user_details(res.user_id, headers).then(res => {
-            return res.data.first_name + " " + res.data.last_name;
+            return (
+              res.data.account_type_id === 3 &&
+              res.data.first_name + " " + res.data.last_name
+            );
           })
         )
     ).then(response => {
-      setStudentDetails(response);
+      setStudentDetails(
+        response.filter(res => {
+          return res !== false;
+        })
+      );
     });
   };
   // const deleteClass = classid => {
@@ -165,11 +173,9 @@ export const ClassView = props => {
   }, [account_type_id]);
 
   // Get current classlist
-  const indexOfLastList = currentPage * postPerPage;
-  const indexOfFirstList = indexOfLastList - postPerPage;
-  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
+  const indexOfLastList = activePage * itemPerPage;
+  const indexOfFirstList = indexOfLastList - itemPerPage;
   // Change page
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <Layout first_name={first_name}>
@@ -183,7 +189,8 @@ export const ClassView = props => {
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
-          currentList
+          classList
+            .slice(indexOfFirstList, indexOfLastList)
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -265,15 +272,15 @@ export const ClassView = props => {
                                 <Tooltip
                                   onOpen={() => onOpenTip(data.id)}
                                   title={
-                                    studentDetails.length !== 0
-                                      ? studentDetails.map(res => (
-                                        <Typography
-                                          style={{ fontSize: 12 }}
-                                          key={res.id}
-                                        >
-                                          {res}
-                                        </Typography>
-                                      ))
+                                    studentDetails.length
+                                      ? studentDetails.map((res, i) => (
+                                          <Typography
+                                            style={{ fontSize: 12 }}
+                                            key={i}
+                                          >
+                                            {res}
+                                          </Typography>
+                                        ))
                                       : ""
                                   }
                                 >
@@ -298,10 +305,13 @@ export const ClassView = props => {
                                           <Chip
                                             variant="outlined"
                                             size="small"
-                                            label={classroomUsers &&
-                                              classroomUsers.filter(res => {
-                                                return res.class_id === data.id;
-                                              }).length}
+                                            label={
+                                              <CountUsers
+                                                classId={data.id}
+                                                classroomUsers={classroomUsers}
+                                                headers={headers}
+                                              />
+                                            }
                                             style={{ fontSize: "14px" }}
                                           />
 
@@ -489,6 +499,19 @@ export const ClassView = props => {
             </div>
           )}
       </Grid>
+      {classList.length ? (
+        <Grid
+          style={{ marginTop: 10, display: "flex", justifyContent: "center" }}
+        >
+          <Paginations
+            totalPost={classList.length}
+            setActivePage={setActivePage}
+            activePage={activePage}
+            itemPerPage={itemPerPage}
+          />
+        </Grid>
+      ) : null}
+
       <HandleClassModal
         open={open}
         setOpen={setOpen}
@@ -502,14 +525,7 @@ export const ClassView = props => {
         classList={classList}
         account_type_id={account_type_id}
       />
-      <Pagination
-        user={user}
-        userDetails={userDetails}
-        headers={headers}
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
-      />
+      
     </Layout>
   );
 };
