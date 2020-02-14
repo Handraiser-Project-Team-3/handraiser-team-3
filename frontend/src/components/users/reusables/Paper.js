@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 		border: "solid 10px white",
 		transition: "border-width 0.3s linear",
 		"&:hover": {
-			borderWidth: "10px"
+			borderWidth: "15px"
 		}
 	},
 	label: {
