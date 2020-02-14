@@ -71,7 +71,7 @@ export default function Profile(props) {
 	const [classUsers, setClassUsers] = useState([]);
 	const [classList, setClassList] = useState([]);
 	const [studentClass, setStudentClass] = useState([]);
-	const [profile, setProfile] = useState(true);
+	const [profile] = useState(true);
 
 	const handleChange = panel => (event, isExpanded) => {
 		setExpanded(isExpanded ? panel : false);
@@ -217,22 +217,22 @@ export default function Profile(props) {
 										</Grid>
 									</Grid>
 								) : (
-									<Paper elevation={3} style={{ width: "80%", height: "auto" }}>
-										<Grid container direction="column">
-											<Grid item xs={12}>
-												<Typography variant="subtitle2">Classes:</Typography>
+										<Paper elevation={3} style={{ width: "80%", height: "auto" }}>
+											<Grid container direction="column">
+												<Grid item xs={12}>
+													<Typography variant="subtitle2">Classes:</Typography>
+												</Grid>
+												<Grid item xs={12}>
+													<Typography
+														variant="h4"
+														style={{ background: "antiquewhite" }}
+													>
+														{classList.length}
+													</Typography>
+												</Grid>
 											</Grid>
-											<Grid item xs={12}>
-												<Typography
-													variant="h4"
-													style={{ background: "antiquewhite" }}
-												>
-													{classList.length}
-												</Typography>
-											</Grid>
-										</Grid>
-									</Paper>
-								)}
+										</Paper>
+									)}
 							</Grid>
 
 							<Grid item>
@@ -262,63 +262,63 @@ export default function Profile(props) {
 											<List>
 												{(account_type_id === 2 ? classList : studentClass)
 													.length !== 0 ? (
-													(account_type_id === 2
-														? classList
-														: studentClass
-													).map(row => (
-														<div key={row.id}>
-															<ListItem>
-																<ListItemText>{row.class_name}</ListItemText>
-																<ListItemSecondaryAction>
-																	<Typography
-																		variant="caption"
-																		style={{ color: "#ff6f61ff" }}
-																	>
-																		{account_type_id === 2 ? (
-																			<Grid item>Student/s:</Grid>
-																		) : (
-																			""
-																		)}
-																		<Grid item style={{ fontWeight: "bold" }}>
-																			<Chip
-																				style={{ color: "gray" }}
-																				variant="outlined"
-																				size="small"
-																				avatar={
-																					<Avatar
-																						style={{
-																							background: "#ff6f61",
-																							color: "white"
-																						}}
-																					>
-																						{account_type_id === 3 ? "M" : "#"}
-																					</Avatar>
-																				}
-																				label={
-																					account_type_id === 3 ? (
-																						<UserDetails
-																							id={row.user_id}
-																							headers={headers}
-																							action="name"
-																						/>
-																					) : (
-																						classUsers &&
-																						classUsers.filter(res => {
-																							return res.class_id === row.id;
-																						}).length
-																					)
-																				}
-																				clickable
-																			/>
-																		</Grid>
-																	</Typography>
-																</ListItemSecondaryAction>
-															</ListItem>
-														</div>
-													))
-												) : (
-													<Typography variant="body2">Empty class</Typography>
-												)}
+														(account_type_id === 2
+															? classList
+															: studentClass
+														).map(row => (
+															<div key={row.id}>
+																<ListItem>
+																	<ListItemText>{row.class_name}</ListItemText>
+																	<ListItemSecondaryAction>
+																		<Typography
+																			variant="caption"
+																			style={{ color: "#ff6f61ff" }}
+																		>
+																			{account_type_id === 2 ? (
+																				<Grid item>Student/s:</Grid>
+																			) : (
+																					""
+																				)}
+																			<Grid item style={{ fontWeight: "bold" }}>
+																				<Chip
+																					style={{ color: "gray" }}
+																					variant="outlined"
+																					size="small"
+																					avatar={
+																						<Avatar
+																							style={{
+																								background: "#ff6f61",
+																								color: "white"
+																							}}
+																						>
+																							{account_type_id === 3 ? "M" : "#"}
+																						</Avatar>
+																					}
+																					label={
+																						account_type_id === 3 ? (
+																							<UserDetails
+																								id={row.user_id}
+																								headers={headers}
+																								action="name"
+																							/>
+																						) : (
+																								classUsers &&
+																								classUsers.filter(res => {
+																									return res.class_id === row.id;
+																								}).length
+																							)
+																					}
+																					clickable
+																				/>
+																			</Grid>
+																		</Typography>
+																	</ListItemSecondaryAction>
+																</ListItem>
+															</div>
+														))
+													) : (
+														<Typography variant="body2">Empty class</Typography>
+													)}
 											</List>
 										</div>
 									</ExpansionPanelDetails>

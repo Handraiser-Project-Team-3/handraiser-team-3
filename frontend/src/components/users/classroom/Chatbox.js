@@ -39,6 +39,7 @@ export default function ChatBox(props) {
         }
       })();
     }
+    // eslint-disable-next-line
   }, [headers, room]);
   const handleSubmit = e => {
     e.preventDefault();
@@ -62,6 +63,7 @@ export default function ChatBox(props) {
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
+    // eslint-disable-next-line
   }, [messages, room]);
   React.useEffect(() => {
     if (room) {
@@ -81,6 +83,7 @@ export default function ChatBox(props) {
         }
       })();
     }
+    // eslint-disable-next-line
   }, [room]);
   return (
     <Paper className={classes.root}>
@@ -91,16 +94,16 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                <img src={bubbles} style={{ width: 45 }} />
-              )
+                  <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+                )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-              <img src={bubbles} style={{ width: 45 }} />
-            )
+                  <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+                )
           ) : (
-            <img src={bubbles} style={{ width: 45 }} />
-          )}
+              <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+            )}
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
@@ -111,8 +114,8 @@ export default function ChatBox(props) {
                   ? `${student.first_name} ${student.last_name}`
                   : ""
                 : mentor !== null
-                ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-                : ""
+                  ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
+                  : ""
               : ""}
           </Typography>
         </Grid>
@@ -161,8 +164,8 @@ export default function ChatBox(props) {
             </Grid>
           </div>
         ) : (
-          ""
-        )}
+            ""
+          )}
         <div
           style={{
             display: "flex",
@@ -196,8 +199,8 @@ export default function ChatBox(props) {
                 />
               ))
           ) : (
-            ""
-          )}
+                ""
+              )}
 
           {isTyping !== null ? (
             <Div style={{ flexDirection: "row" }}>
@@ -217,8 +220,8 @@ export default function ChatBox(props) {
               </Msg>
             </Div>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </div>
       </Paper>
       <form onSubmit={handleSubmit}>
@@ -267,17 +270,18 @@ const MessageBox = props => {
     user_details(data.user_id, headers).then(res => {
       setSender(res.data);
     });
+    // eslint-disable-next-line
   }, []);
   return (
     <Div
       style={
         user.id === data.user_id
           ? {
-              flexDirection: "row-reverse"
-            }
+            flexDirection: "row-reverse"
+          }
           : {
-              flexDirection: "row"
-            }
+            flexDirection: "row"
+          }
       }
     >
       {user.id !== data.user_id ? (
@@ -286,34 +290,34 @@ const MessageBox = props => {
             messages[index + 1].user_id === data.user_id ? (
               <span style={{ width: 40 }} />
             ) : (
+                <Avatar src={sender ? sender.user_image : ""} />
+              )
+          ) : (
               <Avatar src={sender ? sender.user_image : ""} />
             )
-          ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
         ) : messages[index + 1] ? (
           messages[index + 1].user_id === data.user_id ? (
             <span style={{ width: 40 }} />
           ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
+              <Avatar src={sender ? sender.user_image : ""} />
+            )
         ) : (
-          <span style={{ width: 40 }} />
-        )
+              <span style={{ width: 40 }} />
+            )
       ) : (
-        ""
-      )}
+          ""
+        )}
       <Msg
         style={
           user.id === data.user_id
             ? {
-                borderRadius: "20px 20px 0 20px",
-                background: "#ababfa"
-              }
+              borderRadius: "20px 20px 0 20px",
+              background: "#ababfa"
+            }
             : {
-                borderRadius: "20px 20px 20px 0",
-                border: "2px solid #ff6f61"
-              }
+              borderRadius: "20px 20px 20px 0",
+              border: "2px solid #ff6f61"
+            }
         }
       >
         {data.content}

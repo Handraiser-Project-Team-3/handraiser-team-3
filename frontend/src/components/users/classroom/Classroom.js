@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
@@ -65,7 +65,7 @@ export default function Classroom(props) {
   const { classId } = props;
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
+  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
@@ -74,7 +74,6 @@ export default function Classroom(props) {
   const [list, setList] = useState(false);
   const [verify, setVerify] = React.useState([]);
   const history = useHistory();
-  const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -117,12 +116,14 @@ export default function Classroom(props) {
       setRequests(data);
       setRoom(null);
     });
+    // eslint-disable-next-line
   }, [requests, classId]);
 
   React.useEffect(() => {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
+    // eslint-disable-next-line
   }, []);
   React.useEffect(() => {
     if (user) {
@@ -138,6 +139,7 @@ export default function Classroom(props) {
         }
       })();
     }
+    // eslint-disable-next-line
   }, [user, headers]);
 
   const updateRequest = async (id, data, notify, mentor) => {
@@ -162,7 +164,8 @@ export default function Classroom(props) {
         history.replace("/");
       }
     }
-  }, [verify, match.params.id]);
+    // eslint-disable-next-line
+  }, [verify]);
 
   const handleSubmitNewRquest = () => {
     const obj = {

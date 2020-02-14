@@ -1,4 +1,5 @@
 import React from "react";
+import { user_details, getStudentDetails } from "../../reusables/UserDetails";
 // Material-ui
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -10,17 +11,12 @@ import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-import Axios from "axios";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-// images
-import { toast } from "react-toastify";
-
-import { user_details, getStudentDetails } from "../../reusables/UserDetails";
 
 export const RequestComponent = ({
   data,
@@ -43,6 +39,7 @@ export const RequestComponent = ({
         );
       });
     }
+    // eslint-disable-next-line
   }, [data]);
   const handleSubmitAction = (title, submit) =>
     confirmAlert({
@@ -55,7 +52,7 @@ export const RequestComponent = ({
         },
         {
           label: "No",
-          onClick: () => {}
+          onClick: () => { }
         }
       ]
     });
@@ -85,8 +82,8 @@ export const RequestComponent = ({
               style={{ width: "30px", borderRadius: "50%" }}
             />
           ) : (
-            ""
-          )}
+              ""
+            )}
         </div>
         <Div>
           <span style={{ fontSize: 16 }}>{data.title}</span>
@@ -114,8 +111,8 @@ export const RequestComponent = ({
               </Button>
             </Tooltip>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
           {account_type_id === 2 ? (
             <Tooltip title="Help">
               <Button
@@ -134,8 +131,8 @@ export const RequestComponent = ({
               </Button>
             </Tooltip>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
       ) : action === "help" ? (
         <div className={classes.Icons}>
@@ -168,31 +165,31 @@ export const RequestComponent = ({
               </Tooltip>
             </>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
       ) : (
-        <div className={classes.Icons}>
-          {account_type_id === 2 ? (
-            <Tooltip title="Move back to 'Being Help'">
-              <Button
-                onClick={() =>
-                  handleSubmitAction("Moving back request . . .", () =>
-                    updateRequest(data.id, false)
-                  )
-                }
-              >
-                <AssignmentReturnIcon
-                  style={{ color: "#9da1f0" }}
-                  className={classes.removeIcon}
-                />
-              </Button>
-            </Tooltip>
-          ) : (
-            <></>
+            <div className={classes.Icons}>
+              {account_type_id === 2 ? (
+                <Tooltip title="Move back to 'Being Help'">
+                  <Button
+                    onClick={() =>
+                      handleSubmitAction("Moving back request . . .", () =>
+                        updateRequest(data.id, false)
+                      )
+                    }
+                  >
+                    <AssignmentReturnIcon
+                      style={{ color: "#9da1f0" }}
+                      className={classes.removeIcon}
+                    />
+                  </Button>
+                </Tooltip>
+              ) : (
+                  <></>
+                )}
+            </div>
           )}
-        </div>
-      )}
     </Paper>
   );
 };
