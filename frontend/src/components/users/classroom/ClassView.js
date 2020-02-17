@@ -27,7 +27,7 @@ import CountUsers from "../reusables/CountUsers";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
-import student from "../../assets/images/student.png";
+import group from "../../assets/images/team.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
 import Paginations from "../reusables/ComponentPagination";
@@ -47,7 +47,7 @@ const AntSwitch = withStyles(theme => ({
       color: theme.palette.common.white,
       "& + $track": {
         opacity: 1,
-        backgroundColor: theme.palette.primary.main.dark,
+        backgroundColor: "#4a51b9",
         borderColor: theme.palette.primary.main.dark
       }
     }
@@ -264,9 +264,9 @@ export const ClassView = props => {
                               >
                                 <Grid item lg={2} xs={2}>
                                   <img
-                                    src={student}
+                                    src={group}
                                     alt="man"
-                                    style={{ width: "30px" }}
+                                    style={{ width: "40px" }}
                                   />
                                 </Grid>
                                 <Tooltip
@@ -297,7 +297,7 @@ export const ClassView = props => {
                                           component="div"
                                           variant="caption"
                                         >
-                                          Students:
+                                          Members:
                                         </Typography>
                                       </Grid>
                                       <Grid item lg={12} xs={12}>

@@ -84,11 +84,11 @@ export const user_details = async (id, headers) => {
 };
 
 export const getStudentDetails = async (id, headers) => {
-  try {
-    return await Axios.get(`/api/classroom-users/${id}`, headers);
-  } catch (err) {
-    console.log(err);
-  }
+	try {
+		return await Axios.get(`/api/classroom-users/${id}`, headers);
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 export const class_details = async (id, headers) => {
