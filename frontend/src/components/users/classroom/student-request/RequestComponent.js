@@ -86,8 +86,10 @@ export const RequestComponent = ({
         elevation={6}
         style={
           classroomUser.id === data.student_id
-            ? { background: "#e3e4f8", display: "flex", alignItems: "center" }
-            : { display: "flex", alignItems: "center" }
+            ? {
+                background: "#e3e4f8"
+              }
+            : {}
         }
       >
         <Typography variant="h6" className={classes.studentsNeed}>
@@ -96,7 +98,7 @@ export const RequestComponent = ({
               src={sender.user_image}
               alt="man"
               style={{
-                width: "30px",
+                width: "50px",
                 borderRadius: "50%",
                 margin: "0 10px 0 0"
               }}
@@ -161,13 +163,15 @@ export const RequestComponent = ({
                   <AssignmentReturnIcon
                     style={{ ...iconStyle }}
                     onClick={() =>
-                      handleSubmitAction("Moving back request . . .", () =>
+                      handleSubmitAction("Moving back request . . .", () => {
                         updateRequest({
                           id: data.id,
                           data: null,
-                          action: "move_back"
-                        })
-                      )
+                          action: "move_back",
+                          notify: `Mentor ${user.first_name} moved ${sender.firstname}'s request back to queue`
+                        });
+                        setRoom(null);
+                      })
                     }
                   />
                 </Tooltip>

@@ -9,9 +9,9 @@ module.exports = {
       }
     });
 
-    const newData = notify =>
+    const newData = (notify, action) =>
       db.student_request.find({ class_id: classroom }).then(data => {
-        io.to(`${classroom}`).emit(`update_request_list`, data);
+        io.to(`${classroom}`).emit(`update_request_list`, data, action);
         socket.to(`${classroom}`).emit(`notify`, notify);
       });
 
@@ -26,7 +26,10 @@ module.exports = {
         db.student_request
           .destroy({ id: data.id })
           .then(() =>
-            newData(`${user.first_name} ${user.last_name} removed a request`)
+            newData(
+              `${user.first_name} ${user.last_name} removed a request`,
+              "remove"
+            )
           );
       });
     });

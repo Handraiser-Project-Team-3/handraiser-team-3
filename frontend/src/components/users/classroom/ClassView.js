@@ -15,6 +15,7 @@ import copy from "clipboard-copy";
 import axios from "axios";
 import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
+import { toast } from "react-toastify";
 
 // component/s
 import { HandleClassModal } from "./HandleClassModal";
@@ -23,13 +24,14 @@ import Layout from "../reusables/Layout";
 import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
-import Pagination from "../reusables/Pagination";
+import CountUsers from "../reusables/CountUsers";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
-import student from "../../assets/images/student.png";
+import group from "../../assets/images/team.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
+import Paginations from "../reusables/ComponentPagination";
 
 const AntSwitch = withStyles(theme => ({
   root: {
@@ -46,7 +48,7 @@ const AntSwitch = withStyles(theme => ({
       color: theme.palette.common.white,
       "& + $track": {
         opacity: 1,
-        backgroundColor: theme.palette.primary.main.dark,
+        backgroundColor: "#4a51b9",
         borderColor: theme.palette.primary.main.dark
       }
     }
@@ -82,17 +84,20 @@ export const ClassView = props => {
     class_name: "",
     class_description: ""
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage] = useState(8);
+  const [activePage, setActivePage] = useState(1);
+  const [itemPerPage] = useState(8);
 
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedC: true
-  });
-
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
+  const handleStatus = name => event => {
+    axios
+      .patch(
+        `/api/class/${event.target.value}`,
+        { class_status: event.target.checked },
+        headers
+      )
+      .then(res => {
+        setClassList(res.data);
+        alertToast("Class Disabled");
+      });
   };
 
   const handleClickOpen = () => {
@@ -108,11 +113,18 @@ export const ClassView = props => {
         })
         .map(res =>
           user_details(res.user_id, headers).then(res => {
-            return res.data.first_name + " " + res.data.last_name;
+            return (
+              res.data.account_type_id === 3 &&
+              res.data.first_name + " " + res.data.last_name
+            );
           })
         )
     ).then(response => {
-      setStudentDetails(response);
+      setStudentDetails(
+        response.filter(res => {
+          return res !== false;
+        })
+      );
     });
   };
   // const deleteClass = classid => {
@@ -165,12 +177,9 @@ export const ClassView = props => {
   }, [account_type_id]);
 
   // Get current classlist
-  const indexOfLastList = currentPage * postPerPage;
-  const indexOfFirstList = indexOfLastList - postPerPage;
-  const currentList = classList.slice(indexOfFirstList, indexOfLastList);
-  // Change page
-  const paginate = pageNumber => setCurrentPage(pageNumber);
-
+  const indexOfLastList = activePage * itemPerPage;
+  const indexOfFirstList = indexOfLastList - itemPerPage;
+  let currentList = classList.slice(indexOfFirstList, indexOfLastList);
   return (
     <Layout first_name={first_name}>
       <ClassHead
@@ -180,10 +189,12 @@ export const ClassView = props => {
         setHeadTitle={setHeadTitle}
         filter={filter}
         setClassList={setClassList}
+        setActivePage={setActivePage}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
-          currentList
+          classList
+            .slice(indexOfFirstList, indexOfLastList)
             .sort((a, b) => (a.id > b.id ? 1 : -1))
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
@@ -203,9 +214,9 @@ export const ClassView = props => {
                         >
                           <Grid item style={{ margin: "5px" }}>
                             <AntSwitch
-                              checked={state.checkedC}
-                              onChange={handleChange("checkedC")}
-                              value="checkedC"
+                              checked={data.class_status}
+                              onChange={handleStatus("Status")}
+                              value={data.id}
                             />
                           </Grid>
                         </Grid>
@@ -262,19 +273,19 @@ export const ClassView = props => {
                               >
                                 <Grid item lg={2} xs={2}>
                                   <img
-                                    src={student}
+                                    src={group}
                                     alt="man"
-                                    style={{ width: "30px" }}
+                                    style={{ width: "40px" }}
                                   />
                                 </Grid>
                                 <Tooltip
                                   onOpen={() => onOpenTip(data.id)}
                                   title={
-                                    studentDetails.length !== 0
-                                      ? studentDetails.map(res => (
+                                    studentDetails.length
+                                      ? studentDetails.map((res, i) => (
                                           <Typography
                                             style={{ fontSize: 12 }}
-                                            key={res.id}
+                                            key={i}
                                           >
                                             {res}
                                           </Typography>
@@ -295,7 +306,7 @@ export const ClassView = props => {
                                           component="div"
                                           variant="caption"
                                         >
-                                          Students:
+                                          Members:
                                         </Typography>
                                       </Grid>
                                       <Grid item lg={12} xs={12}>
@@ -304,10 +315,11 @@ export const ClassView = props => {
                                             variant="outlined"
                                             size="small"
                                             label={
-                                              classroomUsers &&
-                                              classroomUsers.filter(res => {
-                                                return res.class_id === data.id;
-                                              }).length
+                                              <CountUsers
+                                                classId={data.id}
+                                                classroomUsers={classroomUsers}
+                                                headers={headers}
+                                              />
                                             }
                                             style={{ fontSize: "14px" }}
                                           />
@@ -470,11 +482,12 @@ export const ClassView = props => {
                     ) : (
                       <Grid container direction="column" alignItems="center">
                         <JoinClassModal
+                          socket={socket}
                           classroomUsers={classroomUsers}
-                          classId={data.id}
                           className={data.class_name}
                           codeClass={data.class_code}
-                          user={userDetails}
+                          classId={data.id}
+                          user={user}
                           headers={headers}
                           socket={socket}
                         />
@@ -495,14 +508,23 @@ export const ClassView = props => {
           </div>
         )}
       </Grid>
-      <Pagination
-        user={user}
-        userDetails={userDetails}
-        headers={headers}
-        postPerPage={postPerPage}
-        totalPost={classList.length}
-        paginate={paginate}
-      />
+      {classList.length > 8 ? (
+        <Grid
+          style={{
+            marginTop: currentList.length < 5 ? 265 : 10,
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          <Paginations
+            totalPost={classList.length}
+            setActivePage={setActivePage}
+            activePage={activePage}
+            itemPerPage={itemPerPage}
+          />
+        </Grid>
+      ) : null}
+
       <HandleClassModal
         open={open}
         setOpen={setOpen}
@@ -519,3 +541,13 @@ export const ClassView = props => {
     </Layout>
   );
 };
+
+const alertToast = msg =>
+  toast.info(msg, {
+    position: "bottom-right",
+    hideProgressBar: true,
+    autoClose: 6000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });

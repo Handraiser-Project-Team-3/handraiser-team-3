@@ -62,13 +62,14 @@ const useStyles = makeStyles(theme => ({
 export default function Search(props) {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
-  const { filter, setClassList, setUsers, typeId } = props;
+  const { filter, setClassList, setUsers, typeId, setActivePage } = props;
 
   const handleChange = e => {
     setSearchTerm(e.target.value);
   };
 
   useEffect(() => {
+    setActivePage(1);
     filter &&
       (typeId === 1
         ? setUsers(
@@ -78,7 +79,7 @@ export default function Search(props) {
           )
         : setClassList(
             filter.filter(row =>
-              row.class_name.toLowerCase().startsWith(searchTerm.toLowerCase())
+              row.class_name.toLowerCase().includes(searchTerm.toLowerCase())
             )
           ));
 

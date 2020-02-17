@@ -17,6 +17,7 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import Chip from "@material-ui/core/Chip";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -332,6 +333,7 @@ const Div = styled.div`
 `;
 const Msg = styled.span`
   display: flex;
+  position: static;
   background-color: whitesmoke;
   border: 2px solid #ababfa;
   padding: 10px 15px 10px 17px;

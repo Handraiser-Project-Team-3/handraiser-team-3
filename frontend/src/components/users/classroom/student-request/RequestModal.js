@@ -8,6 +8,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { useForm } from "react-hook-form";
+import hand from "../../../assets/images/hand-animate.gif";
 
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -28,11 +29,19 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   requestIcon: {
-    color: "#ff6f61",
+    color: "#474cb9",
     cursor: "pointer",
     "&:hover": {
       color: "brown"
     }
+  },
+  hand: {
+    width: "80px",
+    position: "absolute",
+    bottom: theme.spacing(-70),
+    right: theme.spacing(1),
+    cursor: "pointer",
+    zIndex: "3000"
   }
 }));
 export default function({
@@ -56,12 +65,8 @@ export default function({
 
   return (
     <div>
-      <Tooltip title="Add Request">
-        <HelpOutlineIcon
-          fontSize="large"
-          className={classes.requestIcon}
-          onClick={handleClickOpen}
-        />
+      <Tooltip title="Click to raise your problem">
+        <img src={hand} className={classes.hand} onClick={handleClickOpen} />
       </Tooltip>
       <Dialog
         className={classes.dialogMainContainer}

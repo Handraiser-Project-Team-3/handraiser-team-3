@@ -3,13 +3,16 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
+import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
@@ -21,6 +24,7 @@ import Chip from "@material-ui/core/Chip";
 import Layout from "../reusables/Layout";
 import Stats from "../reusables/Stats";
 import ClassroomModal from "./student-request/RequestModal";
+import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 
@@ -28,6 +32,7 @@ import { RequestComponent } from "./student-request/RequestComponent";
 import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
 
+import work from "../../assets/images/teamwork.svg";
 import {
   UserDetails,
   class_details,
@@ -83,10 +88,15 @@ export default function Classroom(props) {
   const [requestDialog, setRequestDialog] = React.useState(false);
   const history = useHistory();
   const match = useRouteMatch();
+  const [classDetailsBox, setClassDetailsBox] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // const handleClickBanner = () => {
+  // 	setHeight(true);
+  // };
 
   // get classroom users
   React.useEffect(() => {
@@ -126,7 +136,7 @@ export default function Classroom(props) {
     }
     socket.on(`update_request_list`, (data, action) => {
       setRequests(data);
-      if (action === "move_back") {
+      if (action === "move_back" || action === "remove") {
         setRoom(null);
       }
     });
@@ -195,6 +205,11 @@ export default function Classroom(props) {
     >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
+          <ClassDescription
+            setClassDetailsBox={setClassDetailsBox}
+            classDetailsBox={classDetailsBox}
+            classDetails={classDetails}
+          />
           <AppBar position="static" color="default" className={classes.appBar}>
             {!list ? (
               <Tabs
@@ -236,7 +251,14 @@ export default function Classroom(props) {
               </Grid>
             )}
           </AppBar>
-          <div className={classes.root}>
+          <div
+            className={classes.root}
+            style={
+              classDetailsBox
+                ? { height: 561, transition: "height .27s" }
+                : { height: 471, transition: "height .27s" }
+            }
+          >
             {list ? (
               classroomUsersArray.map(x => (
                 <Grid
@@ -342,7 +364,7 @@ export default function Classroom(props) {
               </>
             )}
           </div>
-          <div className={classes.divStyle}>
+          {/* <div className={classes.divStyle}>
             <Grid
               container
               justify="space-between"
@@ -393,7 +415,7 @@ export default function Classroom(props) {
                 )}
               </Grid>
             </Grid>
-          </div>
+          </div> */}
         </Grid>
         <Stats
           room={room}

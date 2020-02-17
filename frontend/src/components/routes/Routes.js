@@ -20,26 +20,25 @@ export const Routes = props => {
           accessToken === "" ? (
             <Login data={props} />
           ) : (
-            <Navigation
-              data={props}
-              component={account_type_id === 1 ? Admin : ClassView}
-            />
-          )
+              <Navigation
+                data={props}
+                component={account_type_id === 1 ? Admin : ClassView}
+              />
+            )
         }
       />
       <Route
         path={`/classroom/:id`}
         render={history =>
           accessToken === "" ? (
-            <Login data={props} />
+            <PageNotFound data={props} />
           ) : (
-            <Navigation
-              {...history}
-              data={props}
-              component={account_type_id !== 1 ? Classroom : PageNotFound}
-            />
-          )
-        }
+              <Navigation
+                {...history}
+                data={props}
+                component={account_type_id !== 1 ? Classroom : PageNotFound}
+              />
+            )}
       />
       <Route path={`*`} component={PageNotFound} />
     </Switch>
