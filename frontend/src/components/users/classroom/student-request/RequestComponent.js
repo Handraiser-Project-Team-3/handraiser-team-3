@@ -3,7 +3,6 @@ import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import styled from "styled-components";
 import Hidden from "@material-ui/core/Hidden";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
@@ -44,7 +43,7 @@ export const RequestComponent = ({
 				);
 			});
 		}
-	}, [data]);
+	}, [data, headers]);
 
 	const handleSubmitAction = (title, submit) =>
 		confirmAlert({

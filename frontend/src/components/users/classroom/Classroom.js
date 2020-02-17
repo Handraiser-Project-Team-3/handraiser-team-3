@@ -118,12 +118,14 @@ export default function Classroom(props) {
 			setRequests(data);
 			setRoom(null);
 		});
+		// eslint-disable-next-line
 	}, [requests, classId]);
 
 	React.useEffect(() => {
 		socket.on(`notify`, notify => {
 			alertToast(notify);
 		});
+		// eslint-disable-next-line
 	}, []);
 	React.useEffect(() => {
 		if (user) {
@@ -139,7 +141,7 @@ export default function Classroom(props) {
 				}
 			})();
 		}
-	}, [user, headers]);
+	}, [user, headers, props.classId]);
 
 	const updateRequest = async (id, data, notify, mentor) => {
 		try {
@@ -160,7 +162,7 @@ export default function Classroom(props) {
 				history.replace("/");
 			}
 		}
-	}, [verify]);
+	}, [verify, history, props.classId]);
 
 	const handleSubmitNewRquest = () => {
 		const obj = {
@@ -177,7 +179,7 @@ export default function Classroom(props) {
 			first_name={first_name}
 			classId={props.classId}
 		>
-			<img src={hand} className={classes.hand} />
+			<img src={hand} className={classes.hand} alt="hand" />
 			<Grid container justify="flex-start" spacing={2}>
 				<Grid item xs={12} sm={12} md={12} lg={4}>
 					<AppBar position="static" color="default" className={classes.appBar}>

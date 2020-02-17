@@ -72,7 +72,7 @@ export default function Profile(props) {
   const [classroomUsers, setClassroomUsers] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentClass, setStudentClass] = useState([]);
-  const [profile, setProfile] = useState(true);
+  const [profile] = useState(true);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

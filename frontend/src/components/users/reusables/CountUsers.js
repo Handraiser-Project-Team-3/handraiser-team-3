@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { user_details } from "./UserDetails";
 
 export default function CountUsers({ classId, classroomUsers, headers }) {
@@ -15,7 +15,7 @@ export default function CountUsers({ classId, classroomUsers, headers }) {
             })
           )
       ).then(res => setUsersCount(res.filter(res => res !== false).length));
-  }, [classroomUsers]);
+  }, [classroomUsers, classId, headers]);
 
   return usersCount;
 }

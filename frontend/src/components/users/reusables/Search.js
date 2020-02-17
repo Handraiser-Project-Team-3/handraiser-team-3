@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 export default function Search(props) {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
-  const { filter, setClassList, setUsers, typeId, setCurrentPage } = props;
+  const { filter, setClassList, setUsers, typeId } = props;
 
   const handleChange = e => {
     setSearchTerm(e.target.value);
@@ -72,15 +72,15 @@ export default function Search(props) {
     filter &&
       (typeId === 1
         ? setUsers(
-            filter.filter(row =>
-              row.email.toLowerCase().startsWith(searchTerm.toLowerCase())
-            )
+          filter.filter(row =>
+            row.email.toLowerCase().startsWith(searchTerm.toLowerCase())
           )
+        )
         : setClassList(
-            filter.filter(row =>
-              row.class_name.toLowerCase().startsWith(searchTerm.toLowerCase())
-            )
-          ));
+          filter.filter(row =>
+            row.class_name.toLowerCase().startsWith(searchTerm.toLowerCase())
+          )
+        ));
 
     // eslint-disable-next-line
   }, [searchTerm]);
