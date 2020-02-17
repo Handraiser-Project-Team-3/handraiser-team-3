@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import Chip from "@material-ui/core/Chip";
 
 export default function ChatBox(props) {
 	const classes = ChatBoxStyle();
@@ -105,15 +106,33 @@ export default function ChatBox(props) {
 						variant="h6"
 						style={{ paddingLeft: "10px", color: "#525252" }}
 					>
-						{user && room !== null
-							? user.account_type_id === 2
-								? student !== null
-									? `${student.first_name} ${student.last_name}`
-									: ""
-								: mentor !== null
-								? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-								: ""
-							: ""}
+						{user && room !== null ? (
+							user.account_type_id === 2 ? (
+								student !== null ? (
+									`${student.first_name} ${student.last_name}`
+								) : (
+									""
+								)
+							) : mentor !== null ? (
+								<Grid container spacing={1}>
+									<Grid item>
+										{mentor.first_name} {mentor.last_name}
+									</Grid>{" "}
+									<Grid item>
+										<Chip
+											variant="outlined"
+											size="small"
+											label="Mentor"
+											style={{ color: "red" }}
+										/>
+									</Grid>
+								</Grid>
+							) : (
+								""
+							)
+						) : (
+							""
+						)}
 					</Typography>
 				</Grid>
 			</Paper>

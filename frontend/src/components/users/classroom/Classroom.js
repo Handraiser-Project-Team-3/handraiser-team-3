@@ -3,10 +3,12 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -22,14 +24,14 @@ import Chip from "@material-ui/core/Chip";
 import Layout from "../reusables/Layout";
 import Stats from "../reusables/Stats";
 import ClassroomModal from "./student-request/RequestModal";
+import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 
 // images
 import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
-import hand from "../../assets/images/hello.png";
-
+import work from "../../assets/images/teamwork.svg";
 import { UserDetails } from "../reusables/UserDetails";
 
 function TabPanel(props) {
@@ -77,10 +79,15 @@ export default function Classroom(props) {
 	const [verify, setVerify] = React.useState([]);
 	const history = useHistory();
 	const match = useRouteMatch();
+	const [reqBox, setReqBox] = React.useState(false);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+
+	// const handleClickBanner = () => {
+	// 	setHeight(true);
+	// };
 
 	// get classroom users
 	React.useEffect(() => {
@@ -178,10 +185,15 @@ export default function Classroom(props) {
 			first_name={first_name}
 			classId={props.classId}
 		>
-			<img src={hand} className={classes.hand} />
 			<Grid container justify="flex-start" spacing={2}>
 				<Grid item xs={12} sm={12} md={12} lg={4}>
-					<AppBar position="static" color="default" className={classes.appBar}>
+					<ClassDescription setReqBox={setReqBox} />
+					<AppBar
+						elevation={5}
+						position="static"
+						color="default"
+						className={classes.appBar}
+					>
 						{!list ? (
 							<Tabs
 								value={value}
@@ -221,8 +233,21 @@ export default function Classroom(props) {
 								</Grid>
 							</Grid>
 						)}
+						{/* {account_type_id === 3 ? (
+							<ClassroomModal
+								addNewRequest={addNewRequest}
+								handleSubmitNewRquest={handleSubmitNewRquest}
+								newRequest={newRequest}
+							/>
+						) : (
+							""
+						)} */}
 					</AppBar>
-					<Paper elevation={5} className={classes.root}>
+					<Paper
+						elevation={5}
+						className={classes.root}
+						style={reqBox ? { height: "48vh" } : { height: "57.2vh" }}
+					>
 						{list ? (
 							classroomUsersArray.map(x => (
 								<Grid
@@ -233,28 +258,44 @@ export default function Classroom(props) {
 									justify="space-between"
 									style={{ padding: "10px 40px 0px 40px" }}
 								>
-									<Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
-										<Tooltip title="View Profile">
-											<UserDetails
-												id={x.user_id}
-												headers={headers}
-												action="img"
-											/>
-										</Tooltip>
-									</Grid>
-									<Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
-										<Chip
-											variant="outlined"
-											size="medium"
-											label={
+									<Grid item xs={11}>
+										<Grid
+											container
+											direction="row"
+											alignItems="center"
+											justify="space-between"
+										>
+											<Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
 												<UserDetails
 													id={x.user_id}
 													headers={headers}
-													action="name"
+													action="img"
 												/>
-											}
-											style={{ color: "#616161", fontSize: "16px" }}
-										/>
+											</Grid>
+											<Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
+												<Tooltip title="Click to View Profile">
+													<Typography
+														variant="inherit"
+														style={{ paddingLeft: "10px", cursor: "pointer" }}
+													>
+														<UserDetails
+															id={x.user_id}
+															headers={headers}
+															action={"name"}
+														/>
+													</Typography>
+												</Tooltip>
+											</Grid>
+										</Grid>
+									</Grid>
+									<Grid item xs={1}>
+										<Tooltip title="Remove from list">
+											<RemoveIcon
+												fontSize="small"
+												color="secondary"
+												cursor="pointer"
+											/>
+										</Tooltip>
 									</Grid>
 								</Grid>
 							))
@@ -324,54 +365,18 @@ export default function Classroom(props) {
 								</TabPanel>
 							</>
 						)}
-					</Paper>
-					<Paper elevation={2} className={classes.divStyle}>
-						<Grid
-							container
-							justify="space-between"
-							alignItems="center"
-							style={{ padding: "15px" }}
-						>
-							<Grid item>
-								<Tooltip title="description">
-									<Typography variant="h5">
-										Test
-										<UserDetails />
-									</Typography>
-								</Tooltip>
-							</Grid>
-							<Grid item>
-								{account_type_id === 2 ? (
+						{/* <Paper elevation={0} className={classes.divStyle}>
+							<Grid container justify="flex-end" style={{ padding: "10px" }}>
+								<Grid item>
 									<Tooltip title="Click to view all members">
 										<ListIcon
 											style={{ color: "#474cb9", cursor: "pointer" }}
 											onClick={() => setList(!list)}
 										/>
 									</Tooltip>
-								) : (
-									<>
-										<Grid container spacing={1}>
-											<Grid item>
-												<Tooltip title="Click to view all members">
-													<ListIcon
-														style={{ color: "#474cb9", cursor: "pointer" }}
-														onClick={() => setList(!list)}
-													/>
-												</Tooltip>
-											</Grid>
-
-											<Grid item>
-												<ClassroomModal
-													addNewRequest={addNewRequest}
-													handleSubmitNewRquest={handleSubmitNewRquest}
-													newRequest={newRequest}
-												/>
-											</Grid>
-										</Grid>
-									</>
-								)}
+								</Grid>
 							</Grid>
-						</Grid>
+						</Paper> */}
 					</Paper>
 				</Grid>
 				<Stats
