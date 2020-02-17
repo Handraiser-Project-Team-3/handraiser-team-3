@@ -7,7 +7,10 @@ import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-import { user_details, getStudentDetails } from "../reusables/UserDetails";
+import {
+  user_details,
+  getClassroomUserDetails
+} from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
 import Button from "@material-ui/core/Button";
@@ -21,15 +24,14 @@ export default function ChatBox(props) {
   const [msg, setMsg] = React.useState("");
   const [student, setStudent] = React.useState(null);
   const [mentor, setMentor] = React.useState(null);
-  const { room, user, headers, socket } = props.data;
-  const [isTyping, setIsTyping] = React.useState(null);
+  const { room, user, headers, socket, isTyping, setIsTyping } = props.data;
   const [show, setShow] = React.useState(false);
 
   const handleClose = () => {
     setShow(true);
   };
   React.useEffect(() => {
-    if (headers && room) {
+    if (!!headers && !!room) {
       (async () => {
         try {
           const res = await Axios.get(`/api/messages/${room.id}`, headers);
@@ -53,10 +55,11 @@ export default function ChatBox(props) {
     setMsg("");
   };
   React.useEffect(() => {
-    if (room) {
+    if (!!room) {
       socket.on(`typing`, (user, { data }) => {
-        console.log(data.id === room.id);
-        data.id === room.id && setIsTyping(user);
+        user !== null
+          ? setIsTyping({ user: { ...user }, data: { ...data } })
+          : setIsTyping(null);
       });
     }
     socket.on(`new_message`, message => {
@@ -64,24 +67,19 @@ export default function ChatBox(props) {
     });
   }, [messages, room]);
   React.useEffect(() => {
-    if (room) {
-      getStudentDetails(room.student_id, headers).then(res => {
+    if (!!room && !!headers) {
+      getClassroomUserDetails(room.student_id, headers).then(res => {
         user_details(res.data.user_id, headers).then(res =>
           setStudent(res.data)
         );
       });
-      (async () => {
-        try {
-          const res = await Axios.get(`/api/class/${room.class_id}`, headers);
-          user_details(res.data.user_id, headers).then(res =>
-            setMentor(res.data)
-          );
-        } catch (err) {
-          console.error(err);
-        }
-      })();
+      getClassroomUserDetails(room.mentor_id, headers).then(res => {
+        user_details(res.data.user_id, headers).then(res =>
+          setMentor(res.data)
+        );
+      });
     }
-  }, [room]);
+  }, [room, headers]);
   return (
     <Paper className={classes.root}>
       <Paper className={classes.top} elevation={3}>
@@ -119,7 +117,7 @@ export default function ChatBox(props) {
       </Paper>
 
       <Paper className={classes.convoBox} elevation={6}>
-        {!show && room ? (
+        {!show && !!room ? (
           <div
             style={{
               height: "auto",
@@ -170,14 +168,16 @@ export default function ChatBox(props) {
             padding: "20px 10px 10px 10px"
           }}
         >
-          {room === null ? (
+          {room === null && !!user ? (
             <Grid container direction="column" justify="center" align="center">
               <Grid item xs={12}>
                 <Typography
                   variant="h6"
                   style={{ marginTop: "20%", color: "gray" }}
                 >
-                  Request for Help to start a conversation with your mentor
+                  {user.account_type_id === 2
+                    ? "Accept requests to help your students"
+                    : "Request for Help to start a conversation with your mentor"}
                 </Typography>
               </Grid>
             </Grid>
@@ -199,26 +199,28 @@ export default function ChatBox(props) {
             ""
           )}
 
-          {isTyping !== null ? (
-            <Div style={{ flexDirection: "row" }}>
-              <Avatar src={isTyping.user_image} />
+          {isTyping !== null
+            ? isTyping.user && isTyping.data
+              ? isTyping.data.id === room.id && (
+                  <Div style={{ flexDirection: "row" }}>
+                    <Avatar src={isTyping.user.user_image} />
 
-              <Msg
-                style={{
-                  borderRadius: "20px 20px 20px 0",
-                  border: "2px solid #ff6f61"
-                }}
-              >
-                <TypingIndicator>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </TypingIndicator>
-              </Msg>
-            </Div>
-          ) : (
-            ""
-          )}
+                    <Msg
+                      style={{
+                        borderRadius: "20px 20px 20px 0",
+                        border: "2px solid #ff6f61"
+                      }}
+                    >
+                      <TypingIndicator>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </TypingIndicator>
+                    </Msg>
+                  </Div>
+                )
+              : ""
+            : ""}
         </div>
       </Paper>
       <form onSubmit={handleSubmit}>
@@ -242,6 +244,7 @@ export default function ChatBox(props) {
               endAdornment: (
                 <InputAdornment position="end">
                   <Button
+                    disabled={!room}
                     type="submit"
                     endIcon={
                       <SendIcon
@@ -264,10 +267,11 @@ const MessageBox = props => {
   const { data, headers, user, index, messages, isTyping } = props;
   const [sender, setSender] = React.useState({});
   React.useEffect(() => {
-    user_details(data.user_id, headers).then(res => {
-      setSender(res.data);
-    });
-  }, []);
+    !!headers &&
+      user_details(data.user_id, headers).then(res => {
+        setSender(res.data);
+      });
+  }, [headers]);
   return (
     <Div
       style={

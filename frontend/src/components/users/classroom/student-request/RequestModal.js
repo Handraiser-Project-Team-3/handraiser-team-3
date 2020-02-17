@@ -35,12 +35,16 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-export default function(props) {
+export default function({
+  addNewRequest,
+  newRequest,
+  handleSubmitNewRquest,
+  open,
+  setOpen
+}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
 
-  const { register, errors, setError, handleSubmit } = useForm();
+  const { register, errors, setError, handleSubmit, clearError } = useForm();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -95,6 +99,7 @@ export default function(props) {
                     "Character limit reached!"
                   );
                 }
+                clearError(e.target.name);
                 addNewRequest(e.target.value);
               }}
               inputRef={register({ required: "Title is required" })}

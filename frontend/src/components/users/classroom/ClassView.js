@@ -474,8 +474,9 @@ export const ClassView = props => {
                           classId={data.id}
                           className={data.class_name}
                           codeClass={data.class_code}
-                          user={user}
+                          user={userDetails}
                           headers={headers}
+                          socket={socket}
                         />
                       </Grid>
                     )}
