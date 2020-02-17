@@ -15,6 +15,7 @@ import copy from "clipboard-copy";
 import axios from "axios";
 import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
+import { toast } from "react-toastify";
 
 // component/s
 import { HandleClassModal } from "./HandleClassModal";
@@ -86,14 +87,17 @@ export const ClassView = props => {
   const [activePage, setActivePage] = useState(1);
   const [itemPerPage] = useState(8);
 
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedC: true
-  });
-
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
+  const handleStatus = name => event => {
+    axios
+      .patch(
+        `/api/class/${event.target.value}`,
+        { class_status: event.target.checked },
+        headers
+      )
+      .then(res => {
+        setClassList(res.data);
+        alertToast("Class Disabled");
+      });
   };
 
   const handleClickOpen = () => {
@@ -175,8 +179,7 @@ export const ClassView = props => {
   // Get current classlist
   const indexOfLastList = activePage * itemPerPage;
   const indexOfFirstList = indexOfLastList - itemPerPage;
-  // Change page
-
+  let currentList = classList.slice(indexOfFirstList, indexOfLastList);
   return (
     <Layout first_name={first_name}>
       <ClassHead
@@ -186,6 +189,7 @@ export const ClassView = props => {
         setHeadTitle={setHeadTitle}
         filter={filter}
         setClassList={setClassList}
+        setActivePage={setActivePage}
       />
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
@@ -200,20 +204,25 @@ export const ClassView = props => {
                       className={classes.media}
                       image={classroom}
                       title={data.class_name}
-                    >{account_type_id === 2 ?
-                      <Grid container
-                        direction="row"
-                        justify="flex-end"
-                        alignItems="flex-start">
-                        <Grid item style={{ margin: "5px" }}>
-                          <AntSwitch
-                            checked={state.checkedC}
-                            onChange={handleChange('checkedC')}
-                            value="checkedC"
-                          />
+                    >
+                      {account_type_id === 2 ? (
+                        <Grid
+                          container
+                          direction="row"
+                          justify="flex-end"
+                          alignItems="flex-start"
+                        >
+                          <Grid item style={{ margin: "5px" }}>
+                            <AntSwitch
+                              checked={data.class_status}
+                              onChange={handleStatus("Status")}
+                              value={data.id}
+                            />
+                          </Grid>
                         </Grid>
-                      </Grid>
-                      : ""}
+                      ) : (
+                        ""
+                      )}
                     </CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -226,8 +235,8 @@ export const ClassView = props => {
                               {data.class_description.substring(0)}
                             </Typography>
                           ) : (
-                              ""
-                            )
+                            ""
+                          )
                         }
                       >
                         <Typography
@@ -314,7 +323,6 @@ export const ClassView = props => {
                                             }
                                             style={{ fontSize: "14px" }}
                                           />
-
                                         </b>
                                       </Grid>
                                     </Grid>
@@ -375,49 +383,49 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                            <Grid
-                              container
-                              direction="row"
-                              alignItems="center"
-                              justify="space-between"
-                            >
-                              <Grid item xs={3}>
-                                <UserDetails
-                                  id={data.user_id}
-                                  headers={headers}
-                                  action="img"
-                                />
-                              </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item xs={3}>
+                              <UserDetails
+                                id={data.user_id}
+                                headers={headers}
+                                action="img"
+                              />
+                            </Grid>
 
-                              <Grid item xs={9}>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="flex-start"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={12} xs={12}>
-                                    <Typography
-                                      gutterBottom
-                                      component="div"
-                                      variant="caption"
-                                    >
-                                      Mentor's Name:
+                            <Grid item xs={9}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Mentor's Name:
                                   </Typography>
-                                  </Grid>
-                                  <Grid item lg={12} xs={12}>
-                                    <b>
-                                      <UserDetails
-                                        id={data.user_id}
-                                        headers={headers}
-                                        action="name"
-                                      />
-                                    </b>
-                                  </Grid>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>
+                                    <UserDetails
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
+                                  </b>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          )}
+                          </Grid>
+                        )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -472,36 +480,40 @@ export const ClassView = props => {
                         </Grid>
                       </Grid>
                     ) : (
-                        <Grid container direction="column" alignItems="center">
-                          <JoinClassModal
-                            socket={socket}
-                            classroomUsers={classroomUsers}
-                            className={data.class_name}
-                            codeClass={data.class_code}
-                            classId={data.id}
-                            user={user}
-                            headers={headers}
-                          />
-                        </Grid>
-                      )}
+                      <Grid container direction="column" alignItems="center">
+                        <JoinClassModal
+                          socket={socket}
+                          classroomUsers={classroomUsers}
+                          className={data.class_name}
+                          codeClass={data.class_code}
+                          classId={data.id}
+                          user={user}
+                          headers={headers}
+                        />
+                      </Grid>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>
             ))
         ) : (
-            <div className={classes.margin}>
-              <span className={classes.noClasses}>No added classes yet</span>
-              <div className="spinner">
-                <div className="bounce1"></div>
-                <div className="bounce2"></div>
-                <div className="bounce3"></div>
-              </div>
+          <div className={classes.margin}>
+            <span className={classes.noClasses}>No added classes yet</span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
             </div>
-          )}
+          </div>
+        )}
       </Grid>
-      {classList.length ? (
+      {classList.length > 8 ? (
         <Grid
-          style={{ marginTop: 10, display: "flex", justifyContent: "center" }}
+          style={{
+            marginTop: currentList.length < 5 ? 265 : 10,
+            display: "flex",
+            justifyContent: "center"
+          }}
         >
           <Paginations
             totalPost={classList.length}
@@ -525,7 +537,16 @@ export const ClassView = props => {
         classList={classList}
         account_type_id={account_type_id}
       />
-      
     </Layout>
   );
 };
+
+const alertToast = msg =>
+  toast.info(msg, {
+    position: "bottom-right",
+    hideProgressBar: true,
+    autoClose: 6000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true
+  });
