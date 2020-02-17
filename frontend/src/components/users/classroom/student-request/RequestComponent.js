@@ -20,7 +20,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
-import { user_details, getStudentDetails } from "../../reusables/UserDetails";
+import { user_details, getClassroomUserDetails } from "../../reusables/UserDetails";
 
 export const RequestComponent = ({
 	data,
@@ -37,7 +37,7 @@ export const RequestComponent = ({
 	const [sender, setSender] = React.useState();
 	React.useEffect(() => {
 		if (data) {
-			getStudentDetails(data.student_id, headers).then(res => {
+			getClassroomUserDetails(data.student_id, headers).then(res => {
 				user_details(res.data.user_id, headers).then(user =>
 					setSender(user.data)
 				);

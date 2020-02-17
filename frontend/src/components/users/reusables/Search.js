@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 export default function Search(props) {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
-  const { filter, setClassList, setUsers, typeId } = props;
+  const { filter, setClassList, setUsers, typeId, setActivePage } = props;
 
   const handleChange = e => {
     setSearchTerm(e.target.value);

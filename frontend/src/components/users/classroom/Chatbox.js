@@ -7,7 +7,7 @@ import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-import { user_details, getStudentDetails } from "../reusables/UserDetails";
+import { user_details, getClassroomUserDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
 import Button from "@material-ui/core/Button";
@@ -67,7 +67,7 @@ export default function ChatBox(props) {
 	}, [messages, room]);
 	React.useEffect(() => {
 		if (room) {
-			getStudentDetails(room.student_id, headers).then(res => {
+			getClassroomUserDetails(room.student_id, headers).then(res => {
 				user_details(res.data.user_id, headers).then(res =>
 					setStudent(res.data)
 				);
