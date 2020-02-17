@@ -179,6 +179,7 @@ export const Admin = props => {
                       filter={filter}
                       setUsers={setUsers}
                       typeId={account_type_id}
+                      setActivePage={setActivePage}
                     />
                   </Grid>
                 </Grid>
@@ -329,8 +330,7 @@ export const Admin = props => {
                 {users.length > 8 ? (
                   <Grid
                     style={{
-                      marginTop: 22,
-                      marginBottom: 10,
+                      marginTop: 25,
                       display: "flex",
                       justifyContent: "center"
                     }}
@@ -349,7 +349,16 @@ export const Admin = props => {
                       itemPerPage={itemPerPage}
                     />
                   </Grid>
-                ) : null}
+                ) : (
+                  <Grid
+                    style={{
+                      marginTop: 65,
+                      marginBottom: 10,
+                      display: "flex",
+                      justifyContent: "center"
+                    }}
+                  ></Grid>
+                )}
               </Paper>
             </Grid>
           </Grid>
