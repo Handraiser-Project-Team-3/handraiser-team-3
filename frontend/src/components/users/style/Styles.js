@@ -16,21 +16,22 @@ export const ClassroomStyle = makeStyles(theme => ({
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		// border: "1px solid lightgray",
-		height: "65vh",
+		height: "57.2vh",
 		overflow: "auto",
 		padding: "0",
-		position: "static"
+		position: "relative"
+	},
+	banner: {
+		width: "100%",
+		height: "auto",
+		background:
+			"linear-gradient(420deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
 	},
 	needHelp: {
 		padding: "15px",
 		margin: "20px"
-		// display: "flex",
-		// justifyContent: "space-between"
 	},
 	studentsNeed: {
-		// display: "flex",
-		// alignItems: "center",
 		color: "gray"
 	},
 	appBar: {
@@ -42,15 +43,9 @@ export const ClassroomStyle = makeStyles(theme => ({
 	divStyle: {
 		height: "auto",
 		background: "#ececfe",
-		marginTop: "1vh"
-		// border: "1px solid lightgray",
-		// borderRadius: "5px"
-	},
-	hand: {
-		width: "80px",
-		position: "absolute",
-		bottom: theme.spacing(2),
-		right: theme.spacing(2)
+		position: "sticky",
+		bottom: "0px",
+		width: "100%"
 	}
 }));
 

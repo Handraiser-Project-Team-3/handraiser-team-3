@@ -69,6 +69,7 @@ export default function Search(props) {
   };
 
   useEffect(() => {
+    setActivePage(1);
     filter &&
       (typeId === 1
         ? setUsers(

@@ -20,7 +20,7 @@ export default function MentorsView(props) {
 			<Grid container>
 				<Grid item xs={12}>
 					<Grid container spacing={1} className={classes.margin}>
-						<Grid item xs={12} md={4}>
+						<Grid item xs={12} sm={12} md={6} lg={4}>
 							<Paper className={classes.paperStyle}>
 								<Grid
 									container
@@ -28,7 +28,12 @@ export default function MentorsView(props) {
 									align="center"
 									style={{ background: "#d9d9f4" }}
 								>
-									<Grid item xs={4} sm={3} style={{ background: "#aaaafa" }}>
+									<Grid
+										item
+										xs={4}
+										sm={3}
+										style={{ background: "#aaaafa", width: "auto" }}
+									>
 										<img src={question} className={classes.help} alt="help" />
 									</Grid>
 									<Grid item xs={8} sm={9}>
@@ -46,7 +51,7 @@ export default function MentorsView(props) {
 								</Grid>
 							</Paper>
 						</Grid>
-						<Grid item xs={12} md={4}>
+						<Grid item xs={12} sm={12} md={6} lg={4}>
 							<Paper className={classes.paperStyle}>
 								<Grid
 									container
@@ -75,7 +80,7 @@ export default function MentorsView(props) {
 								</Grid>
 							</Paper>
 						</Grid>
-						<Grid item xs={12} md={4}>
+						<Grid item xs={12} sm={12} md={12} lg={4}>
 							<Paper className={classes.paperStyle}>
 								<Grid
 									container
