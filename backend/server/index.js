@@ -35,12 +35,15 @@ massive({
     socket.on(`online`, user => {
       db.users.update({ id: user.id }, { user_status: true }).then(user => {
         userDetails = user[0];
-        console.log(
-          `${userDetails.first_name} is`,
-          "\x1b[32m",
-          `online`,
-          "\x1b[0m"
-        );
+        db.classroom_users.find().then(list => {
+          io.emit(`classroom_user`, list);
+          console.log(
+            `${userDetails.first_name} is`,
+            "\x1b[32m",
+            `online`,
+            "\x1b[0m"
+          );
+        });
       });
     });
 
@@ -51,12 +54,15 @@ massive({
         db.users
           .update({ id: userDetails.id }, { user_status: false })
           .then(signout => {
-            console.log(
-              `${signout[0].first_name} is`,
-              "\x1b[31m",
-              `offline`,
-              "\x1b[0m"
-            );
+            db.classroom_users.find().then(list => {
+              io.emit(`classroom_user`, list);
+              console.log(
+                `${signout[0].first_name} is`,
+                "\x1b[31m",
+                `offline`,
+                "\x1b[0m"
+              );
+            });
           });
       }
     });

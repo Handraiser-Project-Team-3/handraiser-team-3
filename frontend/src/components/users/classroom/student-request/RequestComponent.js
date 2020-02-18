@@ -1,331 +1,230 @@
 import React from "react";
-
 // Material-ui
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import Hidden from "@material-ui/core/Hidden";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Grid from "@material-ui/core/Grid";
+import styled from "styled-components";
+import EditIcon from "@material-ui/icons/Edit";
 
 //tabs
 import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-// images
-import { user_details, getStudentDetails } from "../../reusables/UserDetails";
+import {
+  user_details,
+  getClassroomUserDetails,
+  getClassroomUser
+} from "../../reusables/UserDetails";
 
 export const RequestComponent = ({
-	data,
-	updateRequest,
-	classes,
-	action,
-	account_type_id,
-	headers,
-	classroomUser,
-	user,
-	socket,
-	setRoom
+  data,
+  updateRequest,
+  classes,
+  action,
+  account_type_id,
+  headers,
+  classroomUser,
+  user,
+  socket,
+  setRoom,
+  setIsTyping
 }) => {
-	const [sender, setSender] = React.useState();
-	React.useEffect(() => {
-		if (data) {
-			getStudentDetails(data.student_id, headers).then(res => {
-				user_details(res.data.user_id, headers).then(user =>
-					setSender(user.data)
-				);
-			});
-		}
-	}, [data]);
+  const [sender, setSender] = React.useState();
+  const [mentor, setMentor] = React.useState();
+  React.useEffect(() => {
+    if (!!data && !!user) {
+      getClassroomUserDetails(data.student_id, headers).then(res => {
+        user_details(res.data.user_id, headers).then(user =>
+          setSender(user.data)
+        );
+      });
+      if (account_type_id === 2) {
+        getClassroomUser(headers).then(res => {
+          setMentor(res.data.filter(x => x.user_id === user.id)[0]);
+        });
+      }
+    }
+  }, [data, user]);
+  const handleSubmitAction = (title, submit) =>
+    confirmAlert({
+      title: title,
+      message: "Are you sure?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: submit
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  return (
+    <div
+      onClick={() => {
+        if (
+          (classroomUser.id === data.student_id || account_type_id === 2) &&
+          data.status !== null
+        ) {
+          setIsTyping(null);
+          setRoom(data);
+        }
+      }}
+    >
+      <Paper
+        id={data.id}
+        key={data.id}
+        className={classes.needHelp}
+        elevation={6}
+        style={
+          classroomUser.id === data.student_id
+            ? {
+                background: "#e3e4f8"
+              }
+            : {}
+        }
+      >
+        <Typography variant="h6" className={classes.studentsNeed}>
+          {sender ? (
+            <img
+              src={sender.user_image}
+              alt="man"
+              style={{
+                width: "50px",
+                borderRadius: "50%",
+                margin: "0 10px 0 0"
+              }}
+            />
+          ) : (
+            ""
+          )}
+          <Div>
+            <span style={{ fontSize: 16 }}>{data.title}</span>
+            <span style={{ fontSize: 12 }}>
+              ({sender && ` ${sender.first_name} ${sender.last_name} `})
+            </span>
+          </Div>
+        </Typography>
+        {action === "need" ? (
+          <div className={classes.Icons}>
+            {(classroomUser.id === data.student_id ||
+              account_type_id === 2) && (
+              <Tooltip title="Remove">
+                <RemoveCircleIcon
+                  style={{ ...iconStyle }}
+                  onClick={() =>
+                    handleSubmitAction("Removing request ...", () => {
+                      socket.emit("remove_request", data, user);
+                      setRoom(null);
+                    })
+                  }
+                />
+              </Tooltip>
+            )}
+            {classroomUser.id === data.student_id && (
+              <Tooltip title="Edit">
+                <EditIcon
+                  style={{ ...iconStyle }}
+                  onClick={() => console.log("edit")}
+                />
+              </Tooltip>
+            )}
+            {account_type_id === 2 && (
+              <Tooltip title="Help">
+                <Help
+                  style={{ ...iconStyle }}
+                  onClick={() =>
+                    handleSubmitAction("Accepting request . . .", () => {
+                      updateRequest({
+                        id: data.id,
+                        data: false,
+                        notify: `Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
+                        mentor: mentor.id
+                      });
+                    })
+                  }
+                />
+              </Tooltip>
+            )}
+          </div>
+        ) : action === "help" ? (
+          <div className={classes.Icons}>
+            {account_type_id === 2 && (
+              <>
+                <Tooltip title="Move back to 'Need Help'">
+                  <AssignmentReturnIcon
+                    style={{ ...iconStyle }}
+                    onClick={() =>
+                      handleSubmitAction("Moving back request . . .", () => {
+                        updateRequest({
+                          id: data.id,
+                          data: null,
+                          action: "move_back",
+                          notify: `Mentor ${user.first_name} moved ${sender.firstname}'s request back to queue`
+                        });
+                        setRoom(null);
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Help">
+                  <CheckCircleIcon
+                    style={{ ...iconStyle }}
+                    onClick={() =>
+                      handleSubmitAction("Ending request . . .", () =>
+                        updateRequest({
+                          id: data.id,
+                          data: true,
+                          mentor: mentor.id,
+                          notify: `Mentor ${user.first_name} resolved ${sender.first_name}'s request`
+                        })
+                      )
+                    }
+                  />
+                </Tooltip>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className={classes.Icons}>
+            {account_type_id === 2 && (
+              <Tooltip title="Move back to 'Being Help'">
+                <AssignmentReturnIcon
+                  style={{ ...iconStyle }}
+                  onClick={() =>
+                    handleSubmitAction("Moving back request . . .", () =>
+                      updateRequest({
+                        id: data.id,
+                        data: false,
+                        mentor: mentor.id,
+                        notify: `Mentor ${user.first_name} reopenend ${sender.first_name}'s concern`
+                      })
+                    )
+                  }
+                />
+              </Tooltip>
+            )}
+          </div>
+        )}
+      </Paper>
+    </div>
+  );
+};
 
-	const handleSubmitAction = (title, submit) =>
-		confirmAlert({
-			title: title,
-			message: "Are you sure?",
-			buttons: [
-				{
-					label: "Yes",
-					onClick: submit
-				},
-				{
-					label: "No",
-					onClick: () => {}
-				}
-			]
-		});
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	const handleClick = event => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	return (
-		<Paper
-			id={data.id}
-			key={data.id}
-			className={classes.needHelp}
-			elevation={6}
-		>
-			<Grid container justify="space-between" alignItems="center">
-				<Grid item>
-					<Grid container spacing={2}>
-						<Grid item>
-							<div
-								style={{ padding: "8px 10px 0 0" }}
-								onClick={() => {
-									if (
-										(classroomUser.id === data.student_id ||
-											account_type_id === 2) &&
-										data.status === null
-									) {
-										setRoom(data);
-									}
-								}}
-							>
-								{sender ? (
-									<img
-										src={sender.user_image}
-										alt="man"
-										style={{ width: "30px", borderRadius: "50%" }}
-									/>
-								) : (
-									""
-								)}
-							</div>
-						</Grid>
-						<Grid item>
-							<Grid container direction="column">
-								<Grid item>
-									<Typography variant="body1" style={{ color: "#585fbc" }}>
-										{data.title}
-									</Typography>
-								</Grid>
-								<Grid item>
-									<Typography variant="subtitle2" style={{ color: "#6f6e73" }}>
-										{sender ? `${sender.first_name} ${sender.last_name}` : ""}
-									</Typography>
-								</Grid>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-				<Grid item>
-					{action === "need" ? (
-						<div className={classes.Icons}>
-							{classroomUser.id === data.student_id || account_type_id === 2 ? (
-								<>
-									<Hidden smDown>
-										<Tooltip title="Remove">
-											<RemoveCircleIcon
-												style={{ color: "#9da1f0", cursor: "pointer" }}
-												onClick={() =>
-													handleSubmitAction("Removing request ...", () => {
-														socket.emit("remove_request", data, user);
-														setRoom(null);
-													})
-												}
-											/>
-										</Tooltip>
-									</Hidden>
-									<Hidden mdUp>
-										<MoreVertIcon
-											size="small"
-											style={{ color: "#4c54ba" }}
-											onClick={handleClick}
-										/>
-									</Hidden>
-								</>
-							) : (
-								<></>
-							)}
-							{account_type_id === 2 ? (
-								<>
-									<Hidden smDown>
-										<Tooltip title="Help">
-											<Help
-												style={{ color: "#9da1f0", cursor: "pointer" }}
-												onClick={() =>
-													handleSubmitAction("Accepting request . . .", () => {
-														updateRequest(
-															data.id,
-															false,
-															`Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
-															user.id
-														);
-													})
-												}
-											/>
-										</Tooltip>
-									</Hidden>
-								</>
-							) : (
-								<></>
-							)}
-						</div>
-					) : action === "help" ? (
-						<div className={classes.Icons}>
-							{account_type_id === 2 ? (
-								<>
-									<Hidden smDown>
-										<Tooltip title="Move back to 'Need Help'">
-											<AssignmentReturnIcon
-												style={{ color: "#9da1f0", cursor: "pointer" }}
-												onClick={() =>
-													handleSubmitAction("Moving back request . . .", () =>
-														updateRequest(data.id, null)
-													)
-												}
-											/>
-										</Tooltip>
-										<Tooltip title="Help">
-											<CheckCircleIcon
-												style={{ color: "#9da1f0", cursor: "pointer" }}
-												onClick={() =>
-													handleSubmitAction("Ending request . . .", () =>
-														updateRequest(data.id, true)
-													)
-												}
-											/>
-										</Tooltip>
-									</Hidden>
-									<Hidden mdUp>
-										<MoreVertIcon
-											size="small"
-											style={{ color: "#4c54ba" }}
-											onClick={handleClick}
-										/>
-									</Hidden>
-								</>
-							) : (
-								<></>
-							)}
-						</div>
-					) : (
-						<div className={classes.Icons}>
-							{account_type_id === 2 ? (
-								<div>
-									<Hidden smDown>
-										<Tooltip title="Move back to 'Being Help'">
-											<AssignmentReturnIcon
-												style={{ color: "#9da1f0", cursor: "pointer" }}
-												onClick={() =>
-													handleSubmitAction("Moving back request . . .", () =>
-														updateRequest(data.id, false)
-													)
-												}
-											/>
-										</Tooltip>
-									</Hidden>
-									<Hidden mdUp>
-										<MoreVertIcon
-											size="small"
-											style={{ color: "#4c54ba" }}
-											onClick={handleClick}
-										/>
-									</Hidden>
-								</div>
-							) : (
-								<></>
-							)}
-						</div>
-					)}
-				</Grid>
-			</Grid>
-			<Menu
-				id="simple-menu"
-				anchorEl={anchorEl}
-				keepMounted
-				open={Boolean(anchorEl)}
-				onClose={handleClose}
-			>
-				{action === "need" && account_type_id === 2 ? (
-					<div>
-						<MenuItem
-							onClick={() =>
-								handleSubmitAction("Removing request ...", () => {
-									socket.emit("remove_request", data, user);
-									setRoom(null);
-									handleClose();
-								})
-							}
-						>
-							Remove
-						</MenuItem>
-						<MenuItem
-							onClick={() =>
-								handleSubmitAction("Accepting request . . .", () => {
-									updateRequest(
-										data.id,
-										false,
-										`Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
-										user.id
-									);
-								})
-							}
-						>
-							Help
-						</MenuItem>
-					</div>
-				) : account_type_id === 3 ? (
-					<MenuItem
-						onClick={() =>
-							handleSubmitAction("Removing request ...", () => {
-								socket.emit("remove_request", data, user);
-								setRoom(null);
-								handleClose();
-							})
-						}
-					>
-						Remove
-					</MenuItem>
-				) : action === "help" ? (
-					<div>
-						<MenuItem
-							onClick={() =>
-								handleSubmitAction("Moving back request . . .", () =>
-									updateRequest(data.id, null)
-								)
-							}
-						>
-							Back
-						</MenuItem>
-						<MenuItem
-							onClick={() =>
-								handleSubmitAction("Ending request . . .", () =>
-									updateRequest(data.id, true)
-								)
-							}
-						>
-							Done
-						</MenuItem>
-					</div>
-				) : account_type_id === 2 ? (
-					<MenuItem
-						onClick={() =>
-							handleSubmitAction("Moving back request . . .", () =>
-								updateRequest(data.id, false)
-							)
-						}
-					>
-						Back
-					</MenuItem>
-				) : (
-					""
-				)}
-			</Menu>
-		</Paper>
-	);
+const iconStyle = {
+  margin: "8px",
+  color: "#9da1f0"
 };

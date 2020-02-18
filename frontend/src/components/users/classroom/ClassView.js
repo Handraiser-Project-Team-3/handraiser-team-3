@@ -492,6 +492,7 @@ export const ClassView = props => {
                           classId={data.id}
                           user={user}
                           headers={headers}
+                          socket={socket}
                         />
                       </Grid>
                     )}
