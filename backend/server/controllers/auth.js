@@ -4,7 +4,7 @@ const secret = require("../../secret");
 module.exports = {
   headers: (req, res, next) => {
     if (!req.headers.authorization) {
-      return res.status(400).end();
+      return res.status(401).end();
     }
 
     try {
@@ -13,7 +13,7 @@ module.exports = {
       next();
     } catch (err) {
       console.error(err);
-      res.status(400).end();
+      res.status(500).end();
     }
   }
 };

@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("students", {
+  pgm.createTable("classroom_users", {
     id: {
       type: "serial",
       primaryKey: true
@@ -27,5 +27,5 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-  pgm.dropTable("students");
+  pgm.dropTable("classroom_users");
 };

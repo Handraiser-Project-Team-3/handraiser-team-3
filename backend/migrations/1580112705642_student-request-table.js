@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("student_concerns", {
+  pgm.createTable("student_request", {
     id: {
       type: "serial",
       primaryKey: true
@@ -16,29 +16,27 @@ exports.up = pgm => {
     student_id: {
       type: "integer",
       notNull: true,
-      references: '"students"'
+      references: '"classroom_users"'
     },
     mentor_id: {
       type: "integer",
-      notNull: true,
-      references: '"mentors"'
+      references: '"classroom_users"'
     },
     title: {
       type: "text",
       notNull: true
     },
     status: {
-      type: "boolean",
-      notNull: true
+      type: "boolean"
     },
     date_posted: {
-      type: "timestamp",
+      type: "date",
       notNull: true,
-      default: pgm.func("current_timestamp")
+      default: pgm.func("current_date")
     }
   });
 };
 
 exports.down = pgm => {
-  pgm.dropTable("student_concerns");
+  pgm.dropTable("student_request");
 };

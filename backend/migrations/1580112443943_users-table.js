@@ -3,10 +3,19 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("user_profile", {
+  pgm.createTable("users", {
     id: {
       type: "serial",
       primaryKey: true
+    },
+    account_type_id: {
+      type: "integer",
+      notNull: true,
+      references: '"account_type"'
+    },
+    email: {
+      type: "text",
+      notNull: true
     },
     first_name: {
       type: "text"
@@ -18,12 +27,11 @@ exports.up = pgm => {
       type: "text"
     },
     user_status: {
-      type: "boolean",
-      notNull: true
+      type: "boolean"
     }
   });
 };
 
 exports.down = pgm => {
-  pgm.dropTable("user_profile", { cascade: true });
+  pgm.dropTable("users", { cascade: true });
 };
