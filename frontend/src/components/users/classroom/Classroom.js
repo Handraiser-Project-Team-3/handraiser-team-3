@@ -3,10 +3,8 @@ import { useHistory } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
-import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
 import RemoveIcon from "@material-ui/icons/Remove";
 
@@ -119,12 +117,14 @@ export default function Classroom(props) {
       setRequests(data);
       setRoom(null);
     });
+    // eslint-disable-next-line
   }, [requests, classId]);
 
   React.useEffect(() => {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
+    // eslint-disable-next-line
   }, []);
   React.useEffect(() => {
     if (user) {
@@ -140,7 +140,7 @@ export default function Classroom(props) {
         }
       })();
     }
-  }, [user, headers]);
+  }, [user, headers, props.classId]);
 
   const updateRequest = async (id, data, notify, mentor) => {
     try {
@@ -161,7 +161,7 @@ export default function Classroom(props) {
         history.replace("/");
       }
     }
-  }, [verify]);
+  }, [verify, props.classId, history]);
 
   const handleSubmitNewRquest = () => {
     const obj = {

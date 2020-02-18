@@ -30,6 +30,7 @@ export default function HandleForm(props) {
     const [fullWidth,] = useState(true);
     const [maxWidth] = useState('sm');
     const [filterUser, setFilterUser] = useState([]);
+    const [name, setName] = useState('');
     const [filterEmail, setFilterEmail] = useState([]);
 
     useEffect(() => {
@@ -37,16 +38,15 @@ export default function HandleForm(props) {
             .filter(x => x.class_id === classId)
             .filter(x => x.user_id !== user.id)
             .map(x => x.user_id));
-    }, [classId, headers])
-    console.log(filterUser)
+    }, [classroomUsers, classId, headers, user.id])
 
     useEffect(() => {
         for (let z of filterUser) {
             let email = [];
-            console.log(z)
             axios
                 .get(`/api/user/${z}`, headers)
                 .then(res => {
+                    setName(res.data.first_name)
                     email.push(res.data)
                     setFilterEmail(email)
                 })
@@ -58,6 +58,10 @@ export default function HandleForm(props) {
         matchFrom: 'start',
         stringify: option => option.email
     });
+
+    const handleSubmit = e => {
+        e.preventDefault();
+    }
 
     return (
         <div>
@@ -74,90 +78,99 @@ export default function HandleForm(props) {
                 onClose={handleCloseForm}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Email</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        disabled
-                        margin="dense"
-                        id="email_from"
-                        defaultValue={user.email}
-                        label="From"
-                        type="email"
-                        fullWidth
-                    />
-                    <Autocomplete
-                        multiple
-                        id="checkboxes-tags-demo"
-                        options={filterEmail}
-                        filterOptions={filterOptions}
-                        disableCloseOnSelect
-                        getOptionLabel={option => option.email}
-                        renderOption={(option, { selected }) => (
-                            <React.Fragment>
-                                <Checkbox
-                                    icon={icon}
-                                    checkedIcon={checkedIcon}
-                                    style={{ marginRight: 8 }}
-                                    checked={selected}
+                <form
+                    id={classId}
+                    noValidate
+                    autoComplete="off"
+                    onSubmit={handleSubmit}
+                >
+                    <DialogTitle id="form-dialog-title">Email</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            disabled
+                            margin="dense"
+                            id={`emailForm-${classId}`}
+                            defaultValue={user.email}
+                            label="From"
+                            type="email"
+                            fullWidth
+                        />
+                        <Autocomplete
+                            multiple
+                            id={`to-${classId}`}
+                            options={filterEmail}
+                            filterOptions={filterOptions}
+                            disableCloseOnSelect
+                            getOptionLabel={option => option.email}
+                            renderOption={(option, { selected }) => (
+                                <React.Fragment>
+                                    <Checkbox
+                                        icon={icon}
+                                        checkedIcon={checkedIcon}
+                                        style={{ marginRight: 8 }}
+                                        checked={selected}
+                                    />
+                                    {option.email}
+                                </React.Fragment>
+                            )}
+                            style={{ width: 450 }}
+                            renderInput={params => (
+                                <TextField
+                                    {...params}
+                                    label="To"
+                                    placeholder="Email/s"
+                                    fullWidth
                                 />
-                                {option.email}
-                            </React.Fragment>
-                        )}
-                        renderInput={params => (
-                            <TextField
-                                {...params}
-                                label="To"
-                                placeholder="Email/s"
-                                fullWidth
-                            />
-                        )}
-                    />
-                    <div style={{ display: "flex" }}>
-                        <div style={{ width: "50%", paddingRight: 5 }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="cc"
-                                label="CC"
-                                type="email"
-                                fullWidth
-                            />
+                            )}
+                        />
+                        <div style={{ display: "flex" }}>
+                            <div style={{ width: "50%", paddingRight: 5 }}>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id={`cc-${classId}`}
+                                    label="CC"
+                                    type="email"
+                                    fullWidth
+                                />
+                            </div>
+                            <div style={{ width: "50%" }}>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id={`bcc-${classId}`}
+                                    label="BCC"
+                                    type="email"
+                                    fullWidth
+                                />
+                            </div>
                         </div>
-                        <div style={{ width: "50%" }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="bcc"
-                                label="BCC"
-                                type="email"
-                                fullWidth
-                            />
-                        </div>
-                    </div>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="subject"
-                        label="Subject"
-                        type="email"
-                        defaultValue="Classcode"
-                        fullWidth
-                    />
-                    <TextField
-                        autoFocus
-                        id="message"
-                        label="Message"
-                        multiline
-                        rows="4"
-                        type="text"
-                        fullWidth
-                    />
-                </DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id={`subject-${classId}`}
+                            label="Subject"
+                            type="email"
+                            defaultValue={`HandRaiser - ${data.class_name}`}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            id={`message-${classId}`}
+                            label="Message"
+                            multiline
+                            rows="4"
+                            type="text"
+                            defaultValue={`You've ask to join the ${data.class_name} class, enter this code to join: ${data.class_code}`}
+                            fullWidth
+                        />
+                    </DialogContent>
+                </form>
                 <DialogActions>
                     <Button onClick={handleCloseForm} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleCloseForm} color="primary">
+                    <Button form={classId} type="submit" color="primary">
                         Send
                     </Button>
                 </DialogActions>

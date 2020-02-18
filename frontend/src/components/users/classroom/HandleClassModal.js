@@ -69,7 +69,6 @@ export const HandleClassModal = props => {
 
   const handleInput = e => {
     const { name, value } = e.target;
-    console.log(value);
     setClassRoom({
       ...classRoom,
       [name]: value

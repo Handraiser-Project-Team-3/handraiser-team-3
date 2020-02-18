@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function(props) {
+export default function (props) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
 	const {
@@ -70,9 +70,9 @@ export default function(props) {
 
 	const { register, errors, setError, handleSubmit } = useForm();
 
-	const [direction, setDirection] = React.useState("left");
+	const [direction] = React.useState("left");
 	const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
-	const [hidden, setHidden] = React.useState(false);
+	const [hidden] = React.useState(false);
 
 	const handleCloseSpeedDial = () => {
 		setOpenSpeedDial(false);
@@ -125,13 +125,13 @@ export default function(props) {
 							/>
 						))
 					) : (
-						<SpeedDialAction
-							key={actions[1].name}
-							icon={actions[1].icon}
-							tooltipTitle={actions[1].name}
-							onClick={handleCloseSpeedDial}
-						/>
-					)}
+							<SpeedDialAction
+								key={actions[1].name}
+								icon={actions[1].icon}
+								tooltipTitle={actions[1].name}
+								onClick={handleCloseSpeedDial}
+							/>
+						)}
 				</SpeedDial>
 			</div>
 
