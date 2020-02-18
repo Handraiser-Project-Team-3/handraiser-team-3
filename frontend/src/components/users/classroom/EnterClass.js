@@ -40,7 +40,7 @@ export default function EnterClass({
             }}
           >
             Join Class
-          </Button>
+        </Button>
         )}
     </>
   );

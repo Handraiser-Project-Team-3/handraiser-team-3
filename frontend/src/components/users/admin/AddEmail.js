@@ -28,7 +28,7 @@ export default function AddEmail(props) {
           "/api/user",
           {
             email: email,
-            account_type_id: 3,
+            account_type_id: 2,
             user_status: true
           },
           headers
@@ -36,6 +36,7 @@ export default function AddEmail(props) {
         .then(res => {
           setUsers([...users, res.data]);
           toast.info("Email Address has been Added!");
+          setEmail("");
         })
         .catch(err => toast.error("Email already taken!"));
     } else {

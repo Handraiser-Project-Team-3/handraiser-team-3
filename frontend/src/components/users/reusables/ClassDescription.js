@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from "axios";
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,77 +13,86 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import { ClassroomStyle } from "../style/Styles";
-import work from "../../assets/images/teamwork.svg";
+import work from "../../assets/images/prog.svg";
 import { Paper } from "@material-ui/core";
 
 const ExpansionPanel = withStyles({
-	root: {
-		// border: "1px solid rgba(0, 0, 0, .125)",
-		boxShadow: "none",
-		"&:not(:last-child)": {
-			borderBottom: 0
-		},
-		"&:before": {
-			display: "none"
-		},
-		"&$expanded": {
-			margin: "auto"
-		}
-	},
-	expanded: {}
+  root: {
+    // border: "1px solid rgba(0, 0, 0, .125)",
+    boxShadow: "none",
+    "&:not(:last-child)": {
+      borderBottom: 0
+    },
+    "&:before": {
+      display: "none"
+    },
+    "&$expanded": {
+      margin: "auto"
+    }
+  },
+  expanded: {}
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
-	root: {
-		backgroundColor: "rgba(0, 0, 0, .03)",
-		borderBottom: "1px solid rgba(0, 0, 0, .125)",
-		marginBottom: -1,
-		minHeight: 56
-	},
-	content: {
-		"&$expanded": {
-			margin: "12px 0"
-		}
-	},
-	expanded: {}
+  root: {
+    backgroundColor: "rgba(0, 0, 0, .03)",
+    borderBottom: "1px solid rgba(0, 0, 0, .125)",
+    marginBottom: -1,
+    minHeight: 56
+  },
+  content: {
+    "&$expanded": {
+      margin: "12px 0"
+    }
+  },
+  expanded: {}
 })(MuiExpansionPanelSummary);
 
 const ExpansionPanelDetails = withStyles(theme => ({
-	root: {
-		padding: theme.spacing(2),
-		overflow: "auto",
-		height: "90px"
-	}
+  root: {
+    padding: theme.spacing(2),
+    overflow: "auto",
+    height: "90px"
+  }
 }))(MuiExpansionPanelDetails);
 
 export default function ClassDescription(props) {
-	const classes = ClassroomStyle();
-	const { setReqBox } = props;
+  const classes = ClassroomStyle();
+  const { setReqBox, classId, headers } = props;
+  const [roomName, setRoomName] = React.useState("");
 
-	return (
-		<Paper elevation={5}>
-			<ExpansionPanel>
-				<ExpansionPanelSummary
-					className={classes.banner}
-					onClick={() => setReqBox(true)}
-				>
-					<Grid container alignItems="center" justify="center" align="center">
-						<Grid item xs={12} sm={6}>
-							<img src={work} style={{ width: "270px" }} />
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<Typography variant="h4" style={{ color: "white" }}>
-								Class Name
-							</Typography>
-						</Grid>
-					</Grid>
-				</ExpansionPanelSummary>
-				<ExpansionPanelDetails>
-					<Typography>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
-					</Typography>
-				</ExpansionPanelDetails>
-			</ExpansionPanel>
-		</Paper>
-	);
+  React.useEffect(() => {
+    if (classId) {
+      axios(`/api/class/${classId}`, headers).then(res => {
+        setRoomName(res.data.class_name);
+      });
+    }
+  }, [headers, classId]);
+
+  return (
+    <Paper elevation={5}>
+      <ExpansionPanel>
+        <ExpansionPanelSummary
+          className={classes.banner}
+          onClick={() => setReqBox(true)}
+        >
+          <Grid container alignItems="center" justify="center" align="center">
+            <Grid item xs={12} sm={6}>
+              <img src={work} style={{ width: "190px" }} alt="work" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h4" style={{ color: "white" }}>
+                {roomName}
+              </Typography>
+            </Grid>
+          </Grid>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+          </Typography>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </Paper>
+  );
 }

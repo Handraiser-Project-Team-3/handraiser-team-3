@@ -96,12 +96,15 @@ export const ClassView = props => {
         { class_status: event.target.checked },
         headers
       )
-      .then(res => {
-        setClassList(res.data);
-        alertToast("Class Disabled");
+      .then(() => {
+        axios.get(`/api/class?id=${id}`, headers).then(res => {
+          setClassList(res.data);
+          res.data[0].class_status === false
+            ? alertToast("Class Disabled")
+            : alertToast("Class Enabled");
+        });
       });
   };
-
   const handleClickOpen = () => {
     setOpen(true);
     setAction("Save");
@@ -241,13 +244,13 @@ export const ClassView = props => {
                       </Typography>
                       <Tooltip
                         title={
-                          data.class_description.length > 45 ? (
-                            <Typography style={{ fontSize: 12 }}>
-                              {data.class_description.substring(0)}
-                            </Typography>
-                          ) : (
-                              ""
-                            )
+                          data.class_description.length > 45
+                            ? data.class_description
+                              .split("\n")
+                              .map((item, i) => (
+                                <Typography key={i}>{item}</Typography>
+                              ))
+                            : ""
                         }
                       >
                         <Typography

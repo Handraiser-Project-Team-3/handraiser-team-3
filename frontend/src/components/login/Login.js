@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // images
 import Background from "../assets/images/bg.jpg";
-import Teacher from "../assets/images/undraw.svg";
+import Teacher from "../assets/images/teamwork.svg";
 import Logo from "../assets/images/logo.png";
 
 // material-ui
@@ -43,65 +43,69 @@ export const Login = props => {
 		<React.Fragment>
 			<CssBaseline />
 			<ToastContainer enableMulticontainer />
-			<Grid
-				container
-				direction="row"
-				justify="center"
-				alignItems="center"
-				className={classes.root}
-			>
-				<Grid container>
-					<Grid item xs={12}>
-						<div className={classes.bg}>
-							<Grid container className={classes.handRaiser}>
-								<Grid item xs={12}>
-									<img src={Logo} alt="logo" className={classes.hand} />
-								</Grid>
-								<Grid container direction="row" className={classes.handRaiser}>
-									<Grid item xs={12} sm={12} md={12} lg={12}>
-										<Typography className={classes.signin}>
-											HandRaiser
-										</Typography>
-									</Grid>
-									<Grid item xs={12} sm={9} md={8} lg={5}>
-										<Typography className={classes.subtitle}>
-											You can access the classes by logging in with your
-											@boom.camp account
-										</Typography>
-									</Grid>
-									<Grid item xs={12}>
-										<GoogleLogin
-											clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
-											buttonText="Login"
-											render={renderProps => (
-												<Button
-													onClick={renderProps.onClick}
-													disabled={renderProps.disabled}
-													style={{ background: "#fdddffd9", outline: "none" }}
-												>
-													<Img src={googleIcon} />
-													<span className={classes.googleSignin}>
-														Sign-in with Google
-													</span>
-												</Button>
-											)}
-											onSuccess={responseGoogle}
-											onFailure={responseGoogle}
-											cookiePolicy={"single_host_origin"}
-										/>
-									</Grid>
-									<Grid item xs={12} sm={9} md={7} lg={5}>
-										<hr className={classes.hr} />
-									</Grid>
-								</Grid>
-								<Grid item xs={12}>
-									<img src={Teacher} alt="teacher" className={classes.lady} />
-								</Grid>
+			<div className={classes.bg}>
+				<img src={Logo} alt="logo" className={classes.handRaiserLogo} />
+				<Grid
+					container
+					justify="flex-start"
+					alignItems="center"
+					style={{ marginTop: "10px" }}
+				>
+					<Grid item md={6} lg={12} xl={12}>
+						<Grid
+							container
+							direction="column"
+							style={{ marginTop: "130px", zIndex: 1000 }}
+						>
+							<Grid item>
+								<Typography
+									variant="h1"
+									style={{ color: "#ababfa", textShadow: "3px 2px #d0cde1" }}
+								>
+									Welcome
+								</Typography>
 							</Grid>
-						</div>
+							<Grid item>
+								<Typography
+									variant="h5"
+									style={{ width: "40%", color: "gray" }}
+								>
+									You can access the classes by logging in with your @boom.camp
+									account
+								</Typography>
+							</Grid>
+							<Grid item>
+								<GoogleLogin
+									clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
+									buttonText="Login"
+									render={renderProps => (
+										<Button
+											onClick={renderProps.onClick}
+											disabled={renderProps.disabled}
+											style={{
+												background: "#ababfa",
+												color: "white",
+												outline: "none"
+											}}
+										>
+											<Img src={googleIcon} />
+											<span className={classes.googleSignin}>
+												Sign-in with Google
+											</span>
+										</Button>
+									)}
+									onSuccess={responseGoogle}
+									onFailure={responseGoogle}
+									cookiePolicy={"single_host_origin"}
+								/>
+							</Grid>
+						</Grid>
+					</Grid>
+					<Grid item md={6} lg={12} xl={12}>
+						<img src={Teacher} alt="teacher" className={classes.svg} />
 					</Grid>
 				</Grid>
-			</Grid>
+			</div>
 		</React.Fragment>
 	);
 };
@@ -121,92 +125,22 @@ const useStyles = makeStyles(theme => ({
 		flexGrow: 1
 	},
 	bg: {
+		// background:
+		// 	"linear-gradient(207deg, rgba(171,171,250,1) 35%, rgba(255,255,255,1) 35%)",
 		backgroundImage: `url(${Background})`,
 		height: "100vh",
-		backgroundSize: "cover"
+		backgroundSize: "100%",
+		padding: "50px 500px 80px 80px"
 	},
-	handRaiser: {
-		padding: "1vh 5vw 1vh 5vw"
+	handRaiserLogo: {
+		width: "180px"
 	},
-	hand: {
-		width: "140px",
-		"@media (max-width: 415px)": {
-			width: "30%"
-		}
-	},
-	signin: {
-		fontSize: "70px",
-		marginTop: "80px",
-		color: "#ababfa",
-		textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-		"@media (max-width: 1024px)": {
-			marginTop: "100px",
-			fontSize: "90px"
-		},
-		"@media (max-width: 415px)": {
-			marginTop: "50px",
-			fontSize: "40px"
-		}
-	},
-	subtitle: {
-		fontSize: "20px",
-		color: "#ABABAB",
-		"@media (max-width: 1024px)": {
-			fontSize: "25px"
-		},
-		"@media (max-width: 415px)": {
-			fontSize: "16px"
-		}
-	},
-	hr: {
-		height: "0px",
-		border: "4px solid #ababfa",
-		marginTop: "55px"
-	},
-	googleSignin: {
-		margin: "3px 0 0 0",
-		"@media (max-width: 415px)": {
-			fontSize: "14px"
-		},
-		cursor: "pointer"
-	},
-	lady: {
-		width: "45vw",
-		"@media (max-width: 360px)": {
-			width: "20rem",
-			marginTop: "70px"
-		},
-		"@media (width: 320px)": {
-			width: "18rem",
-			marginTop: "10px"
-		},
-		"@media (width: 375px), (height: 667px)": {
-			width: "21rem",
-			marginTop: "80px"
-		},
-		"@media (width: 411px), (height: 731px)": {
-			width: "23rem",
-			marginTop: "130px"
-		},
-		"@media (height: 823px)": {
-			width: "23rem",
-			marginTop: "200px"
-		},
-		"@media (width: 414px)": {
-			width: "23rem",
-			marginTop: "15vh"
-		},
-		"@media (width: 411px)": {
-			marginTop: "15vh"
-		},
-		"@media (width: 768px)": {
-			width: "40rem",
-			marginTop: "10vh"
-		},
-		"@media (width: 1024px)": {
-			width: "50rem",
-			marginTop: "25vh"
-		}
+	svg: {
+		width: "1500px",
+		position: "absolute",
+		bottom: "0px",
+		right: "0px",
+		margin: "0 auto"
 	}
 }));
 
@@ -217,9 +151,9 @@ const Button = styled.button`
 	border-radius: 30px;
 	padding: 10px 40px 10px 40px;
 	font-size: 20px;
-	background: #ffdf78d9;
+	background: #ababfa;
 	color: gray;
-	margin-top: 50px;
+	margin-top: 30px;
 	outline: none;
 	@media (max-width: 768px) {
 		font-size: 20px;

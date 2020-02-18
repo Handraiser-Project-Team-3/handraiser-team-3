@@ -16,7 +16,7 @@ export const ClassroomStyle = makeStyles(theme => ({
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		height: "57.2vh",
+		height: "57vh",
 		overflow: "auto",
 		padding: "0",
 		position: "relative"
@@ -46,6 +46,16 @@ export const ClassroomStyle = makeStyles(theme => ({
 		position: "sticky",
 		bottom: "0px",
 		width: "100%"
+	},
+	handContainer: {
+		marginTop: "-60px ",
+		display: "flex",
+		justifyContent: "flex-end",
+		paddingRight: "15px"
+	},
+	hand: {
+		width: "45px",
+		padding: "5px"
 	}
 }));
 

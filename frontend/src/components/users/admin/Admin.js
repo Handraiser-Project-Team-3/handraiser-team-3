@@ -100,7 +100,7 @@ export const Admin = props => {
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
   const [users, setUsers] = useState([]);
-  const [userType, setUserType] = useState(3);
+  const [userType, setUserType] = useState(2);
   const [open, setOpen] = useState(false);
   const [handle, setHandle] = useState("");
   const [details, setDetails] = useState({});
