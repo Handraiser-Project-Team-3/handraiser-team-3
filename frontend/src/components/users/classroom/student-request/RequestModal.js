@@ -6,9 +6,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Fab from "@material-ui/core/Fab";
+import hand from "../../../assets/images/hello.png";
 import { useForm } from "react-hook-form";
-import hand from "../../../assets/images/hand-animate.gif";
 
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -36,12 +36,14 @@ const useStyles = makeStyles(theme => ({
     }
   },
   hand: {
-    width: "80px",
-    position: "absolute",
-    bottom: theme.spacing(-70),
-    right: theme.spacing(1),
-    cursor: "pointer",
-    zIndex: "3000"
+    width: "43px",
+    padding: "5px"
+  },
+  handContainer: {
+    marginTop: "-60px ",
+    display: "flex",
+    justifyContent: "flex-end",
+    paddingRight: "15px"
   }
 }));
 export default function({
@@ -55,23 +57,27 @@ export default function({
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+  const handleClick = () => {
+    setOpen(!open);
   };
 
   return (
     <div>
       <Tooltip title="Click to raise your problem">
-        <img src={hand} className={classes.hand} onClick={handleClickOpen} />
+        <div className={classes.handContainer} onClick={handleClick}>
+          <Fab
+            size="medium"
+            style={{ backgroundColor: "#5365BC" }}
+            aria-label="add"
+          >
+            <img src={hand} className={classes.hand} />
+          </Fab>
+        </div>
       </Tooltip>
       <Dialog
         className={classes.dialogMainContainer}
         open={open}
-        onClose={handleClose}
+        onClose={handleClick}
         aria-labelledby="form-dialog-title"
       >
         <form
@@ -95,7 +101,6 @@ export default function({
               label="Request"
               name="request"
               fullWidth
-              value={newRequest}
               onChange={e => {
                 if (e.target.value.length >= 30) {
                   return setError(
@@ -113,7 +118,7 @@ export default function({
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClick} color="primary">
               Cancel
             </Button>
             <Button type="submit" color="primary">

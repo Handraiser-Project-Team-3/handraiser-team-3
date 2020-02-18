@@ -51,7 +51,8 @@ export const ClassroomStyle = makeStyles(theme => ({
     background: "#ececfe",
     position: "sticky",
     bottom: "0px",
-    width: "100%"
+    width: "100%",
+    margin: "-40px 0 0 0"
   }
 }));
 

@@ -232,6 +232,7 @@ export default function ChatBox(props) {
             label="Type your message..."
             value={msg}
             fullWidth
+            multiline
             onChange={e => {
               e.preventDefault();
               if (e.target.value.length !== 0) {

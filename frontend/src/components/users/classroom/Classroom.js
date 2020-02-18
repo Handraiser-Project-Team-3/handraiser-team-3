@@ -38,6 +38,9 @@ import {
   class_details,
   getClassroomUser
 } from "../reusables/UserDetails";
+import RequestModal from "./student-request/RequestModal";
+
+import Badge from "@material-ui/core/Badge";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -271,11 +274,20 @@ export default function Classroom(props) {
                 >
                   <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
                     <Tooltip title="View Profile">
-                      <UserDetails
-                        id={x.user_id}
-                        headers={headers}
-                        action="img"
-                      />
+                      <Badge
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
+                        }}
+                        variant="dot"
+                      >
+                        <UserDetails
+                          id={x.user_id}
+                          headers={headers}
+                          action="img"
+                        />
+                      </Badge>
                     </Tooltip>
                   </Grid>
                   <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
@@ -364,23 +376,13 @@ export default function Classroom(props) {
               </>
             )}
           </div>
-          {/* <div className={classes.divStyle}>
+          <div className={classes.divStyle}>
             <Grid
               container
               justify="space-between"
               alignItems="center"
               style={{ padding: "15px" }}
             >
-              {!!classDetails && (
-                <Grid item>
-                  <Tooltip title={classDetails.class_description}>
-                    <Typography variant="h5">
-                      {classDetails.class_name}
-                      <UserDetails />
-                    </Typography>
-                  </Tooltip>
-                </Grid>
-              )}
               <Grid item>
                 {account_type_id === 2 ? (
                   <Tooltip title="Click to view list of Students">
@@ -400,23 +402,25 @@ export default function Classroom(props) {
                           />
                         </Tooltip>
                       </Grid>
-
-                      <Grid item>
-                        <ClassroomModal
-                          addNewRequest={addNewRequest}
-                          handleSubmitNewRquest={handleSubmitNewRquest}
-                          newRequest={newRequest}
-                          open={requestDialog}
-                          setOpen={setRequestDialog}
-                        />
-                      </Grid>
                     </Grid>
                   </>
                 )}
               </Grid>
             </Grid>
-          </div> */}
+          </div>
+          {account_type_id === 3 ? (
+            <RequestModal
+              addNewRequest={addNewRequest}
+              newRequest={newRequest}
+              handleSubmitNewRquest={handleSubmitNewRquest}
+              open={requestDialog}
+              setOpen={setRequestDialog}
+            />
+          ) : (
+            <></>
+          )}
         </Grid>
+
         <Stats
           room={room}
           user={userDetails}
