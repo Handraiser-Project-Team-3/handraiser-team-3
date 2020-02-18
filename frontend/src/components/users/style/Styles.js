@@ -72,7 +72,7 @@ export const ChatBoxStyle = makeStyles(theme => ({
 		}
 	},
 	root: {
-		padding: "15px",
+		padding: "17.5px",
 		backgroundColor: "#e2e3f7",
 		marginTop: "1vh",
 		borderRadius: "5px"

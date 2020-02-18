@@ -202,8 +202,8 @@ export default function Classroom(props) {
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Need Help" {...a11yProps(0)} />
-								<Tab label="Being Helped" {...a11yProps(1)} />
+								<Tab label="Waiting" {...a11yProps(0)} />
+								<Tab label="In Queue" {...a11yProps(1)} />
 								<Tab label="Done" {...a11yProps(2)} />
 							</Tabs>
 						) : (

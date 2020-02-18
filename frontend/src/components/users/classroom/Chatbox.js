@@ -84,7 +84,7 @@ export default function ChatBox(props) {
 		}
 	}, [room]);
 	return (
-		<Paper className={classes.root}>
+		<Paper elevation={5} className={classes.root}>
 			<Paper className={classes.top} elevation={3}>
 				<Grid className={classes.topName}>
 					{user && room !== null ? (
@@ -92,15 +92,15 @@ export default function ChatBox(props) {
 							student !== null ? (
 								<Avatar src={student.user_image} />
 							) : (
-								<img src={bubbles} style={{ width: 45 }} />
+								<img src={bubbles} style={{ width: 40 }} />
 							)
 						) : mentor !== null ? (
 							<Avatar src={mentor.user_image} />
 						) : (
-							<img src={bubbles} style={{ width: 45 }} />
+							<img src={bubbles} style={{ width: 40 }} />
 						)
 					) : (
-						<img src={bubbles} style={{ width: 45 }} />
+						<img src={bubbles} style={{ width: 40 }} />
 					)}
 					<Typography
 						variant="h6"
