@@ -6,11 +6,12 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { useForm } from "react-hook-form";
-import hand from "../../../assets/images/hand-animate.gif";
-
-import Tooltip from "@material-ui/core/Tooltip";
+import SpeedDial from "@material-ui/lab/SpeedDial";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+import PanToolIcon from "@material-ui/icons/PanTool";
+import ListIcon from "@material-ui/icons/List";
 
 const useStyles = makeStyles(theme => ({
 	icons: {
@@ -35,22 +36,53 @@ const useStyles = makeStyles(theme => ({
 			color: "brown"
 		}
 	},
-	hand: {
-		width: "80px",
-		position: "absolute",
-		bottom: theme.spacing(-70),
-		right: theme.spacing(1),
-		cursor: "pointer",
-		zIndex: "3000"
+	add: {
+		color: "white"
+	},
+	handContainer: {
+		marginTop: "-35px ",
+		display: "flex",
+		justifyContent: "flex-end",
+		paddingRight: "10px",
+		marginBottom: "1vh"
+	},
+	fab: {
+		backgroundColor: "#5365BC",
+		border: "solid 0px #ececfa",
+		"&:hover": {
+			borderWidth: "5px",
+			backgroundColor: "#5365BC"
+		}
 	}
 }));
+
 export default function(props) {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
-	const { addNewRequest, newRequest, handleSubmitNewRquest } = props;
+	const {
+		addNewRequest,
+		newRequest,
+		handleSubmitNewRquest,
+		setList,
+		list,
+		account_type_id
+	} = props;
 
 	const { register, errors, setError, handleSubmit } = useForm();
 
+	const [direction, setDirection] = React.useState("left");
+	const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
+	const [hidden, setHidden] = React.useState(false);
+
+	const handleCloseSpeedDial = () => {
+		setOpenSpeedDial(false);
+	};
+
+	const handleOpenSpeedDial = () => {
+		setOpenSpeedDial(true);
+	};
+
+	// modal
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -59,11 +91,50 @@ export default function(props) {
 		setOpen(false);
 	};
 
+	const actions = [
+		{
+			icon: <PanToolIcon onClick={() => handleClickOpen()} />,
+			name: "Raise your concern"
+		},
+		{
+			icon: <ListIcon onClick={() => setList(!list)} />,
+			name: "List of Members"
+		}
+	];
+
 	return (
 		<div>
-			<Tooltip title="Click to raise your problem">
-				<img src={hand} className={classes.hand} onClick={handleClickOpen} />
-			</Tooltip>
+			<div className={classes.handContainer}>
+				<SpeedDial
+					ariaLabel="SpeedDial example"
+					hidden={hidden}
+					className={classes.handContainer}
+					icon={<SpeedDialIcon className={classes.add} />}
+					onClose={handleCloseSpeedDial}
+					onOpen={handleOpenSpeedDial}
+					open={openSpeedDial}
+					direction={direction}
+				>
+					{account_type_id === 3 ? (
+						actions.map(action => (
+							<SpeedDialAction
+								key={action.name}
+								icon={action.icon}
+								tooltipTitle={action.name}
+								onClick={handleCloseSpeedDial}
+							/>
+						))
+					) : (
+						<SpeedDialAction
+							key={actions[1].name}
+							icon={actions[1].icon}
+							tooltipTitle={actions[1].name}
+							onClick={handleCloseSpeedDial}
+						/>
+					)}
+				</SpeedDial>
+			</div>
+
 			<Dialog
 				className={classes.dialogMainContainer}
 				open={open}
