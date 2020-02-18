@@ -29,18 +29,21 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 
 // images
-import { ClassroomStyle } from "../style/Styles";
+import {
+  ClassroomStyle,
+  StyledBadgeGreen,
+  StyledBadgeWhite
+} from "../style/Styles";
 import { toast } from "react-toastify";
 
 import work from "../../assets/images/teamwork.svg";
 import {
   UserDetails,
   class_details,
-  getClassroomUser
+  getClassroomUser,
+  user_details
 } from "../reusables/UserDetails";
 import RequestModal from "./student-request/RequestModal";
-
-import Badge from "@material-ui/core/Badge";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -96,12 +99,16 @@ export default function Classroom(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  React.useEffect(() => {
+    if (!!classId) {
+      socket.on(`classroom_user`, data => {
+        setClassroomUsersArray(
+          data.filter(x => x.class_id === Number(classId))
+        );
+      });
+    }
+  }, [classId]);
 
-  // const handleClickBanner = () => {
-  // 	setHeight(true);
-  // };
-
-  // get classroom users
   React.useEffect(() => {
     if ((!!user && !!headers && !!classId) === true) {
       getClassroomUser(headers).then(res => {
@@ -239,7 +246,7 @@ export default function Classroom(props) {
                     variant="h6"
                     style={{ padding: "8px", paddingLeft: "20px" }}
                   >
-                    List of Students
+                    Members
                   </Typography>
                 </Grid>
                 <Grid item xs={1}>
@@ -274,20 +281,7 @@ export default function Classroom(props) {
                 >
                   <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
                     <Tooltip title="View Profile">
-                      <Badge
-                        overlap="circle"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right"
-                        }}
-                        variant="dot"
-                      >
-                        <UserDetails
-                          id={x.user_id}
-                          headers={headers}
-                          action="img"
-                        />
-                      </Badge>
+                      <OnlineIndicator data={x} headers={headers} />
                     </Tooltip>
                   </Grid>
                   <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
@@ -444,3 +438,44 @@ const alertToast = msg =>
     pauseOnHover: true,
     draggable: true
   });
+
+const OnlineIndicator = ({ data, headers }) => {
+  const [member, setMember] = React.useState({});
+
+  React.useEffect(() => {
+    if (!!data && !!headers) {
+      user_details(data.user_id, headers).then(res => setMember(res.data));
+    }
+  }, [data, headers]);
+  return (
+    <>
+      {!!member ? (
+        member.user_status ? (
+          <StyledBadgeGreen
+            overlap="circle"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            variant="dot"
+          >
+            <UserDetails id={data.user_id} headers={headers} action="img" />
+          </StyledBadgeGreen>
+        ) : (
+          <StyledBadgeWhite
+            overlap="circle"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            variant="dot"
+          >
+            <UserDetails id={data.user_id} headers={headers} action="img" />
+          </StyledBadgeWhite>
+        )
+      ) : (
+        ""
+      )}
+    </>
+  );
+};

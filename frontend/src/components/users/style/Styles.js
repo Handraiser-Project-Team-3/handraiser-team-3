@@ -1,4 +1,5 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
 import head from "../../assets/images/bg.jpg";
 
 export const ClassroomStyle = makeStyles(theme => ({
@@ -59,7 +60,7 @@ export const ClassroomStyle = makeStyles(theme => ({
 export const ChatBoxStyle = makeStyles(theme => ({
   "@global": {
     "*::-webkit-scrollbar": {
-      width: "0.4em"
+      width: 1
     },
     "*::-webkit-scrollbar-track": {
       "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
@@ -194,3 +195,38 @@ export const ClassViewStyle = makeStyles(theme => ({
     }
   }
 }));
+
+export const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
+export const StyledBadgeWhite = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
