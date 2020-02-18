@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from "axios";
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,7 +13,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import { ClassroomStyle } from "../style/Styles";
-import work from "../../assets/images/teamwork.svg";
+import work from "../../assets/images/prog.svg";
 import { Paper } from "@material-ui/core";
 
 const ExpansionPanel = withStyles({

@@ -370,45 +370,17 @@ export default function Classroom(props) {
               </>
             )}
           </div>
-          <div className={classes.divStyle}>
-            <Grid
-              container
-              justify="space-between"
-              alignItems="center"
-              style={{ padding: "15px" }}
-            >
-              <Grid item>
-                {account_type_id === 2 ? (
-                  <Tooltip title="Click to view list of Students">
-                    <ListIcon
-                      style={{ color: "gray", cursor: "pointer" }}
-                      onClick={() => setList(!list)}
-                    />
-                  </Tooltip>
-                ) : (
-                  <>
-                    <Grid container spacing={1}>
-                      <Grid item>
-                        <Tooltip title="Click to view list of Students">
-                          <ListIcon
-                            style={{ color: "gray", cursor: "pointer" }}
-                            onClick={() => setList(!list)}
-                          />
-                        </Tooltip>
-                      </Grid>
-                    </Grid>
-                  </>
-                )}
-              </Grid>
-            </Grid>
-          </div>
+
           {account_type_id === 3 ? (
-            <RequestModal
+            <ClassroomModal
               addNewRequest={addNewRequest}
               newRequest={newRequest}
               handleSubmitNewRquest={handleSubmitNewRquest}
               open={requestDialog}
               setOpen={setRequestDialog}
+              setList={setList}
+              list={list}
+              account_type_id={account_type_id}
             />
           ) : (
             <></>

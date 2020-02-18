@@ -21,9 +21,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
+import Tooltip from "@material-ui/core/Tooltip";
 
 // images
-import { UserDetails, class_details } from "./UserDetails";
+import { UserDetails, class_details, user_details } from "./UserDetails";
 import CountUsers from "./CountUsers";
 
 const useStyles = makeStyles(theme => ({
@@ -73,6 +74,7 @@ export default function Profile(props) {
   const [classList, setClassList] = useState([]);
   const [studentClass, setStudentClass] = useState([]);
   const [profile, setProfile] = useState(true);
+  const [accountDetails, setAccountDetails] = useState([]);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -85,6 +87,7 @@ export default function Profile(props) {
   };
 
   useEffect(() => {
+    user_details(userId, headers).then(res => setAccountDetails(res.data));
     axios
       .get(`/api/class?id=${userId}`, headers)
       .then(res => setClassList(res.data))
@@ -118,13 +121,25 @@ export default function Profile(props) {
 
   return (
     <>
-      <Chip
-        variant="outlined"
-        size="medium"
-        label={email}
-        onClick={handleClickOpen}
-        style={{ color: "#616161" }}
-      />
+      {email ? (
+        <Chip
+          variant="outlined"
+          size="medium"
+          label={email}
+          onClick={handleClickOpen}
+          style={{ color: "#616161" }}
+        />
+      ) : (
+        <Tooltip title="Click to View Profile">
+          <Typography
+            variant="inherit"
+            style={{ paddingLeft: "10px", cursor: "pointer" }}
+            onClick={handleClickOpen}
+          >
+            <UserDetails id={userId} headers={headers} action={"name"} />
+          </Typography>
+        </Tooltip>
+      )}
 
       <Dialog
         open={open}
@@ -135,7 +150,12 @@ export default function Profile(props) {
           id="form-dialog-title"
           style={{ background: "#aaaafa", color: "white" }}
         >
-          {account_type_id === 2 ? "Mentor" : "Student"} Profile
+          {(email
+          ? account_type_id === 2
+          : accountDetails.account_type_id === 2)
+            ? "Mentor"
+            : "Student"}
+          Profile
         </DialogTitle>
         <DialogContent>
           <div className={classes.root}>
@@ -156,13 +176,14 @@ export default function Profile(props) {
               </Grid>
               <Grid item>
                 <Typography variant="h5" style={{ fontWeight: "bold" }}>
-                  {first_name} {last_name}
+                  {email ? first_name : accountDetails.first_name}{" "}
+                  {email ? last_name : accountDetails.last_name}
                 </Typography>
                 <Typography variant="subtitle1" style={{ fontSize: "14px" }}>
                   <Chip
                     variant="outlined"
                     size="small"
-                    label={email}
+                    label={email ? email : accountDetails.email}
                     style={{ color: "#616161" }}
                   />
                 </Typography>
@@ -174,12 +195,22 @@ export default function Profile(props) {
                       : { color: "purple" }
                   }
                 >
-                  ({account_type_id === 2 ? "Mentor" : "Student"})
+                  (
+                  {(email
+                  ? account_type_id === 2
+                  : accountDetails.account_type_id === 2)
+                    ? "Mentor"
+                    : "Student"}
+                  )
                 </Typography>
               </Grid>
 
               <Grid item>
-                {account_type_id === 3 ? (
+                {(email ? (
+                  account_type_id === 3
+                ) : (
+                  accountDetails.account_type_id === 3
+                )) ? (
                   <Grid container spacing={1} align="center">
                     <Grid item xs={6}>
                       <Paper
@@ -252,7 +283,9 @@ export default function Profile(props) {
                       variant="subtitle2"
                       style={{ color: "#2d2d2d" }}
                     >
-                      {account_type_id === 2
+                      {(email
+                      ? account_type_id === 2
+                      : accountDetails.account_type_id === 2)
                         ? "Classes Created"
                         : "Classes Attented/Attending"}
                     </Typography>
@@ -262,9 +295,15 @@ export default function Profile(props) {
                   >
                     <div className={classes.root1}>
                       <List>
-                        {(account_type_id === 2 ? classList : studentClass)
-                          .length !== 0 ? (
-                          (account_type_id === 2
+                        {((email
+                        ? account_type_id === 2
+                        : accountDetails.account_type_id === 2)
+                          ? classList
+                          : studentClass
+                        ).length !== 0 ? (
+                          ((email
+                          ? account_type_id === 2
+                          : accountDetails.account_type_id === 2)
                             ? classList
                             : studentClass
                           ).map(row => (
@@ -276,7 +315,11 @@ export default function Profile(props) {
                                     variant="caption"
                                     style={{ color: "#ff6f61ff" }}
                                   >
-                                    {account_type_id === 2 ? (
+                                    {(email ? (
+                                      account_type_id === 2
+                                    ) : (
+                                      accountDetails.account_type_id === 2
+                                    )) ? (
                                       <Grid item>Student/s:</Grid>
                                     ) : (
                                       ""
@@ -293,11 +336,20 @@ export default function Profile(props) {
                                               color: "white"
                                             }}
                                           >
-                                            {account_type_id === 3 ? "M" : "#"}
+                                            {(email
+                                            ? account_type_id === 3
+                                            : accountDetails.account_type_id ===
+                                              3)
+                                              ? "M"
+                                              : "#"}
                                           </Avatar>
                                         }
                                         label={
-                                          account_type_id === 3 ? (
+                                          (email ? (
+                                            account_type_id === 3
+                                          ) : (
+                                            accountDetails.account_type_id === 3
+                                          )) ? (
                                             <UserDetails
                                               id={row.user_id}
                                               headers={headers}
