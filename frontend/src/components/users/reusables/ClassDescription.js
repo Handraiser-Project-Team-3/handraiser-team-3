@@ -13,7 +13,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 // images
 import { ClassroomStyle } from "../style/Styles";
-import work from "../../assets/images/teamwork.svg";
+import work from "../../assets/images/prog.svg";
 import { Paper } from "@material-ui/core";
 
 const ExpansionPanel = withStyles({
@@ -78,7 +78,7 @@ export default function ClassDescription(props) {
         >
           <Grid container alignItems="center" justify="center" align="center">
             <Grid item xs={12} sm={6}>
-              <img src={work} style={{ width: "270px" }} alt="work" />
+              <img src={work} style={{ width: "190px" }} alt="work" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h4" style={{ color: "white" }}>

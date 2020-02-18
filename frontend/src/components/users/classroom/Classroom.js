@@ -30,7 +30,6 @@ import { RequestComponent } from "./student-request/RequestComponent";
 // images
 import { ClassroomStyle } from "../style/Styles";
 import { toast } from "react-toastify";
-import work from "../../assets/images/teamwork.svg";
 import { UserDetails } from "../reusables/UserDetails";
 import Profile from "../reusables/Profile";
 
@@ -174,7 +173,6 @@ export default function Classroom(props) {
     socket.emit("add_request", obj, userDetails);
     addNewRequest("");
   };
-
   return (
     <Layout
       accountType={account_type_id}
@@ -186,7 +184,7 @@ export default function Classroom(props) {
         <Grid item xs={12} sm={12} md={12} lg={4}>
           <ClassDescription
             setReqBox={setReqBox}
-            classId={props.classId}
+            classId={classId}
             headers={headers}
           />
           <AppBar
@@ -234,20 +232,11 @@ export default function Classroom(props) {
                 </Grid>
               </Grid>
             )}
-            {/* {account_type_id === 3 ? (
-							<ClassroomModal
-								addNewRequest={addNewRequest}
-								handleSubmitNewRquest={handleSubmitNewRquest}
-								newRequest={newRequest}
-							/>
-						) : (
-							""
-						)} */}
           </AppBar>
           <Paper
             elevation={5}
             className={classes.root}
-            style={reqBox ? { height: "48vh" } : { height: "57.2vh" }}
+            style={reqBox ? { height: "48vh" } : { height: "57vh" }}
           >
             {list ? (
               classroomUsersArray.map(x => (
@@ -355,19 +344,15 @@ export default function Classroom(props) {
                 </TabPanel>
               </>
             )}
-            <Paper elevation={0} className={classes.divStyle}>
-              <Grid container justify="flex-end" style={{ padding: "10px" }}>
-                <Grid item>
-                  <Tooltip title="Click to view all members">
-                    <ListIcon
-                      style={{ color: "#474cb9", cursor: "pointer" }}
-                      onClick={() => setList(!list)}
-                    />
-                  </Tooltip>
-                </Grid>
-              </Grid>
-            </Paper>
           </Paper>
+          <ClassroomModal
+            addNewRequest={addNewRequest}
+            handleSubmitNewRquest={handleSubmitNewRquest}
+            newRequest={newRequest}
+            setList={setList}
+            list={list}
+            account_type_id={account_type_id}
+          />
         </Grid>
         <Stats
           room={room}
