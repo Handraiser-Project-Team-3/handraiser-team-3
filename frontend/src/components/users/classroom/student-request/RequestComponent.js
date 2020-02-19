@@ -79,10 +79,10 @@ export const RequestComponent = ({
 			}}
 		>
 			<Paper
+				elevation={5}
 				id={data.id}
 				key={data.id}
 				className={classes.needHelp}
-				elevation={6}
 				style={
 					classroomUser.id === data.student_id
 						? {
@@ -109,7 +109,7 @@ export const RequestComponent = ({
 						<span style={{ fontSize: 16 }}>{data.title}</span>
 						<span style={{ fontSize: 12 }}>
 							({sender && ` ${sender.first_name} ${sender.last_name} `})
-            </span>
+						</span>
 					</Div>
 				</Typography>
 				{action === "need" ? (
@@ -219,8 +219,8 @@ export const RequestComponent = ({
 };
 
 const Div = styled.div`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 `;
 
 const iconStyle = {

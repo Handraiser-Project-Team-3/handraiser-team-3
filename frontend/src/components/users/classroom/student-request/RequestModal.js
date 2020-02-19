@@ -160,6 +160,7 @@ export default function (props) {
                     "Character limit reached!"
                   );
                 }
+                clearError(e.target.name);
                 addNewRequest(e.target.value);
               }}
               inputRef={register({ required: "Title is required" })}

@@ -21,7 +21,7 @@ export default function MentorsView(props) {
 				<Grid item xs={12}>
 					<Grid container spacing={1} className={classes.margin}>
 						<Grid item xs={12} sm={12} md={6} lg={4}>
-							<Paper className={classes.paperStyle}>
+							<Paper elevation={3} className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
@@ -39,7 +39,7 @@ export default function MentorsView(props) {
 									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
-												<Typography variant="inherit">Need Help:</Typography>
+												<Typography variant="inherit">Waiting:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
@@ -52,7 +52,7 @@ export default function MentorsView(props) {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} sm={12} md={6} lg={4}>
-							<Paper className={classes.paperStyle}>
+							<Paper elevation={3} className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
@@ -65,7 +65,7 @@ export default function MentorsView(props) {
 									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
-												<Typography variant="inherit">Being Helped:</Typography>
+												<Typography variant="inherit">In Queue:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
@@ -81,7 +81,7 @@ export default function MentorsView(props) {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} sm={12} md={12} lg={4}>
-							<Paper className={classes.paperStyle}>
+							<Paper elevation={3} className={classes.paperStyle}>
 								<Grid
 									container
 									alignItems="center"
