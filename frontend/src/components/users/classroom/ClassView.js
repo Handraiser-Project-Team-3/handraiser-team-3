@@ -505,7 +505,9 @@ export const ClassView = props => {
             ))
         ) : (
           <div className={classes.margin}>
-            <span className={classes.noClasses}>No added classes yet</span>
+            <span className={classes.noClasses}>
+              {filter.length ? "No Data Results" : "No added classes yet"}
+            </span>
             <div className="spinner">
               <div className="bounce1"></div>
               <div className="bounce2"></div>
@@ -543,6 +545,8 @@ export const ClassView = props => {
         setClassList={setClassList}
         classList={classList}
         account_type_id={account_type_id}
+        filter={filter}
+        setFilter={setFilter}
       />
     </Layout>
   );

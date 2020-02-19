@@ -169,7 +169,7 @@ export default function Classroom(props) {
       })();
     }
     // eslint-disable-next-line
-  }, [user, headers]);
+  }, [user, headers, classId]);
 
   const updateRequest = async ({ id, data, notify, mentor, action }) => {
     try {

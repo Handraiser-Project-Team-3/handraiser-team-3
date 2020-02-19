@@ -53,7 +53,9 @@ export const HandleClassModal = props => {
     userId,
     setClassList,
     classList,
-    account_type_id
+    account_type_id,
+    filter,
+    setFilter
   } = props;
 
   const isEnabled =
@@ -96,6 +98,7 @@ export const HandleClassModal = props => {
         .then(res => {
           setOpen(false);
           setClassList([...classList, res.data]);
+          setFilter([...filter, res.data]);
           setClassRoom({
             class_name: "",
             class_description: ""
