@@ -77,12 +77,22 @@ export const user_details = async (id, headers) => {
 		console.error(err);
 	}
 };
+<<<<<<< HEAD
 export const getClassroomUserDetails = async (id, headers) => {
 	try {
 		return await Axios.get(`/api/classroom-users/${id}`, headers);
 	} catch (err) {
 		console.log(err);
 	}
+=======
+
+export const getClassroomUserDetails = async (id, headers) => {
+  try {
+    return await Axios.get(`/api/classroom-users/${id}`, headers);
+  } catch (err) {
+    console.log(err);
+  }
+>>>>>>> 3de26e7bd0720e25b611cb14642f2eef3e83481b
 };
 export const class_details = async (id, headers) => {
 	try {
@@ -92,9 +102,18 @@ export const class_details = async (id, headers) => {
 	}
 };
 export const getClassroomUser = async headers => {
+<<<<<<< HEAD
 	try {
 		return await Axios.get(`/api/classroom-users`, headers);
 	} catch (err) {
 		console.log(err);
 	}
 };
+=======
+  try {
+    return await Axios.get(`/api/classroom-users`, headers);
+  } catch (err) {
+    console.log(err);
+  }
+};
+>>>>>>> 3de26e7bd0720e25b611cb14642f2eef3e83481b

@@ -96,13 +96,13 @@ export const ClassView = props => {
         { class_status: event.target.checked },
         headers
       )
-      .then(() => {
+      .then(res => {
         axios.get(`/api/class?id=${id}`, headers).then(res => {
           setClassList(res.data);
-          res.data[res.data.length -1].class_status === false
-            ? alertToast("Class Disabled")
-            : alertToast("Class Enabled");
         });
+        res.data[0].class_status === false
+          ? alertToast("Class Disabled")
+          : alertToast("Class Enabled");
       });
   };
   const handleClickOpen = () => {
