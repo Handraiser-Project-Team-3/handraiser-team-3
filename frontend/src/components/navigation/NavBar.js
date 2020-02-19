@@ -82,11 +82,6 @@ export default function ButtonAppBar(props) {
   const handleClass = () => {
     history.push("/");
   };
-  const handleClickRoom = classID => {
-    history.replace(`/classroom/${classID}`);
-
-    window.location.reload();
-  };
   const handleClick = () => {
     setShow(!show);
   };
@@ -165,21 +160,17 @@ export default function ButtonAppBar(props) {
           <List component="div" disablePadding>
             {classRoom &&
               classRoom.map(rooms => (
-                <ListItem
-                  id={2}
-                  key={rooms.id}
-                  button
-                  className={classes.nested}
-                  onClick={() => {
-                    handleClickRoom(rooms.id);
-                  }}
-                >
-                  <StarBorder />
+                <Link key={rooms.id} to={`/classroom/${rooms.id}`}>
+                  <ListItem id={2} button className={classes.nested}>
+                    <StarBorder />
 
-                  <ListItemText style={{ width: "20px", paddingLeft: "20px" }}>
-                    {rooms.class_name}
-                  </ListItemText>
-                </ListItem>
+                    <ListItemText
+                      style={{ width: "20px", paddingLeft: "20px" }}
+                    >
+                      {rooms.class_name}
+                    </ListItemText>
+                  </ListItem>
+                </Link>
               ))}
           </List>
         </Collapse>
@@ -248,6 +239,7 @@ export default function ButtonAppBar(props) {
                       setUser({});
                       history.push("/");
                       alertToast("Successfully logged out!");
+                      socket.off();
                     }}
                     render={renderProps => (
                       <Btn onClick={renderProps.onClick}>

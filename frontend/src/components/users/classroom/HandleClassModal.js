@@ -8,7 +8,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles(theme => ({
@@ -129,8 +129,6 @@ export const HandleClassModal = props => {
 
   return (
     <div>
-      <ToastContainer enableMulticontainer />
-
       <Dialog
         open={open}
         TransitionComponent={Transition}

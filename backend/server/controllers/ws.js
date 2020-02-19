@@ -60,5 +60,9 @@ module.exports = {
     socket.on(`is_typing`, (user, room) => {
       socket.to(`${classroom}`).emit(`typing`, user, { data: room });
     });
+
+    socket.on(`changed_privileges`, ({ id }) => {
+      io.emit(`notify_user`, { id: id });
+    });
   }
 };
