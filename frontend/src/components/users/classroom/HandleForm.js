@@ -29,33 +29,40 @@ export default function HandleForm(props) {
         headers
     } = props
     const [fullWidth,] = useState(true);
-    const [maxWidth] = useState('sm');
+    const [maxWidth] = useState('xs');
     const [filterUser, setFilterUser] = useState([]);
-    const [name, setName] = useState('');
-    const [filterEmail, setFilterEmail] = useState([]);
-    const [to, setTo] = useState('');
+    const [name] = useState('');
+    const [filterEmail, setFilterEmail] = useState();
+    const [to, setTo] = useState({});
 
     useEffect(() => {
-        setFilterUser(classroomUsers
-            .filter(x => x.class_id === classId)
-            .filter(x => x.user_id !== user.id)
-            .map(x => x.user_id));
+        axios
+            .get(`/api/classroom-users/${classId}`, headers)
+            .then(res => {
+                console.log(res)
+            })
+        // setFilterUser(classroomUsers
+        //     .filter(x => x.class_id === classId)
+        //     .filter(x => x.user_id !== user.id)
+        //     .map(x => x.user_id));
     }, [classroomUsers, classId, headers, user.id])
-
+    console.log(classId)
     useEffect(() => {
-        for (let z of filterUser) {
+        filterUser.map(data => {
             let email = [];
             axios
-                .get(`/api/user/${z}`, headers)
+                .get(`/api/user/${data}`, headers)
                 .then(res => {
-                    setName(res.data.first_name)
-                    email.push(res.data)
-                    setFilterEmail(email)
+                    console.log(res)
+                    // email.push(res.data)
+                    // setName(res.data.first_name)
+                    // setFilterEmail()
                 })
                 .catch(e => console.log(e))
-        }
-    }, [filterUser, headers])
+        })
 
+    }, [filterUser, headers])
+    // console.log(filterEmail)
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
         stringify: option => option.email
@@ -63,28 +70,32 @@ export default function HandleForm(props) {
 
     const messageTemplate = {
         from: user.email,
+        to: to,
         cc: user.email,
         name: name,
         subject: `HandRaiser - ${data.class_name}`,
-        msg: `You've ask to join the ${data.class_name} class, enter this code to join: ${data.class_code}.
-        If it didn't appeared in inbox, check the spam folder.`
+        className: `${data.class_name}`,
+        classCode: `${data.class_code}`
     }
 
     const handleSubmit = e => {
         e.preventDefault();
-
-        emailjs.send('b@tm4n', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
+        if (classId) {
+            emailjs.send('b@tm4n', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
+        }
     }
 
     const handleChange = e => {
-        console.log(e)
-    }
-    console.log(classId)
+        let data = {};
+        data = { ...to, e };
+        setTo(data.e)
+    };
+
     return (
         <div>
             <Chip
@@ -122,8 +133,6 @@ export default function HandleForm(props) {
                         />
                         <Autocomplete
                             multiple
-                            id={`to-${classId}`}
-                            name="to"
                             options={filterEmail}
                             filterOptions={filterOptions}
                             disableCloseOnSelect
@@ -131,51 +140,30 @@ export default function HandleForm(props) {
                             renderOption={(option, { selected }) => (
                                 <React.Fragment>
                                     <Checkbox
+                                        name="to"
                                         icon={icon}
                                         checkedIcon={checkedIcon}
                                         style={{ marginRight: 8 }}
                                         checked={selected}
+                                        onClick={e => handleChange(option.email)}
                                     />
                                     {option.email}
                                 </React.Fragment>
                             )}
-                            style={{ width: 450 }}
                             renderInput={params => (
                                 <TextField
                                     {...params}
-                                    required
                                     label="To"
-                                    onChange={handleChange}
+                                    name="to"
+                                    multiline
+                                    rows="2"
+                                    type="text"
+                                    id={`to-${classId}`}
                                     placeholder="Email/s"
                                     fullWidth
                                 />
                             )}
                         />
-                        {/* <div style={{ display: "flex" }}> */}
-                        <div style={{ width: "50%", paddingRight: 5 }}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id={`cc-${classId}`}
-                                name="cc"
-                                label="CC (Optional)"
-                                type="email"
-                                defaultValue={messageTemplate.cc}
-                                fullWidth
-                            />
-                        </div>
-                        {/* <div style={{ width: "50%" }}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id={`bcc-${classId}`}
-                                    name="bcc"
-                                    label="BCC (Optional)"
-                                    type="email"
-                                    fullWidth
-                                />
-                            </div>
-                        </div> */}
                         <TextField
                             autoFocus
                             required
@@ -194,9 +182,9 @@ export default function HandleForm(props) {
                             name="msg"
                             label="Message"
                             multiline
-                            rows="4"
+                            rows="10"
                             type="text"
-                            defaultValue={messageTemplate.msg}
+                            defaultValue={messageTemplate.message}
                             fullWidth
                         />
                     </form>

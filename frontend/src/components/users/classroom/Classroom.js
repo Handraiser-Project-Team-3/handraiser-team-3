@@ -6,11 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CloseIcon from "@material-ui/icons/Close";
-import RemoveIcon from "@material-ui/icons/Remove";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
-import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
@@ -34,14 +32,12 @@ import {
 } from "../style/Styles";
 import { toast } from "react-toastify";
 
-import work from "../../assets/images/teamwork.svg";
 import {
   UserDetails,
   class_details,
   getClassroomUser,
   user_details
 } from "../reusables/UserDetails";
-import RequestModal from "./student-request/RequestModal";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,7 +74,7 @@ export default function Classroom(props) {
   const { classId } = props;
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
+  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
@@ -104,6 +100,7 @@ export default function Classroom(props) {
         );
       });
     }
+    // eslint-disable-next-line
   }, [classId]);
 
   React.useEffect(() => {

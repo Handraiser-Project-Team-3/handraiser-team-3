@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
@@ -72,7 +72,7 @@ export default function ClassDescription({
         >
           <Grid container alignItems="center" justify="center" align="center">
             <Grid item xs={12} sm={6}>
-              <img src={work} style={{ width: "270px" }} />
+              <img src={work} style={{ width: "270px" }} alt="work" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h4" style={{ color: "white" }}>

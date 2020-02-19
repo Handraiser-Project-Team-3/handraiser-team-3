@@ -60,7 +60,6 @@ export default function (props) {
   const classes = useStyles();
   const {
     addNewRequest,
-    newRequest,
     handleSubmitNewRquest,
     setList,
     list,
@@ -69,11 +68,11 @@ export default function (props) {
     setOpen
   } = props;
 
-  const { register, errors, setError, handleSubmit, clearError } = useForm();
+  const { register, errors, setError, handleSubmit } = useForm();
 
-  const [direction, setDirection] = React.useState("left");
+  const [direction] = React.useState("left");
   const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
+  const [hidden] = React.useState(false);
 
   const handleSpeedDial = () => {
     setOpenSpeedDial(!openSpeedDial);

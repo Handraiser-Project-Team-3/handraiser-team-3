@@ -14,7 +14,6 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
-import Chip from "@material-ui/core/Chip";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -63,6 +62,7 @@ export default function ChatBox(props) {
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
+    // eslint-disable-next-line
   }, [messages, room]);
   React.useEffect(() => {
     if (!!room && !!headers) {
@@ -87,15 +87,15 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                  <img src={bubbles} style={{ width: 45 }} />
+                  <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
                 )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-                  <img src={bubbles} style={{ width: 45 }} />
+                  <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
                 )
           ) : (
-              <img src={bubbles} style={{ width: 45 }} />
+              <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
             )}
           <Typography
             variant="h6"
@@ -270,7 +270,7 @@ const MessageBox = props => {
       user_details(data.user_id, headers).then(res => {
         setSender(res.data);
       });
-  }, [headers]);
+  }, [headers, data.user_id]);
   return (
     <Div
       style={

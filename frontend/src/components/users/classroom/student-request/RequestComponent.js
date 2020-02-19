@@ -10,7 +10,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
@@ -51,7 +50,7 @@ export const RequestComponent = ({
 				});
 			}
 		}
-	}, [data, user]);
+	}, [data, user, headers, account_type_id]);
 	const handleSubmitAction = (title, submit) =>
 		confirmAlert({
 			title: title,
