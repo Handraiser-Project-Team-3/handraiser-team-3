@@ -102,6 +102,10 @@ export default function Classroom(props) {
           data.filter(x => x.class_id === Number(classId))
         );
       });
+      socket.on(`deleted_class`, ({ classList }) => {
+        classList.filter(classX => classX.id === classId).length === 0 &&
+          setNotifyDeleted(true);
+      });
     }
   }, [classId]);
 
@@ -374,6 +378,7 @@ export default function Classroom(props) {
             setList={setList}
             list={list}
             account_type_id={account_type_id}
+            requests={requests}
           />
         </Grid>
 
@@ -397,9 +402,7 @@ const alertToast = msg =>
     position: "bottom-left",
     autoClose: 5000,
     hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true
+    closeOnClick: true
   });
 
 const OnlineIndicator = ({ data, headers }) => {

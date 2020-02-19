@@ -97,7 +97,6 @@ massive({
   app.patch("/api/request/:id", requests.editRequest);
 
   //messages
-
   app.get("/api/messages/:id", message.list);
 
   server.listen(process.env.SERVER_PORT, () => {
