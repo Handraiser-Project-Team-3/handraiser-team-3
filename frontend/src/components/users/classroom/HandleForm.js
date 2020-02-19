@@ -12,6 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -32,6 +33,7 @@ export default function HandleForm(props) {
     const [filterUser, setFilterUser] = useState([]);
     const [name, setName] = useState('');
     const [filterEmail, setFilterEmail] = useState([]);
+    const [to, setTo] = useState('');
 
     useEffect(() => {
         setFilterUser(classroomUsers
@@ -59,10 +61,30 @@ export default function HandleForm(props) {
         stringify: option => option.email
     });
 
-    const handleSubmit = e => {
-        e.preventDefault();
+    const messageTemplate = {
+        from: user.email,
+        cc: user.email,
+        name: name,
+        subject: `HandRaiser - ${data.class_name}`,
+        msg: `You've ask to join the ${data.class_name} class, enter this code to join: ${data.class_code}.
+        If it didn't appeared in inbox, check the spam folder.`
     }
 
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        emailjs.send('b@tm4n', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+    }
+
+    const handleChange = e => {
+        console.log(e)
+    }
+    console.log(classId)
     return (
         <div>
             <Chip
@@ -78,19 +100,22 @@ export default function HandleForm(props) {
                 onClose={handleCloseForm}
                 aria-labelledby="form-dialog-title"
             >
-                <form
-                    id={classId}
-                    noValidate
-                    autoComplete="off"
-                    onSubmit={handleSubmit}
-                >
-                    <DialogTitle id="form-dialog-title">Email</DialogTitle>
-                    <DialogContent>
+
+                <DialogTitle id="form-dialog-title">Email</DialogTitle>
+                <DialogContent>
+                    <form
+                        id={classId}
+                        noValidate
+                        autoComplete="off"
+                        onSubmit={handleSubmit}
+                    >
                         <TextField
+                            required
                             disabled
                             margin="dense"
                             id={`emailForm-${classId}`}
-                            defaultValue={user.email}
+                            name="from"
+                            defaultValue={messageTemplate.from}
                             label="From"
                             type="email"
                             fullWidth
@@ -98,6 +123,7 @@ export default function HandleForm(props) {
                         <Autocomplete
                             multiple
                             id={`to-${classId}`}
+                            name="to"
                             options={filterEmail}
                             filterOptions={filterOptions}
                             disableCloseOnSelect
@@ -117,55 +143,64 @@ export default function HandleForm(props) {
                             renderInput={params => (
                                 <TextField
                                     {...params}
+                                    required
                                     label="To"
+                                    onChange={handleChange}
                                     placeholder="Email/s"
                                     fullWidth
                                 />
                             )}
                         />
-                        <div style={{ display: "flex" }}>
-                            <div style={{ width: "50%", paddingRight: 5 }}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id={`cc-${classId}`}
-                                    label="CC"
-                                    type="email"
-                                    fullWidth
-                                />
-                            </div>
-                            <div style={{ width: "50%" }}>
+                        {/* <div style={{ display: "flex" }}> */}
+                        <div style={{ width: "50%", paddingRight: 5 }}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id={`cc-${classId}`}
+                                name="cc"
+                                label="CC (Optional)"
+                                type="email"
+                                defaultValue={messageTemplate.cc}
+                                fullWidth
+                            />
+                        </div>
+                        {/* <div style={{ width: "50%" }}>
                                 <TextField
                                     autoFocus
                                     margin="dense"
                                     id={`bcc-${classId}`}
-                                    label="BCC"
+                                    name="bcc"
+                                    label="BCC (Optional)"
                                     type="email"
                                     fullWidth
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <TextField
                             autoFocus
+                            required
                             margin="dense"
                             id={`subject-${classId}`}
+                            name="subject"
                             label="Subject"
-                            type="email"
-                            defaultValue={`HandRaiser - ${data.class_name}`}
+                            type="text"
+                            defaultValue={messageTemplate.subject}
                             fullWidth
                         />
                         <TextField
                             autoFocus
+                            required
                             id={`message-${classId}`}
+                            name="msg"
                             label="Message"
                             multiline
                             rows="4"
                             type="text"
-                            defaultValue={`You've ask to join the ${data.class_name} class, enter this code to join: ${data.class_code}`}
+                            defaultValue={messageTemplate.msg}
                             fullWidth
                         />
-                    </DialogContent>
-                </form>
+                    </form>
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseForm} color="primary">
                         Cancel
