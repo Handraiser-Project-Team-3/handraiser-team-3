@@ -67,7 +67,7 @@ export default function ClassDescription({ classDetails }) {
 							variant="h6"
 							style={{ color: "#d1d1f3", textShadow: "1px 0px white" }}
 						>
-							Description:
+							{!!classDetails ? classDetails.class_name : ""} Description:
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
