@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
@@ -56,40 +55,34 @@ const ExpansionPanelDetails = withStyles(theme => ({
   }
 }))(MuiExpansionPanelDetails);
 
-export default function ClassDescription(props) {
+export default function ClassDescription({
+  setClassDetailsBox,
+  classDetailsBox,
+  classDetails
+}) {
   const classes = ClassroomStyle();
-  const { setReqBox, classId, headers } = props;
-  const [roomName, setRoomName] = React.useState("");
-
-  React.useEffect(() => {
-    if (classId) {
-      axios(`/api/class/${classId}`, headers).then(res => {
-        setRoomName(res.data.class_name);
-      });
-    }
-  }, [headers, classId]);
 
   return (
     <Paper elevation={5}>
       <ExpansionPanel>
         <ExpansionPanelSummary
           className={classes.banner}
-          onClick={() => setReqBox(true)}
+          onClick={() => setClassDetailsBox(!classDetailsBox)}
         >
           <Grid container alignItems="center" justify="center" align="center">
             <Grid item xs={12} sm={6}>
-              <img src={work} style={{ width: "190px" }} alt="work" />
+              <img src={work} style={{ width: "270px" }} alt="work" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h4" style={{ color: "white" }}>
-                {roomName}
+                {!!classDetails ? classDetails.class_name : ""}
               </Typography>
             </Grid>
           </Grid>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+            {!!classDetails ? classDetails.class_description : ""}
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>

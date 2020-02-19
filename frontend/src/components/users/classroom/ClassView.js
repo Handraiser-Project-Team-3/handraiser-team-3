@@ -15,6 +15,7 @@ import copy from "clipboard-copy";
 import axios from "axios";
 import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
+import Zoom from "@material-ui/core/Zoom";
 import { toast } from "react-toastify";
 
 // component/s
@@ -95,7 +96,7 @@ export const ClassView = props => {
         headers
       )
       .then(res => {
-        axios.get(`/api/class?id=${id}`, headers).then((res, event) => {
+        axios.get(`/api/class?id=${id}`, headers).then(res => {
           setClassList(res.data);
         });
         res.data[0].class_status === false
@@ -233,6 +234,8 @@ export const ClassView = props => {
                         {data.class_name}
                       </Typography>
                       <Tooltip
+                        classes={{ tooltip: classes.customWidth }}
+                        TransitionComponent={Zoom}
                         title={
                           data.class_description.length > 45
                             ? data.class_description

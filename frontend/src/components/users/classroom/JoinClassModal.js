@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import EnterClass from "./EnterClass";
@@ -32,14 +32,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const alertToast = msg =>
-  toast.info(msg, {
-    position: "top-right",
-    autoClose: 1800,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true
-  });
+// toast
+let toastId = null;
+const alertToast = msg => {
+  if (!toast.isActive(toastId)) {
+    toastId = toast.info(msg, {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 5000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
+  }
+};
 
 export const JoinClassModal = props => {
   const classes = useStyles();
@@ -100,7 +106,6 @@ export const JoinClassModal = props => {
 
   return (
     <div>
-      <ToastContainer enableMulticontainer />
       <EnterClass
         classEnter={classEnter}
         setOpen={setOpen}

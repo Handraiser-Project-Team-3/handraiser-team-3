@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
 
 // material ui
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -151,7 +150,6 @@ export const Admin = props => {
       first_name={first_name}
       typeId={account_type_id}
     >
-      <ToastContainer enableMulticontainer />
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <Paper className={classes.paperStyle}>
