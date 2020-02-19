@@ -35,8 +35,7 @@ const useStyles = makeStyles(theme => ({
 const alertToast = msg =>
   toast.info(msg, {
     position: "top-right",
-    hideProgressBar: true,
-    autoClose: 3000,
+    autoClose: 1800,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true

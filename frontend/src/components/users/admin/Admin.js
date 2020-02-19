@@ -19,7 +19,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import { TableFooter, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 // import Button from "@material-ui/core/Button";
 
@@ -138,9 +138,12 @@ export const Admin = props => {
     setOpen(true);
     setHandle("remove");
   };
-
   const indexOfLastList = activePage * itemPerPage;
   const indexOfFirstList = indexOfLastList - itemPerPage;
+  const currentUsers =
+    userType === 3
+      ? users.filter(res => res.account_type_id === 3)
+      : users.filter(res => res.account_type_id === 2);
 
   return (
     <Layout
@@ -219,11 +222,8 @@ export const Admin = props => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {users.length ? (
-                        (userType === 3
-                          ? users.filter(res => res.account_type_id === 3)
-                          : users.filter(res => res.account_type_id === 2)
-                        )
+                      {currentUsers.length ? (
+                        currentUsers
                           .slice(indexOfFirstList, indexOfLastList)
                           .map(
                             row =>
@@ -299,7 +299,6 @@ export const Admin = props => {
                                     )}
                                     {row.account_type_id === 2 && (
                                       <>
-                                        {/* <MentorDetails /> */}
                                         <Chip
                                           variant="outlined"
                                           size="medium"
@@ -337,13 +336,7 @@ export const Admin = props => {
                   >
                     <Paginations
                       account_type_id={account_type_id}
-                      totalPost={
-                        userType === 3
-                          ? users.filter(res => res.account_type_id === 3)
-                              .length
-                          : users.filter(res => res.account_type_id === 2)
-                              .length
-                      }
+                      totalPost={currentUsers.length}
                       setActivePage={setActivePage}
                       activePage={activePage}
                       itemPerPage={itemPerPage}
@@ -365,6 +358,7 @@ export const Admin = props => {
         </Grid>
       </Grid>
       <Confirmation
+        setFilter={setFilter}
         setOpen={setOpen}
         open={open}
         details={details}

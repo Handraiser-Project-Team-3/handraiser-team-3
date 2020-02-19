@@ -87,20 +87,20 @@ export const ClassView = props => {
   const [activePage, setActivePage] = useState(1);
   const [itemPerPage] = useState(8);
 
-  const handleStatus = name => event => {
+  const handleStatus = () => event => {
     axios
       .patch(
         `/api/class/${event.target.value}`,
         { class_status: event.target.checked },
         headers
       )
-      .then(() => {
-        axios.get(`/api/class?id=${id}`, headers).then(res => {
+      .then(res => {
+        axios.get(`/api/class?id=${id}`, headers).then((res, event) => {
           setClassList(res.data);
-          res.data[0].class_status === false
-            ? alertToast("Class Disabled")
-            : alertToast("Class Enabled");
         });
+        res.data[0].class_status === false
+          ? alertToast("Class Disabled")
+          : alertToast("Class Enabled");
       });
   };
   const handleClickOpen = () => {
@@ -183,6 +183,7 @@ export const ClassView = props => {
   const indexOfLastList = activePage * itemPerPage;
   const indexOfFirstList = indexOfLastList - itemPerPage;
   let currentList = classList.slice(indexOfFirstList, indexOfLastList);
+
   return (
     <Layout first_name={first_name}>
       <ClassHead
@@ -197,8 +198,8 @@ export const ClassView = props => {
       <Grid container direction="row" alignItems="center" spacing={3}>
         {classList.length ? (
           classList
-            .slice(indexOfFirstList, indexOfLastList)
             .sort((a, b) => (a.id > b.id ? 1 : -1))
+            .slice(indexOfFirstList, indexOfLastList)
             .map((data, i) => (
               <Grid key={i} item lg={3} md={4} sm={6} xs={12}>
                 <Card elevation={7}>
@@ -547,8 +548,8 @@ export const ClassView = props => {
 const alertToast = msg =>
   toast.info(msg, {
     position: "bottom-right",
+    autoClose: 1800,
     hideProgressBar: true,
-    autoClose: 6000,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true

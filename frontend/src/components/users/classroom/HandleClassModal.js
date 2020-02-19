@@ -69,7 +69,6 @@ export const HandleClassModal = props => {
 
   const handleInput = e => {
     const { name, value } = e.target;
-    console.log(value);
     setClassRoom({
       ...classRoom,
       [name]: value
@@ -115,7 +114,6 @@ export const HandleClassModal = props => {
         .then(() =>
           axios.get(`/api/class?id=${userId}`, headers).then(res => {
             setClassList(res.data);
-            console.log(res.data[0].class_description);
             setOpen(false);
             setClassRoom({
               class_name: "",
