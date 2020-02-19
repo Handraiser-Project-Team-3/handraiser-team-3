@@ -29,40 +29,37 @@ export default function HandleForm(props) {
         headers
     } = props
     const [fullWidth,] = useState(true);
-    const [maxWidth] = useState('xs');
+    const [maxWidth] = useState('sm');
     const [filterUser, setFilterUser] = useState([]);
-    const [name] = useState('');
+    const [name, setName] = useState('');
     const [filterEmail, setFilterEmail] = useState();
     const [to, setTo] = useState({});
 
     useEffect(() => {
-        axios
-            .get(`/api/classroom-users/${classId}`, headers)
-            .then(res => {
-                console.log(res)
-            })
-        // setFilterUser(classroomUsers
-        //     .filter(x => x.class_id === classId)
-        //     .filter(x => x.user_id !== user.id)
-        //     .map(x => x.user_id));
+        setFilterUser(classroomUsers
+            .filter(x => x.class_id === classId)
+            .filter(x => x.user_id !== user.id)
+            .map(x => x.user_id));
     }, [classroomUsers, classId, headers, user.id])
-    console.log(classId)
-    useEffect(() => {
-        filterUser.map(data => {
-            let email = [];
-            axios
-                .get(`/api/user/${data}`, headers)
-                .then(res => {
-                    console.log(res)
-                    // email.push(res.data)
-                    // setName(res.data.first_name)
-                    // setFilterEmail()
-                })
-                .catch(e => console.log(e))
-        })
 
-    }, [filterUser, headers])
-    // console.log(filterEmail)
+    useEffect(() => {
+        let email = [];
+        if (classId) {
+            filterUser.map(data => {
+                return (
+                    axios
+                        .get(`/api/user/${data}`, headers)
+                        .then(res => {
+                            email.push(res.data)
+                            setName(email.first_name)
+                            setFilterEmail(email)
+                        })
+                        .catch(e => console.log(e))
+                )
+            })
+        }
+    }, [filterUser, headers, classId])
+
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
         stringify: option => option.email
@@ -75,13 +72,14 @@ export default function HandleForm(props) {
         name: name,
         subject: `HandRaiser - ${data.class_name}`,
         className: `${data.class_name}`,
-        classCode: `${data.class_code}`
+        classCode: `${data.class_code}`,
+        message: `You've ask to join the ${data.class_name} class. Enter this code to join: ${data.class_code}`
     }
 
     const handleSubmit = e => {
         e.preventDefault();
         if (classId) {
-            emailjs.send('b@tm4n', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
+            emailjs.send('gmail', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
                 .then((result) => {
                     console.log(result.text);
                 }, (error) => {
@@ -145,7 +143,7 @@ export default function HandleForm(props) {
                                         checkedIcon={checkedIcon}
                                         style={{ marginRight: 8 }}
                                         checked={selected}
-                                        onClick={e => handleChange(option.email)}
+                                        onClick={handleChange(option.email)}
                                     />
                                     {option.email}
                                 </React.Fragment>
@@ -156,7 +154,6 @@ export default function HandleForm(props) {
                                     label="To"
                                     name="to"
                                     multiline
-                                    rows="2"
                                     type="text"
                                     id={`to-${classId}`}
                                     placeholder="Email/s"
@@ -172,6 +169,7 @@ export default function HandleForm(props) {
                             name="subject"
                             label="Subject"
                             type="text"
+                            multiline
                             defaultValue={messageTemplate.subject}
                             fullWidth
                         />
