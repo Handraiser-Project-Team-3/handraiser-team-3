@@ -6,6 +6,8 @@ import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
 import { ToastContainer } from "react-toastify";
+
+import "status-indicator/styles.css";
 const socket = io(`172.60.60.163:3001`);
 
 function App() {

@@ -27,11 +27,24 @@ import ClassroomModal from "./student-request/RequestModal";
 import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
+import Profile from "../reusables/Profile";
 
 // images
-import { ClassroomStyle } from "../style/Styles";
+import {
+	ClassroomStyle,
+	StyledBadgeGreen,
+	StyledBadgeWhite
+} from "../style/Styles";
 import { toast } from "react-toastify";
-import { UserDetails } from "../reusables/UserDetails";
+
+import work from "../../assets/images/teamwork.svg";
+import {
+	UserDetails,
+	class_details,
+	getClassroomUser,
+	user_details
+} from "../reusables/UserDetails";
+import RequestModal from "./student-request/RequestModal";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -73,22 +86,29 @@ export default function Classroom(props) {
 	const [classroomUser, setClassroomUser] = React.useState({});
 	const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
 	const [newRequest, addNewRequest] = React.useState(null);
+	const [classDetails, setClassDetails] = React.useState({});
 	const [room, setRoom] = React.useState(null);
 	const [list, setList] = useState(false);
 	const [verify, setVerify] = React.useState([]);
+	const [isTyping, setIsTyping] = React.useState(null);
+
+	const [requestDialog, setRequestDialog] = React.useState(false);
 	const history = useHistory();
 	const match = useRouteMatch();
-	const [reqBox, setReqBox] = React.useState(false);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	React.useEffect(() => {
+		if (!!classId) {
+			socket.on(`classroom_user`, data => {
+				setClassroomUsersArray(
+					data.filter(x => x.class_id === Number(classId))
+				);
+			});
+		}
+	}, [classId]);
 
-	// const handleClickBanner = () => {
-	// 	setHeight(true);
-	// };
-
-	// get classroom users
 	React.useEffect(() => {
 		if ((!!user && !!headers && !!classId) === true) {
 			getClassroomUser(headers).then(res => {
@@ -102,6 +122,9 @@ export default function Classroom(props) {
 				setClassroomUsersArray(
 					res.data.filter(x => x.class_id === Number(classId))
 				);
+			});
+			class_details(classId, headers).then(res => {
+				setClassDetails(res.data);
 			});
 		}
 	}, [user, headers, classId]);
@@ -121,11 +144,13 @@ export default function Classroom(props) {
 				classId: classId
 			});
 		}
-		socket.on(`update_request_list`, data => {
+		socket.on(`update_request_list`, (data, action) => {
 			setRequests(data);
-			setRoom(null);
+			if (action === "move_back" || action === "remove") {
+				setRoom(null);
+			}
 		});
-	}, [requests, classId]);
+	}, [classId]);
 
 	React.useEffect(() => {
 		socket.on(`notify`, notify => {
@@ -133,7 +158,7 @@ export default function Classroom(props) {
 		});
 	}, []);
 	React.useEffect(() => {
-		if (user) {
+		if (!!user && !!headers && !!classId) {
 			(async () => {
 				try {
 					const res = await Axios.get(
@@ -146,17 +171,20 @@ export default function Classroom(props) {
 				}
 			})();
 		}
-	}, [user, headers]);
+	}, [user, headers, classId]);
 
-	const updateRequest = async (id, data, notify, mentor) => {
+	const updateRequest = async ({ id, data, notify, mentor, action }) => {
 		try {
-			await Axios.patch(`/api/request/${id}`, { status: data }, headers);
-			socket.emit("update_request", notify);
+			await Axios.patch(
+				`/api/request/${id}`,
+				{ status: data, mentor_id: mentor },
+				headers
+			);
+			socket.emit("update_request", { notify: notify, action: action });
 		} catch (err) {
 			console.error(err);
 		}
 	};
-
 	// routes restriction
 	React.useEffect(() => {
 		if (verify.length) {
@@ -177,6 +205,7 @@ export default function Classroom(props) {
 		};
 		socket.emit("add_request", obj, userDetails);
 		addNewRequest("");
+		setRequestDialog(false);
 	};
 	return (
 		<Layout
@@ -186,13 +215,8 @@ export default function Classroom(props) {
 		>
 			<Grid container justify="flex-start" spacing={2}>
 				<Grid item xs={12} sm={12} md={12} lg={4}>
-					<ClassDescription setReqBox={setReqBox} />
-					<AppBar
-						elevation={5}
-						position="static"
-						color="default"
-						className={classes.appBar}
-					>
+					<ClassDescription classDetails={classDetails} />
+					<AppBar position="static" color="default" className={classes.appBar}>
 						{!list ? (
 							<Tabs
 								value={value}
@@ -202,8 +226,8 @@ export default function Classroom(props) {
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Waiting" {...a11yProps(0)} />
-								<Tab label="In Queue" {...a11yProps(1)} />
+								<Tab label="Need Help" {...a11yProps(0)} />
+								<Tab label="Being Helped" {...a11yProps(1)} />
 								<Tab label="Done" {...a11yProps(2)} />
 							</Tabs>
 						) : (
@@ -233,11 +257,7 @@ export default function Classroom(props) {
 							</Grid>
 						)}
 					</AppBar>
-					<Paper
-						elevation={5}
-						className={classes.root}
-						style={reqBox ? { height: "48vh" } : { height: "57vh" }}
-					>
+					<div className={classes.root}>
 						{list ? (
 							classroomUsersArray.map(x => (
 								<Grid
@@ -256,36 +276,25 @@ export default function Classroom(props) {
 											justify="space-between"
 										>
 											<Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
-												<UserDetails
-													id={x.user_id}
-													headers={headers}
-													action="img"
-												/>
+												<Tooltip title="View Profile">
+													<OnlineIndicator data={x} headers={headers} />
+												</Tooltip>
 											</Grid>
 											<Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
-												<Tooltip title="Click to View Profile">
-													<Typography
-														variant="inherit"
-														style={{ paddingLeft: "10px", cursor: "pointer" }}
-													>
-														<UserDetails
-															id={x.user_id}
-															headers={headers}
-															action={"name"}
-														/>
-													</Typography>
-												</Tooltip>
+												<Profile userId={x.user_id} headers={headers} />
 											</Grid>
 										</Grid>
 									</Grid>
 									<Grid item xs={1}>
-										<Tooltip title="Remove from list">
-											<RemoveIcon
-												fontSize="small"
-												color="secondary"
-												cursor="pointer"
-											/>
-										</Tooltip>
+										{account_type_id === 2 && x.user_id !== user.id && (
+											<Tooltip title="Remove from list">
+												<RemoveIcon
+													fontSize="small"
+													color="secondary"
+													cursor="pointer"
+												/>
+											</Tooltip>
+										)}
 									</Grid>
 								</Grid>
 							))
@@ -307,6 +316,7 @@ export default function Classroom(props) {
 													user={userDetails}
 													socket={socket}
 													setRoom={setRoom}
+													setIsTyping={setIsTyping}
 												/>
 											)
 									)}
@@ -327,6 +337,7 @@ export default function Classroom(props) {
 													user={userDetails}
 													socket={socket}
 													setRoom={setRoom}
+													setIsTyping={setIsTyping}
 												/>
 											)
 									)}
@@ -349,41 +360,41 @@ export default function Classroom(props) {
 													user={userDetails}
 													socket={socket}
 													setRoom={setRoom}
+													setIsTyping={setIsTyping}
 												/>
 											)
 									)}
 								</TabPanel>
 							</>
 						)}
-					</Paper>
+					</div>
+
 					<ClassroomModal
 						addNewRequest={addNewRequest}
-						handleSubmitNewRquest={handleSubmitNewRquest}
 						newRequest={newRequest}
+						handleSubmitNewRquest={handleSubmitNewRquest}
+						open={requestDialog}
+						setOpen={setRequestDialog}
 						setList={setList}
 						list={list}
 						account_type_id={account_type_id}
 					/>
 				</Grid>
+
 				<Stats
 					room={room}
 					user={userDetails}
 					headers={headers}
 					socket={socket}
 					requests={requests}
+					isTyping={isTyping}
+					setIsTyping={setIsTyping}
 				/>
 			</Grid>
 		</Layout>
 	);
 }
 
-const getClassroomUser = async headers => {
-	try {
-		return await Axios.get(`/api/classroom-users`, headers);
-	} catch (err) {
-		console.log(err);
-	}
-};
 const alertToast = msg =>
 	toast.info(msg, {
 		position: "bottom-left",
@@ -393,3 +404,44 @@ const alertToast = msg =>
 		pauseOnHover: true,
 		draggable: true
 	});
+
+const OnlineIndicator = ({ data, headers }) => {
+	const [member, setMember] = React.useState({});
+
+	React.useEffect(() => {
+		if (!!data && !!headers) {
+			user_details(data.user_id, headers).then(res => setMember(res.data));
+		}
+	}, [data, headers]);
+	return (
+		<>
+			{!!member ? (
+				member.user_status ? (
+					<StyledBadgeGreen
+						overlap="circle"
+						anchorOrigin={{
+							vertical: "bottom",
+							horizontal: "right"
+						}}
+						variant="dot"
+					>
+						<UserDetails id={data.user_id} headers={headers} action="img" />
+					</StyledBadgeGreen>
+				) : (
+					<StyledBadgeWhite
+						overlap="circle"
+						anchorOrigin={{
+							vertical: "bottom",
+							horizontal: "right"
+						}}
+						variant="dot"
+					>
+						<UserDetails id={data.user_id} headers={headers} action="img" />
+					</StyledBadgeWhite>
+				)
+			) : (
+				""
+			)}
+		</>
+	);
+};

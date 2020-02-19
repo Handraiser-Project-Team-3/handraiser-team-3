@@ -1,5 +1,7 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
 import head from "../../assets/images/bg.jpg";
+import Background from "../../assets/images/backg.png";
 
 export const ClassroomStyle = makeStyles(theme => ({
 	"@global": {
@@ -16,10 +18,12 @@ export const ClassroomStyle = makeStyles(theme => ({
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		height: "57vh",
+		height: 542,
+		borderRadius: "0 0 5px 5px",
 		overflow: "auto",
 		padding: "0",
-		position: "relative"
+		position: "relative",
+		border: "2px solid #e7e6fd"
 	},
 	banner: {
 		width: "100%",
@@ -29,10 +33,15 @@ export const ClassroomStyle = makeStyles(theme => ({
 	},
 	needHelp: {
 		padding: "15px",
-		margin: "20px"
+		margin: "20px",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between"
 	},
 	studentsNeed: {
-		color: "gray"
+		color: "gray",
+		display: "flex",
+		alignItems: "center"
 	},
 	appBar: {
 		background: "#f1f0fa"
@@ -45,24 +54,15 @@ export const ClassroomStyle = makeStyles(theme => ({
 		background: "#ececfe",
 		position: "sticky",
 		bottom: "0px",
-		width: "100%"
-	},
-	handContainer: {
-		marginTop: "-60px ",
-		display: "flex",
-		justifyContent: "flex-end",
-		paddingRight: "15px"
-	},
-	hand: {
-		width: "45px",
-		padding: "5px"
+		width: "100%",
+		margin: "-40px 0 0 0"
 	}
 }));
 
 export const ChatBoxStyle = makeStyles(theme => ({
 	"@global": {
 		"*::-webkit-scrollbar": {
-			width: "0.4em"
+			width: 1
 		},
 		"*::-webkit-scrollbar-track": {
 			"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
@@ -72,7 +72,7 @@ export const ChatBoxStyle = makeStyles(theme => ({
 		}
 	},
 	root: {
-		padding: "17.5px",
+		padding: "15px",
 		backgroundColor: "#e2e3f7",
 		marginTop: "1vh",
 		borderRadius: "5px"
@@ -92,8 +92,7 @@ export const ChatBoxStyle = makeStyles(theme => ({
 	},
 	convoBox: {
 		backgroundColor: "whitesmoke",
-		maxHeight: 500,
-		height: "50vh",
+		height: 500,
 		overflow: "auto",
 		margin: "10px 0 10px 0 "
 	},
@@ -195,6 +194,114 @@ export const ClassViewStyle = makeStyles(theme => ({
 		"&:hover": {
 			background: "#f19c76",
 			color: "white"
+		}
+	}
+}));
+
+export const StyledBadgeGreen = withStyles(theme => ({
+	badge: {
+		backgroundColor: "#44b700",
+		color: "#44b700",
+		boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+		"&::after": {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%",
+			height: "100%",
+			borderRadius: "50%",
+			border: "1px solid currentColor",
+			content: '""'
+		}
+	}
+}))(Badge);
+export const StyledBadgeWhite = withStyles(theme => ({
+	badge: {
+		backgroundColor: "lightgrey",
+		color: "lightgrey",
+		boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+		"&::after": {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%",
+			height: "100%",
+			borderRadius: "50%",
+			border: "1px solid currentColor",
+			content: '""'
+		}
+	}
+}))(Badge);
+
+export const LoginStyle = makeStyles(theme => ({
+	bg: {
+		backgroundImage: `url(${Background})`,
+		height: "100vh",
+		backgroundSize: "cover",
+		opacity: "0.6",
+		"&:hover": {
+			opacity: "1"
+		}
+	},
+	handRaiserLogo: {
+		width: "180px"
+	},
+	svg: {
+		width: "100%",
+		position: "absolute",
+		bottom: "0px",
+		margin: "0 auto"
+	},
+	title: {
+		writingMode: "vertical-lr",
+		textOrientation: "upright",
+		fontSize: "40px"
+	},
+	titleGrid: {
+		background: "#8245dc",
+		height: "101.2vh",
+		width: "100%",
+		fontWeight: "bold"
+	},
+	thirdCont: {
+		background: "#ffffff",
+		backgroundSize: "cover",
+		height: "100vh",
+		width: "100%",
+		"@media (max-width: 1279px)": {
+			background:
+				"linear-gradient(0deg, rgba(207,176,255,1) 5%, rgba(171,171,250,1) 65%, rgba(255,255,255,1) 100%)"
+		}
+	},
+	access: {
+		color: "gray",
+		"@media (max-width: 1279px)": {
+			color: "white",
+			margin: "20px",
+			paddingTop: "10px"
+		}
+	},
+	google: {
+		height: "50px",
+		marginTop: "50px"
+	},
+	gif: {
+		width: "40%",
+		marginTop: "60px"
+	},
+	welcome: {
+		color: "purple",
+		textShadow: "3px 2px black",
+		paddingTop: "50px",
+		"@media (max-width: 360px)": {
+			fontSize: "50px"
+		}
+	},
+	logo: {
+		width: "150px",
+		marginTop: "100px",
+		"@media (max-width: 1279px)": {
+			marginTop: "50px"
 		}
 	}
 }));

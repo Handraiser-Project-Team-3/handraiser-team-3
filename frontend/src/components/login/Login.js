@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 // images
 import Background from "../assets/images/backg.png";
 import Girl from "../assets/images/hehe.gif";
+import two from "../assets/images/teamwork.svg";
 import Logo1 from "../assets/images/logo.png";
 
 // material-ui
@@ -19,9 +20,11 @@ import styled from "styled-components";
 import googleIcon from "../assets/images/google.svg";
 import { Hidden } from "@material-ui/core";
 
+import { LoginStyle } from "../users/style/Styles";
+
 export const Login = props => {
 	const { setAccessToken } = props.data;
-	const classes = useStyles();
+	const classes = LoginStyle();
 
 	const responseGoogle = res => {
 		const obj = {
@@ -47,36 +50,33 @@ export const Login = props => {
 			<ToastContainer enableMulticontainer />
 
 			<Grid container align="center">
-				<Grid item xs={12} sm={7}>
-					<div className={classes.bg}></div>
-				</Grid>
-				<Grid item xs={12} sm={4}>
-					<Grid
-						container
-						direction="row"
-						alignItems="center"
-						className={classes.thirdCont}
-					>
+				<Hidden mdDown>
+					<Grid item xs={12} sm={12} md={12} lg={7}>
+						<div className={classes.bg}></div>
+					</Grid>
+				</Hidden>
+				<Grid item xs={12} sm={12} md={12} lg={4}>
+					<Grid container alignItems="flex-start" className={classes.thirdCont}>
 						<Grid item xs={12}>
-							<Grid container justify="center" spacing={8}>
-								<Grid item>
-									<img src={Logo1} style={{ width: "90%" }} />
+							<Grid container direction="column" justify="center">
+								<Grid item xs={12}>
+									<img src={Logo1} className={classes.logo} />
 								</Grid>
-								<Grid item>
-									<Grid container justify="center" spacing={3}>
-										<Grid item>
-											<Typography
-												variant="h1"
-												style={{
-													color: "purple",
-													textShadow: "3px 2px black"
-												}}
-											>
+
+								<Grid item xs={12}>
+									<Grid
+										container
+										justify="center"
+										alignItems="center"
+										direction="column"
+									>
+										<Grid item xs={12} sm={12} lg={12}>
+											<Typography variant="h1" className={classes.welcome}>
 												Welcome!
 											</Typography>
 										</Grid>
-										<Grid item>
-											<Typography variant="h5" style={{ color: "gray" }}>
+										<Grid item xs={12} sm={12} lg={12}>
+											<Typography variant="h5" className={classes.access}>
 												You can access the classes by logging in with your{" "}
 												<span style={{ color: "purple", paddingRight: "5px" }}>
 													{" "}
@@ -86,46 +86,60 @@ export const Login = props => {
 											</Typography>
 										</Grid>
 									</Grid>
+
+									<Grid item xs={12} sm={12} lg={12} className={classes.google}>
+										<GoogleLogin
+											clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
+											buttonText="Login"
+											render={renderProps => (
+												<Button
+													onClick={renderProps.onClick}
+													disabled={renderProps.disabled}
+													style={{
+														background: "#692896",
+														color: "white",
+														outline: "none"
+													}}
+												>
+													<Img src={googleIcon} />
+													<span>Sign-in with Google</span>
+												</Button>
+											)}
+											onSuccess={responseGoogle}
+											onFailure={responseGoogle}
+											cookiePolicy={"single_host_origin"}
+										/>
+									</Grid>
 								</Grid>
-								<Grid item>
-									<GoogleLogin
-										clientId="98171074423-7khn6bi88f89ncbg6ev5ps5f962kdmlo.apps.googleusercontent.com"
-										buttonText="Login"
-										render={renderProps => (
-											<Button
-												onClick={renderProps.onClick}
-												disabled={renderProps.disabled}
-												style={{
-													background: "#692896",
-													color: "white",
-													outline: "none"
-												}}
-											>
-												<Img src={googleIcon} />
-												<span>Sign-in with Google</span>
-											</Button>
-										)}
-										onSuccess={responseGoogle}
-										onFailure={responseGoogle}
-										cookiePolicy={"single_host_origin"}
-									/>
-								</Grid>
-								{/* <img src={Girl} /> */}
+								<Hidden lgUp>
+									<Grid item xs={12}>
+										<img
+											src={two}
+											style={{
+												width: "100%",
+												marginTop: "8px"
+											}}
+										/>
+									</Grid>
+								</Hidden>
+								<Hidden mdDown>
+									<Grid item xs={12}>
+										<img src={Girl} className={classes.gif} />
+									</Grid>
+								</Hidden>
 							</Grid>
 						</Grid>
 					</Grid>
 				</Grid>
 				<Hidden mdDown>
-					<Grid item xs={12} sm={1}>
+					<Grid item xs={12} sm={12} md={12} lg={1}>
 						<Grid
 							container
 							justify="center"
 							direction="column"
 							spacing={3}
 							className={classes.titleGrid}
-						>
-							{/* <img src={Logo} style={{ width: "100px" }} /> */}
-						</Grid>
+						></Grid>
 					</Grid>
 				</Hidden>
 			</Grid>
@@ -142,45 +156,6 @@ const alertToast = msg =>
 		draggable: true
 	});
 
-const useStyles = makeStyles(theme => ({
-	bg: {
-		backgroundImage: `url(${Background})`,
-		height: "100vh",
-		backgroundSize: "cover",
-		opacity: "0.6",
-		"&:hover": {
-			opacity: "1"
-		}
-	},
-	handRaiserLogo: {
-		width: "180px"
-	},
-	svg: {
-		width: "100%",
-		position: "absolute",
-		bottom: "0px",
-		margin: "0 auto"
-	},
-	title: {
-		// color: `url(${SideBackground})`,
-		writingMode: "vertical-lr",
-		textOrientation: "upright",
-		fontSize: "40px"
-	},
-	titleGrid: {
-		// background: `url(${SideBackground})`,
-		background: "#ababfa",
-		height: "101.2vh",
-		width: "100%",
-		fontWeight: "bold"
-	},
-	thirdCont: {
-		background: "#ffffff",
-		height: "100vh",
-		width: "100%"
-	}
-}));
-
 const Button = styled.button`
 	display: flex;
 	align-items: center;
@@ -193,7 +168,7 @@ const Button = styled.button`
 	margin-top: 30px;
 	margin-bottom: 100px;
 	outline: none;
-	@media (max-width: 768px) {
+	@media (max-width: 1024px) {
 		font-size: 20px;
 	}
 `;
