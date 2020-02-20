@@ -50,7 +50,7 @@ export const RequestComponent = ({
         });
       }
     }
-  }, [data, user, account_type_id, headers]);
+  }, [data, user, headers, account_type_id]);
   const handleSubmitAction = (title, submit) =>
     confirmAlert({
       title: title,
@@ -148,6 +148,7 @@ export const RequestComponent = ({
                         notify: `Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
                         mentor: mentor.id
                       });
+                      console.log(data);
                     })
                   }
                 />
@@ -167,7 +168,8 @@ export const RequestComponent = ({
                           id: data.id,
                           data: null,
                           action: "move_back",
-                          notify: `Mentor ${user.first_name} moved ${sender.firstname}'s request back to queue`
+                          notify: `Mentor ${user.first_name} moved ${sender.first_name}'s request back to queue`,
+                          mentor: null
                         });
                         setRoom(null);
                       })

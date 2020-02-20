@@ -8,13 +8,7 @@ import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import WarningIcon from "@material-ui/icons/Warning";
 
-export default function NotifyLogout({
-  open,
-  setOpen,
-  setAccessToken,
-  setUser,
-  socket
-}) {
+export default function({ open, setOpen, action }) {
   const history = useHistory();
 
   return (
@@ -29,8 +23,8 @@ export default function NotifyLogout({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The class you're accessing now has been deleted, please go back to
-            homepage.
+            {action === "removed_user" && `Mentor removed you from this class`}
+            {action === "class_closed" && `This class has been closed.`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -39,9 +33,10 @@ export default function NotifyLogout({
             autoFocus
             onClick={() => {
               history.push("/");
+              setOpen(false);
             }}
           >
-            Go Back
+            Home
           </Button>
         </DialogActions>
       </Dialog>

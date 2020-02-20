@@ -37,12 +37,6 @@ massive({
         userDetails = user[0];
         db.classroom_users.find().then(list => {
           io.emit(`classroom_user`, list);
-          console.log(
-            `${userDetails.first_name} is`,
-            "\x1b[32m",
-            `online`,
-            "\x1b[0m"
-          );
         });
       });
     });
@@ -56,12 +50,6 @@ massive({
           .then(signout => {
             db.classroom_users.find().then(list => {
               io.emit(`classroom_user`, list);
-              console.log(
-                `${signout[0].first_name} is`,
-                "\x1b[31m",
-                `offline`,
-                "\x1b[0m"
-              );
             });
           });
       }
