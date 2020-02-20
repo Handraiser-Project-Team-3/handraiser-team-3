@@ -16,11 +16,8 @@ export default function AddEmail(props) {
     setEmail(e.target.value);
   }
   function handleClickAdd(email) {
-    const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
+    const EmailVal = /^\w+([-]?\w+)*@\w+(boom)*(\.camp)+$/;
 
-    // if email is already registered!
-
-    // display error message
     if (email.match(EmailVal)) {
       axios
         .post(

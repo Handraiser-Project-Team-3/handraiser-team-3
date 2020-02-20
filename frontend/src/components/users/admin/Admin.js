@@ -18,7 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import { TableFooter, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 // import Button from "@material-ui/core/Button";
 
@@ -95,20 +95,20 @@ const useStyles = makeStyles({
 	}
 });
 export const Admin = props => {
-	const classes = useStyles();
-	const [accountType] = useState("Admin");
-	const { user, headers } = props.data;
-	const userDetails = user ? user : {};
-	const { first_name, account_type_id } = userDetails;
-	const [users, setUsers] = useState([]);
-	const [userType, setUserType] = useState(2);
-	const [open, setOpen] = useState(false);
-	const [handle, setHandle] = useState("");
-	const [details, setDetails] = useState({});
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [activePage, setActivePage] = useState(1);
-	const [itemPerPage] = useState(9);
-	const [filter, setFilter] = useState([]);
+  const classes = useStyles();
+  const [accountType] = useState("Admin");
+  const { user, headers, socket } = props.data;
+  const userDetails = user ? user : {};
+  const { first_name, account_type_id } = userDetails;
+  const [users, setUsers] = useState([]);
+  const [userType, setUserType] = useState(2);
+  const [open, setOpen] = useState(false);
+  const [handle, setHandle] = useState("");
+  const [details, setDetails] = useState({});
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [activePage, setActivePage] = useState(1);
+  const [itemPerPage] = useState(9);
+  const [filter, setFilter] = useState([]);
 
 	useEffect(() => {
 		axios.get("/api/user/list", headers).then(res => {
@@ -132,268 +132,263 @@ export const Admin = props => {
 		setAnchorEl(null);
 	};
 
-	const handleDelete = row => {
-		setDetails(row);
-		setOpen(true);
-		setHandle("remove");
-	};
+  const handleDelete = row => {
+    setDetails(row);
+    setOpen(true);
+    setHandle("remove");
+  };
+  const indexOfLastList = activePage * itemPerPage;
+  const indexOfFirstList = indexOfLastList - itemPerPage;
+  const currentUsers =
+    userType === 3
+      ? users.filter(res => res.account_type_id === 3)
+      : users.filter(res => res.account_type_id === 2);
 
-	const indexOfLastList = activePage * itemPerPage;
-	const indexOfFirstList = indexOfLastList - itemPerPage;
+  return (
+    <Layout
+      accountType={accountType}
+      first_name={first_name}
+      typeId={account_type_id}
+    >
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <Paper className={classes.paperStyle}>
+            <AddEmail headers={headers} setUsers={setUsers} users={users} />
+          </Paper>
+          <PaperStat users={users} />
+        </Grid>
 
-	return (
-		<Layout
-			accountType={accountType}
-			first_name={first_name}
-			typeId={account_type_id}
-		>
-			<Grid container direction="row" spacing={2}>
-				<Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-					<Paper className={classes.paperStyle}>
-						<AddEmail headers={headers} setUsers={setUsers} users={users} />
-					</Paper>
-					<PaperStat users={users} />
-				</Grid>
-
-				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
-					<Grid container spacing={1}>
-						<Grid item xs={12}>
-							<Paper elevation={0} style={{ height: "auto" }}>
-								<Grid container spacing={1}>
-									<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
-										<Typography
-											variant="h5"
-											style={{
-												fontWeight: "bold",
-												color: "#aaaafa",
-												textShadow: "1px 1px purple"
-											}}
-										>
-											Users List
-										</Typography>
-									</Grid>
-									<Grid item xs={12} sm={11} md={4} lg={3} xl={3}>
-										<Search
-											filter={filter}
-											setUsers={setUsers}
-											typeId={account_type_id}
-											setActivePage={setActivePage}
-										/>
-									</Grid>
-								</Grid>
-							</Paper>
-						</Grid>
-						<Grid item xs={12}>
-							<Paper>
-								<TableContainer className={classes.tableHeight}>
-									<Table
-										className={classes.table}
-										aria-label="customized table"
-										stickyHeader
-									>
-										<TableHead>
-											<TableRow>
-												<StyledTableCell style={{ width: "40%" }}>
-													<span>Email Address</span>
-												</StyledTableCell>
-												<StyledTableCell align="center">Role</StyledTableCell>
-												<StyledTableCell
-													align="right"
-													style={{ paddingRight: "80px" }}
-												>
-													Action
-												</StyledTableCell>
-												<TableCell
-													align="right"
-													style={{ background: "#e1e2f7", width: "20px" }}
-												>
-													<Tooltip title="Filter List" arrow>
-														<FilterListIcon
-															onClick={handleClick}
-															className={classes.filter}
-														/>
-													</Tooltip>
-												</TableCell>
-											</TableRow>
-										</TableHead>
-										<TableBody>
-											{users.length ? (
-												(userType === 3
-													? users.filter(res => res.account_type_id === 3)
-													: users.filter(res => res.account_type_id === 2)
-												)
-													.slice(indexOfFirstList, indexOfLastList)
-													.map(
-														row =>
-															row.account_type_id === userType && (
-																<StyledTableRow key={row.id}>
-																	<StyledTableCell component="th" scope="row">
-																		<Profile
-																			email={row.email}
-																			account_type_id={row.account_type_id}
-																			first_name={row.first_name}
-																			last_name={row.last_name}
-																			userId={row.id}
-																			headers={headers}
-																		/>
-																	</StyledTableCell>
-																	<StyledTableCell
-																		component="th"
-																		scope="row"
-																		align="center"
-																	>
-																		<Chip
-																			variant="outlined"
-																			size="medium"
-																			label={
-																				userType === 3 ? "Student" : "Mentor"
-																			}
-																			style={
-																				userType === 3
-																					? {
-																							borderColor: "#aaaafa",
-																							color: "#616161"
-																					  }
-																					: {
-																							borderColor: "#f7b733",
-																							color: "#616161"
-																					  }
-																			}
-																		/>
-																	</StyledTableCell>
-																	<StyledTableCell align="right">
-																		{row.account_type_id === 3 && (
-																			<>
-																				<Chip
-																					variant="outlined"
-																					size="medium"
-																					avatar={
-																						<Avatar
-																							style={{
-																								background: "#aaaafa",
-																								color: "white"
-																							}}
-																						>
-																							<FaceIcon />
-																						</Avatar>
-																					}
-																					label="Set as Mentor"
-																					onClick={() => {
-																						setDetails(row);
-																						setOpen(true);
-																						setHandle("set");
-																					}}
-																					style={{
-																						borderColor: "#aaaafa",
-																						color: "#616161"
-																					}}
-																				/>
-																				{/* <div
+        <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Paper elevation={0} style={{ height: "auto" }}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+                    <Typography
+                      variant="h5"
+                      style={{
+                        fontWeight: "bold",
+                        color: "#aaaafa",
+                        textShadow: "1px 1px purple"
+                      }}
+                    >
+                      Users List
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={11} md={4} lg={3} xl={3}>
+                    <Search
+                      filter={filter}
+                      setUsers={setUsers}
+                      typeId={account_type_id}
+                      setActivePage={setActivePage}
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper>
+                <TableContainer className={classes.tableHeight}>
+                  <Table
+                    className={classes.table}
+                    aria-label="customized table"
+                    stickyHeader
+                  >
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell style={{ width: "40%" }}>
+                          <span>Email Address</span>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">Role</StyledTableCell>
+                        <StyledTableCell
+                          align="right"
+                          style={{ paddingRight: "80px" }}
+                        >
+                          Action
+                        </StyledTableCell>
+                        <TableCell
+                          align="right"
+                          style={{ background: "#e1e2f7", width: "20px" }}
+                        >
+                          <Tooltip title="Filter List" arrow>
+                            <FilterListIcon
+                              onClick={handleClick}
+                              className={classes.filter}
+                            />
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {currentUsers.length ? (
+                        currentUsers
+                          .slice(indexOfFirstList, indexOfLastList)
+                          .map(
+                            row =>
+                              row.account_type_id === userType && (
+                                <StyledTableRow key={row.id}>
+                                  <StyledTableCell component="th" scope="row">
+                                    <Profile
+                                      email={row.email}
+                                      account_type_id={row.account_type_id}
+                                      first_name={row.first_name}
+                                      last_name={row.last_name}
+                                      userId={row.id}
+                                      headers={headers}
+                                    />
+                                  </StyledTableCell>
+                                  <StyledTableCell
+                                    component="th"
+                                    scope="row"
+                                    align="center"
+                                  >
+                                    <Chip
+                                      variant="outlined"
+                                      size="medium"
+                                      label={
+                                        userType === 3 ? "Student" : "Mentor"
+                                      }
+                                      style={
+                                        userType === 3
+                                          ? {
+                                              borderColor: "#aaaafa",
+                                              color: "#616161"
+                                            }
+                                          : {
+                                              borderColor: "#f7b733",
+                                              color: "#616161"
+                                            }
+                                      }
+                                    />
+                                  </StyledTableCell>
+                                  <StyledTableCell align="right">
+                                    {row.account_type_id === 3 && (
+                                      <>
+                                        <Chip
+                                          variant="outlined"
+                                          size="medium"
+                                          avatar={
+                                            <Avatar
+                                              style={{
+                                                background: "#aaaafa",
+                                                color: "white"
+                                              }}
+                                            >
+                                              <FaceIcon />
+                                            </Avatar>
+                                          }
+                                          label="Set as Mentor"
+                                          onClick={() => {
+                                            setDetails(row);
+                                            setOpen(true);
+                                            setHandle("set");
+                                          }}
+                                          style={{
+                                            borderColor: "#aaaafa",
+                                            color: "#616161"
+                                          }}
+                                        />
+                                        {/* <div
 																					onClick={() => deleteClass(row.id)}
 																				>
 																					delete
 																				</div> */}
-																			</>
-																		)}
-																		{row.account_type_id === 2 && (
-																			<>
-																				{/* <MentorDetails /> */}
-																				<Chip
-																					variant="outlined"
-																					size="medium"
-																					label="Remove as Mentor"
-																					onDelete={() => handleDelete(row)}
-																					style={{
-																						borderColor: "#ff6f61ff",
-																						color: "#ff6f61ff"
-																					}}
-																				/>
-																			</>
-																		)}
-																	</StyledTableCell>
-																	<TableCell
-																		style={{ width: "20px" }}
-																	></TableCell>
-																</StyledTableRow>
-															)
-													)
-											) : (
-												<TableRow>
-													<td>no results found</td>
-												</TableRow>
-											)}
-										</TableBody>
-									</Table>
-								</TableContainer>
-								{users.length > 8 ? (
-									<Grid
-										style={{
-											marginTop: 25,
-											display: "flex",
-											justifyContent: "center"
-										}}
-									>
-										<Paginations
-											account_type_id={account_type_id}
-											totalPost={
-												userType === 3
-													? users.filter(res => res.account_type_id === 3)
-															.length
-													: users.filter(res => res.account_type_id === 2)
-															.length
-											}
-											setActivePage={setActivePage}
-											activePage={activePage}
-											itemPerPage={itemPerPage}
-										/>
-									</Grid>
-								) : (
-									<Grid
-										style={{
-											marginTop: 65,
-											marginBottom: 10,
-											display: "flex",
-											justifyContent: "center"
-										}}
-									></Grid>
-								)}
-							</Paper>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
-			<Confirmation
-				setOpen={setOpen}
-				open={open}
-				details={details}
-				headers={headers}
-				handle={handle}
-				setUsers={setUsers}
-			/>
-			<Menu
-				id="simple-menu"
-				anchorEl={anchorEl}
-				keepMounted
-				open={Boolean(anchorEl)}
-				onClose={handleClose}
-			>
-				<MenuItem
-					onClick={() => {
-						setUserType(3);
-						setActivePage(1);
-					}}
-				>
-					Student
-				</MenuItem>
-				<MenuItem
-					onClick={() => {
-						setUserType(2);
-						setActivePage(1);
-					}}
-				>
-					Mentor
-				</MenuItem>
-			</Menu>
-		</Layout>
-	);
+                                      </>
+                                    )}
+                                    {row.account_type_id === 2 && (
+                                      <>
+                                        <Chip
+                                          variant="outlined"
+                                          size="medium"
+                                          label="Remove as Mentor"
+                                          onDelete={() => handleDelete(row)}
+                                          style={{
+                                            borderColor: "#ff6f61ff",
+                                            color: "#ff6f61ff"
+                                          }}
+                                        />
+                                      </>
+                                    )}
+                                  </StyledTableCell>
+                                  <TableCell
+                                    style={{ width: "20px" }}
+                                  ></TableCell>
+                                </StyledTableRow>
+                              )
+                          )
+                      ) : (
+                        <TableRow>
+                          <td>no results found</td>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                {users.length > 8 ? (
+                  <Grid
+                    style={{
+                      marginTop: 25,
+                      display: "flex",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Paginations
+                      account_type_id={account_type_id}
+                      totalPost={currentUsers.length}
+                      setActivePage={setActivePage}
+                      activePage={activePage}
+                      itemPerPage={itemPerPage}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid
+                    style={{
+                      marginTop: 65,
+                      marginBottom: 10,
+                      display: "flex",
+                      justifyContent: "center"
+                    }}
+                  ></Grid>
+                )}
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Confirmation
+        setFilter={setFilter}
+        setOpen={setOpen}
+        open={open}
+        details={details}
+        headers={headers}
+        handle={handle}
+        setUsers={setUsers}
+        socket={socket}
+      />
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem
+          onClick={() => {
+            setUserType(3);
+            setActivePage(1);
+          }}
+        >
+          Student
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setUserType(2);
+            setActivePage(1);
+          }}
+        >
+          Mentor
+        </MenuItem>
+      </Menu>
+    </Layout>
+  );
 };

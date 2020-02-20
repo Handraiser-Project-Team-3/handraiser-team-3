@@ -23,7 +23,7 @@ export const ClassroomStyle = makeStyles(theme => ({
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		height: 541,
+		height: 530,
 		borderRadius: "0 0 5px 5px",
 		overflow: "auto",
 		padding: "0",
@@ -96,7 +96,7 @@ export const ChatBoxStyle = makeStyles(theme => ({
 	},
 	convoBox: {
 		backgroundColor: "whitesmoke",
-		height: 500,
+		height: 495,
 		overflow: "auto",
 		margin: "10px 0 10px 0 "
 	},
@@ -191,6 +191,9 @@ export const ClassViewStyle = makeStyles(theme => ({
 		marginTop: "10%",
 		display: "flex",
 		alignItems: "baseline"
+	},
+	customWidth: {
+		maxWidth: 384
 	},
 	codeStyle: {
 		fontSize: "14px",

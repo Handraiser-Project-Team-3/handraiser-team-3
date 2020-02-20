@@ -66,7 +66,7 @@ export default function ChatBox(props) {
 		socket.on(`new_message`, message => {
 			setMessages([...messages, message]);
 		});
-	}, [messages, room]);
+	}, [messages, room, socket, setIsTyping]);
 	React.useEffect(() => {
 		if (!!room && !!headers) {
 			getClassroomUserDetails(room.student_id, headers).then(res => {
@@ -82,42 +82,58 @@ export default function ChatBox(props) {
 		}
 	}, [room, headers]);
 	return (
-		<Paper className={classes.root}>
-			<Paper className={classes.top} elevation={3}>
+		<Paper className={classes.root} elevation={5}>
+			<Paper className={classes.top}>
 				<Grid className={classes.topName}>
 					{user && room !== null ? (
 						user.account_type_id === 2 ? (
 							student !== null ? (
 								<Avatar src={student.user_image} />
 							) : (
-								<img src={bubbles} style={{ width: 45 }} />
+								<img src={bubbles} style={{ width: 40 }} alt="" />
 							)
 						) : mentor !== null ? (
 							<Avatar src={mentor.user_image} />
 						) : (
-							<img src={bubbles} style={{ width: 45 }} />
+							<img src={bubbles} style={{ width: 40 }} alt="" />
 						)
 					) : (
-						<img src={bubbles} style={{ width: 45 }} />
+						<img src={bubbles} style={{ width: 40 }} alt="" />
 					)}
 					<Typography
 						variant="h6"
 						style={{ paddingLeft: "10px", color: "#525252" }}
 					>
-						{user && room !== null
-							? user.account_type_id === 2
-								? student !== null
-									? `${student.first_name} ${student.last_name}`
-									: ""
-								: mentor !== null
-								? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-								: ""
-							: ""}
+						{user && room !== null ? (
+							user.account_type_id === 2 ? (
+								student !== null ? (
+									`${student.first_name} ${student.last_name}`
+								) : (
+									""
+								)
+							) : mentor !== null ? (
+								<>
+									<span>
+										{mentor.first_name} {mentor.last_name}
+									</span>{" "}
+									<Chip
+										variant="outlined"
+										size="small"
+										label="Mentor"
+										color="primary"
+									/>
+								</>
+							) : (
+								""
+							)
+						) : (
+							""
+						)}
 					</Typography>
 				</Grid>
 			</Paper>
 
-			<Paper className={classes.convoBox} elevation={6}>
+			<Paper className={classes.convoBox}>
 				{!show && !!room ? (
 					<div
 						style={{
@@ -187,10 +203,10 @@ export default function ChatBox(props) {
 							.filter(x => x.student_request_id === room.id)
 							.map((x, i) => (
 								<MessageBox
+									key={x.id}
 									data={x}
 									headers={headers}
 									user={user}
-									key={x.id}
 									index={i}
 									messages={messages}
 									isTyping={isTyping}
@@ -209,7 +225,7 @@ export default function ChatBox(props) {
 										<Msg
 											style={{
 												borderRadius: "20px 20px 20px 0",
-												border: "2px solid #ff6f61"
+												border: "2px solid #d4d4d4"
 											}}
 										>
 											<TypingIndicator>
@@ -225,7 +241,7 @@ export default function ChatBox(props) {
 				</div>
 			</Paper>
 			<form onSubmit={handleSubmit}>
-				<Paper className={classes.inputAreacontainer} elevation={6}>
+				<Paper className={classes.inputAreacontainer}>
 					<TextField
 						disabled={!room}
 						variant="outlined"
@@ -270,10 +286,11 @@ const MessageBox = props => {
 	const [sender, setSender] = React.useState({});
 	React.useEffect(() => {
 		!!headers &&
+			!!data &&
 			user_details(data.user_id, headers).then(res => {
 				setSender(res.data);
 			});
-	}, [headers]);
+	}, [headers, data]);
 	return (
 		<Div
 			style={
@@ -318,7 +335,8 @@ const MessageBox = props => {
 						  }
 						: {
 								borderRadius: "20px 20px 20px 0",
-								border: "2px solid #ff6f61"
+								border: "2px solid #d4d4d4",
+								background: "#d4d4d4"
 						  }
 				}
 			>
@@ -344,7 +362,7 @@ const Msg = styled.span`
 const TypingIndicator = styled.span`
 	span {
 		display: inline-block;
-		background-color: #ff6f61;
+		background-color: purple;
 		width: 5px;
 		height: 5px;
 		border-radius: 50%;

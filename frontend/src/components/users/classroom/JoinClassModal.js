@@ -32,15 +32,20 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const alertToast = msg =>
-	toast.info(msg, {
-		position: "top-right",
-		hideProgressBar: true,
-		autoClose: 3000,
-		closeOnClick: true,
-		pauseOnHover: true,
-		draggable: true
-	});
+// toast
+let toastId = null;
+const alertToast = msg => {
+	if (!toast.isActive(toastId)) {
+		toastId = toast.info(msg, {
+			position: "top-right",
+			hideProgressBar: true,
+			autoClose: 5000,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true
+		});
+	}
+};
 
 export const JoinClassModal = props => {
 	const classes = useStyles();

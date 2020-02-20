@@ -1,24 +1,21 @@
 import React, { useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
-import ListIcon from "@material-ui/icons/List";
 import CloseIcon from "@material-ui/icons/Close";
 import RemoveIcon from "@material-ui/icons/Remove";
+import Paper from "@material-ui/core/Paper";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
-import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import Axios from "axios";
-import Chip from "@material-ui/core/Chip";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -28,6 +25,7 @@ import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 import Profile from "../reusables/Profile";
+import NotifyDeleted from "../reusables/NotifyDeleted";
 
 // images
 import {
@@ -37,14 +35,12 @@ import {
 } from "../style/Styles";
 import { toast } from "react-toastify";
 
-import work from "../../assets/images/teamwork.svg";
 import {
 	UserDetails,
 	class_details,
 	getClassroomUser,
 	user_details
 } from "../reusables/UserDetails";
-import RequestModal from "./student-request/RequestModal";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -81,19 +77,20 @@ export default function Classroom(props) {
 	const { classId } = props;
 	const { headers, user, socket } = props.data;
 	const userDetails = user ? user : {};
-	const { first_name, account_type_id, id } = userDetails;
-	const [value, setValue] = useState(0);
-	const [classroomUser, setClassroomUser] = useState({});
-	const [classroomUsersArray, setClassroomUsersArray] = useState([]);
-	const [newRequest, addNewRequest] = useState(null);
-	const [classDetails, setClassDetails] = useState({});
+	const { first_name, account_type_id } = userDetails;
+	const [value, setValue] = React.useState(0);
+	const [classroomUser, setClassroomUser] = React.useState({});
+	const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
+	const [newRequest, addNewRequest] = React.useState(null);
+	const [classDetails, setClassDetails] = React.useState({});
 	const [room, setRoom] = React.useState(null);
 	const [list, setList] = useState(false);
-	const [verify, setVerify] = useState([]);
-	const [isTyping, setIsTyping] = useState(null);
-	const [requestDialog, setRequestDialog] = useState(false);
+	const [verify, setVerify] = React.useState([]);
+	const [isTyping, setIsTyping] = React.useState(null);
+
+	const [notifyDeleted, setNotifyDeleted] = useState(false);
+	const [requestDialog, setRequestDialog] = React.useState(false);
 	const history = useHistory();
-	const match = useRouteMatch();
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -105,8 +102,12 @@ export default function Classroom(props) {
 					data.filter(x => x.class_id === Number(classId))
 				);
 			});
+			socket.on(`deleted_class`, ({ classList }) => {
+				classList.filter(classX => classX.id === classId).length === 0 &&
+					setNotifyDeleted(true);
+			});
 		}
-	}, [classId]);
+	}, [classId, socket]);
 
 	React.useEffect(() => {
 		if ((!!user && !!headers && !!classId) === true) {
@@ -149,21 +150,18 @@ export default function Classroom(props) {
 				setRoom(null);
 			}
 		});
-	}, [classId]);
+	}, [classId, socket]);
 
 	React.useEffect(() => {
 		socket.on(`notify`, notify => {
 			alertToast(notify);
 		});
-	}, []);
+	}, [socket]);
 	React.useEffect(() => {
 		if (!!user && !!headers && !!classId) {
 			(async () => {
 				try {
-					const res = await Axios.get(
-						`/api/request/list/${props.classId}`,
-						headers
-					);
+					const res = await Axios.get(`/api/request/list/${classId}`, headers);
 					setRequests(res.data);
 				} catch (err) {
 					console.log(err);
@@ -187,18 +185,18 @@ export default function Classroom(props) {
 	// routes restriction
 	React.useEffect(() => {
 		if (verify.length) {
-			if (props.classId === verify.find(x => x === props.classId)) {
-				history.push(`/classroom/${props.classId}`);
+			if (classId === verify.find(x => x === classId)) {
+				history.push(`/classroom/${classId}`);
 			} else {
 				alertToast("You are not Authorize to enter this room!");
 				history.replace("/");
 			}
 		}
-	}, [verify, match.params.id]);
+	}, [verify, classId, history]);
 
 	const handleSubmitNewRquest = () => {
 		const obj = {
-			class_id: props.classId,
+			class_id: classId,
 			student_id: classroomUser.id,
 			title: newRequest
 		};
@@ -275,16 +273,9 @@ export default function Classroom(props) {
 											alignItems="center"
 											justify="space-between"
 										>
-											<Tooltip title="View Profile">
-												<Grid
-													item
-													xs={3}
-													sm={2}
-													style={{ marginBottom: "1vh" }}
-												>
-													<OnlineIndicator data={x} headers={headers} />
-												</Grid>
-											</Tooltip>
+											<Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
+												<OnlineIndicator data={x} headers={headers} />
+											</Grid>
 											<Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
 												<Profile userId={x.user_id} headers={headers} />
 											</Grid>
@@ -383,6 +374,7 @@ export default function Classroom(props) {
 						setList={setList}
 						list={list}
 						account_type_id={account_type_id}
+						requests={requests}
 					/>
 				</Grid>
 
@@ -395,6 +387,7 @@ export default function Classroom(props) {
 					isTyping={isTyping}
 					setIsTyping={setIsTyping}
 				/>
+				<NotifyDeleted open={notifyDeleted} setOpen={setNotifyDeleted} />
 			</Grid>
 		</Layout>
 	);
@@ -405,9 +398,7 @@ const alertToast = msg =>
 		position: "bottom-left",
 		autoClose: 5000,
 		hideProgressBar: true,
-		closeOnClick: true,
-		pauseOnHover: true,
-		draggable: true
+		closeOnClick: true
 	});
 
 const OnlineIndicator = ({ data, headers }) => {
