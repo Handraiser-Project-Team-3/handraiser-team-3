@@ -187,6 +187,9 @@ export const ClassViewStyle = makeStyles(theme => ({
     display: "flex",
     alignItems: "baseline"
   },
+  customWidth: {
+    maxWidth: 384
+  },
   codeStyle: {
     fontSize: "14px",
     cursor: "pointer",

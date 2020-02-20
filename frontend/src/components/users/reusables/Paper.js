@@ -86,7 +86,7 @@ export const PaperStat = props => {
                 <Grid container direction="column" justify="center">
                   <Grid item xs={12}>
                     <Typography variant="h6" className={classes.label}>
-                      Mentors
+                      All
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
@@ -132,7 +132,7 @@ export const PaperStat = props => {
                 <Grid container direction="column" justify="center">
                   <Grid item xs={12}>
                     <Typography variant="h6" className={classes.label}>
-                      All
+                      Mentors
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>

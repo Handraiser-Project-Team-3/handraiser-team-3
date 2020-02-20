@@ -58,6 +58,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function(props) {
+  /* eslint-disable */
   const classes = useStyles();
   const {
     addNewRequest,
@@ -98,7 +99,7 @@ export default function(props) {
     } else {
       if (!!requests) {
         requests.filter(req => req.status === null || req.status === false)
-          .length <= 1
+          .length <= 0
           ? setActions([
               {
                 icon: (
