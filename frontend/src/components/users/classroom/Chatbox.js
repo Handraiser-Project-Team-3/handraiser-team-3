@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import ReactHtmlParser from "react-html-parser";
 import TextField from "@material-ui/core/TextField";
 import {
   user_details,
@@ -43,14 +44,13 @@ export default function ChatBox(props) {
       })();
     }
   }, [headers, room]);
-
   const handleSubmit = e => {
     e.preventDefault();
     socket.emit(`add_message`, {
       message: {
         user_id: user.id,
         student_request_id: room.id,
-        content: msg
+        content: msg.replace(/\n/g, "</br>")
       }
     });
     socket.emit(`is_typing`, null, room);
@@ -191,15 +191,16 @@ export default function ChatBox(props) {
             messages
               .filter(x => x.student_request_id === room.id)
               .map((x, i) => (
-                <MessageBox
-                  data={x}
-                  headers={headers}
-                  user={user}
-                  key={x.id}
-                  index={i}
-                  messages={messages}
-                  isTyping={isTyping}
-                />
+                <div key={i}>
+                  <MessageBox
+                    data={x}
+                    headers={headers}
+                    user={user}
+                    index={i}
+                    messages={messages}
+                    isTyping={isTyping}
+                  />
+                </div>
               ))
           ) : (
             ""
@@ -234,7 +235,7 @@ export default function ChatBox(props) {
           <TextField
             disabled={!room}
             variant="outlined"
-            label="Type your message..."
+            placeholder="Type your message..."
             value={msg}
             fullWidth
             style={{ overflow: "auto" }}
@@ -247,6 +248,8 @@ export default function ChatBox(props) {
               }
               setMsg(e.target.value);
             }}
+            multiline
+            rowsMax="2"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -328,7 +331,7 @@ const MessageBox = props => {
               }
         }
       >
-        {data.content}
+        {ReactHtmlParser(data.content)}
       </Msg>
     </Div>
   );

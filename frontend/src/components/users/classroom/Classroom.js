@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CloseIcon from "@material-ui/icons/Close";
-
+import RemoveIcon from "@material-ui/icons/Remove";
 //tabs
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -85,7 +85,7 @@ export default function Classroom(props) {
   const [list, setList] = useState(false);
   const [verify, setVerify] = useState([]);
   const [isTyping, setIsTyping] = useState(null);
-
+  const [notifyDeleted, setNotifyDeleted] = useState(false);
   const [requestDialog, setRequestDialog] = useState(false);
   const history = useHistory();
   const match = useRouteMatch();
@@ -276,9 +276,7 @@ export default function Classroom(props) {
                       justify="space-between"
                     >
                       <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
-                        <Tooltip title="View Profile">
-                          <OnlineIndicator data={x} headers={headers} />
-                        </Tooltip>
+                        <OnlineIndicator data={x} headers={headers} />
                       </Grid>
                       <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
                         <Profile userId={x.user_id} headers={headers} />

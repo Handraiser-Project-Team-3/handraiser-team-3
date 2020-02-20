@@ -75,7 +75,7 @@ export default function ClassDescription({ classDetails }) {
                 style={{ color: "white", fontSize: "16px", cursor: "pointer" }}
                 onClick={() => setIsFlipped(false)}
               >
-                {!!classDetails ? classDetails.class_description : ""}
+                {classDetails ? classDetails.class_description : ""}
               </Typography>
             </Tooltip>
           </Grid>
