@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import GoogleLogin from "react-google-login";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Paper from "@material-ui/core/Paper";
 
@@ -47,8 +47,6 @@ export const Login = props => {
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<ToastContainer enableMulticontainer />
-
 			<Grid container align="center">
 				<Hidden mdDown>
 					<Grid item xs={12} sm={12} md={12} lg={7}>

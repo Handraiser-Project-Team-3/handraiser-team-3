@@ -71,7 +71,7 @@ export default function ClassDescription({ classDetails }) {
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
-						<Tooltip title="Click to see Class Title">
+						<Tooltip title="Click to flip again">
 							<Typography
 								variant="subtitle2"
 								style={{ color: "white", fontSize: "16px", cursor: "pointer" }}

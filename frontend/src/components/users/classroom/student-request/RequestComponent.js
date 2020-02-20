@@ -10,7 +10,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
@@ -22,6 +21,7 @@ import {
 	getClassroomUserDetails,
 	getClassroomUser
 } from "../../reusables/UserDetails";
+import { Grid } from "@material-ui/core";
 
 export const RequestComponent = ({
 	data,
@@ -87,7 +87,7 @@ export const RequestComponent = ({
 				style={
 					classroomUser.id === data.student_id
 						? {
-								background: "#e3e4f8"
+								background: "#ebeafe"
 						  }
 						: {}
 				}
@@ -106,12 +106,16 @@ export const RequestComponent = ({
 					) : (
 						""
 					)}
-					<Div>
-						<span style={{ fontSize: 16 }}>{data.title}</span>
-						<span style={{ fontSize: 12 }}>
-							({sender && ` ${sender.first_name} ${sender.last_name} `})
-						</span>
-					</Div>
+					<Grid container direction="column" alignItems="flex-start">
+						<Grid item>
+							<Typography variant="inherit">{data.title}</Typography>
+						</Grid>
+						<Grid item>
+							<Typography variant="subtitle2" color="primary">
+								-{sender && ` ${sender.first_name} ${sender.last_name} `}-
+							</Typography>
+						</Grid>
+					</Grid>
 				</Typography>
 				{action === "need" ? (
 					<div className={classes.Icons}>
@@ -119,7 +123,11 @@ export const RequestComponent = ({
 							account_type_id === 2) && (
 							<Tooltip title="Remove">
 								<RemoveCircleIcon
-									style={{ ...iconStyle }}
+									style={{
+										color: "#9da1f0",
+										cursor: "pointer",
+										marginRight: "8px"
+									}}
 									onClick={() =>
 										handleSubmitAction("Removing request ...", () => {
 											socket.emit("remove_request", data, user);
@@ -132,7 +140,7 @@ export const RequestComponent = ({
 						{classroomUser.id === data.student_id && (
 							<Tooltip title="Edit">
 								<EditIcon
-									style={{ ...iconStyle }}
+									style={{ color: "#9da1f0", cursor: "pointer" }}
 									onClick={() => console.log("edit")}
 								/>
 							</Tooltip>
@@ -140,7 +148,7 @@ export const RequestComponent = ({
 						{account_type_id === 2 && (
 							<Tooltip title="Help">
 								<Help
-									style={{ ...iconStyle }}
+									style={{ color: "#9da1f0", cursor: "pointer" }}
 									onClick={() =>
 										handleSubmitAction("Accepting request . . .", () => {
 											updateRequest({
@@ -161,7 +169,11 @@ export const RequestComponent = ({
 							<>
 								<Tooltip title="Move back to 'Need Help'">
 									<AssignmentReturnIcon
-										style={{ ...iconStyle }}
+										style={{
+											marginRight: "8px",
+											color: "#9da1f0",
+											cursor: "pointer"
+										}}
 										onClick={() =>
 											handleSubmitAction("Moving back request . . .", () => {
 												updateRequest({
@@ -177,7 +189,7 @@ export const RequestComponent = ({
 								</Tooltip>
 								<Tooltip title="Help">
 									<CheckCircleIcon
-										style={{ ...iconStyle }}
+										style={{ color: "#9da1f0", cursor: "pointer" }}
 										onClick={() =>
 											handleSubmitAction("Ending request . . .", () =>
 												updateRequest({
@@ -198,7 +210,7 @@ export const RequestComponent = ({
 						{account_type_id === 2 && (
 							<Tooltip title="Move back to 'Being Help'">
 								<AssignmentReturnIcon
-									style={{ ...iconStyle }}
+									style={{ color: "#9da1f0", cursor: "pointer" }}
 									onClick={() =>
 										handleSubmitAction("Moving back request . . .", () =>
 											updateRequest({
@@ -217,14 +229,4 @@ export const RequestComponent = ({
 			</Paper>
 		</div>
 	);
-};
-
-const Div = styled.div`
-	display: flex;
-	flex-direction: column;
-`;
-
-const iconStyle = {
-	margin: "8px",
-	color: "#9da1f0"
 };

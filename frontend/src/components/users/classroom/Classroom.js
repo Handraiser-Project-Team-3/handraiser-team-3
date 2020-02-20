@@ -82,17 +82,16 @@ export default function Classroom(props) {
 	const { headers, user, socket } = props.data;
 	const userDetails = user ? user : {};
 	const { first_name, account_type_id, id } = userDetails;
-	const [value, setValue] = React.useState(0);
-	const [classroomUser, setClassroomUser] = React.useState({});
-	const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
-	const [newRequest, addNewRequest] = React.useState(null);
-	const [classDetails, setClassDetails] = React.useState({});
+	const [value, setValue] = useState(0);
+	const [classroomUser, setClassroomUser] = useState({});
+	const [classroomUsersArray, setClassroomUsersArray] = useState([]);
+	const [newRequest, addNewRequest] = useState(null);
+	const [classDetails, setClassDetails] = useState({});
 	const [room, setRoom] = React.useState(null);
 	const [list, setList] = useState(false);
-	const [verify, setVerify] = React.useState([]);
-	const [isTyping, setIsTyping] = React.useState(null);
-
-	const [requestDialog, setRequestDialog] = React.useState(false);
+	const [verify, setVerify] = useState([]);
+	const [isTyping, setIsTyping] = useState(null);
+	const [requestDialog, setRequestDialog] = useState(false);
 	const history = useHistory();
 	const match = useRouteMatch();
 
@@ -227,7 +226,7 @@ export default function Classroom(props) {
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Need Help" {...a11yProps(0)} />
+								<Tab label="Needs Help" {...a11yProps(0)} />
 								<Tab label="Being Helped" {...a11yProps(1)} />
 								<Tab label="Done" {...a11yProps(2)} />
 							</Tabs>
@@ -258,7 +257,7 @@ export default function Classroom(props) {
 							</Grid>
 						)}
 					</AppBar>
-					<div className={classes.root}>
+					<Paper elevation={5} className={classes.root}>
 						{list ? (
 							classroomUsersArray.map(x => (
 								<Grid
@@ -276,11 +275,16 @@ export default function Classroom(props) {
 											alignItems="center"
 											justify="space-between"
 										>
-											<Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
-												<Tooltip title="View Profile">
+											<Tooltip title="View Profile">
+												<Grid
+													item
+													xs={3}
+													sm={2}
+													style={{ marginBottom: "1vh" }}
+												>
 													<OnlineIndicator data={x} headers={headers} />
-												</Tooltip>
-											</Grid>
+												</Grid>
+											</Tooltip>
 											<Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
 												<Profile userId={x.user_id} headers={headers} />
 											</Grid>
@@ -368,7 +372,7 @@ export default function Classroom(props) {
 								</TabPanel>
 							</>
 						)}
-					</div>
+					</Paper>
 
 					<ClassroomModal
 						addNewRequest={addNewRequest}

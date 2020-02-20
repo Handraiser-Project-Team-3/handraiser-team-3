@@ -15,15 +15,19 @@ export const ClassroomStyle = makeStyles(theme => ({
 			backgroundColor: "whitesmoke"
 		}
 	},
+	margin: {
+		"@media (max-width: 1024px)": {
+			margin: "0"
+		}
+	},
 	root: {
 		background:
 			"linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-		height: 542,
+		height: 541,
 		borderRadius: "0 0 5px 5px",
 		overflow: "auto",
 		padding: "0",
-		position: "relative",
-		border: "2px solid #e7e6fd"
+		position: "relative"
 	},
 	banner: {
 		width: "100%",
@@ -275,26 +279,30 @@ export const LoginStyle = makeStyles(theme => ({
 	},
 	access: {
 		color: "gray",
+		paddingTop: "20px",
+		"@media (max-width: 1440px)": {
+			padding: "20px 40px 0px 40px"
+		},
 		"@media (max-width: 1279px)": {
-			color: "white",
-			margin: "20px",
-			paddingTop: "10px"
+			padding: "10px",
+			color: "white"
 		}
 	},
 	google: {
 		height: "50px",
-		marginTop: "50px"
+		marginTop: "70px"
 	},
 	gif: {
-		width: "40%",
+		width: "55%",
 		marginTop: "60px"
 	},
 	welcome: {
+		fontSize: "100px",
 		color: "purple",
 		textShadow: "3px 2px black",
 		paddingTop: "50px",
-		"@media (max-width: 360px)": {
-			fontSize: "50px"
+		"@media (max-width: 1279px)": {
+			fontSize: "70px"
 		}
 	},
 	logo: {
