@@ -6,39 +6,67 @@ import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
 import { ToastContainer } from "react-toastify";
+import NotifyLogout from "./components/users/reusables/NotifyLogout";
 
-import "status-indicator/styles.css";
+import Axios from "axios";
 const socket = io(`172.60.60.163:3001`);
 
 function App() {
-	const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
-	const [user, setUser] = useState();
-	React.useEffect(() => {
-		if (accessToken) {
-			const obj = { ...jwt_decode(accessToken), status: true };
-			socket.emit("online", obj);
-			setUser(obj);
-		}
-		return () => socket.emit(`disconnect`);
-	}, [accessToken]);
-	const headers = {
-		headers: {
-			Authorization: `Bearer ${accessToken}`
-		}
-	};
-	return (
-		<BrowserRouter>
-			<ToastContainer />
-			<Routes
-				accessToken={accessToken}
-				setAccessToken={setAccessToken}
-				user={user}
-				setUser={setUser}
-				headers={headers}
-				socket={socket}
-			/>
-		</BrowserRouter>
-	);
+  const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+  const [user, setUser] = useState();
+  const [notifyLogout, setNotifyLogout] = useState(false);
+
+  React.useEffect(() => {
+    if (accessToken) {
+      const obj = { ...jwt_decode(accessToken), status: true };
+      socket.emit("online", obj);
+      Axios.get(`/api/user/${obj.id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }).then(res => {
+        res.data.account_type_id !== obj.account_type_id &&
+          setNotifyLogout(true);
+      });
+      setUser(obj);
+    }
+    return () => socket.emit(`disconnect`);
+  }, [accessToken]);
+
+  React.useEffect(() => {
+    if (!!user) {
+      socket.on(`notify_user`, ({ id }) => {
+        user.id === id && setNotifyLogout(true);
+      });
+    }
+  }, [user]);
+
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  };
+
+  return (
+    <BrowserRouter>
+      <ToastContainer />
+      <Routes
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        user={user}
+        setUser={setUser}
+        headers={headers}
+        socket={socket}
+      />
+      <NotifyLogout
+        open={notifyLogout}
+        setOpen={setNotifyLogout}
+        setUser={setUser}
+        setAccessToken={setAccessToken}
+        socket={socket}
+      />
+    </BrowserRouter>
+  );
 }
 
 export default App;

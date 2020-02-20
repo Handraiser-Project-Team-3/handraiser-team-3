@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
 
 // material ui
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -98,7 +97,7 @@ const useStyles = makeStyles({
 export const Admin = props => {
   const classes = useStyles();
   const [accountType] = useState("Admin");
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
   const [users, setUsers] = useState([]);
@@ -148,7 +147,6 @@ export const Admin = props => {
       first_name={first_name}
       typeId={account_type_id}
     >
-      <ToastContainer enableMulticontainer />
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <Paper className={classes.paperStyle}>
@@ -371,6 +369,8 @@ export const Admin = props => {
         headers={headers}
         handle={handle}
         setUsers={setUsers}
+        setFilter={setFilter}
+        socket={socket}
       />
       <Menu
         id="simple-menu"
