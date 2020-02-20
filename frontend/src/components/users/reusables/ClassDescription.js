@@ -3,7 +3,6 @@ import React from "react";
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 
 // component/s
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -11,7 +10,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 // images
 import { ClassroomStyle } from "../style/Styles";
 import work from "../../assets/images/prog.svg";
-import { Paper, isWidthDown, Tooltip } from "@material-ui/core";
+import { Paper, Tooltip } from "@material-ui/core";
 import ReactCardFlip from "react-card-flip";
 
 export default function ClassDescription({ classDetails }) {
@@ -39,7 +38,7 @@ export default function ClassDescription({ classDetails }) {
           align="center"
         >
           <Grid item xs={12} sm={6}>
-            <img src={work} style={{ width: "270.5px" }} />
+            <img src={work} style={{ width: "270.5px" }} alt="" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Tooltip title="Click to see Description">

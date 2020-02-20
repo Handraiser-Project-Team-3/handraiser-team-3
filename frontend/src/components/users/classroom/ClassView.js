@@ -485,7 +485,6 @@ export const ClassView = props => {
                     ) : (
                       <Grid container direction="column" alignItems="center">
                         <JoinClassModal
-                          socket={socket}
                           classroomUsers={classroomUsers}
                           className={data.class_name}
                           codeClass={data.class_code}

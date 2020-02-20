@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // Material-ui
 import Typography from "@material-ui/core/Typography";
@@ -76,7 +76,7 @@ export default function Classroom(props) {
   const { classId } = props;
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
+  const { first_name, account_type_id } = userDetails;
   const [value, setValue] = React.useState(0);
   const [classroomUser, setClassroomUser] = React.useState({});
   const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
@@ -90,7 +90,6 @@ export default function Classroom(props) {
   const [notifyDeleted, setNotifyDeleted] = useState(false);
   const [requestDialog, setRequestDialog] = React.useState(false);
   const history = useHistory();
-  const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -107,7 +106,7 @@ export default function Classroom(props) {
           setNotifyDeleted(true);
       });
     }
-  }, [classId]);
+  }, [classId, socket]);
 
   React.useEffect(() => {
     if ((!!user && !!headers && !!classId) === true) {
@@ -150,21 +149,18 @@ export default function Classroom(props) {
         setRoom(null);
       }
     });
-  }, [classId]);
+  }, [classId, socket]);
 
   React.useEffect(() => {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
-  }, []);
+  }, [socket]);
   React.useEffect(() => {
     if (!!user && !!headers && !!classId) {
       (async () => {
         try {
-          const res = await Axios.get(
-            `/api/request/list/${props.classId}`,
-            headers
-          );
+          const res = await Axios.get(`/api/request/list/${classId}`, headers);
           setRequests(res.data);
         } catch (err) {
           console.log(err);
@@ -188,18 +184,18 @@ export default function Classroom(props) {
   // routes restriction
   React.useEffect(() => {
     if (verify.length) {
-      if (props.classId === verify.find(x => x === props.classId)) {
-        history.push(`/classroom/${props.classId}`);
+      if (classId === verify.find(x => x === classId)) {
+        history.push(`/classroom/${classId}`);
       } else {
         alertToast("You are not Authorize to enter this room!");
         history.replace("/");
       }
     }
-  }, [verify, match.params.id]);
+  }, [verify, classId, history]);
 
   const handleSubmitNewRquest = () => {
     const obj = {
-      class_id: props.classId,
+      class_id: classId,
       student_id: classroomUser.id,
       title: newRequest
     };

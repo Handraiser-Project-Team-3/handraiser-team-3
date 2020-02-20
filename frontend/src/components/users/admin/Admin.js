@@ -18,7 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-import { TableFooter, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 // import Button from "@material-ui/core/Button";
 
