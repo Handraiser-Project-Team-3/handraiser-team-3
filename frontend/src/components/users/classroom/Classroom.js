@@ -14,7 +14,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import Axios from "axios";
-import Chip from "@material-ui/core/Chip";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -23,6 +23,7 @@ import ClassroomModal from "./student-request/RequestModal";
 import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
+import Profile from "../reusables/Profile";
 
 // images
 import {
@@ -75,24 +76,24 @@ export default function Classroom(props) {
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
-  const [value, setValue] = React.useState(0);
-  const [classroomUser, setClassroomUser] = React.useState({});
-  const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
-  const [newRequest, addNewRequest] = React.useState(null);
-  const [classDetails, setClassDetails] = React.useState({});
-  const [room, setRoom] = React.useState(null);
+  const [value, setValue] = useState(0);
+  const [classroomUser, setClassroomUser] = useState({});
+  const [classroomUsersArray, setClassroomUsersArray] = useState([]);
+  const [newRequest, addNewRequest] = useState(null);
+  const [classDetails, setClassDetails] = useState({});
+  const [room, setRoom] = useState(null);
   const [list, setList] = useState(false);
-  const [verify, setVerify] = React.useState([]);
-  const [isTyping, setIsTyping] = React.useState(null);
+  const [verify, setVerify] = useState([]);
+  const [isTyping, setIsTyping] = useState(null);
 
-  const [requestDialog, setRequestDialog] = React.useState(false);
+  const [requestDialog, setRequestDialog] = useState(false);
   const history = useHistory();
   const match = useRouteMatch();
-  const [classDetailsBox, setClassDetailsBox] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  /* eslint-disable */
   React.useEffect(() => {
     if (!!classId) {
       socket.on(`classroom_user`, data => {
@@ -101,7 +102,6 @@ export default function Classroom(props) {
         );
       });
     }
-    // eslint-disable-next-line
   }, [classId]);
 
   React.useEffect(() => {
@@ -145,17 +145,15 @@ export default function Classroom(props) {
         setRoom(null);
       }
     });
-    // eslint-disable-next-line
-  }, [requests, classId]);
+  }, [classId]);
 
   React.useEffect(() => {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
-    // eslint-disable-next-line
   }, []);
   React.useEffect(() => {
-    if (!!user) {
+    if (!!user && !!headers && !!classId) {
       (async () => {
         try {
           const res = await Axios.get(
@@ -168,7 +166,6 @@ export default function Classroom(props) {
         }
       })();
     }
-    // eslint-disable-next-line
   }, [user, headers, classId]);
 
   const updateRequest = async ({ id, data, notify, mentor, action }) => {
@@ -193,7 +190,6 @@ export default function Classroom(props) {
         history.replace("/");
       }
     }
-    // eslint-disable-next-line
   }, [verify, match.params.id]);
 
   const handleSubmitNewRquest = () => {
@@ -215,11 +211,7 @@ export default function Classroom(props) {
     >
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={4}>
-          <ClassDescription
-            setClassDetailsBox={setClassDetailsBox}
-            classDetailsBox={classDetailsBox}
-            classDetails={classDetails}
-          />
+          <ClassDescription classDetails={classDetails} />
           <AppBar position="static" color="default" className={classes.appBar}>
             {!list ? (
               <Tabs
@@ -261,14 +253,7 @@ export default function Classroom(props) {
               </Grid>
             )}
           </AppBar>
-          <div
-            className={classes.root}
-            style={
-              classDetailsBox
-                ? { height: 561, transition: "height .27s" }
-                : { height: 471, transition: "height .27s" }
-            }
-          >
+          <div className={classes.root}>
             {list ? (
               classroomUsersArray.map(x => (
                 <Grid
@@ -279,24 +264,33 @@ export default function Classroom(props) {
                   justify="space-between"
                   style={{ padding: "10px 40px 0px 40px" }}
                 >
-                  <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
-                    <Tooltip title="View Profile">
-                      <OnlineIndicator data={x} headers={headers} />
-                    </Tooltip>
+                  <Grid item xs={11}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justify="space-between"
+                    >
+                      <Grid item xs={3} sm={2} style={{ marginBottom: "1vh" }}>
+                        <Tooltip title="View Profile">
+                          <OnlineIndicator data={x} headers={headers} />
+                        </Tooltip>
+                      </Grid>
+                      <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
+                        <Profile userId={x.user_id} headers={headers} />
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
-                    <Chip
-                      variant="outlined"
-                      size="medium"
-                      label={
-                        <UserDetails
-                          id={x.user_id}
-                          headers={headers}
-                          action="name"
+                  <Grid item xs={1}>
+                    {account_type_id === 2 && x.user_id !== user.id && (
+                      <Tooltip title="Remove from list">
+                        <RemoveIcon
+                          fontSize="small"
+                          color="secondary"
+                          cursor="pointer"
                         />
-                      }
-                      style={{ color: "#616161", fontSize: "16px" }}
-                    />
+                      </Tooltip>
+                    )}
                   </Grid>
                 </Grid>
               ))
@@ -371,20 +365,16 @@ export default function Classroom(props) {
             )}
           </div>
 
-          {account_type_id === 3 ? (
-            <ClassroomModal
-              addNewRequest={addNewRequest}
-              newRequest={newRequest}
-              handleSubmitNewRquest={handleSubmitNewRquest}
-              open={requestDialog}
-              setOpen={setRequestDialog}
-              setList={setList}
-              list={list}
-              account_type_id={account_type_id}
-            />
-          ) : (
-            <></>
-          )}
+          <ClassroomModal
+            addNewRequest={addNewRequest}
+            newRequest={newRequest}
+            handleSubmitNewRquest={handleSubmitNewRquest}
+            open={requestDialog}
+            setOpen={setRequestDialog}
+            setList={setList}
+            list={list}
+            account_type_id={account_type_id}
+          />
         </Grid>
 
         <Stats

@@ -1,6 +1,7 @@
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge";
 import head from "../../assets/images/bg.jpg";
+import Background from "../../assets/images/backg.png";
 
 export const ClassroomStyle = makeStyles(theme => ({
   "@global": {
@@ -17,11 +18,12 @@ export const ClassroomStyle = makeStyles(theme => ({
   root: {
     background:
       "linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-    height: 561,
+    height: 542,
     borderRadius: "0 0 5px 5px",
     overflow: "auto",
     padding: "0",
-    position: "relative"
+    position: "relative",
+    border: "2px solid #e7e6fd"
   },
   banner: {
     width: "100%",
@@ -233,3 +235,76 @@ export const StyledBadgeWhite = withStyles(theme => ({
     }
   }
 }))(Badge);
+
+export const LoginStyle = makeStyles(theme => ({
+  bg: {
+    backgroundImage: `url(${Background})`,
+    height: "100vh",
+    backgroundSize: "cover",
+    opacity: "0.6",
+    "&:hover": {
+      opacity: "1"
+    }
+  },
+  handRaiserLogo: {
+    width: "180px"
+  },
+  svg: {
+    width: "100%",
+    position: "absolute",
+    bottom: "0px",
+    margin: "0 auto"
+  },
+  title: {
+    writingMode: "vertical-lr",
+    textOrientation: "upright",
+    fontSize: "40px"
+  },
+  titleGrid: {
+    background: "#8245dc",
+    height: "101.2vh",
+    width: "100%",
+    fontWeight: "bold"
+  },
+  thirdCont: {
+    background: "#ffffff",
+    backgroundSize: "cover",
+    height: "100vh",
+    width: "100%",
+    "@media (max-width: 1279px)": {
+      background:
+        "linear-gradient(0deg, rgba(207,176,255,1) 5%, rgba(171,171,250,1) 65%, rgba(255,255,255,1) 100%)"
+    }
+  },
+  access: {
+    color: "gray",
+    "@media (max-width: 1279px)": {
+      color: "white",
+      margin: "20px",
+      paddingTop: "10px"
+    }
+  },
+  google: {
+    height: "50px",
+    marginTop: "50px"
+  },
+  gif: {
+    width: "40%",
+    marginTop: "60px"
+  },
+  welcome: {
+    color: "purple",
+    textShadow: "3px 2px black",
+    paddingTop: "50px",
+    "@media (max-width: 360px)": {
+      fontSize: "50px"
+    }
+  },
+  logo: {
+    width: "150px",
+    marginTop: "100px",
+    "@media (max-width: 1279px)": {
+      marginTop: "50px"
+    }
+  }
+}));

@@ -57,6 +57,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function(props) {
+  /* eslint-disable */
   const classes = useStyles();
   const {
     addNewRequest,
@@ -70,7 +71,6 @@ export default function(props) {
   } = props;
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
-
   const [direction, setDirection] = useState("left");
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -161,6 +161,7 @@ export default function(props) {
                     "Character limit reached!"
                   );
                 }
+                clearError(e.target.name);
                 addNewRequest(e.target.value);
               }}
               inputRef={register({ required: "Title is required" })}
