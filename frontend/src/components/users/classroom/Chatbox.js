@@ -27,6 +27,10 @@ export default function ChatBox(props) {
   const { room, user, headers, socket, isTyping, setIsTyping } = props.data;
   const [show, setShow] = React.useState(false);
 
+  const lastMessage = React.useRef(null);
+  const scrollToBottom = () => {
+    lastMessage.current.scrollIntoView({ behavior: "smooth" });
+  };
   const handleClose = () => {
     setShow(true);
   };
@@ -65,6 +69,7 @@ export default function ChatBox(props) {
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
+    scrollToBottom();
   }, [messages, room, socket, setIsTyping]);
   React.useEffect(() => {
     if (!!room && !!headers) {
@@ -165,7 +170,8 @@ export default function ChatBox(props) {
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "20px 10px 10px 10px"
+            padding: "20px 10px 10px 10px",
+            height: 500
           }}
         >
           {room === null && !!user ? (
@@ -185,15 +191,16 @@ export default function ChatBox(props) {
             messages
               .filter(x => x.student_request_id === room.id)
               .map((x, i) => (
-                <MessageBox
-                  data={x}
-                  headers={headers}
-                  user={user}
-                  key={x.id}
-                  index={i}
-                  messages={messages}
-                  isTyping={isTyping}
-                />
+                <div key={i}>
+                  <MessageBox
+                    data={x}
+                    headers={headers}
+                    user={user}
+                    index={i}
+                    messages={messages}
+                    isTyping={isTyping}
+                  />
+                </div>
               ))
           ) : (
             ""
@@ -221,6 +228,7 @@ export default function ChatBox(props) {
                 )
               : ""
             : ""}
+          <div ref={lastMessage} />
         </div>
       </Paper>
       <form onSubmit={handleSubmit}>
@@ -228,7 +236,7 @@ export default function ChatBox(props) {
           <TextField
             disabled={!room}
             variant="outlined"
-            label="Type your message..."
+            placeholder="Type your message..."
             value={msg}
             fullWidth
             style={{ overflow: "auto" }}

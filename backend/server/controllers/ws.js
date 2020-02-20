@@ -8,7 +8,16 @@ module.exports = {
         socket.join(`${classroom}`);
       }
     });
+    socket.on(`leave_class`, ({ classId }) => {
+      socket.leave(`${classId}`);
+    });
 
+    const newClassroomUsers = () => {
+      db.classroom_users
+        .find()
+        .then(users => socket.emit(`classroom_user`, users));
+      newData();
+    };
     const newData = (notify, action) =>
       db.student_request.find({ class_id: classroom }).then(data => {
         io.to(`${classroom}`).emit(`update_request_list`, data, action);
@@ -63,38 +72,29 @@ module.exports = {
 
     socket.on(`changed_privileges`, ({ id }) => {
       io.emit(`notify_user`, { id: id });
-      // db.class
-      //   .find({ user_id: id })
-      //   .then(classList => {
-      //     classList.map(classDetails => {
-      //       db.student_request
-      //         .find({ class_id: classDetails.id })
-      //         .then(studentReqList => {
-      //           studentReqList.map(request => {
-      //             db.messages
-      //               .destroy({ student_request_id: request.id })
-      //               .then(() => console.log("success messages"));
-      //           });
-      //         })
-      //         .then(() =>
-      //           db.student_request
-      //             .destroy({ class_id: classDetails.id })
-      //             .then(() =>
-      //               db.classroom_users
-      //                 .destroy({ class_id: classDetails.id })
-      //                 .then(() => console.log("success class users"))
-      //             )
-      //         );
-      //     });
-      //   })
-      //   .then(() => {
-      //     db.class.destroy({ user_id: id }).then(data => {
-      //       console.log("success class");
-      //       data.map(deleted =>
-      //         io.emit(`deleted_class`, { classList: deleted })
-      //       );
-      //     });
-      //   });
+    });
+
+    socket.on(`closed_class`, classDetails => {
+      io.emit(`notify_class`, { data: classDetails });
+    });
+    socket.on(`remove_class_user`, ({ userId, classroomId }) => {
+      db.student_request
+        .find({ student_id: userId, class_id: classroomId })
+        .then(requests => {
+          return requests.map(x => {
+            db.messages.destroy({ student_request_id: x.id });
+          });
+        })
+        .then(() => {
+          db.student_request
+            .destroy({ student_id: userId, class_id: classroomId })
+            .then(() => {
+              db.classroom_users.destroy({ id: userId }).then(deleted => {
+                io.emit(`notify_removed_user`, deleted[0]);
+                newClassroomUsers();
+              });
+            });
+        });
     });
   }
 };
