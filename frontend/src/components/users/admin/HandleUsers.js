@@ -16,7 +16,8 @@ export default function HandleUsers(props) {
     headers,
     handle,
     setUsers,
-    setFilter
+    setFilter,
+    socket
   } = props;
 
   const handleClose = () => {
@@ -24,7 +25,6 @@ export default function HandleUsers(props) {
   };
   function handleMentor() {
     // SET MENTOR
-
     if (handle === "set") {
       axios
         .patch(
@@ -40,6 +40,7 @@ export default function HandleUsers(props) {
             setFilter(res.data);
             toast.info("Mentor has been Added!");
             setOpen(false);
+            socket.emit(`changed_privileges`, { id: details.id });
           });
         });
     } else {
@@ -57,6 +58,7 @@ export default function HandleUsers(props) {
             setFilter(res.data);
             toast.info("Mentor has been Removed!");
             setOpen(false);
+            socket.emit(`changed_privileges`, { id: details.id });
           });
         });
     }

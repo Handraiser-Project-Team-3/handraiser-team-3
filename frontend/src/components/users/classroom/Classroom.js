@@ -14,7 +14,6 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import Axios from "axios";
-import RemoveIcon from "@material-ui/icons/Remove";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -24,6 +23,7 @@ import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 import Profile from "../reusables/Profile";
+import NotifyDeleted from "../reusables/NotifyDeleted";
 
 // images
 import {
@@ -100,6 +100,10 @@ export default function Classroom(props) {
         setClassroomUsersArray(
           data.filter(x => x.class_id === Number(classId))
         );
+      });
+      socket.on(`deleted_class`, ({ classList }) => {
+        classList.filter(classX => classX.id === classId).length === 0 &&
+          setNotifyDeleted(true);
       });
     }
   }, [classId]);
@@ -374,6 +378,7 @@ export default function Classroom(props) {
             setList={setList}
             list={list}
             account_type_id={account_type_id}
+            requests={requests}
           />
         </Grid>
 
@@ -386,6 +391,7 @@ export default function Classroom(props) {
           isTyping={isTyping}
           setIsTyping={setIsTyping}
         />
+        <NotifyDeleted open={notifyDeleted} setOpen={setNotifyDeleted} />
       </Grid>
     </Layout>
   );
@@ -396,9 +402,7 @@ const alertToast = msg =>
     position: "bottom-left",
     autoClose: 5000,
     hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true
+    closeOnClick: true
   });
 
 const OnlineIndicator = ({ data, headers }) => {

@@ -97,7 +97,7 @@ const useStyles = makeStyles({
 export const Admin = props => {
   const classes = useStyles();
   const [accountType] = useState("Admin");
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
   const [users, setUsers] = useState([]);
@@ -363,6 +363,8 @@ export const Admin = props => {
         headers={headers}
         handle={handle}
         setUsers={setUsers}
+        setFilter={setFilter}
+        socket={socket}
       />
       <Menu
         id="simple-menu"

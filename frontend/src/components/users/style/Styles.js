@@ -18,12 +18,11 @@ export const ClassroomStyle = makeStyles(theme => ({
   root: {
     background:
       "linear-gradient(0deg, rgba(171,171,250,1) 0%, rgba(255,255,255,1) 64%)",
-    height: 542,
+    height: 545,
     borderRadius: "0 0 5px 5px",
     overflow: "auto",
     padding: "0",
-    position: "relative",
-    border: "2px solid #e7e6fd"
+    position: "relative"
   },
   banner: {
     width: "100%",

@@ -65,7 +65,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ButtonAppBar(props) {
-  const { user, setUser, setAccessToken, headers } = props.data;
+  const { user, setUser, setAccessToken, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { user_image, id, account_type_id } = userDetails;
 
@@ -83,9 +83,6 @@ export default function ButtonAppBar(props) {
 
   const handleClass = () => {
     history.push("/");
-  };
-  const handleClickRoom = classID => {
-    history.push(`/classroom/${classID}`);
   };
   const handleClick = () => {
     setShow(!show);
@@ -166,16 +163,8 @@ export default function ButtonAppBar(props) {
           <List component="div" disablePadding>
             {classRoom &&
               classRoom.map(rooms => (
-                <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
-                  <ListItem
-                    id={2}
-                    key={rooms.id}
-                    button
-                    className={classes.nested}
-                    onClick={() => {
-                      handleClickRoom(rooms.id);
-                    }}
-                  >
+                <Link key={rooms.id} to={`/classroom/${rooms.id}`}>
+                  <ListItem id={2} button className={classes.nested}>
                     <StarBorder />
 
                     <ListItemText
@@ -253,6 +242,7 @@ export default function ButtonAppBar(props) {
                       setUser({});
                       history.push("/");
                       alertToast("Successfully logged out!");
+                      socket.off();
                     }}
                     render={renderProps => (
                       <Btn onClick={renderProps.onClick}>

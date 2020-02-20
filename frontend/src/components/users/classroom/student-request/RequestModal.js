@@ -12,6 +12,7 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import ListIcon from "@material-ui/icons/List";
+import NotInterestedIcon from "@material-ui/icons/NotInterested";
 
 const useStyles = makeStyles(theme => ({
   icons: {
@@ -67,13 +68,16 @@ export default function(props) {
     list,
     account_type_id,
     open,
-    setOpen
+    setOpen,
+    requests
   } = props;
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
-  const [direction, setDirection] = useState("left");
-  const [openSpeedDial, setOpenSpeedDial] = useState(false);
-  const [hidden, setHidden] = useState(false);
+
+  const [direction, setDirection] = React.useState("left");
+  const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
+  const [actions, setActions] = React.useState([]);
 
   const handleSpeedDial = () => {
     setOpenSpeedDial(!openSpeedDial);
@@ -83,17 +87,66 @@ export default function(props) {
   const handleClick = () => {
     setOpen(!open);
   };
-  const actions = [
-    {
-      icon: <PanToolIcon onClick={() => handleClick()} />,
-      name: "Raise your concern"
-    },
-    {
-      icon: <ListIcon onClick={() => setList(!list)} />,
-      name: "List of Members"
-    }
-  ];
 
+  React.useEffect(() => {
+    if (account_type_id === 2) {
+      setActions([
+        {
+          icon: <ListIcon style={{ color: "#00579b" }} />,
+          name: "List of Members",
+          func: () => setList(!list)
+        }
+      ]);
+    } else {
+      if (!!requests) {
+        requests.filter(req => req.status === null || req.status === false)
+          .length <= 1
+          ? setActions([
+              {
+                icon: (
+                  <PanToolIcon
+                    style={{ margin: "0 0 0 -3px", color: "#00579b" }}
+                  />
+                ),
+                name: "Raise your concern",
+                func: handleClick
+              },
+              {
+                icon: <ListIcon style={{ color: "#00579b" }} />,
+                name: "List of Members",
+                func: () => setList(!list)
+              }
+            ])
+          : setActions([
+              {
+                icon: (
+                  <span>
+                    <PanToolIcon
+                      style={{ margin: "0 0 0 -3px", color: "#00579b" }}
+                    />
+                    <NotInterestedIcon
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        bottom: 0,
+                        fontSize: 40,
+                        color: "#ff6f61"
+                      }}
+                    />
+                  </span>
+                ),
+                name: "You can only have 2 requests",
+                func: () => {}
+              },
+              {
+                icon: <ListIcon style={{ color: "#00579b" }} />,
+                name: "List of Members",
+                func: () => setList(!list)
+              }
+            ]);
+      }
+    }
+  }, [account_type_id, requests]);
   return (
     <div>
       <div className={classes.handContainer}>
@@ -102,27 +155,19 @@ export default function(props) {
           hidden={hidden}
           className={classes.handContainer}
           icon={<SpeedDialIcon className={classes.add} />}
-          onClick={handleSpeedDial}
+          onClose={handleSpeedDial}
+          onOpen={handleSpeedDial}
           open={openSpeedDial}
           direction={direction}
         >
-          {account_type_id === 3 ? (
-            actions.map(action => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={handleSpeedDial}
-              />
-            ))
-          ) : (
+          {actions.map(action => (
             <SpeedDialAction
-              key={actions[1].name}
-              icon={actions[1].icon}
-              tooltipTitle={actions[1].name}
-              onClick={handleSpeedDial}
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={action.func}
             />
-          )}
+          ))}
         </SpeedDial>
       </div>
 
