@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import WarningIcon from "@material-ui/icons/Warning";
 
 export default function({ open, setOpen, action }) {
@@ -23,17 +23,8 @@ export default function({ open, setOpen, action }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {action === "removed_user" && (
-              <span>
-                Mentor removed you from this class{" "}
-                <Link to="/">Learn more</Link>
-              </span>
-            )}
-            {action === "class_closed" && (
-              <span>
-                This class has been closed. <Link to="/">Learn more</Link>
-              </span>
-            )}
+            {action === "removed_user" && `Mentor removed you from this class`}
+            {action === "class_closed" && `This class has been closed.`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

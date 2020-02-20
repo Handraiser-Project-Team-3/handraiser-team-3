@@ -295,6 +295,7 @@ export default function Classroom(props) {
                         data={x}
                         headers={headers}
                         socket={socket}
+                        setRoom={setRoom}
                       />
                     )}
                   </Grid>
@@ -458,22 +459,7 @@ const OnlineIndicator = ({ data, headers }) => {
   );
 };
 
-const handleSubmitAction = (title, submit) =>
-  confirmAlert({
-    title: title,
-    message: "Are you sure?",
-    buttons: [
-      {
-        label: "Yes",
-        onClick: submit
-      },
-      {
-        label: "No",
-        onClick: () => {}
-      }
-    ]
-  });
-const RemoveUserComponent = ({ data, headers, socket }) => {
+const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
   const [user, setUser] = React.useState({});
 
   React.useEffect(() => {
@@ -490,14 +476,32 @@ const RemoveUserComponent = ({ data, headers, socket }) => {
         onClick={() => {
           handleSubmitAction(
             `Remove ${!!user && user.first_name} from class?`,
-            () =>
+            () => {
+              setRoom(null);
               socket.emit(`remove_class_user`, {
                 userId: data.id,
                 classroomId: data.class_id
-              })
+              });
+            }
           );
         }}
       />
     </Tooltip>
   );
 };
+
+const handleSubmitAction = (title, submit) =>
+  confirmAlert({
+    title: title,
+    message: " ",
+    buttons: [
+      {
+        label: "Yes",
+        onClick: submit
+      },
+      {
+        label: "No",
+        onClick: () => {}
+      }
+    ]
+  });
