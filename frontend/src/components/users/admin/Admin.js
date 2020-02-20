@@ -363,7 +363,6 @@ export const Admin = props => {
         headers={headers}
         handle={handle}
         setUsers={setUsers}
-        setFilter={setFilter}
         socket={socket}
       />
       <Menu
