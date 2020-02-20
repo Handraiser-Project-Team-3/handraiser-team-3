@@ -85,7 +85,6 @@ export default function Search(props) {
 
     // eslint-disable-next-line
   }, [searchTerm]);
-
   return (
     <div className={classes.search}>
       <div className={classes.searchIcon}>

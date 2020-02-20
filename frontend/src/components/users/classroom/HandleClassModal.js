@@ -8,7 +8,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Slide from "@material-ui/core/Slide";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +53,9 @@ export const HandleClassModal = props => {
     userId,
     setClassList,
     classList,
-    account_type_id
+    account_type_id,
+    filter,
+    setFilter
   } = props;
 
   const isEnabled =
@@ -96,6 +98,7 @@ export const HandleClassModal = props => {
         .then(res => {
           setOpen(false);
           setClassList([...classList, res.data]);
+          setFilter([...filter, res.data]);
           setClassRoom({
             class_name: "",
             class_description: ""
@@ -114,7 +117,6 @@ export const HandleClassModal = props => {
         .then(() =>
           axios.get(`/api/class?id=${userId}`, headers).then(res => {
             setClassList(res.data);
-            console.log(res.data[0].class_description);
             setOpen(false);
             setClassRoom({
               class_name: "",
@@ -128,8 +130,6 @@ export const HandleClassModal = props => {
 
   return (
     <div>
-      <ToastContainer enableMulticontainer />
-
       <Dialog
         open={open}
         TransitionComponent={Transition}

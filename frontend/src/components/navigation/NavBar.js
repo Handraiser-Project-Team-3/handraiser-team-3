@@ -258,6 +258,7 @@ export default function ButtonAppBar(props) {
                       setUser({});
                       history.push("/");
                       alertToast("Successfully logged out!");
+                      socket.off();
                     }}
                     render={renderProps => (
                       <Btn onClick={renderProps.onClick}>

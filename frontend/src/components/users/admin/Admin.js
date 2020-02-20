@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
 
 // material ui
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -96,7 +95,7 @@ const useStyles = makeStyles({
 export const Admin = props => {
   const classes = useStyles();
   const [accountType] = useState("Admin");
-  const { user, headers } = props.data;
+  const { user, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { first_name, account_type_id } = userDetails;
   const [users, setUsers] = useState([]);
@@ -136,9 +135,12 @@ export const Admin = props => {
     setOpen(true);
     setHandle("remove");
   };
-
   const indexOfLastList = activePage * itemPerPage;
   const indexOfFirstList = indexOfLastList - itemPerPage;
+  const currentUsers =
+    userType === 3
+      ? users.filter(res => res.account_type_id === 3)
+      : users.filter(res => res.account_type_id === 2);
 
   return (
     <Layout
@@ -146,7 +148,6 @@ export const Admin = props => {
       first_name={first_name}
       typeId={account_type_id}
     >
-      <ToastContainer enableMulticontainer />
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <Paper className={classes.paperStyle}>
@@ -217,11 +218,8 @@ export const Admin = props => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {users.length ? (
-                        (userType === 3
-                          ? users.filter(res => res.account_type_id === 3)
-                          : users.filter(res => res.account_type_id === 2)
-                        )
+                      {currentUsers.length ? (
+                        currentUsers
                           .slice(indexOfFirstList, indexOfLastList)
                           .map(
                             row =>
@@ -297,7 +295,6 @@ export const Admin = props => {
                                     )}
                                     {row.account_type_id === 2 && (
                                       <>
-                                        {/* <MentorDetails /> */}
                                         <Chip
                                           variant="outlined"
                                           size="medium"
@@ -335,40 +332,36 @@ export const Admin = props => {
                   >
                     <Paginations
                       account_type_id={account_type_id}
-                      totalPost={
-                        userType === 3
-                          ? users.filter(res => res.account_type_id === 3)
-                            .length
-                          : users.filter(res => res.account_type_id === 2)
-                            .length
-                      }
+                      totalPost={currentUsers.length}
                       setActivePage={setActivePage}
                       activePage={activePage}
                       itemPerPage={itemPerPage}
                     />
                   </Grid>
                 ) : (
-                  <Grid
-                    style={{
-                      marginTop: 65,
-                      marginBottom: 10,
-                      display: "flex",
-                      justifyContent: "center"
-                    }}
-                  ></Grid>
-                )}
+                    <Grid
+                      style={{
+                        marginTop: 65,
+                        marginBottom: 10,
+                        display: "flex",
+                        justifyContent: "center"
+                      }}
+                    ></Grid>
+                  )}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
       <Confirmation
+        setFilter={setFilter}
         setOpen={setOpen}
         open={open}
         details={details}
         headers={headers}
         handle={handle}
         setUsers={setUsers}
+        socket={socket}
       />
       <Menu
         id="simple-menu"

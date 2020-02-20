@@ -49,7 +49,7 @@ massive({
 
     ws.websockets(socket, db, io);
 
-    socket.on(`disconnect`, () => {
+    socket.once(`disconnect`, () => {
       if (userDetails !== undefined) {
         db.users
           .update({ id: userDetails.id }, { user_status: false })
@@ -97,7 +97,6 @@ massive({
   app.patch("/api/request/:id", requests.editRequest);
 
   //messages
-
   app.get("/api/messages/:id", message.list);
 
   server.listen(process.env.SERVER_PORT, () => {
