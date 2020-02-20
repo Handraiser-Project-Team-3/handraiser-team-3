@@ -65,7 +65,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ButtonAppBar(props) {
-  const { user, setUser, setAccessToken, headers } = props.data;
+  const { user, setUser, setAccessToken, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { user_image, id, account_type_id } = userDetails;
 
