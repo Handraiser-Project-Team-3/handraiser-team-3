@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect}from "react";
 // Material-ui
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -10,7 +10,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import Help from "@material-ui/icons/Help";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
 import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
 
 // component/s
@@ -36,9 +35,9 @@ export const RequestComponent = ({
 	setRoom,
 	setIsTyping
 }) => {
-	const [sender, setSender] = React.useState();
-	const [mentor, setMentor] = React.useState();
-	React.useEffect(() => {
+	const [sender, setSender] = useState();
+	const [mentor, setMentor] = useState();
+	useEffect(() => {
 		if (!!data && !!user) {
 			getClassroomUserDetails(data.student_id, headers).then(res => {
 				user_details(res.data.user_id, headers).then(user =>
@@ -51,6 +50,7 @@ export const RequestComponent = ({
 				});
 			}
 		}
+		 // eslint-disable-next-line
 	}, [data, user]);
 	const handleSubmitAction = (title, submit) =>
 		confirmAlert({

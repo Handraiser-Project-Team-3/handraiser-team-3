@@ -20,11 +20,13 @@ import ClassIcon from "@material-ui/icons/Class";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
+
 import { GoogleLogout } from "react-google-login";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -99,6 +101,7 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
+
     axios.get(`/api/classroom-users`, headers).then(e => {
       Promise.all(
         e.data
@@ -145,13 +148,13 @@ export default function ButtonAppBar(props) {
         <ListItem
           button
           onClick={handleClick}
-          style={{ display: account_type_id === 3 ? "flex" : "none" }}
+          style={{ display: account_type_id >= 2 ? "flex" : "none" }}
           className={classes.enrolled}
         >
           <InboxIcon />
 
           <ListItemText
-            primary="Enrolled"
+            primary={account_type_id === 2 ? "Subjects Handled" : "Enrolled"}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
           {show ? <ExpandLess /> : <ExpandMore />}

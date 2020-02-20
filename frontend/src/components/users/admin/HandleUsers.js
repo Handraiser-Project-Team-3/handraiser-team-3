@@ -23,7 +23,6 @@ export default function HandleUsers(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
   function handleMentor() {
     // SET MENTOR
     if (handle === "set") {

@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CloseIcon from "@material-ui/icons/Close";
-import RemoveIcon from "@material-ui/icons/Remove";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -76,25 +75,25 @@ export default function Classroom(props) {
   const { classId } = props;
   const { headers, user, socket } = props.data;
   const userDetails = user ? user : {};
-  const { first_name, account_type_id, id } = userDetails;
-  const [value, setValue] = React.useState(0);
-  const [classroomUser, setClassroomUser] = React.useState({});
-  const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
-  const [newRequest, addNewRequest] = React.useState(null);
-  const [classDetails, setClassDetails] = React.useState({});
-  const [room, setRoom] = React.useState(null);
+  const { first_name, account_type_id } = userDetails;
+  const [value, setValue] = useState(0);
+  const [classroomUser, setClassroomUser] = useState({});
+  const [classroomUsersArray, setClassroomUsersArray] = useState([]);
+  const [newRequest, addNewRequest] = useState(null);
+  const [classDetails, setClassDetails] = useState({});
+  const [room, setRoom] = useState(null);
   const [list, setList] = useState(false);
-  const [verify, setVerify] = React.useState([]);
-  const [isTyping, setIsTyping] = React.useState(null);
+  const [verify, setVerify] = useState([]);
+  const [isTyping, setIsTyping] = useState(null);
 
-  const [notifyDeleted, setNotifyDeleted] = useState(false);
-  const [requestDialog, setRequestDialog] = React.useState(false);
+  const [requestDialog, setRequestDialog] = useState(false);
   const history = useHistory();
   const match = useRouteMatch();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  /* eslint-disable */
   React.useEffect(() => {
     if (!!classId) {
       socket.on(`classroom_user`, data => {
