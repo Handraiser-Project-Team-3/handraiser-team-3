@@ -14,7 +14,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import Axios from "axios";
-import Chip from "@material-ui/core/Chip";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 // component/s
 import Layout from "../reusables/Layout";
@@ -75,7 +75,7 @@ export default function Classroom(props) {
 	const { classId } = props;
 	const { headers, user, socket } = props.data;
 	const userDetails = user ? user : {};
-	const { first_name, account_type_id, id } = userDetails;
+	const { first_name, account_type_id } = userDetails;
 	const [value, setValue] = React.useState(0);
 	const [classroomUser, setClassroomUser] = React.useState({});
 	const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
@@ -100,6 +100,7 @@ export default function Classroom(props) {
 				);
 			});
 		}
+		// eslint-disable-next-line
 	}, [classId]);
 
 	React.useEffect(() => {
@@ -143,12 +144,14 @@ export default function Classroom(props) {
 				setRoom(null);
 			}
 		});
+		// eslint-disable-next-line
 	}, [classId]);
 
 	React.useEffect(() => {
 		socket.on(`notify`, notify => {
 			alertToast(notify);
 		});
+		// eslint-disable-next-line
 	}, []);
 	React.useEffect(() => {
 		if (!!user && !!headers && !!classId) {
@@ -164,7 +167,7 @@ export default function Classroom(props) {
 				}
 			})();
 		}
-	}, [user, headers, classId]);
+	}, [user, headers, classId, props.classId]);
 
 	const updateRequest = async ({ id, data, notify, mentor, action }) => {
 		try {
@@ -188,7 +191,7 @@ export default function Classroom(props) {
 				history.replace("/");
 			}
 		}
-	}, [verify, match.params.id]);
+	}, [verify, history, props.classId]);
 
 	const handleSubmitNewRquest = () => {
 		const obj = {

@@ -68,7 +68,7 @@ export default function (props) {
     setOpen
   } = props;
 
-  const { register, errors, setError, handleSubmit } = useForm();
+  const { register, errors, setError, handleSubmit, clearError } = useForm();
 
   const [direction] = React.useState("left");
   const [openSpeedDial, setOpenSpeedDial] = React.useState(false);

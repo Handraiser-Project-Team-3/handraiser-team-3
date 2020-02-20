@@ -13,6 +13,8 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import axios from 'axios';
 import emailjs from 'emailjs-com';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -24,41 +26,26 @@ export default function HandleForm(props) {
         data,
         classes,
         user,
-        classroomUsers,
         classId,
         headers
     } = props
     const [fullWidth,] = useState(true);
     const [maxWidth] = useState('sm');
     const [filterUser, setFilterUser] = useState([]);
-    const [name, setName] = useState('');
-    const [filterEmail, setFilterEmail] = useState();
-    const [to, setTo] = useState({});
+    const [to, setTo] = useState([]);
 
     useEffect(() => {
-        setFilterUser(classroomUsers
-            .filter(x => x.class_id === classId)
-            .filter(x => x.user_id !== user.id)
-            .map(x => x.user_id));
-    }, [classroomUsers, classId, headers, user.id])
-
-    useEffect(() => {
-        let email = [];
-        if (classId) {
-            filterUser.map(data => {
-                return (
-                    axios
-                        .get(`/api/user/${data}`, headers)
-                        .then(res => {
-                            email.push(res.data)
-                            setName(email.first_name)
-                            setFilterEmail(email)
-                        })
-                        .catch(e => console.log(e))
+        let tempData = [];
+        axios
+            .get(`/api/user/list`, headers)
+            .then(data => {
+                tempData = data.data
+                setFilterUser(tempData
+                    .filter(acc => acc.account_type_id === 3)
                 )
             })
-        }
-    }, [filterUser, headers, classId])
+            .catch(e => console.log(e))
+    }, [headers])
 
     const filterOptions = createFilterOptions({
         matchFrom: 'start',
@@ -69,23 +56,24 @@ export default function HandleForm(props) {
         from: user.email,
         to: to,
         cc: user.email,
-        name: name,
+        name: "",
         subject: `HandRaiser - ${data.class_name}`,
         className: `${data.class_name}`,
         classCode: `${data.class_code}`,
         message: `You've ask to join the ${data.class_name} class. Enter this code to join: ${data.class_code}`
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (classId) {
-            emailjs.send('gmail', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
-                .then((result) => {
-                    console.log(result.text);
-                }, (error) => {
-                    console.log(error.text);
-                });
-        }
+        // if (classId) {
+        //     emailjs.send('gmail', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
+        //         .then((result) => {
+        //                 alertToast('Email sent!')
+        //         }, (error) => {
+        //             alertToast('Unable to send!')
+        //             console.log(error.text)
+        //         });
+        // }
     }
 
     const handleChange = e => {
@@ -96,6 +84,7 @@ export default function HandleForm(props) {
 
     return (
         <div>
+            <ToastContainer enableMulticontainer />
             <Chip
                 variant="outlined"
                 size="small"
@@ -131,7 +120,7 @@ export default function HandleForm(props) {
                         />
                         <Autocomplete
                             multiple
-                            options={filterEmail}
+                            options={filterUser}
                             filterOptions={filterOptions}
                             disableCloseOnSelect
                             getOptionLabel={option => option.email}
@@ -151,6 +140,7 @@ export default function HandleForm(props) {
                             renderInput={params => (
                                 <TextField
                                     {...params}
+                                    required
                                     label="To"
                                     name="to"
                                     multiline
@@ -175,13 +165,15 @@ export default function HandleForm(props) {
                         />
                         <TextField
                             autoFocus
-                            required
                             id={`message-${classId}`}
                             name="msg"
-                            label="Message"
+                            label="Message Template (view only)"
+                            type="text"
                             multiline
                             rows="10"
-                            type="text"
+                            InputProps={{
+                                readOnly: true
+                            }}
                             defaultValue={messageTemplate.message}
                             fullWidth
                         />
@@ -199,3 +191,12 @@ export default function HandleForm(props) {
         </div>
     );
 }
+
+const alertToast = msg =>
+    toast.info(msg, {
+        position: "top-right",
+        autoClose: 6000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+    });

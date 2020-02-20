@@ -387,7 +387,6 @@ export const ClassView = props => {
                                         >
                                           <HandleForm
                                             classId={data.id}
-                                            classroomUsers={classroomUsers}
                                             user={user}
                                             form={form}
                                             handleCloseForm={handleCloseForm}

@@ -3,17 +3,14 @@ import axios from "axios";
 import GoogleLogin from "react-google-login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Paper from "@material-ui/core/Paper";
 
 // images
-import Background from "../assets/images/backg.png";
 import Girl from "../assets/images/hehe.gif";
 import two from "../assets/images/teamwork.svg";
 import Logo1 from "../assets/images/logo.png";
 
 // material-ui
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
@@ -60,7 +57,7 @@ export const Login = props => {
 						<Grid item xs={12}>
 							<Grid container direction="column" justify="center">
 								<Grid item xs={12}>
-									<img src={Logo1} className={classes.logo} />
+									<img src={Logo1} className={classes.logo} alt="logo" />
 								</Grid>
 
 								<Grid item xs={12}>
@@ -119,12 +116,13 @@ export const Login = props => {
 												width: "100%",
 												marginTop: "8px"
 											}}
+											alt="two"
 										/>
 									</Grid>
 								</Hidden>
 								<Hidden mdDown>
 									<Grid item xs={12}>
-										<img src={Girl} className={classes.gif} />
+										<img src={Girl} className={classes.gif} alt="girl" />
 									</Grid>
 								</Hidden>
 							</Grid>

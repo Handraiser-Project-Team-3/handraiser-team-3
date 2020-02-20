@@ -62,7 +62,8 @@ export default function ChatBox(props) {
 		socket.on(`new_message`, message => {
 			setMessages([...messages, message]);
 		});
-	}, [messages, room]);
+		// eslint-disable-next-line
+	}, [messages, room, setIsTyping]);
 	React.useEffect(() => {
 		if (!!room && !!headers) {
 			getClassroomUserDetails(room.student_id, headers).then(res => {
@@ -86,15 +87,15 @@ export default function ChatBox(props) {
 							student !== null ? (
 								<Avatar src={student.user_image} />
 							) : (
-									<img src={bubbles} style={{ width: 45 }} />
+									<img src={bubbles} style={{ width: 45 }} alt="bubbles" />
 								)
 						) : mentor !== null ? (
 							<Avatar src={mentor.user_image} />
 						) : (
-									<img src={bubbles} style={{ width: 45 }} />
+									<img src={bubbles} style={{ width: 45 }} alt="bubbles" />
 								)
 					) : (
-							<img src={bubbles} style={{ width: 45 }} />
+							<img src={bubbles} style={{ width: 45 }} alt="bubbles" />
 						)}
 					<Typography
 						variant="h6"
@@ -269,7 +270,7 @@ const MessageBox = props => {
 			user_details(data.user_id, headers).then(res => {
 				setSender(res.data);
 			});
-	}, [headers]);
+	}, [headers, data.user_id]);
 	return (
 		<Div
 			style={
