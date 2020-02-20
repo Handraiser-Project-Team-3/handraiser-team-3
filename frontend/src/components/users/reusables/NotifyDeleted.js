@@ -5,9 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 import WarningIcon from "@material-ui/icons/Warning";
 
 export default function NotifyLogout({
@@ -50,13 +48,3 @@ export default function NotifyLogout({
     </div>
   );
 }
-
-const alertToast = msg =>
-  toast.info(msg, {
-    position: "top-right",
-    hideProgressBar: true,
-    autoClose: 2000,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true
-  });

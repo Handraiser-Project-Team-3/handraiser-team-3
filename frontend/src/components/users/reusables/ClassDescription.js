@@ -1,4 +1,5 @@
 import React from "react";
+
 // Material-ui
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -37,7 +38,7 @@ export default function ClassDescription({ classDetails }) {
           align="center"
         >
           <Grid item xs={12} sm={6}>
-            <img src={work} style={{ width: "270.5px" }} alt="work" />
+            <img src={work} style={{ width: "270.5px" }} alt="" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Tooltip title="Click to see Description">

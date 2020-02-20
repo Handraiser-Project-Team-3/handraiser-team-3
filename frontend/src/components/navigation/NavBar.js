@@ -80,9 +80,14 @@ export default function ButtonAppBar(props) {
   const [state, setState] = React.useState({
     left: false
   });
-
+  // React.useEffect(() => {
+  //   axios.get(`/api/user/6`, headers).then(re => console.log(re));
+  // }, [headers]);
   const handleClass = () => {
     history.push("/");
+  };
+  const handleClickRoom = classID => {
+    history.push(`/classroom/${classID}`);
   };
   const handleClick = () => {
     setShow(!show);
@@ -163,12 +168,23 @@ export default function ButtonAppBar(props) {
           <List component="div" disablePadding>
             {classRoom &&
               classRoom.map(rooms => (
-                <Link key={rooms.id} to={`/classroom/${rooms.id}`}>
-                  <ListItem id={2} button className={classes.nested}>
+                <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+                  <ListItem
+                    id={2}
+                    key={rooms.id}
+                    button
+                    className={classes.nested}
+                    onClick={() => {
+                      handleClickRoom(rooms.id);
+                    }}
+                  >
                     <StarBorder />
 
                     <ListItemText
-                      style={{ width: "20px", paddingLeft: "20px" }}
+                      style={{
+                        width: "20px",
+                        paddingLeft: "20px"
+                      }}
                     >
                       {rooms.class_name}
                     </ListItemText>
