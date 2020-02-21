@@ -81,7 +81,6 @@ export default function HandleForm(props) {
               handleCloseForm();
             },
             error => {
-              toast.warning("Unable to send, " + error.text);
               console.log(error.text);
             }
           )
