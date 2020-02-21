@@ -29,6 +29,7 @@ import HandleForm from "./HandleForm";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
+import room from "../../assets/images/room.jpg";
 import group from "../../assets/images/team.png";
 import edit from "../../assets/images/edit.png";
 import key from "../../assets/images/key.png";
@@ -211,7 +212,7 @@ export const ClassView = props => {
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
-                      image={classroom}
+                      image={account_type_id === 3 ? classroom : room}
                       title={data.class_name}
                     >
                       {account_type_id === 2 ? (
@@ -438,7 +439,7 @@ export const ClassView = props => {
                   <CardActions
                     style={
                       account_type_id === 2
-                        ? { background: "#ff6f61" }
+                        ? { background: "#8c6cc6" }
                         : { background: "#ababfa" }
                     }
                   >
@@ -449,7 +450,7 @@ export const ClassView = props => {
                         alignItems="center"
                         justify="space-between"
                       >
-                        <Grid item lg={9} md={10} sm={9} xs={9}>
+                        <Grid item lg={9} md={10} sm={9} xs={9} >
                           <Button
                             onClick={() =>
                               history.push(`/classroom/${data.id}`)

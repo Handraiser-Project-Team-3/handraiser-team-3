@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	container: {
-		margin: "50px 8vw 10px 8vw"
+		margin: "50px 6vw 10px 6vw"
 	}
 }));
 
