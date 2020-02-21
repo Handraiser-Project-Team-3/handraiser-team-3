@@ -125,7 +125,7 @@ export const RequestComponent = ({
 					)}
 					<Grid container direction="column" alignItems="flex-start">
 						<Grid item>
-							<Typography variant="inherit">{data.title}</Typography>
+							<Typography variant="body1">{data.title}</Typography>
 						</Grid>
 						<Grid item>
 							<Typography variant="subtitle2" color="primary">

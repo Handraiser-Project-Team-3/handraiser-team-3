@@ -51,15 +51,23 @@ const useStyles = makeStyles(theme => ({
 	nested: {
 		"&:hover": {
 			background:
-				"linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+				"linear-gradient(90deg, rgba(86,55,140,1) 0%, rgba(192,162,255,1) 21%, rgba(171,171,250,1) 41%, rgba(255,255,255,1) 100%)",
 			color: "whitesmoke"
 		}
 	},
 	enrolled: {
 		"&:hover": {
 			background:
-				"linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+				"linear-gradient(90deg, rgba(86,55,140,1) 0%, rgba(192,162,255,1) 21%, rgba(171,171,250,1) 41%, rgba(255,255,255,1) 100%)",
 			color: "whitesmoke"
+		}
+	},
+	headerBg: {
+		background:
+			"linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 27%, rgba(171,171,250,1) 55%, rgba(255,255,255,1) 100%)",
+		"@media (max-width: 890px)": {
+			background:
+				"linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)"
 		}
 	}
 }));
@@ -86,9 +94,9 @@ export default function ButtonAppBar(props) {
 	const handleClass = () => {
 		history.push("/");
 	};
-	const handleClickRoom = classID => {
-		history.push(`/classroom/${classID}`);
-	};
+	// const handleClickRoom = classID => {
+	// 	history.push(`/classroom/${classID}`);
+	// };
 	const handleClick = () => {
 		setShow(!show);
 	};
@@ -167,30 +175,31 @@ export default function ButtonAppBar(props) {
 				<Collapse in={!show} timeout="auto" unmountOnExit>
 					<List component="div" disablePadding>
 						{classRoom &&
-							classRoom.map(rooms => (
-								<Link to={`/classroom/${rooms.id}`} key={rooms.id}>
-									<ListItem
-										id={2}
-										key={rooms.id}
-										button
-										className={classes.nested}
-										onClick={() => {
-											handleClickRoom(rooms.id);
-										}}
-									>
-										<StarBorder />
-
-										<ListItemText
-											style={{
-												width: "20px",
-												paddingLeft: "20px"
-											}}
+							classRoom.map(rooms =>
+								rooms.class_status === true ? (
+									<Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+										<ListItem
+											id={2}
+											key={rooms.id}
+											button
+											className={classes.nested}
 										>
-											{rooms.class_name}
-										</ListItemText>
-									</ListItem>
-								</Link>
-							))}
+											<StarBorder />​
+											<ListItemText
+												style={{
+													width: "20px",
+													paddingLeft: "20px"
+												}}
+											>
+												{" "}
+												{rooms.class_name}
+											</ListItemText>
+										</ListItem>
+									</Link>
+								) : (
+									<></>
+								)
+							)}
 					</List>
 				</Collapse>
 			</List>
@@ -199,13 +208,7 @@ export default function ButtonAppBar(props) {
 	return (
 		<>
 			<div className={classes.root}>
-				<AppBar
-					position="fixed"
-					style={{
-						background:
-							"linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
-					}}
-				>
+				<AppBar position="fixed" className={classes.headerBg}>
 					<Toolbar>
 						<IconButton
 							edge="start"

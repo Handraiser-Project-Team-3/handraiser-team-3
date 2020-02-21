@@ -18,6 +18,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
 import Chip from "@material-ui/core/Chip";
+import ReactHtmlParser from "react-html-parser";
 
 export default function ChatBox(props) {
 	const classes = ChatBoxStyle();
@@ -43,18 +44,20 @@ export default function ChatBox(props) {
 			})();
 		}
 	}, [headers, room]);
+
 	const handleSubmit = e => {
 		e.preventDefault();
 		socket.emit(`add_message`, {
 			message: {
 				user_id: user.id,
 				student_request_id: room.id,
-				content: msg
+				content: msg.replace(/\n/g, "</br>")
 			}
 		});
 		socket.emit(`is_typing`, null, room);
 		setMsg("");
 	};
+
 	React.useEffect(() => {
 		if (!!room) {
 			socket.on(`typing`, (user, { data }) => {
@@ -116,12 +119,7 @@ export default function ChatBox(props) {
 									<span>
 										{mentor.first_name} {mentor.last_name}
 									</span>{" "}
-									<Chip
-										variant="outlined"
-										size="small"
-										label="Mentor"
-										color="primary"
-									/>
+									<Chip size="small" label="Mentor" color="primary" />
 								</>
 							) : (
 								""
@@ -144,7 +142,12 @@ export default function ChatBox(props) {
 					>
 						<Grid container alignItems="center" justify="space-between">
 							<Grid item xs={11}>
-								<Grid container spacing={1} style={{ padding: "10px" }}>
+								<Grid
+									container
+									spacing={1}
+									alignItems="center"
+									style={{ padding: "10px" }}
+								>
 									<Grid item>
 										<Typography style={{ color: "gray" }}>Request:</Typography>
 									</Grid>
@@ -245,7 +248,7 @@ export default function ChatBox(props) {
 					<TextField
 						disabled={!room}
 						variant="outlined"
-						label="Type your message..."
+						placeholder="Type your message..."
 						value={msg}
 						fullWidth
 						style={{ overflow: "auto" }}
@@ -326,6 +329,7 @@ const MessageBox = props => {
 			) : (
 				""
 			)}
+
 			<Msg
 				style={
 					user.id === data.user_id
@@ -340,7 +344,7 @@ const MessageBox = props => {
 						  }
 				}
 			>
-				{data.content}
+				{ReactHtmlParser(data.content)}
 			</Msg>
 		</Div>
 	);

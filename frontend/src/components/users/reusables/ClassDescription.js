@@ -53,11 +53,7 @@ export default function ClassDescription({ classDetails }) {
 					</Grid>
 				</Grid>
 			</Paper>
-			<Paper
-				elevation={5}
-				className={classes.banner}
-				style={{ overflow: "auto" }}
-			>
+			<Paper elevation={5} className={classes.bannerFlip}>
 				<Grid
 					style={{ height: "177px", padding: "30px" }}
 					container

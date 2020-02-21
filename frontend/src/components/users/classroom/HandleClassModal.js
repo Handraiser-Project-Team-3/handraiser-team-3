@@ -53,7 +53,6 @@ export const HandleClassModal = props => {
 		userId,
 		setClassList,
 		classList,
-		account_type_id,
 		filter,
 		setFilter
 	} = props;
@@ -143,7 +142,7 @@ export const HandleClassModal = props => {
 				<DialogTitle
 					id="responsive-dialog-title"
 					style={{
-						background: "#ff6f61",
+						background: "#8c6cc6",
 						color: "white"
 					}}
 				>
@@ -180,16 +179,12 @@ export const HandleClassModal = props => {
 						/>
 
 						<DialogActions>
-							<Button
-								autoFocus
-								onClick={handleClose}
-								color={account_type_id === 3 ? "primary" : "secondary"}
-							>
+							<Button autoFocus onClick={handleClose} color="primary">
 								Cancel
 							</Button>
 							<Button
 								type="submit"
-								color={account_type_id === 3 ? "primary" : "secondary"}
+								color="primary"
 								autoFocus
 								disabled={!isEnabled}
 							>

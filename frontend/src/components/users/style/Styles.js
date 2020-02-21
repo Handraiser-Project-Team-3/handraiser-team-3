@@ -33,7 +33,13 @@ export const ClassroomStyle = makeStyles(theme => ({
 		width: "100%",
 		height: "auto",
 		background:
-			"linear-gradient(420deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
+			"linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 29%, rgba(171,171,250,1) 79%, rgba(255,255,255,1) 100%)"
+	},
+	bannerFlip: {
+		width: "100%",
+		height: "auto",
+		background: "#ababfa",
+		overflow: "auto"
 	},
 	needHelp: {
 		padding: "15px",
@@ -134,6 +140,9 @@ export const ClassViewStyle = makeStyles(theme => ({
 			backgroundColor: "whitesmoke"
 		}
 	},
+	popover: {
+		pointerEvents: "none"
+	},
 	header: {
 		height: "auto",
 		backgroundImage: `url(${head})`,
@@ -172,7 +181,7 @@ export const ClassViewStyle = makeStyles(theme => ({
 	},
 	addClass: {
 		cursor: "pointer",
-		color: "#8e9493"
+		color: "pink"
 	},
 	icons: {
 		width: "20px",
@@ -199,7 +208,7 @@ export const ClassViewStyle = makeStyles(theme => ({
 		fontSize: "14px",
 		cursor: "pointer",
 		"&:hover": {
-			background: "#f19c76",
+			background: "gray",
 			color: "white"
 		}
 	}
@@ -296,12 +305,12 @@ export const LoginStyle = makeStyles(theme => ({
 		marginTop: "70px"
 	},
 	gif: {
-		width: "55%",
+		width: "45%",
 		marginTop: "60px"
 	},
 	welcome: {
 		fontSize: "100px",
-		color: "purple",
+		color: "#9760e6",
 		textShadow: "3px 2px black",
 		paddingTop: "50px",
 		"@media (max-width: 1279px)": {

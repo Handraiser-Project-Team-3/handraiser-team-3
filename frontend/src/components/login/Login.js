@@ -91,7 +91,7 @@ export const Login = props => {
 													onClick={renderProps.onClick}
 													disabled={renderProps.disabled}
 													style={{
-														background: "#692896",
+														background: "#7c42d2",
 														color: "white",
 														outline: "none"
 													}}
