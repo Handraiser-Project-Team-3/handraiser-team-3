@@ -5,10 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import { useLocalStorage } from "./components/hooks/useLocalStorage";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import NotifyLogout from "./components/users/reusables/NotifyLogout";
 
 import Axios from "axios";
+import { class_details } from "./components/users/reusables/UserDetails";
 const socket = io(`172.60.60.163:3001`);
 
 function App() {
@@ -46,7 +47,22 @@ function App() {
       Authorization: `Bearer ${accessToken}`
     }
   };
-
+  React.useEffect(() => {
+    if (!!accessToken && !!user) {
+      socket.on(`notify_assigned`, data => {
+        data.user_id === user.id &&
+          class_details(data.class_id, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }).then(res => {
+            alertToast(
+              `You've been added as mentor in class [ ${res.data.class_name} ]`
+            );
+          });
+      });
+    }
+  }, [accessToken, user]);
   return (
     <BrowserRouter>
       <ToastContainer />
@@ -70,3 +86,15 @@ function App() {
 }
 
 export default App;
+// toast
+let toastId = null;
+const alertToast = msg => {
+  if (!toast.isActive(toastId)) {
+    toastId = toast.info(msg, {
+      position: "bottom-left",
+      hideProgressBar: true,
+      autoClose: 5000,
+      closeOnClick: true
+    });
+  }
+};

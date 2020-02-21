@@ -13,10 +13,7 @@ module.exports = {
     });
 
     const newClassroomUsers = () => {
-      db.classroom_users
-        .find()
-        .then(users => socket.emit(`classroom_user`, users));
-      newData();
+      db.classroom_users.find().then(users => io.emit(`classroom_user`, users));
     };
     const newData = (notify, action) =>
       db.student_request.find({ class_id: classroom }).then(data => {
@@ -79,7 +76,7 @@ module.exports = {
     });
     socket.on(`remove_class_user`, ({ userId, classroomId }) => {
       db.student_request
-        .find({ student_id: userId, class_id: classroomId })
+        .find({ student_id: userId, class_id: Number(classroomId) })
         .then(requests => {
           return requests.map(x => {
             db.messages.destroy({ student_request_id: x.id });
@@ -92,9 +89,23 @@ module.exports = {
               db.classroom_users.destroy({ id: userId }).then(deleted => {
                 io.emit(`notify_removed_user`, deleted[0]);
                 newClassroomUsers();
+                newData();
               });
             });
         });
+    });
+    socket.on(`add_mentors`, ({ newMentors, classId }) => {
+      newMentors.map(mentor => {
+        db.classroom_users
+          .insert(
+            { user_id: mentor.value, class_id: Number(classId) },
+            { deepInsert: true }
+          )
+          .then(inserted => {
+            newClassroomUsers();
+            io.emit(`notify_assigned`, inserted);
+          });
+      });
     });
   }
 };
