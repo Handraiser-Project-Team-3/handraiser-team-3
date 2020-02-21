@@ -86,9 +86,6 @@ export default function ButtonAppBar(props) {
   const handleClass = () => {
     history.push("/");
   };
-  const handleClickRoom = classID => {
-    history.push(`/classroom/${classID}`);
-  };
   const handleClick = () => {
     setShow(!show);
   };
@@ -123,7 +120,7 @@ export default function ButtonAppBar(props) {
     setState({ ...state, [side]: open });
   };
 
-  const sideList = side => (
+  const sideList = (side, socket) => (
     <div
       className={classes.list}
       role="presentation"
@@ -145,7 +142,10 @@ export default function ButtonAppBar(props) {
 
           <ListItemText
             primary="Classes"
-            onClick={handleClass}
+            onClick={() => {
+              handleClass();
+              socket.off();
+            }}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
         </ListItem>
@@ -175,7 +175,7 @@ export default function ButtonAppBar(props) {
                     button
                     className={classes.nested}
                     onClick={() => {
-                      handleClickRoom(rooms.id);
+                      socket.off();
                     }}
                   >
                     <StarBorder />
@@ -217,10 +217,10 @@ export default function ButtonAppBar(props) {
               <MenuIcon />
             </IconButton>
             <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-              {sideList("left")}
+              {sideList("left", socket)}
             </Drawer>
             <Typography variant="h6" className={classes.title}>
-              <Link to="/">
+              <Link to="/" onClick={() => socket.off()}>
                 <img src={logo} className={classes.logo} alt="logo" />
               </Link>
             </Typography>

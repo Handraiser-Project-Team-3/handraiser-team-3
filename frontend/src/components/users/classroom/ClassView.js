@@ -102,6 +102,9 @@ export const ClassView = props => {
         res.data[0].class_status === false
           ? alertToast("Class Disabled")
           : alertToast("Class Enabled");
+        if (res.data[0].class_status === false) {
+          socket.emit(`closed_class`, res.data);
+        }
       });
   };
   const handleClickOpen = () => {
