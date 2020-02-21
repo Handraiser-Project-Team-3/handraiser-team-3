@@ -48,12 +48,12 @@ export const PaperStat = props => {
   const [student, setStudent] = React.useState(true);
 
   useEffect(() => {
-    headers &&
+    if (!!headers) {
       axios.get("/api/user/list", headers).then(res => {
         setUsers(res.data);
       });
-    // eslint-disable-next-line
-  }, [headers]);
+    }
+  }, [headers, setUsers]);
 
   return (
     <>

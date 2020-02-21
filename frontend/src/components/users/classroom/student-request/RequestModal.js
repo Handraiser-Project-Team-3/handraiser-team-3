@@ -62,7 +62,6 @@ export default function(props) {
   const classes = useStyles();
   const {
     addNewRequest,
-    newRequest,
     handleSubmitNewRquest,
     setList,
     list,
@@ -74,9 +73,9 @@ export default function(props) {
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
 
-  const [direction, setDirection] = React.useState("left");
+  const [direction] = React.useState("left");
   const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
+  const [hidden] = React.useState(false);
   const [actions, setActions] = React.useState([]);
 
   const handleSpeedDial = () => {
@@ -100,7 +99,7 @@ export default function(props) {
     } else {
       if (!!requests) {
         requests.filter(req => req.status === null || req.status === false)
-          .length <= 1
+          .length <= 0
           ? setActions([
               {
                 icon: (
@@ -109,7 +108,7 @@ export default function(props) {
                   />
                 ),
                 name: "Raise your concern",
-                func: handleClick
+                func: () => setOpen(!open)
               },
               {
                 icon: <ListIcon style={{ color: "#00579b" }} />,
@@ -146,7 +145,7 @@ export default function(props) {
             ]);
       }
     }
-  }, [account_type_id, requests]);
+  }, [account_type_id, requests, setList, list, open, setOpen]);
   return (
     <div>
       <div className={classes.handContainer}>

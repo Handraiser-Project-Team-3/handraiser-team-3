@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import googleIcon from "../assets/images/google.svg";
 import { Hidden } from "@material-ui/core";
+
 import { LoginStyle } from "../users/style/Styles";
 
 export const Login = props => {
@@ -55,7 +56,7 @@ export const Login = props => {
             <Grid item xs={12}>
               <Grid container direction="column" justify="center">
                 <Grid item xs={12}>
-                  <img src={Logo1} className={classes.logo} alt="Logo1" />
+                  <img src={Logo1} className={classes.logo} alt="" />
                 </Grid>
 
                 <Grid item xs={12}>
@@ -114,13 +115,13 @@ export const Login = props => {
                         width: "100%",
                         marginTop: "8px"
                       }}
-                      alt="two"
+                      alt=""
                     />
                   </Grid>
                 </Hidden>
                 <Hidden mdDown>
                   <Grid item xs={12}>
-                    <img src={Girl} className={classes.gif} alt="Girl" />
+                    <img src={Girl} className={classes.gif} alt="" />
                   </Grid>
                 </Hidden>
               </Grid>

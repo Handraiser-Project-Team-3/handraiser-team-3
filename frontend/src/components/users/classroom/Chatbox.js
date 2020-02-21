@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Paper from "@material-ui/core/Paper";
 import bubbles from "../../assets/images/chat-box.png";
 import Grid from "@material-ui/core/Grid";
@@ -21,18 +21,17 @@ import { ChatBoxStyle } from "../style/Styles";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
-  const [messages, setMessages] = useState([]);
-  const [msg, setMsg] = useState("");
-  const [student, setStudent] = useState(null);
-  const [mentor, setMentor] = useState(null);
+  const [messages, setMessages] = React.useState([]);
+  const [msg, setMsg] = React.useState("");
+  const [student, setStudent] = React.useState(null);
+  const [mentor, setMentor] = React.useState(null);
   const { room, user, headers, socket, isTyping, setIsTyping } = props.data;
-  const [show, setShow] = useState(false);
+  const [show, setShow] = React.useState(false);
 
   const handleClose = () => {
     setShow(true);
   };
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (!!headers && !!room) {
       (async () => {
         try {
@@ -56,8 +55,7 @@ export default function ChatBox(props) {
     socket.emit(`is_typing`, null, room);
     setMsg("");
   };
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (!!room) {
       socket.on(`typing`, (user, { data }) => {
         user !== null
@@ -68,10 +66,8 @@ export default function ChatBox(props) {
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
-    // eslint-disable-next-line
-  }, [messages, room]);
-
-  useEffect(() => {
+  }, [messages, room, socket, setIsTyping]);
+  React.useEffect(() => {
     if (!!room && !!headers) {
       getClassroomUserDetails(room.student_id, headers).then(res => {
         user_details(res.data.user_id, headers).then(res =>
@@ -85,7 +81,6 @@ export default function ChatBox(props) {
       });
     }
   }, [room, headers]);
-
   return (
     <Paper className={classes.root}>
       <Paper className={classes.top} elevation={3}>
@@ -95,15 +90,15 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+                <img src={bubbles} style={{ width: 45 }} alt="" />
               )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-              <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+              <img src={bubbles} style={{ width: 45 }} alt="" />
             )
           ) : (
-            <img src={bubbles} style={{ width: 45 }} alt="bubbles" />
+            <img src={bubbles} style={{ width: 45 }} alt="" />
           )}
           <Typography
             variant="h6"
@@ -278,11 +273,11 @@ const MessageBox = props => {
   const [sender, setSender] = React.useState({});
   React.useEffect(() => {
     !!headers &&
+      !!data &&
       user_details(data.user_id, headers).then(res => {
         setSender(res.data);
       });
-    // eslint-disable-next-line
-  }, [headers]);
+  }, [headers, data]);
   return (
     <Div
       style={
