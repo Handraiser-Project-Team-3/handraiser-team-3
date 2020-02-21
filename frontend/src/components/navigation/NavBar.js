@@ -51,15 +51,23 @@ const useStyles = makeStyles(theme => ({
   nested: {
     "&:hover": {
       background:
-        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
     }
   },
   enrolled: {
     "&:hover": {
       background:
-        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
+    }
+  },
+  headerBg: {
+    background:
+      "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 27%, rgba(171,171,250,1) 55%, rgba(255,255,255,1) 100%)",
+    "@media (max-width: 890px)": {
+      background:
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)"
     }
   }
 }));
@@ -226,47 +234,51 @@ export default function ButtonAppBar(props) {
           </List>
         </Collapse>
         {/* thirdDropDown */}
-        <ListItem
-          button
-          onClick={handleClickOpen}
-          style={{ display: account_type_id >= 2 ? "flex" : "none" }}
-          className={classes.enrolled}
-        >
-          <InboxIcon />
-          <ListItemText
-            primary={account_type_id === 2 ? "Subjects Handled " : "Enrolled"}
-            style={{ width: "20px", paddingLeft: "20px" }}
-          />
-          {show ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={Open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <StarBorder />
-              <ListItemText primary="Starred" />
+        {account_type_id === 2 && (
+          <>
+            <ListItem
+              button
+              onClick={handleClickOpen}
+              style={{ display: account_type_id >= 2 ? "flex" : "none" }}
+              className={classes.enrolled}
+            >
+              <InboxIcon />
+              <ListItemText
+                primary="Subjects Assigned"
+                style={{ width: "20px", paddingLeft: "20px" }}
+              />
+              {show ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-          </List>
-        </Collapse>
+            <Collapse in={Open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <StarBorder />
+                  <ListItemText
+                    style={{
+                      width: "20px",
+                      paddingLeft: "20px"
+                    }}
+                    primary="Starred"
+                  />
+                </ListItem>
+              </List>
+            </Collapse>
+          </>
+        )}
       </List>
     </div>
   );
   return (
     <>
       <div className={classes.root}>
-        <AppBar
-          position="fixed"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
-          }}
-        >
+        <AppBar position="fixed" className={classes.headerBg}>
           <Toolbar>
             <IconButton
               edge="start"
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={toggleDrawer("left", true)}
+              onClick={account_type_id !== 1 && toggleDrawer("left", true)}
             >
               <MenuIcon />
             </IconButton>
@@ -331,6 +343,7 @@ export default function ButtonAppBar(props) {
     </>
   );
 }
+
 const Btn = styled.span`
   display: flex;
   align-items: center;

@@ -11,21 +11,41 @@ import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import styled from "styled-components";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { getClassroomUser } from "./UserDetails";
 
 export default function({ open, setOpen, headers, socket, classId }) {
   const [mentorList, setMentorList] = React.useState([]);
   const [newMentors, setNewMentors] = React.useState([]);
+  const [classUsers, setUsers] = React.useState([]);
   const handleClick = () => {
     setOpen(!open);
   };
   React.useEffect(() => {
-    if (!!open && !!headers) {
+    !!headers && getClassroomUser(headers).then(res => setUsers(res.data));
+  }, [headers]);
+  React.useEffect(() => {
+    if (!!open && !!headers && !!classId) {
       (async () => {
         try {
           const res = await Axios.get("/api/user/list", headers);
           setMentorList(
             res.data
               .filter(x => x.account_type_id === 2)
+              .filter(users => {
+                if (
+                  classUsers.filter(x => {
+                    if (
+                      x.user_id === users.id &&
+                      x.class_id === Number(classId)
+                    ) {
+                      return x;
+                    }
+                    return null;
+                  }).length !== 1
+                ) {
+                  return users;
+                }
+              })
               .map(x => {
                 return {
                   value: x.id,
@@ -39,7 +59,7 @@ export default function({ open, setOpen, headers, socket, classId }) {
         }
       })();
     }
-  }, [open, headers]);
+  }, [open, headers, classId]);
   return (
     <div>
       <Dialog
