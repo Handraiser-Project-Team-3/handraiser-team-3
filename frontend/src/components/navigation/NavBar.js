@@ -120,7 +120,7 @@ export default function ButtonAppBar(props) {
     setState({ ...state, [side]: open });
   };
 
-  const sideList = (side, socket) => (
+  const sideList = side => (
     <div
       className={classes.list}
       role="presentation"
@@ -142,10 +142,7 @@ export default function ButtonAppBar(props) {
 
           <ListItemText
             primary="Classes"
-            onClick={() => {
-              handleClass();
-              socket.off();
-            }}
+            onClick={handleClass}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
         </ListItem>
@@ -167,30 +164,31 @@ export default function ButtonAppBar(props) {
         <Collapse in={!show} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {classRoom &&
-              classRoom.map(rooms => (
-                <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
-                  <ListItem
-                    id={2}
-                    key={rooms.id}
-                    button
-                    className={classes.nested}
-                    onClick={() => {
-                      socket.off();
-                    }}
-                  >
-                    <StarBorder />
+              classRoom.map(
+                rooms =>
+                  rooms.class_status === true && (
+                    <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+                      <ListItem
+                        id={2}
+                        key={rooms.id}
+                        button
+                        className={classes.nested}
+                      >
+                        <StarBorder />
 
-                    <ListItemText
-                      style={{
-                        width: "20px",
-                        paddingLeft: "20px"
-                      }}
-                    >
-                      {rooms.class_name}
-                    </ListItemText>
-                  </ListItem>
-                </Link>
-              ))}
+                        <ListItemText
+                          style={{
+                            width: "20px",
+                            paddingLeft: "20px"
+                          }}
+                        >
+                          {" "}
+                          {rooms.class_name}
+                        </ListItemText>
+                      </ListItem>
+                    </Link>
+                  )
+              )}
           </List>
         </Collapse>
       </List>
@@ -212,15 +210,15 @@ export default function ButtonAppBar(props) {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={toggleDrawer("left", true)}
+              onClick={account_type_id !== 1 && toggleDrawer("left", true)}
             >
               <MenuIcon />
             </IconButton>
             <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-              {sideList("left", socket)}
+              {sideList("left")}
             </Drawer>
             <Typography variant="h6" className={classes.title}>
-              <Link to="/" onClick={() => socket.off()}>
+              <Link to="/">
                 <img src={logo} className={classes.logo} alt="logo" />
               </Link>
             </Typography>

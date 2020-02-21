@@ -13,6 +13,7 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import ListIcon from "@material-ui/icons/List";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 const useStyles = makeStyles(theme => ({
   icons: {
@@ -69,7 +70,8 @@ export default function(props) {
     open,
     setOpen,
     requests,
-    classroomUser
+    classroomUser,
+    setAddMentorModal
   } = props;
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
@@ -95,6 +97,11 @@ export default function(props) {
           icon: <ListIcon style={{ color: "#00579b" }} />,
           name: "List of Members",
           func: () => setList(!list)
+        },
+        {
+          icon: <PersonAddIcon style={{ color: "#00579b" }} />,
+          name: "Add new Mentor",
+          func: () => setAddMentorModal(true)
         }
       ]);
     } else {
