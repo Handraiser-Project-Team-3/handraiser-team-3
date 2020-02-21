@@ -237,31 +237,31 @@ export default function Classroom(props) {
                 <Tab label="Done" {...a11yProps(2)} />
               </Tabs>
             ) : (
-              <Grid
-                container
-                justify="space-between"
-                alignItems="center"
-                style={{ borderBottom: "2px solid #3f51b5" }}
-              >
-                <Grid item xs={11}>
-                  <Typography
-                    variant="h6"
-                    style={{ padding: "8px", paddingLeft: "20px" }}
-                  >
-                    Members
+                <Grid
+                  container
+                  justify="space-between"
+                  alignItems="center"
+                  style={{ borderBottom: "2px solid #3f51b5" }}
+                >
+                  <Grid item xs={11}>
+                    <Typography
+                      variant="h6"
+                      style={{ padding: "8px", paddingLeft: "20px" }}
+                    >
+                      Members
                   </Typography>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <CloseIcon
+                      fontSize="small"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setList(false);
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={1}>
-                  <CloseIcon
-                    fontSize="small"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setList(false);
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            )}
+              )}
           </AppBar>
           <div className={classes.root}>
             {list ? (
@@ -302,74 +302,74 @@ export default function Classroom(props) {
                 </Grid>
               ))
             ) : (
-              <>
-                <TabPanel value={value} index={0}>
-                  {requests.map(
-                    x =>
-                      x.status === null && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"need"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                          setIsTyping={setIsTyping}
-                        />
-                      )
-                  )}
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                  {requests.map(
-                    x =>
-                      x.status === false && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"help"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                          setIsTyping={setIsTyping}
-                        />
-                      )
-                  )}
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  {requests.map(
-                    x =>
-                      x.status === true &&
-                      (classroomUser.id === x.student_id ||
-                        account_type_id === 2) && (
-                        <RequestComponent
-                          key={x.id}
-                          data={x}
-                          updateRequest={updateRequest}
-                          classes={classes}
-                          action={"done"}
-                          account_type_id={account_type_id}
-                          headers={headers}
-                          classroomUser={classroomUser}
-                          user={userDetails}
-                          socket={socket}
-                          setRoom={setRoom}
-                          setIsTyping={setIsTyping}
-                        />
-                      )
-                  )}
-                </TabPanel>
-              </>
-            )}
+                <>
+                  <TabPanel value={value} index={0}>
+                    {requests.map(
+                      x =>
+                        x.status === null && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"need"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                            setIsTyping={setIsTyping}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    {requests.map(
+                      x =>
+                        x.status === false && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"help"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                            setIsTyping={setIsTyping}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    {requests.map(
+                      x =>
+                        x.status === true &&
+                        (classroomUser.id === x.student_id ||
+                          account_type_id === 2) && (
+                          <RequestComponent
+                            key={x.id}
+                            data={x}
+                            updateRequest={updateRequest}
+                            classes={classes}
+                            action={"done"}
+                            account_type_id={account_type_id}
+                            headers={headers}
+                            classroomUser={classroomUser}
+                            user={userDetails}
+                            socket={socket}
+                            setRoom={setRoom}
+                            setIsTyping={setIsTyping}
+                          />
+                        )
+                    )}
+                  </TabPanel>
+                </>
+              )}
           </div>
 
           <ClassroomModal
@@ -441,20 +441,20 @@ const OnlineIndicator = ({ data, headers }) => {
             <UserDetails id={data.user_id} headers={headers} action="img" />
           </StyledBadgeGreen>
         ) : (
-          <StyledBadgeWhite
-            overlap="circle"
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right"
-            }}
-            variant="dot"
-          >
-            <UserDetails id={data.user_id} headers={headers} action="img" />
-          </StyledBadgeWhite>
-        )
+            <StyledBadgeWhite
+              overlap="circle"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right"
+              }}
+              variant="dot"
+            >
+              <UserDetails id={data.user_id} headers={headers} action="img" />
+            </StyledBadgeWhite>
+          )
       ) : (
-        ""
-      )}
+          ""
+        )}
     </>
   );
 };

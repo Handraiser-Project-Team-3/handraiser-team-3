@@ -7,16 +7,14 @@ import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
-import {
-  user_details,
-  getClassroomUserDetails
-} from "../reusables/UserDetails";
+import { user_details, getClassroomUserDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import ReactHtmlParser from "react-html-parser";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -52,7 +50,7 @@ export default function ChatBox(props) {
       message: {
         user_id: user.id,
         student_request_id: room.id,
-        content: msg
+        content: msg.replace(/\n/g, "</br>")
       }
     });
     socket.emit(`is_typing`, null, room);
@@ -94,16 +92,16 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                <img src={bubbles} style={{ width: 45 }} alt="" />
-              )
+                  <img src={bubbles} style={{ width: 45 }} alt="" />
+                )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-              <img src={bubbles} style={{ width: 45 }} alt="" />
-            )
+                  <img src={bubbles} style={{ width: 45 }} alt="" />
+                )
           ) : (
-            <img src={bubbles} style={{ width: 45 }} alt="" />
-          )}
+              <img src={bubbles} style={{ width: 45 }} alt="" />
+            )}
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
@@ -114,8 +112,8 @@ export default function ChatBox(props) {
                   ? `${student.first_name} ${student.last_name}`
                   : ""
                 : mentor !== null
-                ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-                : ""
+                  ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
+                  : ""
               : ""}
           </Typography>
         </Grid>
@@ -164,8 +162,8 @@ export default function ChatBox(props) {
             </Grid>
           </div>
         ) : (
-          ""
-        )}
+            ""
+          )}
         <div
           style={{
             display: "flex",
@@ -203,29 +201,29 @@ export default function ChatBox(props) {
                 </div>
               ))
           ) : (
-            ""
-          )}
+                ""
+              )}
 
           {isTyping !== null
             ? isTyping.user && isTyping.data
               ? isTyping.data.id === room.id && (
-                  <Div style={{ flexDirection: "row" }}>
-                    <Avatar src={isTyping.user.user_image} />
+                <Div style={{ flexDirection: "row" }}>
+                  <Avatar src={isTyping.user.user_image} />
 
-                    <Msg
-                      style={{
-                        borderRadius: "20px 20px 20px 0",
-                        border: "2px solid #ff6f61"
-                      }}
-                    >
-                      <TypingIndicator>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </TypingIndicator>
-                    </Msg>
-                  </Div>
-                )
+                  <Msg
+                    style={{
+                      borderRadius: "20px 20px 20px 0",
+                      border: "2px solid #ff6f61"
+                    }}
+                  >
+                    <TypingIndicator>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </TypingIndicator>
+                  </Msg>
+                </Div>
+              )
               : ""
             : ""}
           <div ref={lastMessage} />
@@ -287,11 +285,11 @@ const MessageBox = props => {
       style={
         user.id === data.user_id
           ? {
-              flexDirection: "row-reverse"
-            }
+            flexDirection: "row-reverse"
+          }
           : {
-              flexDirection: "row"
-            }
+            flexDirection: "row"
+          }
       }
     >
       {user.id !== data.user_id ? (
@@ -300,37 +298,37 @@ const MessageBox = props => {
             messages[index + 1].user_id === data.user_id ? (
               <span style={{ width: 40 }} />
             ) : (
+                <Avatar src={sender ? sender.user_image : ""} />
+              )
+          ) : (
               <Avatar src={sender ? sender.user_image : ""} />
             )
-          ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
         ) : messages[index + 1] ? (
           messages[index + 1].user_id === data.user_id ? (
             <span style={{ width: 40 }} />
           ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
+              <Avatar src={sender ? sender.user_image : ""} />
+            )
         ) : (
-          <span style={{ width: 40 }} />
-        )
+              <span style={{ width: 40 }} />
+            )
       ) : (
-        ""
-      )}
+          ""
+        )}
       <Msg
         style={
           user.id === data.user_id
             ? {
-                borderRadius: "20px 20px 0 20px",
-                background: "#ababfa"
-              }
+              borderRadius: "20px 20px 0 20px",
+              background: "#ababfa"
+            }
             : {
-                borderRadius: "20px 20px 20px 0",
-                border: "2px solid #ff6f61"
-              }
+              borderRadius: "20px 20px 20px 0",
+              border: "2px solid #ff6f61"
+            }
         }
       >
-        {data.content}
+        {ReactHtmlParser(data.content)}
       </Msg>
     </Div>
   );

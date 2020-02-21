@@ -62,7 +62,7 @@ export const RequestComponent = ({
         },
         {
           label: "No",
-          onClick: () => {}
+          onClick: () => { }
         }
       ]
     });
@@ -86,8 +86,8 @@ export const RequestComponent = ({
         style={
           classroomUser.id === data.student_id
             ? {
-                background: "#e3e4f8"
-              }
+              background: "#e3e4f8"
+            }
             : {}
         }
       >
@@ -103,8 +103,8 @@ export const RequestComponent = ({
               }}
             />
           ) : (
-            ""
-          )}
+              ""
+            )}
           <Div>
             <span style={{ fontSize: 16 }}>{data.title}</span>
             <span style={{ fontSize: 12 }}>
@@ -116,18 +116,18 @@ export const RequestComponent = ({
           <div className={classes.Icons}>
             {(classroomUser.id === data.student_id ||
               account_type_id === 2) && (
-              <Tooltip title="Remove">
-                <RemoveCircleIcon
-                  style={{ ...iconStyle }}
-                  onClick={() =>
-                    handleSubmitAction("Removing request ...", () => {
-                      socket.emit("remove_request", data, user);
-                      setRoom(null);
-                    })
-                  }
-                />
-              </Tooltip>
-            )}
+                <Tooltip title="Remove">
+                  <RemoveCircleIcon
+                    style={{ ...iconStyle }}
+                    onClick={() =>
+                      handleSubmitAction("Removing request ...", () => {
+                        socket.emit("remove_request", data, user);
+                        setRoom(null);
+                      })
+                    }
+                  />
+                </Tooltip>
+              )}
             {classroomUser.id === data.student_id && (
               <Tooltip title="Edit">
                 <EditIcon
@@ -195,26 +195,26 @@ export const RequestComponent = ({
             )}
           </div>
         ) : (
-          <div className={classes.Icons}>
-            {account_type_id === 2 && (
-              <Tooltip title="Move back to 'Being Help'">
-                <AssignmentReturnIcon
-                  style={{ ...iconStyle }}
-                  onClick={() =>
-                    handleSubmitAction("Moving back request . . .", () =>
-                      updateRequest({
-                        id: data.id,
-                        data: false,
-                        mentor: mentor.id,
-                        notify: `Mentor ${user.first_name} reopenend ${sender.first_name}'s concern`
-                      })
-                    )
-                  }
-                />
-              </Tooltip>
+              <div className={classes.Icons}>
+                {account_type_id === 2 && (
+                  <Tooltip title="Move back to 'Being Help'">
+                    <AssignmentReturnIcon
+                      style={{ ...iconStyle }}
+                      onClick={() =>
+                        handleSubmitAction("Moving back request . . .", () =>
+                          updateRequest({
+                            id: data.id,
+                            data: false,
+                            mentor: mentor.id,
+                            notify: `Mentor ${user.first_name} reopenend ${sender.first_name}'s concern`
+                          })
+                        )
+                      }
+                    />
+                  </Tooltip>
+                )}
+              </div>
             )}
-          </div>
-        )}
       </Paper>
     </div>
   );

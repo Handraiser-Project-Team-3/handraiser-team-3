@@ -15,8 +15,7 @@ export default function CountUsers({ classId, classroomUsers, headers }) {
             })
           )
       ).then(res => setUsersCount(res.filter(res => res !== false).length));
-    // eslint-disable-next-line
-  }, [classroomUsers]);
+  }, [classroomUsers, classId, headers]);
 
   return usersCount;
 }
