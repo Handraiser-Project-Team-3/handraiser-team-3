@@ -71,36 +71,36 @@ export const PaperStat = props => {
               />
             </Grid>
           ) : (
-            <>
-              <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-                <img
-                  src={both}
-                  className={classes.imgStyle}
-                  alt="all"
-                  onClick={() => {
-                    setAll(true);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-                <Grid container direction="column" justify="center">
-                  <Grid item xs={12}>
-                    <Typography variant="h6" className={classes.label}>
-                      All
+              <>
+                <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+                  <img
+                    src={both}
+                    className={classes.imgStyle}
+                    alt="all"
+                    onClick={() => {
+                      setAll(true);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+                  <Grid container direction="column" justify="center">
+                    <Grid item xs={12}>
+                      <Typography variant="h6" className={classes.label}>
+                        All
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="h3"
-                      style={{ fontWeight: "bold", color: "#fadc60" }}
-                    >
-                      {users.filter(user => user.account_type_id !== 1).length}
-                    </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        variant="h3"
+                        style={{ fontWeight: "bold", color: "#fadc60" }}
+                      >
+                        {users.filter(user => user.account_type_id !== 1).length}
+                      </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </>
-          )}
+              </>
+            )}
         </Grid>
       </Paper>
       <Paper elevation={5} className={classes.total}>
@@ -117,36 +117,36 @@ export const PaperStat = props => {
               />
             </Grid>
           ) : (
-            <>
-              <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-                <img
-                  src={teacher}
-                  className={classes.imgStyle}
-                  alt="mentor"
-                  onClick={() => {
-                    setMentor(true);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-                <Grid container direction="column" justify="center">
-                  <Grid item xs={12}>
-                    <Typography variant="h6" className={classes.label}>
-                      Mentors
+              <>
+                <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+                  <img
+                    src={teacher}
+                    className={classes.imgStyle}
+                    alt="mentor"
+                    onClick={() => {
+                      setMentor(true);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+                  <Grid container direction="column" justify="center">
+                    <Grid item xs={12}>
+                      <Typography variant="h6" className={classes.label}>
+                        Mentors
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="h3"
-                      style={{ fontWeight: "bold", color: "#fadc60" }}
-                    >
-                      {users.filter(user => user.account_type_id === 2).length}
-                    </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        variant="h3"
+                        style={{ fontWeight: "bold", color: "#fadc60" }}
+                      >
+                        {users.filter(user => user.account_type_id === 2).length}
+                      </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </>
-          )}
+              </>
+            )}
         </Grid>
       </Paper>
       <Paper elevation={5} className={classes.total}>
@@ -163,36 +163,36 @@ export const PaperStat = props => {
               />
             </Grid>
           ) : (
-            <>
-              <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
-                <img
-                  src={stud}
-                  className={classes.imgStyle}
-                  alt="student"
-                  onClick={() => {
-                    setStudent(true);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
-                <Grid container direction="column" justify="center">
-                  <Grid item xs={12}>
-                    <Typography variant="h6" className={classes.label}>
-                      Students
+              <>
+                <Grid item xs={6} sm={4} md={7} lg={6} xl={6}>
+                  <img
+                    src={stud}
+                    className={classes.imgStyle}
+                    alt="student"
+                    onClick={() => {
+                      setStudent(true);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={8} md={12} lg={6} xl={6}>
+                  <Grid container direction="column" justify="center">
+                    <Grid item xs={12}>
+                      <Typography variant="h6" className={classes.label}>
+                        Students
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="h3"
-                      style={{ fontWeight: "bold", color: "#fadc60" }}
-                    >
-                      {users.filter(user => user.account_type_id === 3).length}
-                    </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        variant="h3"
+                        style={{ fontWeight: "bold", color: "#fadc60" }}
+                      >
+                        {users.filter(user => user.account_type_id === 3).length}
+                      </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </>
-          )}
+              </>
+            )}
         </Grid>
       </Paper>
     </>
