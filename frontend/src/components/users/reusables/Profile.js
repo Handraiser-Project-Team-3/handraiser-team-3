@@ -153,8 +153,8 @@ export default function Profile(props) {
 					{(email
 					? account_type_id === 2
 					: accountDetails.account_type_id === 2)
-						? "Mentor"
-						: "Student"}
+						? `Mentor ${accountDetails.first_name}'s `
+						: `${accountDetails.first_name}'s `}
 					Profile
 				</DialogTitle>
 				<DialogContent>

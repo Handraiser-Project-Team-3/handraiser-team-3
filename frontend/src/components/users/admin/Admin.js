@@ -20,8 +20,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import { Typography } from "@material-ui/core";
 
-// import Button from "@material-ui/core/Button";
-
 // images
 import Layout from "../reusables/Layout";
 
@@ -92,6 +90,16 @@ const useStyles = makeStyles({
 		"&:hover": {
 			color: "gray"
 		}
+	},
+	margin: {
+		marginLeft: "95%",
+		marginTop: "65%",
+		display: "flex",
+		alignItems: "baseline"
+	},
+	noClasses: {
+		fontSize: "30px",
+		color: "gray"
 	}
 });
 export const Admin = props => {
@@ -317,9 +325,21 @@ export const Admin = props => {
 															)
 													)
 											) : (
-												<TableRow>
-													<td style={{ fontSize: "16px", padding: "10px" }}>
-														No Results Found...
+												<TableRow className={classes.margin}>
+													<td className={classes.noClasses}>
+														<span
+															style={{
+																display: "flex",
+																minWidth: "max-content"
+															}}
+														>
+															No Results Found
+															<div className="spinner">
+																<div className="bounce1"></div>
+																<div className="bounce2"></div>
+																<div className="bounce3"></div>
+															</div>
+														</span>
 													</td>
 												</TableRow>
 											)}

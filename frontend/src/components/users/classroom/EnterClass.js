@@ -17,8 +17,7 @@ export default function EnterClass({
 			classroomUsers &&
 				classroomUsers.filter(x => x.user_id === user.id).map(x => x.class_id)
 		);
-		// eslint-disable-next-line
-	}, [classroomUsers]);
+	}, [classroomUsers, user.id]);
 
 	return (
 		<>

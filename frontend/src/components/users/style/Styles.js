@@ -206,10 +206,10 @@ export const ClassViewStyle = makeStyles(theme => ({
 	},
 	codeStyle: {
 		fontSize: "14px",
+		fontWeight: "bold",
 		cursor: "pointer",
 		"&:hover": {
-			background: "gray",
-			color: "white"
+			background: "gray"
 		}
 	}
 }));

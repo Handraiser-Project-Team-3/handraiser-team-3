@@ -189,8 +189,8 @@ export default function ChatBox(props) {
 					container
 					direction="column"
 					style={{
-						padding: "20px 10px 10px 10px",
-						height: 500
+						padding: "20px 10px 10px 10px"
+						// height: 500
 					}}
 				>
 					{room === null && !!user ? (

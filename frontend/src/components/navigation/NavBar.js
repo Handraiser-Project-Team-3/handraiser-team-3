@@ -51,14 +51,14 @@ const useStyles = makeStyles(theme => ({
 	nested: {
 		"&:hover": {
 			background:
-				"linear-gradient(90deg, rgba(86,55,140,1) 0%, rgba(192,162,255,1) 21%, rgba(171,171,250,1) 41%, rgba(255,255,255,1) 100%)",
+				"linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
 			color: "whitesmoke"
 		}
 	},
 	enrolled: {
 		"&:hover": {
 			background:
-				"linear-gradient(90deg, rgba(86,55,140,1) 0%, rgba(192,162,255,1) 21%, rgba(171,171,250,1) 41%, rgba(255,255,255,1) 100%)",
+				"linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
 			color: "whitesmoke"
 		}
 	},
@@ -76,13 +76,13 @@ export default function ButtonAppBar(props) {
 	const { user, setUser, setAccessToken, headers, socket } = props.data;
 	const userDetails = user ? user : {};
 	const { user_image, id, account_type_id } = userDetails;
-
 	const history = useHistory();
 	const MyComponent = props.component;
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const [show, setShow] = useState(true);
+	const [Open, setOpen] = useState(false);
 	const [classRoom, setClassRoom] = useState([]);
 	const classId = props.match && props.match.params.id;
 	const [state, setState] = React.useState({
@@ -94,11 +94,11 @@ export default function ButtonAppBar(props) {
 	const handleClass = () => {
 		history.push("/");
 	};
-	// const handleClickRoom = classID => {
-	// 	history.push(`/classroom/${classID}`);
-	// };
 	const handleClick = () => {
 		setShow(!show);
+	};
+	const handleClickOpen = () => {
+		setOpen(!Open);
 	};
 	const handleMenu = event => {
 		setAnchorEl(event.currentTarget);
@@ -114,7 +114,6 @@ export default function ButtonAppBar(props) {
 		) {
 			return;
 		}
-
 		axios.get(`/api/classroom-users`, headers).then(e => {
 			Promise.all(
 				e.data
@@ -130,14 +129,14 @@ export default function ButtonAppBar(props) {
 		});
 		setState({ ...state, [side]: open });
 	};
-
-	const sideList = side => (
+	const sideList = (side, socket) => (
 		<div
 			className={classes.list}
 			role="presentation"
 			onClick={toggleDrawer(side, true)}
 			onKeyDown={toggleDrawer(side, true)}
 		>
+			{console.log(classRoom)}
 			<List
 				component="nav"
 				aria-labelledby="nested-list-subheader"
@@ -150,14 +149,16 @@ export default function ButtonAppBar(props) {
 			>
 				<ListItem button className={classes.nested}>
 					<ClassIcon />
-
 					<ListItemText
 						primary="Classes"
-						onClick={handleClass}
+						onClick={() => {
+							handleClass();
+							socket.off();
+						}}
 						style={{ width: "20px", paddingLeft: "20px" }}
 					/>
 				</ListItem>
-
+				{/* secondDropDown */}
 				<ListItem
 					button
 					onClick={handleClick}
@@ -165,15 +166,43 @@ export default function ButtonAppBar(props) {
 					className={classes.enrolled}
 				>
 					<InboxIcon />
-
 					<ListItemText
-						primary={account_type_id === 2 ? "Subjects Handled" : "Enrolled"}
+						primary={account_type_id === 2 ? "Subjects Handled " : "Enrolled"}
 						style={{ width: "20px", paddingLeft: "20px" }}
 					/>
 					{show ? <ExpandLess /> : <ExpandMore />}
 				</ListItem>
 				<Collapse in={!show} timeout="auto" unmountOnExit>
 					<List component="div" disablePadding>
+						{classRoom.length === 0 ? (
+							<div
+								style={{
+									display: "flex",
+									marginLeft: "20px",
+									marginTop: "25px"
+								}}
+							>
+								<div>
+									<div className="spinner">
+										<div className="bounce1"></div>
+										<div className="bounce2"></div>
+										<div className="bounce3"></div>
+									</div>
+								</div>
+								<span className={classes.noClasses} style={{ color: "blue" }}>
+									{account_type_id === 3
+										? "Not Enrolled Yet"
+										: "Theres no Subject Handle Yet"}
+								</span>
+								<div className="spinner">
+									<div className="bounce1"></div>
+									<div className="bounce2"></div>
+									<div className="bounce3"></div>
+								</div>
+							</div>
+						) : (
+							<></>
+						)}
 						{classRoom &&
 							classRoom.map(rooms =>
 								rooms.class_status === true ? (
@@ -183,8 +212,11 @@ export default function ButtonAppBar(props) {
 											key={rooms.id}
 											button
 											className={classes.nested}
+											onClick={() => {
+												socket.off();
+											}}
 										>
-											<StarBorder />​
+											<StarBorder />
 											<ListItemText
 												style={{
 													width: "20px",
@@ -200,6 +232,34 @@ export default function ButtonAppBar(props) {
 									<></>
 								)
 							)}
+					</List>
+				</Collapse>
+				{/* thirdDropDown */}
+				<ListItem
+					button
+					onClick={handleClickOpen}
+					style={{ display: account_type_id >= 2 ? "flex" : "none" }}
+					className={classes.enrolled}
+				>
+					<InboxIcon />
+					<ListItemText
+						primary={account_type_id === 2 ? "Subjects " : "Enrolled"}
+						style={{ width: "20px", paddingLeft: "20px" }}
+					/>
+					{show ? <ExpandLess /> : <ExpandMore />}
+				</ListItem>
+				<Collapse in={Open} timeout="auto" unmountOnExit>
+					<List component="div" disablePadding>
+						<ListItem button className={classes.nested}>
+							<StarBorder />
+							<ListItemText
+								style={{
+									width: "20px",
+									paddingLeft: "20px"
+								}}
+								primary="Starred"
+							/>
+						</ListItem>
 					</List>
 				</Collapse>
 			</List>
@@ -220,10 +280,10 @@ export default function ButtonAppBar(props) {
 							<MenuIcon />
 						</IconButton>
 						<Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-							{sideList("left")}
+							{sideList("left", socket)}
 						</Drawer>
 						<Typography variant="h6" className={classes.title}>
-							<Link to="/">
+							<Link to="/" onClick={() => socket.off()}>
 								<img src={logo} className={classes.logo} alt="logo" />
 							</Link>
 						</Typography>
@@ -280,6 +340,7 @@ export default function ButtonAppBar(props) {
 		</>
 	);
 }
+
 const Btn = styled.span`
 	display: flex;
 	align-items: center;

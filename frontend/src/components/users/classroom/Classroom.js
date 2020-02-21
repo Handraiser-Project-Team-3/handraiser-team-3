@@ -247,7 +247,11 @@ export default function Classroom(props) {
 								<Grid item xs={11}>
 									<Typography
 										variant="h6"
-										style={{ padding: "8px", paddingLeft: "20px" }}
+										style={{
+											padding: "9px",
+											paddingLeft: "20px",
+											color: "#6d52cb"
+										}}
 									>
 										Members
 									</Typography>

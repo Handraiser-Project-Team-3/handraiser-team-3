@@ -55,7 +55,7 @@ export default function ClassDescription({ classDetails }) {
 			</Paper>
 			<Paper elevation={5} className={classes.bannerFlip}>
 				<Grid
-					style={{ height: "177px", padding: "30px" }}
+					style={{ height: "181px", padding: "30px" }}
 					container
 					alignItems="center"
 					justify="flex-start"
