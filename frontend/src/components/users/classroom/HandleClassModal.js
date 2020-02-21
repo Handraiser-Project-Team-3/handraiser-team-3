@@ -116,6 +116,7 @@ export const HandleClassModal = props => {
 				.then(() =>
 					axios.get(`/api/class?id=${userId}`, headers).then(res => {
 						setClassList(res.data);
+						setFilter(res.data);
 						setOpen(false);
 						setClassRoom({
 							class_name: "",

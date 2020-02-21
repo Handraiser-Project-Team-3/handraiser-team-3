@@ -68,7 +68,8 @@ export default function(props) {
 		account_type_id,
 		open,
 		setOpen,
-		requests
+		requests,
+		classroomUser
 	} = props;
 
 	const { register, errors, setError, handleSubmit, clearError } = useForm();
@@ -98,8 +99,11 @@ export default function(props) {
 			]);
 		} else {
 			if (!!requests) {
-				requests.filter(req => req.status === null || req.status === false)
-					.length <= 0
+				requests.filter(
+					req =>
+						(req.status === null || req.status === false) &&
+						req.student_id === classroomUser.id
+				).length === 0
 					? setActions([
 							{
 								icon: (
@@ -134,7 +138,7 @@ export default function(props) {
 										/>
 									</span>
 								),
-								name: "You can only have 1 request",
+								name: "You can only have 1 request at a time",
 								func: () => {}
 							},
 							{

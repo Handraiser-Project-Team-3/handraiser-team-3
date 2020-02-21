@@ -29,6 +29,10 @@ export default function ChatBox(props) {
 	const { room, user, headers, socket, isTyping, setIsTyping } = props.data;
 	const [show, setShow] = React.useState(false);
 
+	const lastMessage = React.useRef(null);
+	const scrollToBottom = () => {
+		lastMessage.current.scrollIntoView({ behavior: "smooth" });
+	};
 	const handleClose = () => {
 		setShow(true);
 	};
@@ -51,13 +55,12 @@ export default function ChatBox(props) {
 			message: {
 				user_id: user.id,
 				student_request_id: room.id,
-				content: msg.replace(/\n/g, "</br>")
+				content: msg
 			}
 		});
 		socket.emit(`is_typing`, null, room);
 		setMsg("");
 	};
-
 	React.useEffect(() => {
 		if (!!room) {
 			socket.on(`typing`, (user, { data }) => {
@@ -69,6 +72,7 @@ export default function ChatBox(props) {
 		socket.on(`new_message`, message => {
 			setMessages([...messages, message]);
 		});
+		scrollToBottom();
 	}, [messages, room, socket, setIsTyping]);
 	React.useEffect(() => {
 		if (!!room && !!headers) {
@@ -85,8 +89,8 @@ export default function ChatBox(props) {
 		}
 	}, [room, headers]);
 	return (
-		<Paper className={classes.root} elevation={5}>
-			<Paper className={classes.top}>
+		<Paper elevation={5} className={classes.root}>
+			<Paper className={classes.top} elevation={3}>
 				<Grid className={classes.topName}>
 					{user && room !== null ? (
 						user.account_type_id === 2 ? (
@@ -181,11 +185,12 @@ export default function ChatBox(props) {
 				) : (
 					""
 				)}
-				<div
+				<Grid
+					container
+					direction="column"
 					style={{
-						display: "flex",
-						flexDirection: "column",
-						padding: "20px 10px 10px 10px"
+						padding: "20px 10px 10px 10px",
+						height: 500
 					}}
 				>
 					{room === null && !!user ? (
@@ -205,15 +210,16 @@ export default function ChatBox(props) {
 						messages
 							.filter(x => x.student_request_id === room.id)
 							.map((x, i) => (
-								<MessageBox
-									key={x.id}
-									data={x}
-									headers={headers}
-									user={user}
-									index={i}
-									messages={messages}
-									isTyping={isTyping}
-								/>
+								<div key={i}>
+									<MessageBox
+										data={x}
+										headers={headers}
+										user={user}
+										index={i}
+										messages={messages}
+										isTyping={isTyping}
+									/>
+								</div>
 							))
 					) : (
 						""
@@ -222,7 +228,7 @@ export default function ChatBox(props) {
 					{isTyping !== null
 						? isTyping.user && isTyping.data
 							? isTyping.data.id === room.id && (
-									<Div style={{ flexDirection: "row" }}>
+									<Grid container>
 										<Avatar src={isTyping.user.user_image} />
 
 										<Msg
@@ -237,14 +243,15 @@ export default function ChatBox(props) {
 												<span></span>
 											</TypingIndicator>
 										</Msg>
-									</Div>
+									</Grid>
 							  )
 							: ""
 						: ""}
-				</div>
+					<div ref={lastMessage} />
+				</Grid>
 			</Paper>
 			<form onSubmit={handleSubmit}>
-				<Paper className={classes.inputAreacontainer}>
+				<Paper className={classes.inputAreacontainer} elevation={6}>
 					<TextField
 						disabled={!room}
 						variant="outlined"
@@ -295,16 +302,11 @@ const MessageBox = props => {
 			});
 	}, [headers, data]);
 	return (
-		<Div
-			style={
-				user.id === data.user_id
-					? {
-							flexDirection: "row-reverse"
-					  }
-					: {
-							flexDirection: "row"
-					  }
-			}
+		<Grid
+			container
+			alignItems="flex-end"
+			style={{ padding: "0 5px 10px 5px" }}
+			direction={user.id === data.user_id ? "row-reverse" : "row"}
 		>
 			{user.id !== data.user_id ? (
 				isTyping === null ? (
@@ -329,7 +331,6 @@ const MessageBox = props => {
 			) : (
 				""
 			)}
-
 			<Msg
 				style={
 					user.id === data.user_id
@@ -346,14 +347,10 @@ const MessageBox = props => {
 			>
 				{ReactHtmlParser(data.content)}
 			</Msg>
-		</Div>
+		</Grid>
 	);
 };
-const Div = styled.div`
-	padding: 0 5px 10px 5px;
-	display: flex;
-	align-items: flex-end;
-`;
+
 const Msg = styled.span`
 	display: flex;
 	position: static;
@@ -366,7 +363,7 @@ const Msg = styled.span`
 const TypingIndicator = styled.span`
 	span {
 		display: inline-block;
-		background-color: purple;
+		background-color: #ff6f61;
 		width: 5px;
 		height: 5px;
 		border-radius: 50%;

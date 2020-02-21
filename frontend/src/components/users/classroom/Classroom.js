@@ -25,7 +25,9 @@ import ClassDescription from "../reusables/ClassDescription";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { RequestComponent } from "./student-request/RequestComponent";
 import Profile from "../reusables/Profile";
-import NotifyDeleted from "../reusables/NotifyDeleted";
+import NotifyRemoved from "../reusables/NotifyRemoved";
+
+import { confirmAlert } from "react-confirm-alert";
 
 // images
 import {
@@ -85,10 +87,10 @@ export default function Classroom(props) {
 	const [classDetails, setClassDetails] = React.useState({});
 	const [room, setRoom] = React.useState(null);
 	const [list, setList] = useState(false);
-	const [verify, setVerify] = React.useState([]);
 	const [isTyping, setIsTyping] = React.useState(null);
 
-	const [notifyDeleted, setNotifyDeleted] = useState(false);
+	const [notifyRemovedUser, setNotifyRemovedUser] = useState(false);
+	const [closedClass, setClosedClass] = useState(false);
 	const [requestDialog, setRequestDialog] = React.useState(false);
 	const history = useHistory();
 
@@ -102,29 +104,39 @@ export default function Classroom(props) {
 					data.filter(x => x.class_id === Number(classId))
 				);
 			});
-			socket.on(`deleted_class`, ({ classList }) => {
+			socket.on(`removed_user`, ({ classList }) => {
 				classList.filter(classX => classX.id === classId).length === 0 &&
-					setNotifyDeleted(true);
+					setNotifyRemovedUser(true);
+			});
+			socket.on(`notify_class`, ({ data }) => {
+				data[0].id === Number(classId) && setClosedClass(true);
 			});
 		}
 	}, [classId, socket]);
 
 	React.useEffect(() => {
+		if (!!classroomUser && !!classId) {
+			socket.on(`notify_removed_user`, data => {
+				data.id === classroomUser.id && setNotifyRemovedUser(true);
+			});
+		}
+	}, [classroomUser, classId, socket]);
+
+	React.useEffect(() => {
 		if ((!!user && !!headers && !!classId) === true) {
 			getClassroomUser(headers).then(res => {
-				setVerify(
-					res.data
-						.filter(x => x.user_id === user.id)
-						.map(x => x.class_id)
-						.map(String)
+				setClassroomUser(
+					res.data.filter(
+						x => x.user_id === user.id && x.class_id === Number(classId)
+					)[0]
 				);
-				setClassroomUser(res.data.filter(x => x.user_id === user.id)[0]);
 				setClassroomUsersArray(
 					res.data.filter(x => x.class_id === Number(classId))
 				);
 			});
 			class_details(classId, headers).then(res => {
 				setClassDetails(res.data);
+				res.data.class_status === false && setClosedClass(true);
 			});
 		}
 	}, [user, headers, classId]);
@@ -143,13 +155,14 @@ export default function Classroom(props) {
 			socket.emit(`join_classroom`, {
 				classId: classId
 			});
+			socket.on(`update_request_list`, (data, action) => {
+				setRequests(data);
+				if (action === "move_back" || action === "remove") {
+					setRoom(null);
+				}
+			});
 		}
-		socket.on(`update_request_list`, (data, action) => {
-			setRequests(data);
-			if (action === "move_back" || action === "remove") {
-				setRoom(null);
-			}
-		});
+		return () => socket.emit(`leave_class`, { classId: classId });
 	}, [classId, socket]);
 
 	React.useEffect(() => {
@@ -184,15 +197,11 @@ export default function Classroom(props) {
 	};
 	// routes restriction
 	React.useEffect(() => {
-		if (verify.length) {
-			if (classId === verify.find(x => x === classId)) {
-				history.push(`/classroom/${classId}`);
-			} else {
-				alertToast("You are not Authorize to enter this room!");
-				history.replace("/");
-			}
+		if (!classroomUser) {
+			alertToast("You are not Authorized to enter this room!");
+			history.replace("/");
 		}
-	}, [verify, classId, history]);
+	}, [classroomUser, history]);
 
 	const handleSubmitNewRquest = () => {
 		const obj = {
@@ -224,7 +233,7 @@ export default function Classroom(props) {
 								variant="fullWidth"
 								aria-label="full width tabs example"
 							>
-								<Tab label="Needs Help" {...a11yProps(0)} />
+								<Tab label="Need Help" {...a11yProps(0)} />
 								<Tab label="Being Helped" {...a11yProps(1)} />
 								<Tab label="Done" {...a11yProps(2)} />
 							</Tabs>
@@ -283,13 +292,12 @@ export default function Classroom(props) {
 									</Grid>
 									<Grid item xs={1}>
 										{account_type_id === 2 && x.user_id !== user.id && (
-											<Tooltip title="Remove from list">
-												<RemoveIcon
-													fontSize="small"
-													color="secondary"
-													cursor="pointer"
-												/>
-											</Tooltip>
+											<RemoveUserComponent
+												data={x}
+												headers={headers}
+												socket={socket}
+												setRoom={setRoom}
+											/>
 										)}
 									</Grid>
 								</Grid>
@@ -375,6 +383,7 @@ export default function Classroom(props) {
 						list={list}
 						account_type_id={account_type_id}
 						requests={requests}
+						classroomUser={classroomUser}
 					/>
 				</Grid>
 
@@ -387,7 +396,16 @@ export default function Classroom(props) {
 					isTyping={isTyping}
 					setIsTyping={setIsTyping}
 				/>
-				<NotifyDeleted open={notifyDeleted} setOpen={setNotifyDeleted} />
+				<NotifyRemoved
+					open={notifyRemovedUser}
+					setOpen={setNotifyRemovedUser}
+					action={"removed_user"}
+				/>
+				<NotifyRemoved
+					open={closedClass}
+					setOpen={setClosedClass}
+					action={"class_closed"}
+				/>
 			</Grid>
 		</Layout>
 	);
@@ -441,3 +459,50 @@ const OnlineIndicator = ({ data, headers }) => {
 		</>
 	);
 };
+
+const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
+	const [user, setUser] = React.useState({});
+
+	React.useEffect(() => {
+		if (!!data && !!headers) {
+			user_details(data.user_id, headers).then(res => setUser(res.data));
+		}
+	}, [data, headers]);
+	return (
+		<Tooltip title="Remove from class">
+			<RemoveIcon
+				fontSize="small"
+				color="secondary"
+				cursor="pointer"
+				onClick={() => {
+					handleSubmitAction(
+						`Remove ${!!user && user.first_name} from class?`,
+						() => {
+							setRoom(null);
+							socket.emit(`remove_class_user`, {
+								userId: data.id,
+								classroomId: data.class_id
+							});
+						}
+					);
+				}}
+			/>
+		</Tooltip>
+	);
+};
+
+const handleSubmitAction = (title, submit) =>
+	confirmAlert({
+		title: title,
+		message: " ",
+		buttons: [
+			{
+				label: "Yes",
+				onClick: submit
+			},
+			{
+				label: "No",
+				onClick: () => {}
+			}
+		]
+	});
