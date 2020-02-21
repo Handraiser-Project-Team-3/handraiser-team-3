@@ -84,6 +84,16 @@ const useStyles = makeStyles({
   tableHeight: {
     height: "65.5vh"
   },
+  margin: {
+    marginLeft: "95%",
+    marginTop: "65%",
+    display: "flex",
+    alignItems: "baseline"
+  },
+  noClasses: {
+    fontSize: "30px",
+    color: "gray"
+  },
   filter: {
     cursor: "pointer",
     color: "#3f51b5",
@@ -121,7 +131,7 @@ export const Admin = props => {
   //     .delete(`/api/user/${classid}`, headers)
   //     .then(() => setUsers(users.filter(data => data.id !== classid)));
   // };
-  //
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -249,13 +259,13 @@ export const Admin = props => {
                                       style={
                                         userType === 3
                                           ? {
-                                            borderColor: "#aaaafa",
-                                            color: "#616161"
-                                          }
+                                              borderColor: "#aaaafa",
+                                              color: "#616161"
+                                            }
                                           : {
-                                            borderColor: "#f7b733",
-                                            color: "#616161"
-                                          }
+                                              borderColor: "#f7b733",
+                                              color: "#616161"
+                                            }
                                       }
                                     />
                                   </StyledTableCell>
@@ -287,10 +297,10 @@ export const Admin = props => {
                                           }}
                                         />
                                         {/* <div
-																					onClick={() => deleteClass(row.id)}
-																				>
-																					delete
-																				</div> */}
+                                          onClick={() => deleteClass(row.id)}
+                                        >
+                                          delete
+                                        </div> */}
                                       </>
                                     )}
                                     {row.account_type_id === 2 && (
@@ -315,10 +325,24 @@ export const Admin = props => {
                               )
                           )
                       ) : (
-                          <TableRow>
-                            <td>no results found</td>
-                          </TableRow>
-                        )}
+                        <TableRow className={classes.margin}>
+                          <td className={classes.noClasses}>
+                            <span
+                              style={{
+                                display: "flex",
+                                minWidth: "max-content"
+                              }}
+                            >
+                              No Results Found
+                              <div className="spinner">
+                                <div className="bounce1"></div>
+                                <div className="bounce2"></div>
+                                <div className="bounce3"></div>
+                              </div>
+                            </span>
+                          </td>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -339,15 +363,15 @@ export const Admin = props => {
                     />
                   </Grid>
                 ) : (
-                    <Grid
-                      style={{
-                        marginTop: 65,
-                        marginBottom: 10,
-                        display: "flex",
-                        justifyContent: "center"
-                      }}
-                    ></Grid>
-                  )}
+                  <Grid
+                    style={{
+                      marginTop: 65,
+                      marginBottom: 10,
+                      display: "flex",
+                      justifyContent: "center"
+                    }}
+                  ></Grid>
+                )}
               </Paper>
             </Grid>
           </Grid>

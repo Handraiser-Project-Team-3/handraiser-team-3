@@ -178,6 +178,9 @@ export const HandleClassModal = props => {
               variant="outlined"
               style={{ width: "100%" }}
               onChange={handleInput}
+              inputProps={{
+                maxLength: 425
+              }}
             />
 
             <DialogActions>

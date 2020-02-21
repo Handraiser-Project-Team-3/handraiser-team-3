@@ -16,7 +16,7 @@ export default function AddEmail(props) {
     setEmail(e.target.value);
   }
   function handleClickAdd(email) {
-    const EmailVal = /^\w+([-]?\w+)*@\w+(boom)*(\.camp)+$/;
+    const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/; // eslint-disable-line
 
     if (email.match(EmailVal)) {
       axios
@@ -34,9 +34,9 @@ export default function AddEmail(props) {
           toast.info("Email Address has been Added!");
           setEmail("");
         })
-        .catch(err => toast.error("Email already taken!"));
+        .catch(() => errorToast("Email already taken!"));
     } else {
-      toast.error("Please Enter Valid Email Address");
+      errorToast("Please Enter Valid Email Address");
     }
   }
   return (
@@ -96,3 +96,18 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   }
 });
+
+// toast
+let toastId = null;
+const errorToast = msg => {
+  if (!toast.isActive(toastId)) {
+    toastId = toast.error(msg, {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 3000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
+  }
+};
