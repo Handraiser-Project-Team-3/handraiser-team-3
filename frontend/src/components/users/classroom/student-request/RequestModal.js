@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function(props) {
+export default function (props) {
   /* eslint-disable */
   const classes = useStyles();
   const {
@@ -68,7 +68,8 @@ export default function(props) {
     account_type_id,
     open,
     setOpen,
-    requests
+    requests,
+    classroomUser
   } = props;
 
   const { register, errors, setError, handleSubmit, clearError } = useForm();
@@ -98,51 +99,54 @@ export default function(props) {
       ]);
     } else {
       if (!!requests) {
-        requests.filter(req => req.status === null || req.status === false)
-          .length <= 0
+        requests.filter(
+          req =>
+            (req.status === null || req.status === false) &&
+            req.student_id === classroomUser.id
+        ).length === 0
           ? setActions([
-              {
-                icon: (
+            {
+              icon: (
+                <PanToolIcon
+                  style={{ margin: "0 0 0 -3px", color: "#00579b" }}
+                />
+              ),
+              name: "Raise your concern",
+              func: () => setOpen(!open)
+            },
+            {
+              icon: <ListIcon style={{ color: "#00579b" }} />,
+              name: "List of Members",
+              func: () => setList(!list)
+            }
+          ])
+          : setActions([
+            {
+              icon: (
+                <span>
                   <PanToolIcon
                     style={{ margin: "0 0 0 -3px", color: "#00579b" }}
                   />
-                ),
-                name: "Raise your concern",
-                func: () => setOpen(!open)
-              },
-              {
-                icon: <ListIcon style={{ color: "#00579b" }} />,
-                name: "List of Members",
-                func: () => setList(!list)
-              }
-            ])
-          : setActions([
-              {
-                icon: (
-                  <span>
-                    <PanToolIcon
-                      style={{ margin: "0 0 0 -3px", color: "#00579b" }}
-                    />
-                    <NotInterestedIcon
-                      style={{
-                        position: "absolute",
-                        left: 0,
-                        bottom: 0,
-                        fontSize: 40,
-                        color: "#ff6f61"
-                      }}
-                    />
-                  </span>
-                ),
-                name: "You can only have 2 requests",
-                func: () => {}
-              },
-              {
-                icon: <ListIcon style={{ color: "#00579b" }} />,
-                name: "List of Members",
-                func: () => setList(!list)
-              }
-            ]);
+                  <NotInterestedIcon
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      fontSize: 40,
+                      color: "#ff6f61"
+                    }}
+                  />
+                </span>
+              ),
+              name: "You can only have 1 request at a time",
+              func: () => { }
+            },
+            {
+              icon: <ListIcon style={{ color: "#00579b" }} />,
+              name: "List of Members",
+              func: () => setList(!list)
+            }
+          ]);
       }
     }
   }, [account_type_id, requests, setList, list, open, setOpen]);

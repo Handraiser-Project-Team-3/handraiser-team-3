@@ -8,16 +8,14 @@ import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ReactHtmlParser from "react-html-parser";
 import TextField from "@material-ui/core/TextField";
-import {
-  user_details,
-  getClassroomUserDetails
-} from "../reusables/UserDetails";
+import { user_details, getClassroomUserDetails } from "../reusables/UserDetails";
 import styled from "styled-components";
 import Axios from "axios";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import ReactHtmlParser from "react-html-parser";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -28,6 +26,10 @@ export default function ChatBox(props) {
   const { room, user, headers, socket, isTyping, setIsTyping } = props.data;
   const [show, setShow] = React.useState(false);
 
+  const lastMessage = React.useRef(null);
+  const scrollToBottom = () => {
+    lastMessage.current.scrollIntoView({ behavior: "smooth" });
+  };
   const handleClose = () => {
     setShow(true);
   };
@@ -66,6 +68,7 @@ export default function ChatBox(props) {
     socket.on(`new_message`, message => {
       setMessages([...messages, message]);
     });
+    scrollToBottom();
   }, [messages, room, socket, setIsTyping]);
   React.useEffect(() => {
     if (!!room && !!headers) {
@@ -90,16 +93,16 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                <img src={bubbles} style={{ width: 45 }} alt="" />
-              )
+                  <img src={bubbles} style={{ width: 45 }} alt="" />
+                )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-              <img src={bubbles} style={{ width: 45 }} alt="" />
-            )
+                  <img src={bubbles} style={{ width: 45 }} alt="" />
+                )
           ) : (
-            <img src={bubbles} style={{ width: 45 }} alt="" />
-          )}
+              <img src={bubbles} style={{ width: 45 }} alt="" />
+            )}
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
@@ -110,8 +113,8 @@ export default function ChatBox(props) {
                   ? `${student.first_name} ${student.last_name}`
                   : ""
                 : mentor !== null
-                ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-                : ""
+                  ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
+                  : ""
               : ""}
           </Typography>
         </Grid>
@@ -160,13 +163,14 @@ export default function ChatBox(props) {
             </Grid>
           </div>
         ) : (
-          ""
-        )}
+            ""
+          )}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "20px 10px 10px 10px"
+            padding: "20px 10px 10px 10px",
+            height: 500
           }}
         >
           {room === null && !!user ? (
@@ -198,31 +202,32 @@ export default function ChatBox(props) {
                 </div>
               ))
           ) : (
-            ""
-          )}
+                ""
+              )}
 
           {isTyping !== null
             ? isTyping.user && isTyping.data
               ? isTyping.data.id === room.id && (
-                  <Div style={{ flexDirection: "row" }}>
-                    <Avatar src={isTyping.user.user_image} />
+                <Div style={{ flexDirection: "row" }}>
+                  <Avatar src={isTyping.user.user_image} />
 
-                    <Msg
-                      style={{
-                        borderRadius: "20px 20px 20px 0",
-                        border: "2px solid #ff6f61"
-                      }}
-                    >
-                      <TypingIndicator>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </TypingIndicator>
-                    </Msg>
-                  </Div>
-                )
+                  <Msg
+                    style={{
+                      borderRadius: "20px 20px 20px 0",
+                      border: "2px solid #ff6f61"
+                    }}
+                  >
+                    <TypingIndicator>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </TypingIndicator>
+                  </Msg>
+                </Div>
+              )
               : ""
             : ""}
+          <div ref={lastMessage} />
         </div>
       </Paper>
       <form onSubmit={handleSubmit}>
@@ -283,11 +288,11 @@ const MessageBox = props => {
       style={
         user.id === data.user_id
           ? {
-              flexDirection: "row-reverse"
-            }
+            flexDirection: "row-reverse"
+          }
           : {
-              flexDirection: "row"
-            }
+            flexDirection: "row"
+          }
       }
     >
       {user.id !== data.user_id ? (
@@ -296,34 +301,34 @@ const MessageBox = props => {
             messages[index + 1].user_id === data.user_id ? (
               <span style={{ width: 40 }} />
             ) : (
+                <Avatar src={sender ? sender.user_image : ""} />
+              )
+          ) : (
               <Avatar src={sender ? sender.user_image : ""} />
             )
-          ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
         ) : messages[index + 1] ? (
           messages[index + 1].user_id === data.user_id ? (
             <span style={{ width: 40 }} />
           ) : (
-            <Avatar src={sender ? sender.user_image : ""} />
-          )
+              <Avatar src={sender ? sender.user_image : ""} />
+            )
         ) : (
-          <span style={{ width: 40 }} />
-        )
+              <span style={{ width: 40 }} />
+            )
       ) : (
-        ""
-      )}
+          ""
+        )}
       <Msg
         style={
           user.id === data.user_id
             ? {
-                borderRadius: "20px 20px 0 20px",
-                background: "#ababfa"
-              }
+              borderRadius: "20px 20px 0 20px",
+              background: "#ababfa"
+            }
             : {
-                borderRadius: "20px 20px 20px 0",
-                border: "2px solid #ff6f61"
-              }
+              borderRadius: "20px 20px 20px 0",
+              border: "2px solid #ff6f61"
+            }
         }
       >
         {ReactHtmlParser(data.content)}

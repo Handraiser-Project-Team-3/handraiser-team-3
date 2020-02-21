@@ -20,8 +20,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import { Typography } from "@material-ui/core";
 
-// import Button from "@material-ui/core/Button";
-
 // images
 import Layout from "../reusables/Layout";
 
@@ -251,13 +249,13 @@ export const Admin = props => {
                                       style={
                                         userType === 3
                                           ? {
-                                              borderColor: "#aaaafa",
-                                              color: "#616161"
-                                            }
+                                            borderColor: "#aaaafa",
+                                            color: "#616161"
+                                          }
                                           : {
-                                              borderColor: "#f7b733",
-                                              color: "#616161"
-                                            }
+                                            borderColor: "#f7b733",
+                                            color: "#616161"
+                                          }
                                       }
                                     />
                                   </StyledTableCell>
@@ -317,10 +315,10 @@ export const Admin = props => {
                               )
                           )
                       ) : (
-                        <TableRow>
-                          <td>no results found</td>
-                        </TableRow>
-                      )}
+                          <TableRow>
+                            <td>no results found</td>
+                          </TableRow>
+                        )}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -341,15 +339,15 @@ export const Admin = props => {
                     />
                   </Grid>
                 ) : (
-                  <Grid
-                    style={{
-                      marginTop: 65,
-                      marginBottom: 10,
-                      display: "flex",
-                      justifyContent: "center"
-                    }}
-                  ></Grid>
-                )}
+                    <Grid
+                      style={{
+                        marginTop: 65,
+                        marginBottom: 10,
+                        display: "flex",
+                        justifyContent: "center"
+                      }}
+                    ></Grid>
+                  )}
               </Paper>
             </Grid>
           </Grid>

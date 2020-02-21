@@ -73,15 +73,15 @@ export default function Search(props) {
     filter &&
       (typeId === 1
         ? setUsers(
-            filter.filter(row =>
-              row.email.toLowerCase().startsWith(searchTerm.toLowerCase())
-            )
+          filter.filter(row =>
+            row.email.toLowerCase().startsWith(searchTerm.toLowerCase())
           )
+        )
         : setClassList(
-            filter.filter(row =>
-              row.class_name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-          ));
+          filter.filter(row =>
+            row.class_name.toLowerCase().startsWith(searchTerm.toLowerCase())
+          )
+        ));
 
     // eslint-disable-next-line
   }, [searchTerm]);

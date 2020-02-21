@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
-import copy from "clipboard-copy";
 import axios from "axios";
 import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
@@ -26,6 +25,7 @@ import { JoinClassModal } from "./JoinClassModal";
 import { UserDetails, user_details } from "../reusables/UserDetails";
 import { ClassViewStyle } from "../style/Styles";
 import CountUsers from "../reusables/CountUsers";
+import HandleForm from "./HandleForm";
 
 // images
 import classroom from "../../assets/images/classroom.jpg";
@@ -102,6 +102,9 @@ export const ClassView = props => {
         res.data[0].class_status === false
           ? alertToast("Class Disabled")
           : alertToast("Class Enabled");
+        if (res.data[0].class_status === false) {
+          socket.emit(`closed_class`, res.data);
+        }
       });
   };
   const handleClickOpen = () => {
@@ -226,8 +229,8 @@ export const ClassView = props => {
                           </Grid>
                         </Grid>
                       ) : (
-                        ""
-                      )}
+                          ""
+                        )}
                     </CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -239,10 +242,10 @@ export const ClassView = props => {
                         title={
                           data.class_description.length > 45
                             ? data.class_description
-                                .split("\n")
-                                .map((item, i) => (
-                                  <Typography key={i}>{item}</Typography>
-                                ))
+                              .split("\n")
+                              .map((item, i) => (
+                                <Typography key={i}>{item}</Typography>
+                              ))
                             : ""
                         }
                       >
@@ -290,13 +293,13 @@ export const ClassView = props => {
                                   title={
                                     studentDetails.length
                                       ? studentDetails.map((res, i) => (
-                                          <Typography
-                                            style={{ fontSize: 12 }}
-                                            key={i}
-                                          >
-                                            {res}
-                                          </Typography>
-                                        ))
+                                        <Typography
+                                          style={{ fontSize: 12 }}
+                                          key={i}
+                                        >
+                                          {res}
+                                        </Typography>
+                                      ))
                                       : ""
                                   }
                                 >
@@ -371,18 +374,13 @@ export const ClassView = props => {
                                       </Typography>
                                     </Grid>
                                     <Grid item lg={12} xs={12}>
-                                      <Tooltip title="Click to copy code">
-                                        <b
-                                          onClick={() => copy(data.class_code)}
-                                        >
-                                          <Chip
-                                            variant="outlined"
-                                            size="small"
-                                            label={data.class_code}
-                                            className={classes.codeStyle}
-                                          />
-                                        </b>
-                                      </Tooltip>
+                                      <HandleForm
+                                        classId={data.id}
+                                        user={user}
+                                        data={data}
+                                        classes={classes}
+                                        headers={headers}
+                                      />
                                     </Grid>
                                   </Grid>
                                 </Grid>
@@ -390,49 +388,49 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                          <Grid
-                            container
-                            direction="row"
-                            alignItems="center"
-                            justify="space-between"
-                          >
-                            <Grid item xs={3}>
-                              <UserDetails
-                                id={data.user_id}
-                                headers={headers}
-                                action="img"
-                              />
-                            </Grid>
+                            <Grid
+                              container
+                              direction="row"
+                              alignItems="center"
+                              justify="space-between"
+                            >
+                              <Grid item xs={3}>
+                                <UserDetails
+                                  id={data.user_id}
+                                  headers={headers}
+                                  action="img"
+                                />
+                              </Grid>
 
-                            <Grid item xs={9}>
-                              <Grid
-                                container
-                                direction="column"
-                                alignItems="flex-start"
-                                justify="space-between"
-                              >
-                                <Grid item lg={12} xs={12}>
-                                  <Typography
-                                    gutterBottom
-                                    component="div"
-                                    variant="caption"
-                                  >
-                                    Mentor's Name:
+                              <Grid item xs={9}>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  alignItems="flex-start"
+                                  justify="space-between"
+                                >
+                                  <Grid item lg={12} xs={12}>
+                                    <Typography
+                                      gutterBottom
+                                      component="div"
+                                      variant="caption"
+                                    >
+                                      Mentor's Name:
                                   </Typography>
-                                </Grid>
-                                <Grid item lg={12} xs={12}>
-                                  <b>
-                                    <UserDetails
-                                      id={data.user_id}
-                                      headers={headers}
-                                      action="name"
-                                    />
-                                  </b>
+                                  </Grid>
+                                  <Grid item lg={12} xs={12}>
+                                    <b>
+                                      <UserDetails
+                                        id={data.user_id}
+                                        headers={headers}
+                                        action="name"
+                                      />
+                                    </b>
+                                  </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          </Grid>
-                        )}
+                          )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -487,51 +485,53 @@ export const ClassView = props => {
                         </Grid>
                       </Grid>
                     ) : (
-                      <Grid container direction="column" alignItems="center">
-                        <JoinClassModal
-                          classroomUsers={classroomUsers}
-                          className={data.class_name}
-                          codeClass={data.class_code}
-                          classId={data.id}
-                          user={user}
-                          headers={headers}
-                          socket={socket}
-                        />
-                      </Grid>
-                    )}
+                        <Grid container direction="column" alignItems="center">
+                          <JoinClassModal
+                            classroomUsers={classroomUsers}
+                            className={data.class_name}
+                            codeClass={data.class_code}
+                            classId={data.id}
+                            user={user}
+                            headers={headers}
+                            socket={socket}
+                          />
+                        </Grid>
+                      )}
                   </CardActions>
                 </Card>
               </Grid>
             ))
         ) : (
-          <div className={classes.margin}>
-            <span className={classes.noClasses}>
-              {filter.length ? "No Data Results" : "No added classes yet"}
-            </span>
-            <div className="spinner">
-              <div className="bounce1"></div>
-              <div className="bounce2"></div>
-              <div className="bounce3"></div>
+            <div className={classes.margin}>
+              <span className={classes.noClasses}>
+                {filter.length ? "No Data Results" : "No added classes yet"}
+              </span>
+              <div className="spinner">
+                <div className="bounce1"></div>
+                <div className="bounce2"></div>
+                <div className="bounce3"></div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </Grid>
-      {classList.length > 8 ? (
-        <Grid
-          style={{
-            marginTop: currentList.length < 5 ? 265 : 10,
-            display: "flex",
-            justifyContent: "center"
-          }}
-        >
-          <Paginations
-            totalPost={classList.length}
-            setActivePage={setActivePage}
-            activePage={activePage}
-            itemPerPage={itemPerPage}
-          />
-        </Grid>
-      ) : null}
+      {
+        classList.length > 8 ? (
+          <Grid
+            style={{
+              marginTop: currentList.length < 5 ? 265 : 10,
+              display: "flex",
+              justifyContent: "center"
+            }}
+          >
+            <Paginations
+              totalPost={classList.length}
+              setActivePage={setActivePage}
+              activePage={activePage}
+              itemPerPage={itemPerPage}
+            />
+          </Grid>
+        ) : null
+      }
 
       <HandleClassModal
         open={open}
@@ -548,7 +548,7 @@ export const ClassView = props => {
         filter={filter}
         setFilter={setFilter}
       />
-    </Layout>
+    </Layout >
   );
 };
 

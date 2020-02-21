@@ -130,16 +130,16 @@ export default function Profile(props) {
           style={{ color: "#616161" }}
         />
       ) : (
-        <Tooltip title="Click to View Profile">
-          <Typography
-            variant="inherit"
-            style={{ paddingLeft: "10px", cursor: "pointer" }}
-            onClick={handleClickOpen}
-          >
-            <UserDetails id={userId} headers={headers} action={"name"} />
-          </Typography>
-        </Tooltip>
-      )}
+          <Tooltip title="Click to View Profile">
+            <Typography
+              variant="inherit"
+              style={{ paddingLeft: "10px", cursor: "pointer" }}
+              onClick={handleClickOpen}
+            >
+              <UserDetails id={userId} headers={headers} action={"name"} />
+            </Typography>
+          </Tooltip>
+        )}
 
       <Dialog
         open={open}
@@ -151,8 +151,8 @@ export default function Profile(props) {
           style={{ background: "#aaaafa", color: "white" }}
         >
           {(email
-          ? account_type_id === 2
-          : accountDetails.account_type_id === 2)
+            ? account_type_id === 2
+            : accountDetails.account_type_id === 2)
             ? "Mentor"
             : "Student"}
           Profile
@@ -197,8 +197,8 @@ export default function Profile(props) {
                 >
                   (
                   {(email
-                  ? account_type_id === 2
-                  : accountDetails.account_type_id === 2)
+                    ? account_type_id === 2
+                    : accountDetails.account_type_id === 2)
                     ? "Mentor"
                     : "Student"}
                   )
@@ -209,63 +209,63 @@ export default function Profile(props) {
                 {(email ? (
                   account_type_id === 3
                 ) : (
-                  accountDetails.account_type_id === 3
-                )) ? (
-                  <Grid container spacing={1} align="center">
-                    <Grid item xs={6}>
-                      <Paper
-                        elevation={3}
-                        style={{ width: "100%", height: "auto" }}
-                      >
-                        <Typography variant="subtitle2">Attending:</Typography>
-                        <Typography
-                          variant="h4"
-                          style={{ background: "antiquewhite" }}
+                    accountDetails.account_type_id === 3
+                  )) ? (
+                    <Grid container spacing={1} align="center">
+                      <Grid item xs={6}>
+                        <Paper
+                          elevation={3}
+                          style={{ width: "100%", height: "auto" }}
                         >
-                          {
-                            studentClass.filter(res => {
-                              return res.class_status === true;
-                            }).length
-                          }
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Paper
-                        elevation={3}
-                        style={{ width: "100%", height: "auto" }}
-                      >
-                        <Typography variant="subtitle2">Attended:</Typography>
-                        <Typography
-                          variant="h4"
-                          style={{ background: "antiquewhite" }}
-                        >
-                          {
-                            studentClass.filter(res => {
-                              return res.class_status === false;
-                            }).length
-                          }
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <Paper elevation={3} style={{ width: "80%", height: "auto" }}>
-                    <Grid container direction="column">
-                      <Grid item xs={12}>
-                        <Typography variant="subtitle2">Classes:</Typography>
+                          <Typography variant="subtitle2">Attending:</Typography>
+                          <Typography
+                            variant="h4"
+                            style={{ background: "antiquewhite" }}
+                          >
+                            {
+                              studentClass.filter(res => {
+                                return res.class_status === true;
+                              }).length
+                            }
+                          </Typography>
+                        </Paper>
                       </Grid>
-                      <Grid item xs={12}>
-                        <Typography
-                          variant="h4"
-                          style={{ background: "antiquewhite" }}
+                      <Grid item xs={6}>
+                        <Paper
+                          elevation={3}
+                          style={{ width: "100%", height: "auto" }}
                         >
-                          {classList.length}
-                        </Typography>
+                          <Typography variant="subtitle2">Attended:</Typography>
+                          <Typography
+                            variant="h4"
+                            style={{ background: "antiquewhite" }}
+                          >
+                            {
+                              studentClass.filter(res => {
+                                return res.class_status === false;
+                              }).length
+                            }
+                          </Typography>
+                        </Paper>
                       </Grid>
                     </Grid>
-                  </Paper>
-                )}
+                  ) : (
+                    <Paper elevation={3} style={{ width: "80%", height: "auto" }}>
+                      <Grid container direction="column">
+                        <Grid item xs={12}>
+                          <Typography variant="subtitle2">Classes:</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography
+                            variant="h4"
+                            style={{ background: "antiquewhite" }}
+                          >
+                            {classList.length}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  )}
               </Grid>
 
               <Grid item>
@@ -284,8 +284,8 @@ export default function Profile(props) {
                       style={{ color: "#2d2d2d" }}
                     >
                       {(email
-                      ? account_type_id === 2
-                      : accountDetails.account_type_id === 2)
+                        ? account_type_id === 2
+                        : accountDetails.account_type_id === 2)
                         ? "Classes Created"
                         : "Classes Attented/Attending"}
                     </Typography>
@@ -296,84 +296,84 @@ export default function Profile(props) {
                     <div className={classes.root1}>
                       <List>
                         {((email
-                        ? account_type_id === 2
-                        : accountDetails.account_type_id === 2)
+                          ? account_type_id === 2
+                          : accountDetails.account_type_id === 2)
                           ? classList
                           : studentClass
                         ).length !== 0 ? (
-                          ((email
-                          ? account_type_id === 2
-                          : accountDetails.account_type_id === 2)
-                            ? classList
-                            : studentClass
-                          ).map(row => (
-                            <div key={row.id}>
-                              <ListItem>
-                                <ListItemText>{row.class_name}</ListItemText>
-                                <ListItemSecondaryAction>
-                                  <Typography
-                                    variant="caption"
-                                    style={{ color: "#ff6f61ff" }}
-                                  >
-                                    {(email ? (
-                                      account_type_id === 2
-                                    ) : (
-                                      accountDetails.account_type_id === 2
-                                    )) ? (
-                                      <Grid item>Student/s:</Grid>
-                                    ) : (
-                                      ""
-                                    )}
-                                    <Grid item style={{ fontWeight: "bold" }}>
-                                      <Chip
-                                        style={{ color: "gray" }}
-                                        variant="outlined"
-                                        size="small"
-                                        avatar={
-                                          <Avatar
-                                            style={{
-                                              background: "#ff6f61",
-                                              color: "white"
-                                            }}
-                                          >
-                                            {(email
-                                            ? account_type_id === 3
-                                            : accountDetails.account_type_id ===
-                                              3)
-                                              ? "M"
-                                              : "#"}
-                                          </Avatar>
-                                        }
-                                        label={
-                                          (email ? (
-                                            account_type_id === 3
-                                          ) : (
-                                            accountDetails.account_type_id === 3
-                                          )) ? (
-                                            <UserDetails
-                                              id={row.user_id}
-                                              headers={headers}
-                                              action="name"
-                                            />
-                                          ) : (
-                                            <CountUsers
-                                              classId={row.id}
-                                              classroomUsers={classroomUsers}
-                                              headers={headers}
-                                            />
-                                          )
-                                        }
-                                        clickable
-                                      />
-                                    </Grid>
-                                  </Typography>
-                                </ListItemSecondaryAction>
-                              </ListItem>
-                            </div>
-                          ))
-                        ) : (
-                          <Typography variant="body2">Empty class</Typography>
-                        )}
+                            ((email
+                              ? account_type_id === 2
+                              : accountDetails.account_type_id === 2)
+                              ? classList
+                              : studentClass
+                            ).map(row => (
+                              <div key={row.id}>
+                                <ListItem>
+                                  <ListItemText>{row.class_name}</ListItemText>
+                                  <ListItemSecondaryAction>
+                                    <Typography
+                                      variant="caption"
+                                      style={{ color: "#ff6f61ff" }}
+                                    >
+                                      {(email ? (
+                                        account_type_id === 2
+                                      ) : (
+                                          accountDetails.account_type_id === 2
+                                        )) ? (
+                                          <Grid item>Student/s:</Grid>
+                                        ) : (
+                                          ""
+                                        )}
+                                      <Grid item style={{ fontWeight: "bold" }}>
+                                        <Chip
+                                          style={{ color: "gray" }}
+                                          variant="outlined"
+                                          size="small"
+                                          avatar={
+                                            <Avatar
+                                              style={{
+                                                background: "#ff6f61",
+                                                color: "white"
+                                              }}
+                                            >
+                                              {(email
+                                                ? account_type_id === 3
+                                                : accountDetails.account_type_id ===
+                                                3)
+                                                ? "M"
+                                                : "#"}
+                                            </Avatar>
+                                          }
+                                          label={
+                                            (email ? (
+                                              account_type_id === 3
+                                            ) : (
+                                                accountDetails.account_type_id === 3
+                                              )) ? (
+                                                <UserDetails
+                                                  id={row.user_id}
+                                                  headers={headers}
+                                                  action="name"
+                                                />
+                                              ) : (
+                                                <CountUsers
+                                                  classId={row.id}
+                                                  classroomUsers={classroomUsers}
+                                                  headers={headers}
+                                                />
+                                              )
+                                          }
+                                          clickable
+                                        />
+                                      </Grid>
+                                    </Typography>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
+                              </div>
+                            ))
+                          ) : (
+                            <Typography variant="body2">Empty class</Typography>
+                          )}
                       </List>
                     </div>
                   </ExpansionPanelDetails>
