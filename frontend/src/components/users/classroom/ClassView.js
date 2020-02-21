@@ -100,11 +100,12 @@ export const ClassView = props => {
         axios.get(`/api/class?id=${id}`, headers).then(res => {
           setClassList(res.data);
         });
-        res.data[0].class_status === false
-          ? alertToast("Class Disabled")
-          : alertToast("Class Enabled");
+
         if (res.data[0].class_status === false) {
+          alertToast("Class Disabled");
           socket.emit(`closed_class`, res.data);
+        } else {
+          alertToast("Class Enabled");
         }
       });
   };

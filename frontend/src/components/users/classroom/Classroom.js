@@ -43,6 +43,7 @@ import {
 	getClassroomUser,
 	user_details
 } from "../reusables/UserDetails";
+import AddMentorModal from "../reusables/AddMentorModal";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -80,18 +81,21 @@ export default function Classroom(props) {
 	const { headers, user, socket } = props.data;
 	const userDetails = user ? user : {};
 	const { first_name, account_type_id } = userDetails;
-	const [value, setValue] = React.useState(0);
-	const [classroomUser, setClassroomUser] = React.useState({});
-	const [classroomUsersArray, setClassroomUsersArray] = React.useState([]);
-	const [newRequest, addNewRequest] = React.useState(null);
-	const [classDetails, setClassDetails] = React.useState({});
-	const [room, setRoom] = React.useState(null);
+	const [value, setValue] = useState(0);
+	const [classroomUser, setClassroomUser] = useState({});
+	const [classroomUsersArray, setClassroomUsersArray] = useState([]);
+	const [newRequest, addNewRequest] = useState(null);
+	const [classDetails, setClassDetails] = useState({});
+	const [room, setRoom] = useState(null);
 	const [list, setList] = useState(false);
-	const [isTyping, setIsTyping] = React.useState(null);
+	const [isTyping, setIsTyping] = useState(null);
 
+	// dialogs
+	const [addMentorModal, setAddMentorModal] = useState(false);
 	const [notifyRemovedUser, setNotifyRemovedUser] = useState(false);
 	const [closedClass, setClosedClass] = useState(false);
-	const [requestDialog, setRequestDialog] = React.useState(false);
+	const [requestDialog, setRequestDialog] = useState(false);
+
 	const history = useHistory();
 
 	const handleChange = (event, newValue) => {
@@ -103,6 +107,7 @@ export default function Classroom(props) {
 				setClassroomUsersArray(
 					data.filter(x => x.class_id === Number(classId))
 				);
+				console.log(data.filter(x => x.class_id === Number(classId)));
 			});
 			socket.on(`removed_user`, ({ classList }) => {
 				classList.filter(classX => classX.id === classId).length === 0 &&
@@ -170,6 +175,7 @@ export default function Classroom(props) {
 			alertToast(notify);
 		});
 	}, [socket]);
+
 	React.useEffect(() => {
 		if (!!user && !!headers && !!classId) {
 			(async () => {
@@ -247,11 +253,7 @@ export default function Classroom(props) {
 								<Grid item xs={11}>
 									<Typography
 										variant="h6"
-										style={{
-											padding: "9px",
-											paddingLeft: "20px",
-											color: "#6d52cb"
-										}}
+										style={{ padding: "8px", paddingLeft: "20px" }}
 									>
 										Members
 									</Typography>
@@ -295,14 +297,15 @@ export default function Classroom(props) {
 										</Grid>
 									</Grid>
 									<Grid item xs={1}>
-										{account_type_id === 2 && x.user_id !== user.id && (
-											<RemoveUserComponent
-												data={x}
-												headers={headers}
-												socket={socket}
-												setRoom={setRoom}
-											/>
-										)}
+										{classDetails.user_id === userDetails.id &&
+											x.user_id !== user.id && (
+												<RemoveUserComponent
+													data={x}
+													headers={headers}
+													socket={socket}
+													setRoom={setRoom}
+												/>
+											)}
 									</Grid>
 								</Grid>
 							))
@@ -388,6 +391,7 @@ export default function Classroom(props) {
 						account_type_id={account_type_id}
 						requests={requests}
 						classroomUser={classroomUser}
+						setAddMentorModal={setAddMentorModal}
 					/>
 				</Grid>
 
@@ -410,18 +414,30 @@ export default function Classroom(props) {
 					setOpen={setClosedClass}
 					action={"class_closed"}
 				/>
+				<AddMentorModal
+					open={addMentorModal}
+					setOpen={setAddMentorModal}
+					headers={headers}
+					socket={socket}
+					classId={classId}
+				/>
 			</Grid>
 		</Layout>
 	);
 }
 
-const alertToast = msg =>
-	toast.info(msg, {
-		position: "bottom-left",
-		autoClose: 5000,
-		hideProgressBar: true,
-		closeOnClick: true
-	});
+// toast
+let toastId = null;
+const alertToast = msg => {
+	if (!toast.isActive(toastId)) {
+		toastId = toast.info(msg, {
+			position: "bottom-left",
+			hideProgressBar: true,
+			autoClose: 3000,
+			closeOnClick: true
+		});
+	}
+};
 
 const OnlineIndicator = ({ data, headers }) => {
 	const [member, setMember] = React.useState({});

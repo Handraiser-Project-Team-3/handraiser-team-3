@@ -59,14 +59,14 @@ export default function HandleForm(props) {
 		subject: `HandRaiser - ${data.class_name}`,
 		className: `${data.class_name}`,
 		classCode: `${data.class_code}`,
-		message: `You've asked to join the ${data.class_name} class. Enter this code to join: ${data.class_code}`
+		message: `You've ask to join the ${data.class_name} class. Enter this code to join: ${data.class_code}`
 	};
 
 	const handleSubmit = e => {
 		setSending(true);
 		e.preventDefault();
 		if (classId && emailArray.length) {
-			emailArray.map(to => {
+			emailArray.map(to =>
 				emailjs
 					.send(
 						"sendgrid",
@@ -75,16 +75,16 @@ export default function HandleForm(props) {
 						"user_WxE3R1PwGUTBLDfMHLKQ6"
 					)
 					.then(
-						result => {
-							toast.success("Email sent!");
+						() => {
 							setSending(false);
+							toast.success("Email sent!");
 							handleCloseForm();
 						},
 						error => {
 							console.log(error.text);
 						}
-					);
-			});
+					)
+			);
 		}
 	};
 
