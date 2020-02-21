@@ -66,7 +66,7 @@ export default function HandleForm(props) {
     setSending(true);
     e.preventDefault();
     if (classId && emailArray.length) {
-      emailArray.map(to => {
+      emailArray.map(to =>
         emailjs
           .send(
             "sendgrid",
@@ -75,7 +75,7 @@ export default function HandleForm(props) {
             "user_WxE3R1PwGUTBLDfMHLKQ6"
           )
           .then(
-            result => {
+            () => {
               setSending(false);
               toast.success("Email sent!");
               handleCloseForm();
@@ -83,8 +83,8 @@ export default function HandleForm(props) {
             error => {
               console.log(error.text);
             }
-          );
-      });
+          )
+      );
     }
   };
 

@@ -68,13 +68,13 @@ export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers, socket } = props.data;
   const userDetails = user ? user : {};
   const { user_image, id, account_type_id } = userDetails;
-
   const history = useHistory();
   const MyComponent = props.component;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [show, setShow] = useState(true);
+  const [Open, setOpen] = useState(false);
   const [classRoom, setClassRoom] = useState([]);
   const classId = props.match && props.match.params.id;
   const [state, setState] = React.useState({
@@ -88,6 +88,9 @@ export default function ButtonAppBar(props) {
   };
   const handleClick = () => {
     setShow(!show);
+  };
+  const handleClickOpen = () => {
+    setOpen(!Open);
   };
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -103,7 +106,6 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
-
     axios.get(`/api/classroom-users`, headers).then(e => {
       Promise.all(
         e.data
@@ -119,8 +121,7 @@ export default function ButtonAppBar(props) {
     });
     setState({ ...state, [side]: open });
   };
-
-  const sideList = side => (
+  const sideList = (side, socket) => (
     <div
       className={classes.list}
       role="presentation"
@@ -139,14 +140,16 @@ export default function ButtonAppBar(props) {
       >
         <ListItem button className={classes.nested}>
           <ClassIcon />
-
           <ListItemText
             primary="Classes"
-            onClick={handleClass}
+            onClick={() => {
+              handleClass();
+              socket.off();
+            }}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
         </ListItem>
-
+        {/* secondDropDown */}
         <ListItem
           button
           onClick={handleClick}
@@ -154,41 +157,94 @@ export default function ButtonAppBar(props) {
           className={classes.enrolled}
         >
           <InboxIcon />
-
           <ListItemText
-            primary={account_type_id === 2 ? "Subjects Handled" : "Enrolled"}
+            primary={account_type_id === 2 ? "Subjects Handled " : "Enrolled"}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
           {show ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
+            {classRoom.length === 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  marginLeft: "20px",
+                  marginTop: "25px"
+                }}
+              >
+                <div>
+                  <div className="spinner">
+                    <div className="bounce1"></div>
+                    <div className="bounce2"></div>
+                    <div className="bounce3"></div>
+                  </div>
+                </div>
+                <span className={classes.noClasses} style={{ color: "blue" }}>
+                  {account_type_id === 3
+                    ? "Not Enrolled Yet"
+                    : "Theres no Subject Handle Yet"}
+                </span>
+                <div className="spinner">
+                  <div className="bounce1"></div>
+                  <div className="bounce2"></div>
+                  <div className="bounce3"></div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
             {classRoom &&
-              classRoom.map(
-                rooms =>
-                  rooms.class_status === true && (
-                    <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
-                      <ListItem
-                        id={2}
-                        key={rooms.id}
-                        button
-                        className={classes.nested}
+              classRoom.map(rooms =>
+                rooms.class_status === true ? (
+                  <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+                    <ListItem
+                      id={2}
+                      key={rooms.id}
+                      button
+                      className={classes.nested}
+                      onClick={() => {
+                        socket.off();
+                      }}
+                    >
+                      <StarBorder />
+                      <ListItemText
+                        style={{
+                          width: "20px",
+                          paddingLeft: "20px"
+                        }}
                       >
-                        <StarBorder />
-
-                        <ListItemText
-                          style={{
-                            width: "20px",
-                            paddingLeft: "20px"
-                          }}
-                        >
-                          {" "}
-                          {rooms.class_name}
-                        </ListItemText>
-                      </ListItem>
-                    </Link>
-                  )
+                        {" "}
+                        {rooms.class_name}
+                      </ListItemText>
+                    </ListItem>
+                  </Link>
+                ) : (
+                  <></>
+                )
               )}
+          </List>
+        </Collapse>
+        {/* thirdDropDown */}
+        <ListItem
+          button
+          onClick={handleClickOpen}
+          style={{ display: account_type_id >= 2 ? "flex" : "none" }}
+          className={classes.enrolled}
+        >
+          <InboxIcon />
+          <ListItemText
+            primary={account_type_id === 2 ? "Subjects Handled " : "Enrolled"}
+            style={{ width: "20px", paddingLeft: "20px" }}
+          />
+          {show ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={Open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className={classes.nested}>
+              <StarBorder />
+              <ListItemText primary="Starred" />
+            </ListItem>
           </List>
         </Collapse>
       </List>
@@ -210,15 +266,15 @@ export default function ButtonAppBar(props) {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={account_type_id !== 1 && toggleDrawer("left", true)}
+              onClick={toggleDrawer("left", true)}
             >
               <MenuIcon />
             </IconButton>
             <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
-              {sideList("left")}
+              {sideList("left", socket)}
             </Drawer>
             <Typography variant="h6" className={classes.title}>
-              <Link to="/">
+              <Link to="/" onClick={() => socket.off()}>
                 <img src={logo} className={classes.logo} alt="logo" />
               </Link>
             </Typography>
