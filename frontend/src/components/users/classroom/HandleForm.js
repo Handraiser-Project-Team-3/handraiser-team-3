@@ -7,22 +7,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
+import copy from "clipboard-copy";
+import emailjs from 'emailjs-com';
+import Tooltip from "@material-ui/core/Tooltip";
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import axios from 'axios';
-import emailjs from 'emailjs-com';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function HandleForm(props) {
     const {
-        form,
-        handleCloseForm,
         data,
         classes,
         user,
@@ -31,8 +29,17 @@ export default function HandleForm(props) {
     } = props
     const [fullWidth,] = useState(true);
     const [maxWidth] = useState('sm');
+    const [form, setForm] = useState(false);
     const [filterUser, setFilterUser] = useState([]);
-    const [to, setTo] = useState([]);
+    const [emailArray, setEmailArray] = useState([]);
+
+    const handleForm = () => {
+        setForm(true);
+    }
+
+    const handleCloseForm = () => {
+        setForm(false);
+    }
 
     useEffect(() => {
         let tempData = [];
@@ -54,9 +61,7 @@ export default function HandleForm(props) {
 
     const messageTemplate = {
         from: user.email,
-        to: to,
         cc: user.email,
-        name: "",
         subject: `HandRaiser - ${data.class_name}`,
         className: `${data.class_name}`,
         classCode: `${data.class_code}`,
@@ -65,32 +70,38 @@ export default function HandleForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // if (classId) {
-        //     emailjs.send('gmail', 'classId', messageTemplate, 'user_WxE3R1PwGUTBLDfMHLKQ6')
-        //         .then((result) => {
-        //                 alertToast('Email sent!')
-        //         }, (error) => {
-        //             alertToast('Unable to send!')
-        //             console.log(error.text)
-        //         });
-        // }
+        if (classId && emailArray.length) {
+            emailArray.map(to => {
+                emailjs.send('gmail', 'classId', { ...messageTemplate, to: to }, 'user_WxE3R1PwGUTBLDfMHLKQ6')
+                    .then((result) => {
+                        if (result.status === 200) {
+                            console.log('Email sent!')
+                        }
+                    }, (error) => {
+                        console.log(error.text)
+                    });
+            })
+        }
     }
 
     const handleChange = e => {
-        let data = {};
-        data = { ...to, e };
-        setTo(data.e)
-    };
+        setEmailArray(e.map(email => email.email))
+    }
 
     return (
         <div>
-            <ToastContainer enableMulticontainer />
-            <Chip
-                variant="outlined"
-                size="small"
-                label={data.class_code}
-                className={classes.codeStyle}
-            />
+            <Tooltip title="Copy and send">
+                <Chip
+                    variant="outlined"
+                    size="small"
+                    label={data.class_code}
+                    className={classes.codeStyle}
+                    onClick={() => {
+                        handleForm()
+                        copy(data.class_code)
+                    }}
+                />
+            </Tooltip>
             <Dialog
                 fullWidth={fullWidth}
                 maxWidth={maxWidth}
@@ -98,7 +109,6 @@ export default function HandleForm(props) {
                 onClose={handleCloseForm}
                 aria-labelledby="form-dialog-title"
             >
-
                 <DialogTitle id="form-dialog-title">Email</DialogTitle>
                 <DialogContent>
                     <form
@@ -107,32 +117,46 @@ export default function HandleForm(props) {
                         autoComplete="off"
                         onSubmit={handleSubmit}
                     >
-                        <TextField
-                            required
-                            disabled
-                            margin="dense"
-                            id={`emailForm-${classId}`}
-                            name="from"
-                            defaultValue={messageTemplate.from}
-                            label="From"
-                            type="email"
-                            fullWidth
-                        />
+                        <div style={{ display: "flex" }}>
+                            <TextField
+                                style={{ width: "50%", paddingRight: 5 }}
+                                required
+                                disabled
+                                margin="dense"
+                                id={`emailForm-${classId}`}
+                                name="from"
+                                defaultValue={messageTemplate.from}
+                                label="From"
+                                type="email"
+                                fullWidth
+                            />
+                            <TextField
+                                style={{ width: "50%" }}
+                                margin="dense"
+                                id={`cc-${classId}`}
+                                name="cc"
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                defaultValue={messageTemplate.from}
+                                label="cc (auto)"
+                                type="email"
+                                fullWidth
+                            />
+                        </div>
                         <Autocomplete
                             multiple
                             options={filterUser}
                             filterOptions={filterOptions}
                             disableCloseOnSelect
-                            getOptionLabel={option => option.email}
+                            getOptionLabel={option => (option ? option.email : null)}
                             renderOption={(option, { selected }) => (
                                 <React.Fragment>
                                     <Checkbox
-                                        name="to"
                                         icon={icon}
                                         checkedIcon={checkedIcon}
                                         style={{ marginRight: 8 }}
                                         checked={selected}
-                                        onClick={handleChange(option.email)}
                                     />
                                     {option.email}
                                 </React.Fragment>
@@ -140,16 +164,14 @@ export default function HandleForm(props) {
                             renderInput={params => (
                                 <TextField
                                     {...params}
-                                    required
                                     label="To"
-                                    name="to"
                                     multiline
-                                    type="text"
                                     id={`to-${classId}`}
                                     placeholder="Email/s"
                                     fullWidth
                                 />
                             )}
+                            onChange={(option, value) => handleChange(value)}
                         />
                         <TextField
                             autoFocus
@@ -191,12 +213,3 @@ export default function HandleForm(props) {
         </div>
     );
 }
-
-const alertToast = msg =>
-    toast.info(msg, {
-        position: "top-right",
-        autoClose: 6000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-    });

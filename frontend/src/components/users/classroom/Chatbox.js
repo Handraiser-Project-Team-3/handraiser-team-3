@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import ReactHtmlParser from "react-html-parser";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -45,7 +46,7 @@ export default function ChatBox(props) {
       message: {
         user_id: user.id,
         student_request_id: room.id,
-        content: msg
+        content: msg.replace(/\n/g, "</br>")
       }
     });
     socket.emit(`is_typing`, null, room);
@@ -319,7 +320,7 @@ const MessageBox = props => {
             }
         }
       >
-        {data.content}
+        {ReactHtmlParser(data.content)}
       </Msg>
     </Div>
   );

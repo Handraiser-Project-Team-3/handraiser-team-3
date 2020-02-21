@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useHistory } from "react-router-dom";
-import copy from "clipboard-copy";
 import axios from "axios";
 import Switch from "@material-ui/core/Switch";
 import Chip from "@material-ui/core/Chip";
@@ -88,7 +87,6 @@ export const ClassView = props => {
   });
   const [activePage, setActivePage] = useState(1);
   const [itemPerPage] = useState(8);
-  const [form, setForm] = useState(false);
 
   const handleStatus = () => event => {
     axios
@@ -186,14 +184,6 @@ export const ClassView = props => {
   const indexOfLastList = activePage * itemPerPage;
   const indexOfFirstList = indexOfLastList - itemPerPage;
   let currentList = classList.slice(indexOfFirstList, indexOfLastList);
-
-  const handleForm = () => {
-    setForm(true);
-  }
-
-  const handleCloseForm = () => {
-    setForm(false);
-  }
 
   return (
     <Layout first_name={first_name}>
@@ -381,24 +371,13 @@ export const ClassView = props => {
                                       </Typography>
                                     </Grid>
                                     <Grid item lg={12} xs={12}>
-                                      <Tooltip title="Click to copy code">
-                                        <b
-                                          onClick={() => {
-                                            handleForm()
-                                            copy(data.class_code)
-                                          }}
-                                        >
-                                          <HandleForm
-                                            classId={data.id}
-                                            user={user}
-                                            form={form}
-                                            handleCloseForm={handleCloseForm}
-                                            data={data}
-                                            classes={classes}
-                                            headers={headers}
-                                          />
-                                        </b>
-                                      </Tooltip>
+                                      <HandleForm
+                                        classId={data.id}
+                                        user={user}
+                                        data={data}
+                                        classes={classes}
+                                        headers={headers}
+                                      />
                                     </Grid>
                                   </Grid>
                                 </Grid>
@@ -532,22 +511,24 @@ export const ClassView = props => {
             </div>
           )}
       </Grid>
-      {classList.length > 8 ? (
-        <Grid
-          style={{
-            marginTop: currentList.length < 5 ? 265 : 10,
-            display: "flex",
-            justifyContent: "center"
-          }}
-        >
-          <Paginations
-            totalPost={classList.length}
-            setActivePage={setActivePage}
-            activePage={activePage}
-            itemPerPage={itemPerPage}
-          />
-        </Grid>
-      ) : null}
+      {
+        classList.length > 8 ? (
+          <Grid
+            style={{
+              marginTop: currentList.length < 5 ? 265 : 10,
+              display: "flex",
+              justifyContent: "center"
+            }}
+          >
+            <Paginations
+              totalPost={classList.length}
+              setActivePage={setActivePage}
+              activePage={activePage}
+              itemPerPage={itemPerPage}
+            />
+          </Grid>
+        ) : null
+      }
 
       <HandleClassModal
         open={open}
@@ -564,7 +545,7 @@ export const ClassView = props => {
         filter={filter}
         setFilter={setFilter}
       />
-    </Layout>
+    </Layout >
   );
 };
 
