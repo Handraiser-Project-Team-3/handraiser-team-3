@@ -121,11 +121,27 @@ export default function ButtonAppBar(props) {
   };
   React.useEffect(() => {
     if (!!user && !!headers) {
-      axios
-        .get(`/api/class`, headers)
-        .then(response =>
-          setClassRoom(response.data.filter(x => x.user_id === user.id))
-        );
+      if (user.account_type_id === 2) {
+        axios
+          .get(`/api/class`, headers)
+          .then(response =>
+            setClassRoom(response.data.filter(x => x.user_id === user.id))
+          );
+      } else {
+        axios.get(`/api/classroom-users`, headers).then(e => {
+          Promise.all(
+            e.data
+              .filter(userdata => {
+                return userdata.user_id === user.account_type_id;
+              })
+              .map(res =>
+                axios(`/api/class/${res.class_id}`, headers).then(res => {
+                  return res.data;
+                })
+              )
+          ).then(response => setClassRoom(response));
+        });
+      }
     }
   }, [user, headers]);
 
