@@ -309,7 +309,9 @@ export default function ButtonAppBar(props) {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={account_type_id !== 1 && toggleDrawer("left", true)}
+              onClick={
+                account_type_id !== 1 ? toggleDrawer("left", true) : () => {}
+              }
             >
               <MenuIcon />
             </IconButton>
