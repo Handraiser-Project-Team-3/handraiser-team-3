@@ -94,7 +94,7 @@ module.exports = {
             });
         });
     });
-    socket.on(`add_mentors`, ({ newMentors, classId }) => {
+    socket.on(`add_mentors`, ({ newMentors, classId }, callBack) => {
       newMentors.map(mentor => {
         db.classroom_users
           .insert(
@@ -104,6 +104,9 @@ module.exports = {
           .then(inserted => {
             newClassroomUsers();
             io.emit(`notify_assigned`, inserted);
+            db.classroom_users
+              .find({ class_id: classId })
+              .then(users => callBack(users));
           });
       });
     });

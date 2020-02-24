@@ -39,36 +39,36 @@ export const UserDetails = ({ id, headers, action, profile }) => {
         style={
           profile
             ? {
-              width: "150px",
-              borderRadius: "50%",
-              marginTop: "20px",
-              border: "5px solid #aaaafa",
-              padding: "5px"
-            }
+                width: "150px",
+                borderRadius: "50%",
+                marginTop: "20px",
+                border: "5px solid #aaaafa",
+                padding: "5px"
+              }
             : {
-              width: "60px",
-              borderRadius: "50%",
-              border: "2px solid #ababfa",
-              padding: "3px"
-            }
+                width: "60px",
+                borderRadius: "50%",
+                border: "2px solid #ababfa",
+                padding: "3px"
+              }
         }
       />
     ) : (
-        <Avatar
-          alt="avatar"
-          src={student}
-          style={{
-            width: "150px",
-            height: "150px",
-            marginTop: "20px",
-            border: "5px solid #aaaafa",
-            padding: "5px"
-          }}
-        />
-      )
+      <Avatar
+        alt="avatar"
+        src={student}
+        style={{
+          width: "150px",
+          height: "150px",
+          marginTop: "20px",
+          border: "5px solid #aaaafa",
+          padding: "5px"
+        }}
+      />
+    )
   ) : (
-        ""
-      );
+    ""
+  );
 };
 export const user_details = async (id, headers) => {
   try {

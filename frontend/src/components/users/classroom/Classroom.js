@@ -172,6 +172,7 @@ export default function Classroom(props) {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
+    socket.emit("update_request", { notify: null, action: null });
   }, [socket]);
 
   React.useEffect(() => {
@@ -302,6 +303,8 @@ export default function Classroom(props) {
                           headers={headers}
                           socket={socket}
                           setRoom={setRoom}
+                          classId={classId}
+                          setClassroomUsersArray={setClassroomUsersArray}
                         />
                       )}
                   </Grid>
@@ -418,6 +421,8 @@ export default function Classroom(props) {
           headers={headers}
           socket={socket}
           classId={classId}
+          classroomUsersArray={classroomUsersArray}
+          setClassroomUsersArray={setClassroomUsersArray}
         />
       </Grid>
     </Layout>
@@ -478,7 +483,14 @@ const OnlineIndicator = ({ data, headers }) => {
   );
 };
 
-const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
+const RemoveUserComponent = ({
+  data,
+  headers,
+  socket,
+  setRoom,
+  classId,
+  setClassroomUsersArray
+}) => {
   const [user, setUser] = React.useState({});
 
   React.useEffect(() => {
@@ -500,6 +512,11 @@ const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
               socket.emit(`remove_class_user`, {
                 userId: data.id,
                 classroomId: data.class_id
+              });
+              getClassroomUser(headers).then(res => {
+                setClassroomUsersArray(
+                  res.data.filter(x => x.class_id === Number(classId))
+                );
               });
             }
           );
