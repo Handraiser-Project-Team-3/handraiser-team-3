@@ -75,7 +75,7 @@ export default function HandleForm(props) {
             "user_WxE3R1PwGUTBLDfMHLKQ6"
           )
           .then(
-            result => {
+            () => {
               setSending(false);
               toast.success("Email sent!");
               handleCloseForm();

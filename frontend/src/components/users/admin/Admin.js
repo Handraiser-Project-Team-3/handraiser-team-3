@@ -84,6 +84,13 @@ const useStyles = makeStyles({
   tableHeight: {
     height: "65.5vh"
   },
+  filter: {
+    cursor: "pointer",
+    color: "#3f51b5",
+    "&:hover": {
+      color: "gray"
+    }
+  },
   margin: {
     marginLeft: "95%",
     marginTop: "65%",
@@ -93,13 +100,6 @@ const useStyles = makeStyles({
   noClasses: {
     fontSize: "30px",
     color: "gray"
-  },
-  filter: {
-    cursor: "pointer",
-    color: "#3f51b5",
-    "&:hover": {
-      color: "gray"
-    }
   }
 });
 export const Admin = props => {
@@ -131,7 +131,7 @@ export const Admin = props => {
   //     .delete(`/api/user/${classid}`, headers)
   //     .then(() => setUsers(users.filter(data => data.id !== classid)));
   // };
-
+  //
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -297,10 +297,10 @@ export const Admin = props => {
                                           }}
                                         />
                                         {/* <div
-                                          onClick={() => deleteClass(row.id)}
-                                        >
-                                          delete
-                                        </div> */}
+																					onClick={() => deleteClass(row.id)}
+																				>
+																					delete
+																				</div> */}
                                       </>
                                     )}
                                     {row.account_type_id === 2 && (

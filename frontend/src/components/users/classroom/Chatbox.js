@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import SendIcon from "@material-ui/icons/Send";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import ReactHtmlParser from "react-html-parser";
 import TextField from "@material-ui/core/TextField";
 import {
   user_details,
@@ -18,6 +17,8 @@ import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import { Tooltip } from "@material-ui/core";
 import { ChatBoxStyle } from "../style/Styles";
+import Chip from "@material-ui/core/Chip";
+import ReactHtmlParser from "react-html-parser";
 
 export default function ChatBox(props) {
   const classes = ChatBoxStyle();
@@ -47,13 +48,14 @@ export default function ChatBox(props) {
       })();
     }
   }, [headers, room]);
+
   const handleSubmit = e => {
     e.preventDefault();
     socket.emit(`add_message`, {
       message: {
         user_id: user.id,
         student_request_id: room.id,
-        content: msg.replace(/\n/g, "</br>")
+        content: msg
       }
     });
     socket.emit(`is_typing`, null, room);
@@ -87,7 +89,7 @@ export default function ChatBox(props) {
     }
   }, [room, headers]);
   return (
-    <Paper className={classes.root}>
+    <Paper elevation={5} className={classes.root}>
       <Paper className={classes.top} elevation={3}>
         <Grid className={classes.topName}>
           {user && room !== null ? (
@@ -95,34 +97,45 @@ export default function ChatBox(props) {
               student !== null ? (
                 <Avatar src={student.user_image} />
               ) : (
-                <img src={bubbles} style={{ width: 45 }} alt="" />
+                <img src={bubbles} style={{ width: 40 }} alt="" />
               )
             ) : mentor !== null ? (
               <Avatar src={mentor.user_image} />
             ) : (
-              <img src={bubbles} style={{ width: 45 }} alt="" />
+              <img src={bubbles} style={{ width: 40 }} alt="" />
             )
           ) : (
-            <img src={bubbles} style={{ width: 45 }} alt="" />
+            <img src={bubbles} style={{ width: 40 }} alt="" />
           )}
           <Typography
             variant="h6"
             style={{ paddingLeft: "10px", color: "#525252" }}
           >
-            {user && room !== null
-              ? user.account_type_id === 2
-                ? student !== null
-                  ? `${student.first_name} ${student.last_name}`
-                  : ""
-                : mentor !== null
-                ? `${mentor.first_name} ${mentor.last_name} [Mentor]`
-                : ""
-              : ""}
+            {user && room !== null ? (
+              user.account_type_id === 2 ? (
+                student !== null ? (
+                  `${student.first_name} ${student.last_name}`
+                ) : (
+                  ""
+                )
+              ) : mentor !== null ? (
+                <>
+                  <span>
+                    {mentor.first_name} {mentor.last_name}
+                  </span>{" "}
+                  <Chip size="small" label="Mentor" color="primary" />
+                </>
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )}
           </Typography>
         </Grid>
       </Paper>
 
-      <Paper className={classes.convoBox} elevation={6}>
+      <Paper className={classes.convoBox}>
         {!show && !!room ? (
           <div
             style={{
@@ -133,7 +146,12 @@ export default function ChatBox(props) {
           >
             <Grid container alignItems="center" justify="space-between">
               <Grid item xs={11}>
-                <Grid container spacing={1} style={{ padding: "10px" }}>
+                <Grid
+                  container
+                  spacing={1}
+                  alignItems="center"
+                  style={{ padding: "10px" }}
+                >
                   <Grid item>
                     <Typography style={{ color: "gray" }}>Request:</Typography>
                   </Grid>
@@ -167,12 +185,12 @@ export default function ChatBox(props) {
         ) : (
           ""
         )}
-        <div
+        <Grid
+          container
+          direction="column"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            padding: "20px 10px 10px 10px",
-            height: 500
+            padding: "20px 10px 10px 10px"
+            // height: 500
           }}
         >
           {room === null && !!user ? (
@@ -210,13 +228,13 @@ export default function ChatBox(props) {
           {isTyping !== null
             ? isTyping.user && isTyping.data
               ? isTyping.data.id === room.id && (
-                  <Div style={{ flexDirection: "row" }}>
+                  <Grid container>
                     <Avatar src={isTyping.user.user_image} />
 
                     <Msg
                       style={{
                         borderRadius: "20px 20px 20px 0",
-                        border: "2px solid #ff6f61"
+                        border: "2px solid #d4d4d4"
                       }}
                     >
                       <TypingIndicator>
@@ -225,12 +243,12 @@ export default function ChatBox(props) {
                         <span></span>
                       </TypingIndicator>
                     </Msg>
-                  </Div>
+                  </Grid>
                 )
               : ""
             : ""}
           <div ref={lastMessage} />
-        </div>
+        </Grid>
       </Paper>
       <form onSubmit={handleSubmit}>
         <Paper className={classes.inputAreacontainer} elevation={6}>
@@ -250,8 +268,6 @@ export default function ChatBox(props) {
               }
               setMsg(e.target.value);
             }}
-            multiline
-            rowsMax="2"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -286,16 +302,11 @@ const MessageBox = props => {
       });
   }, [headers, data]);
   return (
-    <Div
-      style={
-        user.id === data.user_id
-          ? {
-              flexDirection: "row-reverse"
-            }
-          : {
-              flexDirection: "row"
-            }
-      }
+    <Grid
+      container
+      alignItems="flex-end"
+      style={{ padding: "0 5px 10px 5px" }}
+      direction={user.id === data.user_id ? "row-reverse" : "row"}
     >
       {user.id !== data.user_id ? (
         isTyping === null ? (
@@ -329,20 +340,17 @@ const MessageBox = props => {
               }
             : {
                 borderRadius: "20px 20px 20px 0",
-                border: "2px solid #ff6f61"
+                border: "2px solid #d4d4d4",
+                background: "#d4d4d4"
               }
         }
       >
         {ReactHtmlParser(data.content)}
       </Msg>
-    </Div>
+    </Grid>
   );
 };
-const Div = styled.div`
-  padding: 0 5px 10px 5px;
-  display: flex;
-  align-items: flex-end;
-`;
+
 const Msg = styled.span`
   display: flex;
   position: static;

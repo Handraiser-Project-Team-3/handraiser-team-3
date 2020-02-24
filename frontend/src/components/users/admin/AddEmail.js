@@ -34,7 +34,7 @@ export default function AddEmail(props) {
           toast.info("Email Address has been Added!");
           setEmail("");
         })
-        .catch(() => errorToast("Email already taken!"));
+        .catch(err => errorToast("Email already taken!"));
     } else {
       errorToast("Please Enter Valid Email Address");
     }

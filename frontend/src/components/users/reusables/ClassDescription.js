@@ -38,7 +38,7 @@ export default function ClassDescription({ classDetails }) {
           align="center"
         >
           <Grid item xs={12} sm={6}>
-            <img src={work} style={{ width: "270.5px" }} alt="" />
+            <img src={work} style={{ width: "270.5px" }} alt="svg" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Tooltip title="Click to see Description">
@@ -53,10 +53,9 @@ export default function ClassDescription({ classDetails }) {
           </Grid>
         </Grid>
       </Paper>
-      <Paper elevation={5}>
+      <Paper elevation={5} className={classes.bannerFlip}>
         <Grid
-          className={classes.banner}
-          style={{ height: "177px", padding: "30px" }}
+          style={{ height: "181px", padding: "30px" }}
           container
           alignItems="center"
           justify="flex-start"
@@ -70,13 +69,17 @@ export default function ClassDescription({ classDetails }) {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Tooltip title="Click to see Class Title">
+            <Tooltip title="Click to flip again">
               <Typography
                 variant="subtitle2"
-                style={{ color: "white", fontSize: "16px", cursor: "pointer" }}
+                style={{
+                  color: "white",
+                  cursor: "pointer",
+                  paddingBottom: "20px"
+                }}
                 onClick={() => setIsFlipped(false)}
               >
-                {classDetails ? classDetails.class_description : ""}
+                {!!classDetails ? classDetails.class_description : ""}
               </Typography>
             </Tooltip>
           </Grid>

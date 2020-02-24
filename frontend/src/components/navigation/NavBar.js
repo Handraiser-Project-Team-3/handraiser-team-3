@@ -51,15 +51,23 @@ const useStyles = makeStyles(theme => ({
   nested: {
     "&:hover": {
       background:
-        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
     }
   },
   enrolled: {
     "&:hover": {
       background:
-        "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)",
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)",
       color: "whitesmoke"
+    }
+  },
+  headerBg: {
+    background:
+      "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 27%, rgba(171,171,250,1) 55%, rgba(255,255,255,1) 100%)",
+    "@media (max-width: 890px)": {
+      background:
+        "linear-gradient(90deg, rgba(95,71,194,1) 0%, rgba(192,162,255,1) 70%, rgba(171,171,250,1) 100%, rgba(255,255,255,1) 100%)"
     }
   }
 }));
@@ -234,7 +242,7 @@ export default function ButtonAppBar(props) {
         >
           <InboxIcon />
           <ListItemText
-            primary={account_type_id === 2 ? "Subjects Handled " : "Enrolled"}
+            primary={account_type_id === 2 ? "Subjects " : "Enrolled"}
             style={{ width: "20px", paddingLeft: "20px" }}
           />
           {show ? <ExpandLess /> : <ExpandMore />}
@@ -243,7 +251,13 @@ export default function ButtonAppBar(props) {
           <List component="div" disablePadding>
             <ListItem button className={classes.nested}>
               <StarBorder />
-              <ListItemText primary="Starred" />
+              <ListItemText
+                style={{
+                  width: "20px",
+                  paddingLeft: "20px"
+                }}
+                primary="Starred"
+              />
             </ListItem>
           </List>
         </Collapse>
@@ -253,13 +267,7 @@ export default function ButtonAppBar(props) {
   return (
     <>
       <div className={classes.root}>
-        <AppBar
-          position="fixed"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(52,52,181,1) 0%, rgba(92,117,190,1) 27%, rgba(171,171,250,1) 68%, rgba(255,255,255,1) 100%)"
-          }}
-        >
+        <AppBar position="fixed" className={classes.headerBg}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -331,6 +339,7 @@ export default function ButtonAppBar(props) {
     </>
   );
 }
+
 const Btn = styled.span`
   display: flex;
   align-items: center;
