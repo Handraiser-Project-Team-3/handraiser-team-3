@@ -28,7 +28,7 @@ module.exports = {
     });
 
     socket.on(`remove_request`, (data, user) => {
-      db.messages.destroy({ student_request_id: data.id }).then(() => {
+      db.messages.destroy({ student_request_id: Number(data.id) }).then(() => {
         db.student_request
           .destroy({ id: data.id })
           .then(() =>
@@ -40,6 +40,11 @@ module.exports = {
       });
     });
 
+    socket.on(`edit_request`, data => {
+      const id = data.id;
+      delete data.id;
+      db.student_request.update({ id: Number(id) }, data).then(() => newData());
+    });
     socket.on(`update_request`, ({ notify, action }) =>
       notify !== null
         ? action === "move_back"
@@ -84,7 +89,7 @@ module.exports = {
         })
         .then(() => {
           db.student_request
-            .destroy({ student_id: userId, class_id: classroomId })
+            .destroy({ student_id: userId, class_id: Number(classroomId) })
             .then(() => {
               db.classroom_users.destroy({ id: userId }).then(deleted => {
                 io.emit(`notify_removed_user`, deleted[0]);
