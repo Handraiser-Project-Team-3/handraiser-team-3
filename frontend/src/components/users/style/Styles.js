@@ -254,7 +254,7 @@ export const LoginStyle = makeStyles(theme => ({
 		backgroundImage: `url(${Background})`,
 		height: "100vh",
 		backgroundSize: "cover",
-		opacity: "0.6",
+		opacity: "0.9",
 		"&:hover": {
 			opacity: "1"
 		}

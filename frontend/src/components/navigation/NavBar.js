@@ -136,7 +136,6 @@ export default function ButtonAppBar(props) {
 			onClick={toggleDrawer(side, true)}
 			onKeyDown={toggleDrawer(side, true)}
 		>
-			{console.log(classRoom)}
 			<List
 				component="nav"
 				aria-labelledby="nested-list-subheader"
@@ -201,8 +200,8 @@ export default function ButtonAppBar(props) {
 								</div>
 							</div>
 						) : (
-							<></>
-						)}
+								<></>
+							)}
 						{classRoom &&
 							classRoom.map(rooms =>
 								rooms.class_status === true ? (
@@ -229,8 +228,8 @@ export default function ButtonAppBar(props) {
 										</ListItem>
 									</Link>
 								) : (
-									<></>
-								)
+										<></>
+									)
 							)}
 					</List>
 				</Collapse>
