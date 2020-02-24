@@ -39,7 +39,7 @@ export default function MentorsView(props) {
 									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
-												<Typography variant="inherit">Waiting:</Typography>
+												<Typography variant="inherit">Needs Help:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
@@ -65,7 +65,7 @@ export default function MentorsView(props) {
 									<Grid item xs={8} sm={9}>
 										<Grid container direction="column" align="center">
 											<Grid item>
-												<Typography variant="inherit">In Queue:</Typography>
+												<Typography variant="inherit">Being Helped:</Typography>
 											</Grid>
 											<Grid item>
 												<Typography variant="h3" style={{ color: "#ff6f61" }}>
