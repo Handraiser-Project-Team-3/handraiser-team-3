@@ -43,6 +43,7 @@ import {
   user_details
 } from "../reusables/UserDetails";
 import AddMentorModal from "../reusables/AddMentorModal";
+import { Chip } from "@material-ui/core";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -218,6 +219,19 @@ export default function Classroom(props) {
     addNewRequest("");
     setRequestDialog(false);
   };
+  const defaultRoom = action => {
+    if (action === "being_helped") {
+      const req = requests.filter(
+        req => req.status === false && req.student_id === classroomUser.id
+      );
+      req.length === 1 && setRoom(req[0]);
+    } else {
+      const req = requests.filter(
+        req => req.status === true && req.student_id === classroomUser.id
+      );
+      req.length === 1 && setRoom(req[0]);
+    }
+  };
   return (
     <Layout
       accountType={account_type_id}
@@ -239,8 +253,20 @@ export default function Classroom(props) {
                 aria-label="full width tabs example"
               >
                 <Tab label="Need Help" {...a11yProps(0)} />
-                <Tab label="Being Helped" {...a11yProps(1)} />
-                <Tab label="Done" {...a11yProps(2)} />
+                <Tab
+                  label="Being Helped"
+                  {...a11yProps(1)}
+                  onClick={() => {
+                    defaultRoom("being_helped");
+                  }}
+                />
+                <Tab
+                  label="Done"
+                  {...a11yProps(2)}
+                  onClick={() => {
+                    defaultRoom("done");
+                  }}
+                />
               </Tabs>
             ) : (
               <Grid
@@ -292,6 +318,7 @@ export default function Classroom(props) {
                       </Grid>
                       <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
                         <Profile userId={x.user_id} headers={headers} />
+                        <MentorIndicator user={x} headers={headers} />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -523,6 +550,26 @@ const RemoveUserComponent = ({
         }}
       />
     </Tooltip>
+  );
+};
+
+const MentorIndicator = ({ user, headers }) => {
+  const [userDetails, setUserDetails] = React.useState({});
+  React.useEffect(() => {
+    if (!!user && !!headers) {
+      user_details(user.user_id, headers).then(res => setUserDetails(res.data));
+    }
+  }, [user, headers]);
+
+  return userDetails.account_type_id === 2 ? (
+    <Chip
+      size="small"
+      label="Mentor"
+      color="primary"
+      style={{ margin: "0 0 0 10px" }}
+    />
+  ) : (
+    <></>
   );
 };
 

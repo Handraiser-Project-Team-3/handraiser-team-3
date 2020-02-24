@@ -18,7 +18,7 @@ module.exports = {
     const newData = (notify, action) =>
       db.student_request.find({ class_id: classroom }).then(data => {
         io.to(`${classroom}`).emit(`update_request_list`, data, action);
-        socket.to(`${classroom}`).emit(`notify`, notify);
+        !!notify && socket.to(`${classroom}`).emit(`notify`, notify);
       });
 
     socket.on(`add_request`, (data, user) => {
