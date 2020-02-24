@@ -145,7 +145,7 @@ const Option = props => {
         {data.user_image ? (
           <Img src={data.user_image} />
         ) : (
-          <AccountCircleIcon style={{ fontSize: 30 }} />
+          <AccountCircleIcon style={{ fontSize: 37, margin: "0 8px 0 -3px" }} />
         )}
         {data.label}
       </Div>
@@ -154,6 +154,8 @@ const Option = props => {
 };
 const Div = styled.div`
   padding: 5px 0 5px 15px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 `;
 const Img = styled.img`
