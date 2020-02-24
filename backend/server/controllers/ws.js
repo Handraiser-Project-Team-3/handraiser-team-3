@@ -18,7 +18,7 @@ module.exports = {
     const newData = (notify, action) =>
       db.student_request.find({ class_id: classroom }).then(data => {
         io.to(`${classroom}`).emit(`update_request_list`, data, action);
-        socket.to(`${classroom}`).emit(`notify`, notify);
+        !!notify && socket.to(`${classroom}`).emit(`notify`, notify);
       });
 
     socket.on(`add_request`, (data, user) => {
@@ -94,7 +94,7 @@ module.exports = {
             });
         });
     });
-    socket.on(`add_mentors`, ({ newMentors, classId }) => {
+    socket.on(`add_mentors`, ({ newMentors, classId }, callBack) => {
       newMentors.map(mentor => {
         db.classroom_users
           .insert(
@@ -104,6 +104,9 @@ module.exports = {
           .then(inserted => {
             newClassroomUsers();
             io.emit(`notify_assigned`, inserted);
+            db.classroom_users
+              .find({ class_id: classId })
+              .then(users => callBack(users));
           });
       });
     });

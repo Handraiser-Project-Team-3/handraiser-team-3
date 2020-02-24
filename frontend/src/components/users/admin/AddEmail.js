@@ -17,7 +17,6 @@ export default function AddEmail(props) {
   }
   function handleClickAdd(email) {
     const EmailVal = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/; // eslint-disable-line
-
     if (email.match(EmailVal)) {
       axios
         .post(
@@ -96,7 +95,6 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   }
 });
-
 // toast
 let toastId = null;
 const errorToast = msg => {

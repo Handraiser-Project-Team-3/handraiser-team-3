@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import CloseIcon from "@material-ui/icons/Close";
 import RemoveIcon from "@material-ui/icons/Remove";
-import Paper from "@material-ui/core/Paper";
 
 //tabs
 import AppBar from "@material-ui/core/AppBar";
@@ -44,6 +43,7 @@ import {
   user_details
 } from "../reusables/UserDetails";
 import AddMentorModal from "../reusables/AddMentorModal";
+import { Chip } from "@material-ui/core";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -173,6 +173,7 @@ export default function Classroom(props) {
     socket.on(`notify`, notify => {
       alertToast(notify);
     });
+    socket.emit("update_request", { notify: null, action: null });
   }, [socket]);
 
   React.useEffect(() => {
@@ -218,6 +219,19 @@ export default function Classroom(props) {
     addNewRequest("");
     setRequestDialog(false);
   };
+  const defaultRoom = action => {
+    if (action === "being_helped") {
+      const req = requests.filter(
+        req => req.status === false && req.student_id === classroomUser.id
+      );
+      req.length === 1 && setRoom(req[0]);
+    } else {
+      const req = requests.filter(
+        req => req.status === true && req.student_id === classroomUser.id
+      );
+      req.length === 1 && setRoom(req[0]);
+    }
+  };
   return (
     <Layout
       accountType={account_type_id}
@@ -239,8 +253,20 @@ export default function Classroom(props) {
                 aria-label="full width tabs example"
               >
                 <Tab label="Need Help" {...a11yProps(0)} />
-                <Tab label="Being Helped" {...a11yProps(1)} />
-                <Tab label="Done" {...a11yProps(2)} />
+                <Tab
+                  label="Being Helped"
+                  {...a11yProps(1)}
+                  onClick={() => {
+                    defaultRoom("being_helped");
+                  }}
+                />
+                <Tab
+                  label="Done"
+                  {...a11yProps(2)}
+                  onClick={() => {
+                    defaultRoom("done");
+                  }}
+                />
               </Tabs>
             ) : (
               <Grid
@@ -269,7 +295,7 @@ export default function Classroom(props) {
               </Grid>
             )}
           </AppBar>
-          <Paper elevation={5} className={classes.root}>
+          <div className={classes.root}>
             {list ? (
               classroomUsersArray.map(x => (
                 <Grid
@@ -292,6 +318,7 @@ export default function Classroom(props) {
                       </Grid>
                       <Grid item xs={9} sm={10} style={{ marginBottom: "1vh" }}>
                         <Profile userId={x.user_id} headers={headers} />
+                        <MentorIndicator user={x} headers={headers} />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -303,6 +330,8 @@ export default function Classroom(props) {
                           headers={headers}
                           socket={socket}
                           setRoom={setRoom}
+                          classId={classId}
+                          setClassroomUsersArray={setClassroomUsersArray}
                         />
                       )}
                   </Grid>
@@ -377,7 +406,7 @@ export default function Classroom(props) {
                 </TabPanel>
               </>
             )}
-          </Paper>
+          </div>
 
           <ClassroomModal
             addNewRequest={addNewRequest}
@@ -419,6 +448,8 @@ export default function Classroom(props) {
           headers={headers}
           socket={socket}
           classId={classId}
+          classroomUsersArray={classroomUsersArray}
+          setClassroomUsersArray={setClassroomUsersArray}
         />
       </Grid>
     </Layout>
@@ -479,7 +510,14 @@ const OnlineIndicator = ({ data, headers }) => {
   );
 };
 
-const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
+const RemoveUserComponent = ({
+  data,
+  headers,
+  socket,
+  setRoom,
+  classId,
+  setClassroomUsersArray
+}) => {
   const [user, setUser] = React.useState({});
 
   React.useEffect(() => {
@@ -502,11 +540,36 @@ const RemoveUserComponent = ({ data, headers, socket, setRoom }) => {
                 userId: data.id,
                 classroomId: data.class_id
               });
+              getClassroomUser(headers).then(res => {
+                setClassroomUsersArray(
+                  res.data.filter(x => x.class_id === Number(classId))
+                );
+              });
             }
           );
         }}
       />
     </Tooltip>
+  );
+};
+
+const MentorIndicator = ({ user, headers }) => {
+  const [userDetails, setUserDetails] = React.useState({});
+  React.useEffect(() => {
+    if (!!user && !!headers) {
+      user_details(user.user_id, headers).then(res => setUserDetails(res.data));
+    }
+  }, [user, headers]);
+
+  return userDetails.account_type_id === 2 ? (
+    <Chip
+      size="small"
+      label="Mentor"
+      color="primary"
+      style={{ margin: "0 0 0 10px" }}
+    />
+  ) : (
+    <></>
   );
 };
 

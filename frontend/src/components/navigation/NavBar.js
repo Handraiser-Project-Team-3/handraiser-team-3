@@ -26,6 +26,7 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import Axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -75,7 +76,7 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar(props) {
   const { user, setUser, setAccessToken, headers, socket } = props.data;
   const userDetails = user ? user : {};
-  const { user_image, id, account_type_id } = userDetails;
+  const { user_image, account_type_id } = userDetails;
   const history = useHistory();
   const MyComponent = props.component;
   const classes = useStyles();
@@ -84,6 +85,7 @@ export default function ButtonAppBar(props) {
   const [show, setShow] = useState(true);
   const [Open, setOpen] = useState(false);
   const [classRoom, setClassRoom] = useState([]);
+  const [assignedClass, setAssignedClass] = useState([]);
   const classId = props.match && props.match.params.id;
   const [state, setState] = React.useState({
     left: false
@@ -114,21 +116,62 @@ export default function ButtonAppBar(props) {
     ) {
       return;
     }
-    axios.get(`/api/classroom-users`, headers).then(e => {
-      Promise.all(
-        e.data
-          .filter(userdata => {
-            return userdata.user_id === id;
-          })
-          .map(res =>
-            axios(`/api/class/${res.class_id}`, headers).then(res => {
-              return res.data;
-            })
-          )
-      ).then(response => setClassRoom(response));
-    });
+
     setState({ ...state, [side]: open });
   };
+  React.useEffect(() => {
+    if (!!user && !!headers) {
+      if (user.account_type_id === 2) {
+        axios
+          .get(`/api/class`, headers)
+          .then(response =>
+            setClassRoom(response.data.filter(x => x.user_id === user.id))
+          );
+      } else {
+        axios.get(`/api/classroom-users`, headers).then(e => {
+          Promise.all(
+            e.data
+              .filter(userdata => {
+                return userdata.user_id === user.account_type_id;
+              })
+              .map(res =>
+                axios(`/api/class/${res.class_id}`, headers).then(res => {
+                  return res.data;
+                })
+              )
+          ).then(response => setClassRoom(response));
+        });
+      }
+    }
+  }, [user, headers]);
+
+  React.useEffect(() => {
+    if (!!classRoom && !!headers && !!user) {
+      (async () => {
+        try {
+          const res = await Axios.get(`/api/classroom-users/`, headers);
+
+          Promise.all(
+            res.data
+              .filter(userdata => {
+                return (
+                  userdata.user_id === user.id &&
+                  classRoom.filter(room => room.id === userdata.class_id)
+                    .length !== 1
+                );
+              })
+              .map(res =>
+                axios(`/api/class/${res.class_id}`, headers).then(res => {
+                  return res.data;
+                })
+              )
+          ).then(response => setAssignedClass(response));
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }
+  }, [classRoom, headers, user]);
   const sideList = (side, socket) => (
     <div
       className={classes.list}
@@ -173,94 +216,86 @@ export default function ButtonAppBar(props) {
         </ListItem>
         <Collapse in={!show} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {classRoom.length === 0 ? (
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "20px",
-                  marginTop: "25px"
-                }}
-              >
-                <div>
-                  <div className="spinner">
-                    <div className="bounce1"></div>
-                    <div className="bounce2"></div>
-                    <div className="bounce3"></div>
-                  </div>
-                </div>
-                <span className={classes.noClasses} style={{ color: "blue" }}>
-                  {account_type_id === 3
-                    ? "Not Enrolled Yet"
-                    : "Theres no Subject Handle Yet"}
-                </span>
-                <div className="spinner">
-                  <div className="bounce1"></div>
-                  <div className="bounce2"></div>
-                  <div className="bounce3"></div>
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
             {classRoom &&
-              classRoom.map(rooms =>
-                rooms.class_status === true ? (
-                  <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
-                    <ListItem
-                      id={2}
-                      key={rooms.id}
-                      button
-                      className={classes.nested}
-                      onClick={() => {
-                        socket.off();
-                      }}
-                    >
-                      <StarBorder />
-                      <ListItemText
-                        style={{
-                          width: "20px",
-                          paddingLeft: "20px"
+              classRoom.map(
+                rooms =>
+                  rooms.class_status === true && (
+                    <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+                      <ListItem
+                        id={2}
+                        key={rooms.id}
+                        button
+                        className={classes.nested}
+                        onClick={() => {
+                          socket.off();
                         }}
                       >
-                        {" "}
-                        {rooms.class_name}
-                      </ListItemText>
-                    </ListItem>
-                  </Link>
-                ) : (
-                  <></>
-                )
+                        <StarBorder />
+                        <ListItemText
+                          style={{
+                            width: "20px",
+                            paddingLeft: "20px"
+                          }}
+                        >
+                          {" "}
+                          {rooms.class_name}
+                        </ListItemText>
+                      </ListItem>
+                    </Link>
+                  )
               )}
           </List>
         </Collapse>
         {/* thirdDropDown */}
-        <ListItem
-          button
-          onClick={handleClickOpen}
-          style={{ display: account_type_id >= 2 ? "flex" : "none" }}
-          className={classes.enrolled}
-        >
-          <InboxIcon />
-          <ListItemText
-            primary={account_type_id === 2 ? "Subjects " : "Enrolled"}
-            style={{ width: "20px", paddingLeft: "20px" }}
-          />
-          {show ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={Open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <StarBorder />
+        {account_type_id === 2 && (
+          <>
+            <ListItem
+              button
+              onClick={handleClickOpen}
+              style={{ display: account_type_id >= 2 ? "flex" : "none" }}
+              className={classes.enrolled}
+            >
+              <InboxIcon />
               <ListItemText
-                style={{
-                  width: "20px",
-                  paddingLeft: "20px"
-                }}
-                primary="Starred"
+                primary="Subjects Assigned"
+                style={{ width: "20px", paddingLeft: "20px" }}
               />
+              {show ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-          </List>
-        </Collapse>
+            <Collapse in={Open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {assignedClass &&
+                  assignedClass.map(
+                    rooms =>
+                      rooms.class_status === true && (
+                        <Link to={`/classroom/${rooms.id}`} key={rooms.id}>
+                          <ListItem
+                            id={2}
+                            key={rooms.id}
+                            button
+                            className={classes.nested}
+                            onClick={() => {
+                              socket.off();
+                            }}
+                          >
+                            <StarBorder />
+                            <ListItemText
+                              style={{
+                                width: "20px",
+                                paddingLeft: "20px"
+                              }}
+                            >
+                              {" "}
+                              {rooms.class_name}
+                            </ListItemText>
+                          </ListItem>
+                        </Link>
+                      )
+                  )}
+              </List>
+            </Collapse>
+          </>
+        )}
       </List>
     </div>
   );
@@ -274,7 +309,7 @@ export default function ButtonAppBar(props) {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={toggleDrawer("left", true)}
+              onClick={account_type_id !== 1 && toggleDrawer("left", true)}
             >
               <MenuIcon />
             </IconButton>
