@@ -108,6 +108,8 @@ export default function HandleForm(props) {
       </Tooltip>
       <Dialog
         fullWidth={fullWidth}
+        disableBackdropClick
+        disableEscapeKeyDown
         maxWidth={maxWidth}
         open={form}
         onClose={handleCloseForm}
