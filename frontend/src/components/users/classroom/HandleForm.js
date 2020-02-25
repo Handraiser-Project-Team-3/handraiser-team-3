@@ -77,7 +77,7 @@ export default function HandleForm(props) {
           .then(
             () => {
               setSending(false);
-              toast.success("Email sent!");
+              alertToast("Email sent!");
               handleCloseForm();
             },
             error => {
@@ -229,3 +229,14 @@ export default function HandleForm(props) {
     </div>
   );
 }
+let toastId = null;
+const alertToast = msg => {
+  if (!toast.isActive(toastId)) {
+    toastId = toast.info(msg, {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 3000,
+      closeOnClick: true
+    });
+  }
+};
