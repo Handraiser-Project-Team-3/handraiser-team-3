@@ -90,9 +90,7 @@ export default function ButtonAppBar(props) {
   const [state, setState] = React.useState({
     left: false
   });
-  // React.useEffect(() => {
-  //   axios.get(`/api/user/6`, headers).then(re => console.log(re));
-  // }, [headers]);
+
   const handleClass = () => {
     history.push("/");
   };

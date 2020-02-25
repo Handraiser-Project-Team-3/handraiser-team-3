@@ -109,6 +109,7 @@ export default function HandleForm(props) {
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}
+        disableBackdropClick
         open={form}
         onClose={handleCloseForm}
         aria-labelledby="form-dialog-title"

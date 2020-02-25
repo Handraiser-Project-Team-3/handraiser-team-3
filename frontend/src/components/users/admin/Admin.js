@@ -82,7 +82,7 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   },
   tableHeight: {
-    height: "65.5vh"
+    height: 647
   },
   filter: {
     cursor: "pointer",
@@ -93,7 +93,7 @@ const useStyles = makeStyles({
   },
   margin: {
     marginLeft: "95%",
-    marginTop: "65%",
+    marginTop: "50%",
     display: "flex",
     alignItems: "baseline"
   },
@@ -126,12 +126,6 @@ export const Admin = props => {
     // eslint-disable-next-line
   }, []);
 
-  // const deleteClass = classid => {
-  //   axios
-  //     .delete(`/api/user/${classid}`, headers)
-  //     .then(() => setUsers(users.filter(data => data.id !== classid)));
-  // };
-  //
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -296,11 +290,6 @@ export const Admin = props => {
                                             color: "#616161"
                                           }}
                                         />
-                                        {/* <div
-																					onClick={() => deleteClass(row.id)}
-																				>
-																					delete
-																				</div> */}
                                       </>
                                     )}
                                     {row.account_type_id === 2 && (
@@ -346,7 +335,7 @@ export const Admin = props => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-                {users.length > 8 ? (
+                {currentUsers.length > 9 ? (
                   <Grid
                     style={{
                       marginTop: 25,
