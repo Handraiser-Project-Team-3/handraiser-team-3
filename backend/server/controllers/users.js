@@ -37,7 +37,17 @@ module.exports = {
               getUserDetails();
             });
         }
-        getUserDetails();
+        users
+          .update(
+            { id: user.id },
+            {
+              ...req.body,
+              user_status: true
+            }
+          )
+          .then(() => {
+            getUserDetails();
+          });
       });
   },
   addUser: (req, res) => {
