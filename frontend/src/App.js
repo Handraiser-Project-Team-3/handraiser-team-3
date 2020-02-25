@@ -10,7 +10,7 @@ import NotifyLogout from "./components/users/reusables/NotifyLogout";
 
 import Axios from "axios";
 import { class_details } from "./components/users/reusables/UserDetails";
-const socket = io(`172.60.60.163:3001`);
+const socket = io(`${process.env.REACT_APP_BASE_URL}`);
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
