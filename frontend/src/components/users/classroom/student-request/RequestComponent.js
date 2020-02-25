@@ -290,16 +290,19 @@ export const RequestComponent = ({
         >
           {action === "need" && account_type_id === 2 ? (
             <div>
-              <MenuItem
-                onClick={() =>
-                  handleSubmitAction("Removing request ...", () => {
-                    socket.emit("remove_request", data, user);
-                    setRoom(null);
-                  })
-                }
-              >
-                Remove
-              </MenuItem>
+              {classroomUser.id === data.student_id && (
+                <MenuItem
+                  onClick={() =>
+                    handleSubmitAction("Removing request ...", () => {
+                      socket.emit("remove_request", data, user);
+                      setRoom(null);
+                    })
+                  }
+                >
+                  Remove
+                </MenuItem>
+              )}
+
               <MenuItem
                 onClick={() =>
                   handleSubmitAction("Accepting request . . .", () => {
