@@ -136,7 +136,7 @@ export default function Profile(props) {
 						style={{ paddingLeft: "10px", cursor: "pointer" }}
 						onClick={handleClickOpen}
 					>
-						<UserDetails id={userId} headers={headers} action={"name"} />
+							<UserDetails id={userId} headers={headers} action={"name"} />
 					</Typography>
 				</Tooltip>
 			)}
