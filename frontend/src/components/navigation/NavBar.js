@@ -90,9 +90,7 @@ export default function ButtonAppBar(props) {
   const [state, setState] = React.useState({
     left: false
   });
-  // React.useEffect(() => {
-  //   axios.get(`/api/user/6`, headers).then(re => console.log(re));
-  // }, [headers]);
+
   const handleClass = () => {
     history.push("/");
   };
@@ -123,24 +121,32 @@ export default function ButtonAppBar(props) {
     if (!!user && !!headers) {
       if (user.account_type_id === 2) {
         axios
-          .get(`/api/class`, headers)
+          .get(`${process.env.REACT_APP_PROXY_URL}/api/class`, headers)
           .then(response =>
             setClassRoom(response.data.filter(x => x.user_id === user.id))
           );
       } else {
-        axios.get(`/api/classroom-users`, headers).then(e => {
-          Promise.all(
-            e.data
-              .filter(userdata => {
-                return userdata.user_id === user.account_type_id;
-              })
-              .map(res =>
-                axios(`/api/class/${res.class_id}`, headers).then(res => {
-                  return res.data;
+        axios
+          .get(
+            `${process.env.REACT_APP_PROXY_URL}/api/classroom-users`,
+            headers
+          )
+          .then(e => {
+            Promise.all(
+              e.data
+                .filter(userdata => {
+                  return userdata.user_id === user.account_type_id;
                 })
-              )
-          ).then(response => setClassRoom(response));
-        });
+                .map(res =>
+                  axios(
+                    `${process.env.REACT_APP_PROXY_URL}/api/class/${res.class_id}`,
+                    headers
+                  ).then(res => {
+                    return res.data;
+                  })
+                )
+            ).then(response => setClassRoom(response));
+          });
       }
     }
   }, [user, headers]);
@@ -149,7 +155,10 @@ export default function ButtonAppBar(props) {
     if (!!classRoom && !!headers && !!user) {
       (async () => {
         try {
-          const res = await Axios.get(`/api/classroom-users/`, headers);
+          const res = await Axios.get(
+            `${process.env.REACT_APP_PROXY_URL}/api/classroom-users/`,
+            headers
+          );
 
           Promise.all(
             res.data
@@ -161,7 +170,10 @@ export default function ButtonAppBar(props) {
                 );
               })
               .map(res =>
-                axios(`/api/class/${res.class_id}`, headers).then(res => {
+                axios(
+                  `${process.env.REACT_APP_PROXY_URL}/api/class/${res.class_id}`,
+                  headers
+                ).then(res => {
                   return res.data;
                 })
               )
