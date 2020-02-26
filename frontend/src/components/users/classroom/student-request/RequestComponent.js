@@ -171,11 +171,14 @@ export const RequestComponent = ({
               )}
             </Hidden>
             <Hidden mdUp>
-              <MoreVertIcon
-                size="small"
-                style={{ color: "#4c54ba" }}
-                onClick={handleClick}
-              />
+              {(account_type_id === 2 ||
+                classroomUser.id === data.student_id) && (
+                <MoreVertIcon
+                  size="small"
+                  style={{ color: "#4c54ba" }}
+                  onClick={handleClick}
+                />
+              )}
             </Hidden>
 
             {account_type_id === 2 && (
@@ -288,38 +291,8 @@ export const RequestComponent = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {action === "need" && account_type_id === 2 ? (
+          {action === "need" ? (
             <div>
-              {classroomUser.id === data.student_id && (
-                <MenuItem
-                  onClick={() =>
-                    handleSubmitAction("Removing request ...", () => {
-                      socket.emit("remove_request", data, user);
-                      setRoom(null);
-                    })
-                  }
-                >
-                  Remove
-                </MenuItem>
-              )}
-
-              <MenuItem
-                onClick={() =>
-                  handleSubmitAction("Accepting request . . .", () => {
-                    updateRequest({
-                      id: data.id,
-                      data: false,
-                      notify: `Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
-                      mentor: mentor.id
-                    });
-                  })
-                }
-              >
-                Help
-              </MenuItem>
-            </div>
-          ) : account_type_id === 3 ? (
-            <span>
               <MenuItem
                 onClick={() =>
                   handleSubmitAction("Removing request ...", () => {
@@ -330,15 +303,33 @@ export const RequestComponent = ({
               >
                 Remove
               </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setEdit(data);
-                  setEditModal(true);
-                }}
-              >
-                Edit
-              </MenuItem>
-            </span>
+
+              {account_type_id === 2 ? (
+                <MenuItem
+                  onClick={() =>
+                    handleSubmitAction("Accepting request . . .", () => {
+                      updateRequest({
+                        id: data.id,
+                        data: false,
+                        notify: `Mentor ${user.first_name} accepted ${sender.first_name}'s request`,
+                        mentor: mentor.id
+                      });
+                    })
+                  }
+                >
+                  Help
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    setEdit(data);
+                    setEditModal(true);
+                  }}
+                >
+                  Edit
+                </MenuItem>
+              )}
+            </div>
           ) : action === "help" ? (
             <div>
               <MenuItem
