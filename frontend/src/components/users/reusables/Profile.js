@@ -89,12 +89,12 @@ export default function Profile(props) {
 	useEffect(() => {
 		user_details(userId, headers).then(res => setAccountDetails(res.data));
 		axios
-			.get(`/api/class?id=${userId}`, headers)
+			.get(`${process.env.REACT_APP_PROXY_URL}/api/class?id=${userId}`, headers)
 			.then(res => setClassList(res.data))
 			.catch(err => console.error(err));
 
 		axios
-			.get(`/api/classroom-users/`, headers)
+			.get(`${process.env.REACT_APP_PROXY_URL}/api/classroom-users/`, headers)
 			.then(res => {
 				setClassroomUsers(res.data);
 				Promise.all(

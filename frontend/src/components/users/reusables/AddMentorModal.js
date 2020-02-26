@@ -30,7 +30,10 @@ export default function({
 
   const fetchMentors = async (headers, classId, classUsers, setMentorList) => {
     try {
-      const res = await Axios.get("/api/user/list", headers);
+      const res = await Axios.get(
+        `${process.env.REACT_APP_PROXY_URL}/api/user/list`,
+        headers
+      );
       setMentorList(
         res.data
           .filter(

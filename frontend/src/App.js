@@ -21,7 +21,7 @@ function App() {
     if (accessToken) {
       const obj = { ...jwt_decode(accessToken), status: true };
       socket.emit("online", obj);
-      Axios.get(`/api/user/${obj.id}`, {
+      Axios.get(`${process.env.REACT_APP_PROXY_URL}/api/user/${obj.id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

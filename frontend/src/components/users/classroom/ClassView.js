@@ -92,14 +92,16 @@ export const ClassView = props => {
   const handleStatus = () => event => {
     axios
       .patch(
-        `/api/class/${event.target.value}`,
+        `${process.env.REACT_APP_PROXY_URL}/api/class/${event.target.value}`,
         { class_status: event.target.checked },
         headers
       )
       .then(res => {
-        axios.get(`/api/class?id=${id}`, headers).then(res => {
-          setClassList(res.data);
-        });
+        axios
+          .get(`${process.env.REACT_APP_PROXY_URL}/api/class?id=${id}`, headers)
+          .then(res => {
+            setClassList(res.data);
+          });
 
         if (res.data[0].class_status === false) {
           alertToast("Class Disabled");
@@ -136,17 +138,15 @@ export const ClassView = props => {
       );
     });
   };
-  // const deleteClass = classid => {
-  //   axios
-  //     .delete(`/api/class/${classid}`, headers)
-  //     .then(() => setClassList(classList.filter(data => data.id !== classid)));
-  // };
 
   useEffect(() => {
     account_type_id &&
       (async () => {
         try {
-          const res = await axios.get("/api/class/", headers);
+          const res = await axios.get(
+            `${process.env.REACT_APP_PROXY_URL}/api/class/`,
+            headers
+          );
           if (account_type_id === 2) {
             setClassList(
               res.data.filter(data => {
@@ -176,7 +176,7 @@ export const ClassView = props => {
       })();
 
     axios
-      .get(`/api/classroom-users/`, headers)
+      .get(`${process.env.REACT_APP_PROXY_URL}/api/classroom-users/`, headers)
       .then(classUsers => {
         setClassroomUsers(classUsers.data);
       })
@@ -231,8 +231,8 @@ export const ClassView = props => {
                           </Grid>
                         </Grid>
                       ) : (
-                          ""
-                        )}
+                        ""
+                      )}
                     </CardMedia>
                     <CardContent>
                       <Typography gutterBottom variant="h5">
@@ -244,10 +244,10 @@ export const ClassView = props => {
                         title={
                           data.class_description.length > 45
                             ? data.class_description
-                              .split("\n")
-                              .map((item, i) => (
-                                <Typography key={i}>{item}</Typography>
-                              ))
+                                .split("\n")
+                                .map((item, i) => (
+                                  <Typography key={i}>{item}</Typography>
+                                ))
                             : ""
                         }
                       >
@@ -295,13 +295,13 @@ export const ClassView = props => {
                                   title={
                                     studentDetails.length
                                       ? studentDetails.map((res, i) => (
-                                        <Typography
-                                          style={{ fontSize: 12 }}
-                                          key={i}
-                                        >
-                                          {res}
-                                        </Typography>
-                                      ))
+                                          <Typography
+                                            style={{ fontSize: 12 }}
+                                            key={i}
+                                          >
+                                            {res}
+                                          </Typography>
+                                        ))
                                       : ""
                                   }
                                 >
@@ -390,49 +390,49 @@ export const ClassView = props => {
                             </Grid>
                           </Grid>
                         ) : (
-                            <Grid
-                              container
-                              direction="row"
-                              alignItems="center"
-                              justify="space-between"
-                            >
-                              <Grid item xs={3}>
-                                <UserDetails
-                                  id={data.user_id}
-                                  headers={headers}
-                                  action="img"
-                                />
-                              </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justify="space-between"
+                          >
+                            <Grid item xs={3}>
+                              <UserDetails
+                                id={data.user_id}
+                                headers={headers}
+                                action="img"
+                              />
+                            </Grid>
 
-                              <Grid item xs={9}>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="flex-start"
-                                  justify="space-between"
-                                >
-                                  <Grid item lg={12} xs={12}>
-                                    <Typography
-                                      gutterBottom
-                                      component="div"
-                                      variant="caption"
-                                    >
-                                      Mentor's Name:
+                            <Grid item xs={9}>
+                              <Grid
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justify="space-between"
+                              >
+                                <Grid item lg={12} xs={12}>
+                                  <Typography
+                                    gutterBottom
+                                    component="div"
+                                    variant="caption"
+                                  >
+                                    Mentor's Name:
                                   </Typography>
-                                  </Grid>
-                                  <Grid item lg={12} xs={12}>
-                                    <b>
-                                      <UserDetails
-                                        id={data.user_id}
-                                        headers={headers}
-                                        action="name"
-                                      />
-                                    </b>
-                                  </Grid>
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                  <b>
+                                    <UserDetails
+                                      id={data.user_id}
+                                      headers={headers}
+                                      action="name"
+                                    />
+                                  </b>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          )}
+                          </Grid>
+                        )}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -450,7 +450,7 @@ export const ClassView = props => {
                         alignItems="center"
                         justify="space-between"
                       >
-                        <Grid item lg={9} md={10} sm={9} xs={9} >
+                        <Grid item lg={9} md={10} sm={9} xs={9}>
                           <Button
                             onClick={() =>
                               history.push(`/classroom/${data.id}`)
@@ -460,9 +460,6 @@ export const ClassView = props => {
                           >
                             Enter Class
                           </Button>
-                          {/* <Button onClick={() => deleteClass(data.id)}>
-                            delete
-                          </Button> */}
                         </Grid>
 
                         <Grid item lg={1}>
@@ -487,53 +484,51 @@ export const ClassView = props => {
                         </Grid>
                       </Grid>
                     ) : (
-                        <Grid container direction="column" alignItems="center">
-                          <JoinClassModal
-                            classroomUsers={classroomUsers}
-                            className={data.class_name}
-                            codeClass={data.class_code}
-                            classId={data.id}
-                            user={user}
-                            headers={headers}
-                            socket={socket}
-                          />
-                        </Grid>
-                      )}
+                      <Grid container direction="column" alignItems="center">
+                        <JoinClassModal
+                          classroomUsers={classroomUsers}
+                          className={data.class_name}
+                          codeClass={data.class_code}
+                          classId={data.id}
+                          user={user}
+                          headers={headers}
+                          socket={socket}
+                        />
+                      </Grid>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>
             ))
         ) : (
-            <div className={classes.margin}>
-              <span className={classes.noClasses}>
-                {filter.length ? "No Data Results" : "No added classes yet"}
-              </span>
-              <div className="spinner">
-                <div className="bounce1"></div>
-                <div className="bounce2"></div>
-                <div className="bounce3"></div>
-              </div>
+          <div className={classes.margin}>
+            <span className={classes.noClasses}>
+              {filter.length ? "No Data Results" : "No added classes yet"}
+            </span>
+            <div className="spinner">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
             </div>
-          )}
+          </div>
+        )}
       </Grid>
-      {
-        classList.length > 8 ? (
-          <Grid
-            style={{
-              marginTop: currentList.length < 5 ? 265 : 10,
-              display: "flex",
-              justifyContent: "center"
-            }}
-          >
-            <Paginations
-              totalPost={classList.length}
-              setActivePage={setActivePage}
-              activePage={activePage}
-              itemPerPage={itemPerPage}
-            />
-          </Grid>
-        ) : null
-      }
+      {classList.length > 8 ? (
+        <Grid
+          style={{
+            marginTop: currentList.length < 5 ? 265 : 10,
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          <Paginations
+            totalPost={classList.length}
+            setActivePage={setActivePage}
+            activePage={activePage}
+            itemPerPage={itemPerPage}
+          />
+        </Grid>
+      ) : null}
 
       <HandleClassModal
         open={open}
@@ -550,7 +545,7 @@ export const ClassView = props => {
         filter={filter}
         setFilter={setFilter}
       />
-    </Layout >
+    </Layout>
   );
 };
 
