@@ -19,7 +19,10 @@ export const UserDetails = ({ id, headers, action, profile }) => {
   React.useEffect(() => {
     (async () => {
       try {
-        const res = await Axios.get(`/api/user/${id}`, headers);
+        const res = await Axios.get(
+          `${process.env.REACT_APP_PROXY_URL}/api/user/${id}`,
+          headers
+        );
         setUser(res.data);
       } catch (err) {
         console.error(err);
@@ -72,7 +75,10 @@ export const UserDetails = ({ id, headers, action, profile }) => {
 };
 export const user_details = async (id, headers) => {
   try {
-    return await Axios.get(`/api/user/${id}`, headers);
+    return await Axios.get(
+      `${process.env.REACT_APP_PROXY_URL}/api/user/${id}`,
+      headers
+    );
   } catch (err) {
     console.error(err);
   }
@@ -80,21 +86,30 @@ export const user_details = async (id, headers) => {
 
 export const getClassroomUserDetails = async (id, headers) => {
   try {
-    return await Axios.get(`/api/classroom-users/${id}`, headers);
+    return await Axios.get(
+      `${process.env.REACT_APP_PROXY_URL}/api/classroom-users/${id}`,
+      headers
+    );
   } catch (err) {
     console.log(err);
   }
 };
 export const class_details = async (id, headers) => {
   try {
-    return await Axios.get(`/api/class/${id}`, headers);
+    return await Axios.get(
+      `${process.env.REACT_APP_PROXY_URL}/api/class/${id}`,
+      headers
+    );
   } catch (err) {
     console.error(err);
   }
 };
 export const getClassroomUser = async headers => {
   try {
-    return await Axios.get(`/api/classroom-users`, headers);
+    return await Axios.get(
+      `${process.env.REACT_APP_PROXY_URL}/api/classroom-users`,
+      headers
+    );
   } catch (err) {
     console.log(err);
   }
