@@ -92,14 +92,16 @@ export const ClassView = props => {
   const handleStatus = () => event => {
     axios
       .patch(
-        `/api/class/${event.target.value}`,
+        `${process.env.REACT_APP_PROXY_URL}/api/class/${event.target.value}`,
         { class_status: event.target.checked },
         headers
       )
       .then(res => {
-        axios.get(`/api/class?id=${id}`, headers).then(res => {
-          setClassList(res.data);
-        });
+        axios
+          .get(`${process.env.REACT_APP_PROXY_URL}/api/class?id=${id}`, headers)
+          .then(res => {
+            setClassList(res.data);
+          });
 
         if (res.data[0].class_status === false) {
           alertToast("Class Disabled");
@@ -141,7 +143,10 @@ export const ClassView = props => {
     account_type_id &&
       (async () => {
         try {
-          const res = await axios.get("/api/class/", headers);
+          const res = await axios.get(
+            `${process.env.REACT_APP_PROXY_URL}/api/class/`,
+            headers
+          );
           if (account_type_id === 2) {
             setClassList(
               res.data.filter(data => {
@@ -171,7 +176,7 @@ export const ClassView = props => {
       })();
 
     axios
-      .get(`/api/classroom-users/`, headers)
+      .get(`${process.env.REACT_APP_PROXY_URL}/api/classroom-users/`, headers)
       .then(classUsers => {
         setClassroomUsers(classUsers.data);
       })

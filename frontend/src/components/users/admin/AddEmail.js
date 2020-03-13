@@ -20,7 +20,7 @@ export default function AddEmail(props) {
     if (email.match(EmailVal)) {
       axios
         .post(
-          "/api/user",
+          `${process.env.REACT_APP_PROXY_URL}/api/user`,
           {
             email: email,
             account_type_id: 2,

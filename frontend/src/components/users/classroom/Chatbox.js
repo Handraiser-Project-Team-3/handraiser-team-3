@@ -40,7 +40,10 @@ export default function ChatBox(props) {
     if (!!headers && !!room) {
       (async () => {
         try {
-          const res = await Axios.get(`/api/messages/${room.id}`, headers);
+          const res = await Axios.get(
+            `${process.env.REACT_APP_PROXY_URL}/api/messages/${room.id}`,
+            headers
+          );
           setMessages(res.data);
         } catch (err) {
           console.error(err);

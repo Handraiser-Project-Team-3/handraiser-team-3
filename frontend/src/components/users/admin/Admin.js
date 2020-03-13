@@ -119,10 +119,12 @@ export const Admin = props => {
   const [filter, setFilter] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/user/list", headers).then(res => {
-      setUsers(res.data);
-      setFilter(res.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_PROXY_URL}/api/user/list`, headers)
+      .then(res => {
+        setUsers(res.data);
+        setFilter(res.data);
+      });
     // eslint-disable-next-line
   }, []);
 

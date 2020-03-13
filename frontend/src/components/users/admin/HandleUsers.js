@@ -28,38 +28,42 @@ export default function HandleUsers(props) {
     if (handle === "set") {
       axios
         .patch(
-          `/api/user/${details.id}`,
+          `${process.env.REACT_APP_PROXY_URL}/api/user/${details.id}`,
           {
             account_type_id: 2
           },
           headers
         )
         .then(() => {
-          axios.get("/api/user/list", headers).then(res => {
-            setUsers(res.data);
-            setFilter(res.data);
-            toast.info("Mentor has been Added!");
-            setOpen(false);
-            socket.emit(`changed_privileges`, { id: details.id });
-          });
+          axios
+            .get(`${process.env.REACT_APP_PROXY_URL}/api/user/list`, headers)
+            .then(res => {
+              setUsers(res.data);
+              setFilter(res.data);
+              toast.info("Mentor has been Added!");
+              setOpen(false);
+              socket.emit(`changed_privileges`, { id: details.id });
+            });
         });
     } else {
       axios
         .patch(
-          `/api/user/${details.id}`,
+          `${process.env.REACT_APP_PROXY_URL}/api/user/${details.id}`,
           {
             account_type_id: 3
           },
           headers
         )
         .then(() => {
-          axios.get("/api/user/list", headers).then(res => {
-            setUsers(res.data);
-            setFilter(res.data);
-            toast.info("Mentor has been Removed!");
-            setOpen(false);
-            socket.emit(`changed_privileges`, { id: details.id });
-          });
+          axios
+            .get(`${process.env.REACT_APP_PROXY_URL}/api/user/list`, headers)
+            .then(res => {
+              setUsers(res.data);
+              setFilter(res.data);
+              toast.info("Mentor has been Removed!");
+              setOpen(false);
+              socket.emit(`changed_privileges`, { id: details.id });
+            });
         });
     }
   }

@@ -40,7 +40,7 @@ export default function HandleForm(props) {
   useEffect(() => {
     let tempData = [];
     axios
-      .get(`/api/user/list`, headers)
+      .get(`${process.env.REACT_APP_PROXY_URL}/api/user/list`, headers)
       .then(data => {
         tempData = data.data;
         setFilterUser(tempData.filter(acc => acc.account_type_id === 3));

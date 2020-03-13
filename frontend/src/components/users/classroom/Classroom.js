@@ -180,7 +180,10 @@ export default function Classroom(props) {
     if (!!user && !!headers && !!classId) {
       (async () => {
         try {
-          const res = await Axios.get(`/api/request/list/${classId}`, headers);
+          const res = await Axios.get(
+            `${process.env.REACT_APP_PROXY_URL}/api/request/list/${classId}`,
+            headers
+          );
           setRequests(res.data);
         } catch (err) {
           console.log(err);
@@ -192,7 +195,7 @@ export default function Classroom(props) {
   const updateRequest = async ({ id, data, notify, mentor, action }) => {
     try {
       await Axios.patch(
-        `/api/request/${id}`,
+        `${process.env.REACT_APP_PROXY_URL}/api/request/${id}`,
         { status: data, mentor_id: mentor },
         headers
       );

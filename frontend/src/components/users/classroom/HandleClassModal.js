@@ -82,7 +82,7 @@ export const HandleClassModal = props => {
     if (action === "Add") {
       axios
         .post(
-          "/api/class",
+          `${process.env.REACT_APP_PROXY_URL}/api/class`,
           {
             user_id: userId,
             class_code: Math.random()
@@ -107,23 +107,28 @@ export const HandleClassModal = props => {
     } else {
       axios
         .patch(
-          `/api/class/${classRoom.id}`,
+          `${process.env.REACT_APP_PROXY_URL}/api/class/${classRoom.id}`,
           {
             ...classRoom
           },
           headers
         )
         .then(() =>
-          axios.get(`/api/class?id=${userId}`, headers).then(res => {
-            setClassList(res.data);
-            setFilter(res.data);
-            setOpen(false);
-            setClassRoom({
-              class_name: "",
-              class_description: ""
-            });
-            alertToast("Successfully Updated the Class!");
-          })
+          axios
+            .get(
+              `${process.env.REACT_APP_PROXY_URL}/api/class?id=${userId}`,
+              headers
+            )
+            .then(res => {
+              setClassList(res.data);
+              setFilter(res.data);
+              setOpen(false);
+              setClassRoom({
+                class_name: "",
+                class_description: ""
+              });
+              alertToast("Successfully Updated the Class!");
+            })
         );
     }
   };
@@ -177,9 +182,6 @@ export const HandleClassModal = props => {
               variant="outlined"
               style={{ width: "100%" }}
               onChange={handleInput}
-              inputProps={{
-                maxLength: 425
-              }}
             />
 
             <DialogActions>
